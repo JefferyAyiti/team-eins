@@ -27,6 +27,14 @@ public class Main extends Application implements EventHandler {
     Button button2;
 
     Image image = new Image("/cards/back.png");
+    Image card1 = new Image("/cards/card1.png");
+    Image card2 = new Image("/cards/card2.png");
+    Image card3 = new Image("/cards/card3.png");
+    Image card4 = new Image("/cards/card4.png");
+    Image card5 = new Image("/cards/card5.png");
+    Image card6 = new Image("/cards/card6.png");
+    Image[] cardsArray = {card1,card2,card3,card4,card5,card6};
+
     Image whiteChipImage = new Image("/chips/white.png");
     Image blackChipImage = new Image("/chips/black.png");
 
@@ -123,12 +131,11 @@ public class Main extends Application implements EventHandler {
             }
             if(playerCount > 3) {
                 gridPane.add(makepanel(3), 4, 2, 1, 1);
+
             }
 
 
-
             root.getChildren().add(gridPane);
-
 
 
 
@@ -160,8 +167,6 @@ public class Main extends Application implements EventHandler {
 
 
 
-
-
     private Pane makepanel(int PlayerId) {
 
         VBox pane = new VBox();
@@ -174,6 +179,11 @@ public class Main extends Application implements EventHandler {
         int zahl = (int)((Math.random()) * 6 + 1);
         for(int i=0;i<zahl;i++) {
             ImageView imgView = new ImageView(image);
+            if(PlayerId == 0) {
+                imgView = new ImageView(cardsArray[i]);
+            }
+
+
             imgView.setX(10+i*13);
             imgView.setOnMouseClicked(this::ablegen);
             cards.getChildren().add(imgView);
