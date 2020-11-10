@@ -2,7 +2,6 @@
 public class Chip {
 
     public int value;
-    public String player;
 
 
     public Chip(int value) {
