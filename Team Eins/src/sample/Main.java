@@ -78,8 +78,14 @@ public class Main extends Application implements EventHandler {
                 table.getChildren().add(imgView);
             }
 
+            //Ablagestapel
+            ImageView imgView = new ImageView(cardsArray[(int) (Math.random() * ( 5 - 0 ))]); //Karte muss später vom Stack gezogen werden
+            imgView.setY(120);
+            imgView.setX(250);
+            table.getChildren().add(imgView);
 
-            ImageView imgView = new ImageView(blackChipImage);
+
+            imgView = new ImageView(blackChipImage);
             imgView.setY(120);
             imgView.setX(180);
             imgView.setFitHeight(20);
