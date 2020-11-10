@@ -18,6 +18,7 @@ public class Stapel {
         }
         if(!isAblage){
             Karte karte = stapel.pop();
+            cardCount = cardCount - 1;
             return karte;
         }
 
@@ -27,6 +28,7 @@ public class Stapel {
     public void ablegen(Karte karte){
         if (isAblage){
             stapel.add(karte);
+            cardCount = cardCount + 1;
         }
     }
 
