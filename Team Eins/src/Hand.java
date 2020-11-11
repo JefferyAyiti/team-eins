@@ -1,31 +1,43 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Hand {
     private int valueSum;
-    private List<Karte> handKarte;
-    //private Spieler spieler;
+    private ArrayList<HandKarte> handKarten = new ArrayList<HandKarte>();
+    private Spieler spieler;
+    private Tisch tisch;
 
-    public Hand(/*Spieler entrySpieler*/){
-        //spieler = entrySpieler;
-        //TODO add Spieler
-    }
-    public void aussteigen(){
-        //TODO spieler.aussteigen();
+    public Hand(){
     }
     public void setSum(int i){
         valueSum += i;
     }
+    public void setTisch(Tisch entryTisch){
+        tisch = entryTisch;
+    }
+    public void setSpieler(Spieler entrySpieler){
+        spieler = entrySpieler;
+    }
+
     public int getSum(){
         return valueSum;
     }
+    public Tisch getTisch(){
+        return tisch;
+    }
+    public Spieler getSpieler(){
+        return spieler;
+    }
 
-    public List<Karte> getHandKarte() {
-        return handKarte;
+
+    public List<HandKarte> getHandKarte() {
+        return handKarten;
     }
     public void addKarte(Karte karte){
-        handKarte.add(karte);
+        HandKarte hk = new HandKarte(karte.getValue(), false, tisch, this);
+        handKarten.add(hk);
     }
-    public void removeKarte (Karte karte){
-        handKarte.remove(karte);
+    public void removeKarte (HandKarte karte){
+        handKarten.remove(karte);
     }
 }

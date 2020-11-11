@@ -4,9 +4,9 @@ import java.util.Collections;
 import java.util.Stack;
 
 public class Stapel {
-    private int cardCount;
+    private int cardCount = 0;
     private boolean coverCard;
-    private Stack<Karte> stapel;
+    private Stack<Karte> stapel = new Stack<Karte>();
     private Karte topCard;
 
     public Stapel(boolean coverCard) {
@@ -50,7 +50,7 @@ public class Stapel {
         }
     }
     public void Reset(){
-         stapel = new Stack();
+         stapel = new Stack<Karte>();
     }
 
     public int getCardCount() {
@@ -69,6 +69,5 @@ public class Stapel {
             stapel.push(karte);
             cardCount = cardCount + 1;
         }
-        throw new Exception();
     }
 }
