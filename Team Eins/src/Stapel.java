@@ -63,4 +63,11 @@ public class Stapel {
         }
         throw new Exception();
     }
+
+    public void addCard(Karte karte) throws Exception {
+        if(coverCard){
+            stapel.push(karte);
+        }
+        throw new Exception();
+    }
 }
