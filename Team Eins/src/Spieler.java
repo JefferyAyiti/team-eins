@@ -1,13 +1,15 @@
 public class Spieler {
     int points = 0;
+    Tisch tisch;
     Hand cardHand;
     String playerName;
     int blackChips = 0, whiteChips = 0;
     boolean folded = false;
 
-    public Spieler(Hand cardHand, String playerName) {
+    public Spieler(Hand cardHand, String playerName, Tisch tisch) {
         this.cardHand = cardHand;
         this.playerName = playerName;
+        this.tisch = tisch;
     }
 
     public int getPoints() {
@@ -44,5 +46,13 @@ public class Spieler {
 
     int getCardCount() {
         return cardHand.getHandKarte().size();
+    }
+
+    void chipTausch() {
+        if(tisch.getBlackChips() >= 1 && whiteChips >= 10) {
+            tisch.takeChips(-10, 1);
+            blackChips++;
+            whiteChips -= 10;
+        }
     }
 }
