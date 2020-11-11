@@ -9,8 +9,7 @@ public class Stapel {
     private Stack<Karte> stapel;
     private Karte topCard;
 
-    public Stapel(boolean coverCard,int cardCount) {
-        this.cardCount = cardCount;
+    public Stapel(boolean coverCard) {
         this.coverCard = coverCard;
     }
 
@@ -57,6 +56,7 @@ public class Stapel {
     public int getCardCount() {
         return cardCount;
     }
+    
     public Karte getTopCard() throws Exception {
         if(!coverCard){
             return topCard;
@@ -67,6 +67,7 @@ public class Stapel {
     public void addCard(Karte karte) throws Exception {
         if(coverCard){
             stapel.push(karte);
+            cardCount = cardCount + 1;
         }
         throw new Exception();
     }
