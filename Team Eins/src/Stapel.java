@@ -5,18 +5,21 @@ import java.util.Stack;
 
 public class Stapel {
     private int cardCount;
-    private boolean isAblage;
+    private boolean coverCard;
     private Stack<Karte> stapel;
+    private Karte topCard;
 
-    public Stapel(int cardCount) {
+    public Stapel(boolean coverCard,int cardCount) {
         this.cardCount = cardCount;
+        this.coverCard = coverCard;
     }
 
-    public Karte nehmen() throws Exception {
+    public Karte ziehen() throws Exception {
         if(stapel.isEmpty()){
             throw new Exception("Stapel leer");
         }
-        if(!isAblage){
+
+        if(coverCard){    //Ziehstapel
             Karte karte = stapel.pop();
             cardCount = cardCount - 1;
             return karte;
@@ -26,24 +29,38 @@ public class Stapel {
     }
 
     public void ablegen(Karte karte){
-        if (isAblage){
+        if (!coverCard){    //Ablagestapel
             stapel.add(karte);
             cardCount = cardCount + 1;
+            topCard = stapel.peek();
         }
     }
 
     public void mischen(){
         ArrayList<Karte> kartenStapel = new ArrayList<Karte>();
 
-        while(!stapel.isEmpty()){
+        while(!stapel.isEmpty()){           //stapel leeren und in liste packen
             Karte karte = stapel.pop();
             kartenStapel.add(karte);
         }
-        Collections.shuffle(kartenStapel);
+        Collections.shuffle(kartenStapel);    //shuffle liste
 
         int length = kartenStapel.size();
         for(int i = 0; i <= length-1; i++){
-            stapel.push(kartenStapel.get(i));
+            stapel.push(kartenStapel.get(i));       //wieder auf stack packen
         }
+    }
+    public void Reset(){
+         stapel = new Stack();
+    }
+
+    public int getCardCount() {
+        return cardCount;
+    }
+    public Karte getTopCard() throws Exception {
+        if(!coverCard){
+            return topCard;
+        }
+        throw new Exception();
     }
 }
