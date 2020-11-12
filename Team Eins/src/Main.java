@@ -1,7 +1,6 @@
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -13,11 +12,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class Main extends Application {
+public class Main extends Application implements EventHandler {
 
     static Hand[] haende;
     static Spieler[] spieler;
@@ -30,6 +25,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         try {
             initGame();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,8 +61,8 @@ public class Main extends Application {
         tisch.karteAblegen(tisch.karteZiehen()); //Ablagestapel
     }
 
-    private static void initSpieler(Spieler spieler, Hand hand, Tisch tisch) {
-        hand.setSpieler(spieler);
+    private static void initSpieler(Spieler spielerI, Hand hand, Tisch tisch) {
+        hand.setSpieler(spielerI);
         hand.setTisch(tisch);
     }
 
@@ -82,7 +78,7 @@ public class Main extends Application {
     Image card6 = new Image("/cards/card6.png");
     Image lama = new Image("/cards/lama.png");
     Image table = new Image("/table.png");
-    Image[] cardsArray = {card1, card2, card3, card4, card5, card6, null, null, null,lama};
+    Image[] cardsArray = {card1, card2, card3, card4, card5, card6, null, null, null, lama};
 
     Image whiteChipImage = new Image("/chips/white.png");
     Image blackChipImage = new Image("/chips/black.png");
@@ -92,7 +88,52 @@ public class Main extends Application {
         primaryStage.setTitle("L.A.M.A - Team Eins");
         primaryStage.setResizable(false);
 
+        buildStage(primaryStage);
+        spieler[1].setWhiteChips(15);
+        spieler[1].chipTausch();
+
+
+    }
+
+    private Pane makepanel(int playerId) {
+
+
+        VBox pane = new VBox();
+        System.out.println(playerId);
+
+        pane.getChildren().add(new Label(spieler[playerId].getName()));
+        pane.setAlignment(Pos.CENTER);
+
+        Pane cards = new Pane();
+        //verdeckte Karten
+        int zahl = (int) ((Math.random()) * 6 + 1);
+        for (int i = 0; i < spieler[playerId].getCardCount(); i++) {
+            ImageView imgView = new ImageView(image);
+            if (playerId == 0) {
+                imgView = new ImageView(
+                        cardsArray[spieler[playerId].getCardHand().getKarte(i).getValue() - 1]);
+            }
+
+
+            imgView.setX(10 + i * 13);
+            cards.getChildren().add(imgView);
+        }
+
+        pane.getChildren().add(cards);
+        Text chips = new Text();
+        chips.setText("⚪: " + spieler[playerId].getWhiteChips() +
+                "    ⚫: " + spieler[playerId].getBlackChips());
+        chips.setY(102);
+        pane.getChildren().add(chips);
+
+        return pane;
+    }
+
+    Stage classPrimaryStage;
+
+    public void buildStage(Stage primaryStage) throws Exception {
         StackPane root = new StackPane();
+        classPrimaryStage = primaryStage;
 
         Scene scene = new Scene(root, 999, 700);
         BackgroundImage myBI = new BackgroundImage(table,
@@ -126,7 +167,8 @@ public class Main extends Application {
 
         //Ablagestapel
         ImageView imgView = new ImageView(
-                cardsArray[tisch.getObereKarteAblagestapel().getValue()]);
+                cardsArray[tisch.getObereKarteAblagestapel().getValue() - 1]);
+        imgView.setOnMouseClicked(this::handle);
         imgView.setY(120);
         imgView.setX(250);
         table.getChildren().add(imgView);
@@ -192,39 +234,16 @@ public class Main extends Application {
         // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
 
-    private Pane makepanel(int playerId) {
 
-        VBox pane = new VBox();
-
-        pane.getChildren().add(new Label(spieler[playerId].getName()));
-        pane.setAlignment(Pos.CENTER);
-
-        Pane cards = new Pane();
-        //verdeckte Karten
-        int zahl = (int) ((Math.random()) * 6 + 1);
-        for (int i = 0; i < spieler[playerId].getCardCount(); i++) {
-            ImageView imgView = new ImageView(image);
-            if (playerId == 0) {
-                imgView = new ImageView(
-                        cardsArray[spieler[playerId].getCardHand().getKarte(i).getValue()-1]);
-            }
-
-
-            imgView.setX(10 + i * 13);
-            cards.getChildren().add(imgView);
+    @Override
+    public void handle(Event event) {
+        System.out.println(event.getTarget());
+        try {
+            buildStage(classPrimaryStage);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        pane.getChildren().add(cards);
-        Text chips = new Text();
-        chips.setText("⚪: " + spieler[playerId].getWhiteChips() +
-                  "    ⚫: " + spieler[playerId].getBlackChips());
-        chips.setY(102);
-        pane.getChildren().add(chips);
-
-        return pane;
     }
-
 }
