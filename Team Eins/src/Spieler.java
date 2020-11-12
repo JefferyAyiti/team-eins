@@ -5,14 +5,15 @@ public class Spieler {
     String playerName;
     int blackChips = 0, whiteChips = 0;
     boolean folded = false;
-    boolean isPlaying = false;
 
     public Spieler(Hand cardHand, String playerName, Tisch tisch) {
         this.cardHand = cardHand;
         this.playerName = playerName;
         this.tisch = tisch;
     }
-
+ public String getName() {
+        return playerName;
+ }
     public int getPoints() {
         return points;
     }
@@ -29,16 +30,12 @@ public class Spieler {
         this.folded = folded;
     }
 
-    public boolean getIsPlaying(){
-        return isPlaying;
-    }
-
-    public void setisPlaying(boolean entryIsplaying){
-        isPlaying = entryIsplaying;
-    }
-
     public int getBlackChips() {
         return blackChips;
+    }
+
+    public Hand getCardHand() {
+        return cardHand;
     }
 
     public void setBlackChips(int blackChips) {
