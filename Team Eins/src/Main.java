@@ -6,13 +6,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class Main extends Application implements EventHandler {
+public class Main extends Application{
 
     static Hand[] haende;
     static Spieler[] spieler;
@@ -89,8 +90,6 @@ public class Main extends Application implements EventHandler {
         primaryStage.setResizable(false);
 
         buildStage(primaryStage);
-        spieler[1].setWhiteChips(15);
-        spieler[1].chipTausch();
 
 
     }
@@ -131,119 +130,123 @@ public class Main extends Application implements EventHandler {
 
     Stage classPrimaryStage;
 
-    public void buildStage(Stage primaryStage) throws Exception {
-        StackPane root = new StackPane();
-        classPrimaryStage = primaryStage;
-
-        Scene scene = new Scene(root, 999, 700);
-        BackgroundImage myBI = new BackgroundImage(table,
-                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
-
-
-        GridPane gridPane = new GridPane();
-        gridPane.setBackground(new Background(myBI));
-        gridPane.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        gridPane.setGridLinesVisible(false);
-        gridPane.setAlignment(Pos.CENTER);
-
-
-        for (int i = 0; i < 5; i++) {
-            ColumnConstraints column = new ColumnConstraints(130);
-            gridPane.getColumnConstraints().add(column);
-            RowConstraints row = new RowConstraints(110);
-            gridPane.getRowConstraints().add(row);
-        }
-
-        Pane table = new Pane();
-        //karten auf dem Tisch
-        for (int i = 0; i < tisch.getAblageStapelSize(); i++) {
-            ImageView imgView = new ImageView(image);
-            imgView.setY(120 + i * 0.1);
-            imgView.setX(100 + i * 0.3);
-            table.getChildren().add(imgView);
-        }
-
-        //Ablagestapel
-        ImageView imgView = new ImageView(
-                cardsArray[tisch.getObereKarteAblagestapel().getValue() - 1]);
-        imgView.setOnMouseClicked(this::handle);
-        imgView.setY(120);
-        imgView.setX(250);
-        table.getChildren().add(imgView);
-
-
-        imgView = new ImageView(blackChipImage);
-        imgView.setY(120);
-        imgView.setX(180);
-        imgView.setFitHeight(20);
-        imgView.setFitWidth(20);
-        //imgView.setOnMouseClicked(this::ablegen);
-        table.getChildren().add(imgView);
-        Text ChipText = new Text();
-        ChipText.setText(Integer.toString(tisch.getBlackChips()));
-        ChipText.setFont(Font.font("Verdana", 20));
-        ChipText.setFill(Color.WHITE);
-        ChipText.setX(205);
-        ChipText.setY(138);
-        table.getChildren().add(ChipText);
-
-        imgView = new ImageView(whiteChipImage);
-        imgView.setY(150);
-        imgView.setX(180);
-        imgView.setFitHeight(20);
-        imgView.setFitWidth(20);
-        // imgView.setOnMouseClicked(this::ablegen);
-        table.getChildren().add(imgView);
-        ChipText = new Text();
-        ChipText.setText(Integer.toString(tisch.getWhiteChips()));
-        ChipText.setFont(Font.font("Verdana", 20));
-        ChipText.setFill(Color.WHITE);
-        ChipText.setX(205);
-        ChipText.setY(168);
-        table.getChildren().add(ChipText);
-
-
-        //button1.setOnAction(this);
-        gridPane.add(table, 1, 1, 3, 3);
-
-        if (anzSpieler <= 4) {
-            gridPane.add(makepanel(0), 2, 0, 1, 1);
-            gridPane.add(makepanel(1), 2, 4, 1, 1);
-
-        } else {
-            gridPane.add(makepanel(0), 1, 0, 1, 1);
-            gridPane.add(makepanel(1), 1, 4, 1, 1);
-
-            gridPane.add(makepanel(4), 3, 0, 1, 1);
-            gridPane.add(makepanel(5), 3, 4, 1, 1);
-        }
-        if (anzSpieler > 2) {
-            gridPane.add(makepanel(2), 0, 2, 1, 1);
-        }
-        if (anzSpieler > 3) {
-            gridPane.add(makepanel(3), 4, 2, 1, 1);
-
-        }
-
-
-        root.getChildren().add(gridPane);
-
-
-        // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-
-    @Override
-    public void handle(Event event) {
-        System.out.println(event.getTarget());
+    public void buildStage(Stage primaryStage) {
         try {
-            buildStage(classPrimaryStage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            StackPane root = new StackPane();
+            classPrimaryStage = primaryStage;
+
+            Scene scene = new Scene(root, 999, 700);
+            BackgroundImage myBI = new BackgroundImage(table,
+                    BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                    BackgroundSize.DEFAULT);
+
+
+            GridPane gridPane = new GridPane();
+            gridPane.setBackground(new Background(myBI));
+            gridPane.setBorder(new Border(new BorderStroke(Color.BLACK,
+                    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            gridPane.setGridLinesVisible(false);
+            gridPane.setAlignment(Pos.CENTER);
+
+
+            for (int i = 0; i < 5; i++) {
+                ColumnConstraints column = new ColumnConstraints(130);
+                gridPane.getColumnConstraints().add(column);
+                RowConstraints row = new RowConstraints(110);
+                gridPane.getRowConstraints().add(row);
+            }
+
+            Pane table = new Pane();
+            //karten auf dem Tisch
+            for (int i = 0; i < tisch.getAblageStapelSize(); i++) {
+                ImageView imgView = new ImageView(image);
+                imgView.setY(120 + i * 0.1);
+                imgView.setX(100 + i * 0.3);
+                table.getChildren().add(imgView);
+            }
+
+            //Ablagestapel
+            ImageView imgView = new ImageView(
+                    cardsArray[tisch.getObereKarteAblagestapel().getValue() - 1]);
+            //TEST_EVENT:
+            imgView.setOnMouseClicked(
+                    new EventHandler<>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            //was passiert beim Klick auf den Ablagestapel
+
+                            buildStage(classPrimaryStage);
+
+                        }
+
+                    });
+            imgView.setY(120);
+            imgView.setX(250);
+            table.getChildren().add(imgView);
+
+
+            imgView = new ImageView(blackChipImage);
+            imgView.setY(120);
+            imgView.setX(180);
+            imgView.setFitHeight(20);
+            imgView.setFitWidth(20);
+            table.getChildren().add(imgView);
+            Text ChipText = new Text();
+            ChipText.setText(Integer.toString(tisch.getBlackChips()));
+            ChipText.setFont(Font.font("Verdana", 20));
+            ChipText.setFill(Color.WHITE);
+            ChipText.setX(205);
+            ChipText.setY(138);
+            table.getChildren().add(ChipText);
+
+            imgView = new ImageView(whiteChipImage);
+            imgView.setY(150);
+            imgView.setX(180);
+            imgView.setFitHeight(20);
+            imgView.setFitWidth(20);
+            table.getChildren().add(imgView);
+            ChipText = new Text();
+            ChipText.setText(Integer.toString(tisch.getWhiteChips()));
+            ChipText.setFont(Font.font("Verdana", 20));
+            ChipText.setFill(Color.WHITE);
+            ChipText.setX(205);
+            ChipText.setY(168);
+            table.getChildren().add(ChipText);
+
+
+            //button1.setOnAction(this);
+            gridPane.add(table, 1, 1, 3, 3);
+
+            if (anzSpieler <= 4) {
+                gridPane.add(makepanel(0), 2, 0, 1, 1);
+                gridPane.add(makepanel(1), 2, 4, 1, 1);
+
+            } else {
+                gridPane.add(makepanel(0), 1, 0, 1, 1);
+                gridPane.add(makepanel(1), 1, 4, 1, 1);
+
+                gridPane.add(makepanel(4), 3, 0, 1, 1);
+                gridPane.add(makepanel(5), 3, 4, 1, 1);
+            }
+            if (anzSpieler > 2) {
+                gridPane.add(makepanel(2), 0, 2, 1, 1);
+            }
+            if (anzSpieler > 3) {
+                gridPane.add(makepanel(3), 4, 2, 1, 1);
+
+            }
+
+
+            root.getChildren().add(gridPane);
+
+
+            // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (Exception e) {}
     }
+
+
+
+
 }
