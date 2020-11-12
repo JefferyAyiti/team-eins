@@ -9,6 +9,10 @@ public class Hand {
 
     public Hand(){
     }
+
+    public Hand(ArrayList<HandKarte> karten){
+        handKarten = karten;
+    }
     public void setSum(int i){
         valueSum += i;
     }
@@ -32,6 +36,10 @@ public class Hand {
 
     public List<HandKarte> getHandKarte() {
         return handKarten;
+    }
+
+    public HandKarte getKarte(int nr) {
+        return handKarten.get(nr);
     }
     public void addKarte(Karte karte){
         HandKarte hk = new HandKarte(karte.getValue(), false, tisch, this);

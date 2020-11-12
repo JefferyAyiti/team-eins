@@ -9,7 +9,7 @@ public class Tisch {
     private Stapel nachziehStapel = new Stapel(true);
     private Stapel ablageStapel = new Stapel(false);
 
-    public Tisch(int anzSpieler) throws Exception {
+    public Tisch(int anzSpieler) {
         blackCh = chipsblack.getMaxChips();
         whiteCh = whiteChip.getMaxChips();
         spieler = anzSpieler;

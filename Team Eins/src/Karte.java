@@ -7,6 +7,7 @@ boolean covered;
         this.covered = covered;
     }
 
+
     public int getValue() {
         return value;
     }
