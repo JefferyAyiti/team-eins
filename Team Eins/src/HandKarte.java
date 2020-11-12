@@ -9,14 +9,14 @@ public class HandKarte extends Karte {
         hand = entryHand;
     }
 
-    void ablegen() {
+    void ablegen() throws Exception {
         if(this.isPlayable()) {
             tisch.karteAblegen(this);
             hand.removeKarte(this);
         }
     }
 
-    boolean isPlayable() {
+    boolean isPlayable() throws Exception {
         //3 Ablageregeln
         boolean ruleNormal = value != LAMA && (
                 tisch.getObereKarteAblagestapel().getValue() == value
