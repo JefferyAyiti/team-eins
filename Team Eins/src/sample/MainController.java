@@ -9,27 +9,26 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
-import javafx.scene.image.WritableImage;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ImageTest implements Initializable {
+public class MainController implements Initializable {
     @FXML
-    ImageView githubImage = new ImageView();
+    ImageView backImg = new ImageView();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
 
-        try(InputStream file = getClass().getResourceAsStream("/images/cards/PNG/Back.png")){
+        try(InputStream file = getClass().getResourceAsStream("/cards/SVG/Back.svg")){
             TranscoderInput transIn = new TranscoderInput(file);
             try {
                 transcoder.transcode(transIn, null);
                 Image img = SwingFXUtils.toFXImage(transcoder.getBufferedImage(), null);
-                githubImage.setImage(img);
+                backImg.setImage(img);
             } catch (TranscoderException ex) {
                 ex.printStackTrace();
             }
