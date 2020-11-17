@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
@@ -114,8 +113,9 @@ public class Main extends Application{
 
 
     /**
+     * Erstellt die Fläche auf dem Tisch für einen einzelnen Spieler, d.h. Karten, Chips, Name etc
      * @param playerId
-     * @return
+     * @return Gibt ein Panel zurück
      */
     private Pane makepanel(int playerId) {
 
@@ -182,6 +182,11 @@ public class Main extends Application{
             buildStage(classPrimaryStage);
         }};
 
+
+    /**
+     * Bildet die Stage neu, sodass Änderungen im SPiel dargestellt werden
+     * @param primaryStage
+     */
     public void buildStage(Stage primaryStage) {
         try {
             StackPane root = new StackPane();
