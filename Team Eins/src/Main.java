@@ -45,6 +45,8 @@ public class Main extends Application{
     }
 
     /**
+     *
+     * Erstellt Stapel, Spieler und deren initialen handkarten
      * @throws Exception
      */
     private static void initGame() throws Exception {
@@ -76,11 +78,6 @@ public class Main extends Application{
         tisch.karteAblegen(tisch.karteZiehen()); //Ablagestapel
     }
 
-    /**
-     * @param spielerI
-     * @param hand
-     * @param tisch
-     */
     private static void initSpieler(Spieler spielerI, Hand hand, Tisch tisch) {
         hand.setSpieler(spielerI);
         hand.setTisch(tisch);
