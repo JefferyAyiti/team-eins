@@ -4,7 +4,7 @@ import SVG.dimension.PrimitiveDimensionProvider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.File;
+
 import java.io.InputStream;
 
 public class TestLoadImageUsingClass {

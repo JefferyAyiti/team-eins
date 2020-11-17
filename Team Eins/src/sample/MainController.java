@@ -23,7 +23,7 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
 
-        try(InputStream file = getClass().getResourceAsStream("/cards/SVG/Back.svg")){
+        try(InputStream file = getClass().getResourceAsStream("/images/SVG/Back.svg")){
             TranscoderInput transIn = new TranscoderInput(file);
             try {
                 transcoder.transcode(transIn, null);

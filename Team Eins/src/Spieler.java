@@ -9,7 +9,6 @@ public class Spieler {
     public Spieler(Hand cardHand, String playerName, Tisch tisch) {
         this.cardHand = cardHand;
         this.playerName = playerName;
-        this.tisch = tisch;
     }
  public String getName() {
         return playerName;
@@ -54,11 +53,5 @@ public class Spieler {
         return cardHand.getHandKarte().size();
     }
 
-    void chipTausch() {
-        if(tisch.getBlackChips() >= 1 && whiteChips >= 10) {
-            tisch.takeChips(-10, 1);
-            blackChips++;
-            whiteChips -= 10;
-        }
-    }
+
 }
