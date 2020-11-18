@@ -20,7 +20,11 @@ public class TestLoadImageUsingClass {
 		InputStream imageData = this.getClass().getClassLoader()
 				.getResourceAsStream(path);
 
-		Image image = new Image(imageData);
+		Image image;
+		if(path.contains("SVG")) {
+			image = new Image(imageData, 60, 90, true, true);
+		} else
+			image = new Image(imageData);
 		return image;
 	}
 

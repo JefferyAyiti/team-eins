@@ -38,7 +38,7 @@ public class Main extends Application{
             initGame();
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         launch(args);
     }
@@ -122,6 +122,7 @@ public class Main extends Application{
 
         Label plr = new Label(spieler[playerId].getName());
         plr.setTextFill(Color.WHITE);
+        plr.setTranslateY(-5);
         pane.getChildren().add(plr);
 
         Pane cards = new HBox();
@@ -140,11 +141,12 @@ public class Main extends Application{
             imgView.setPreserveRatio(true);
             imgView.setSmooth(true);
             System.out.println(classPrimaryStage.getWidth());
-            imgView.setFitWidth(playerId==0?60:50);
+            imgView.setFitWidth(playerId==0?55:40);
 
 
             if(playerId!=0) {
                 imgView.setTranslateX(-30*i);
+                imgView.setRotate(-spieler[playerId].getCardCount()/2*10+i*10);
             }
             cards.getChildren().add(imgView);
         }
@@ -303,7 +305,7 @@ public class Main extends Application{
 
             if(anzSpieler > 3) {
                 Node player3 = makepanel(3);
-                player3.setRotate(180);
+                player3.setRotate(155);
                 gridPane.add(player3, 0, 0, 2, 1);
             }
 
@@ -315,7 +317,7 @@ public class Main extends Application{
 
             if(anzSpieler > 5) {
                 Node player5 = makepanel(5);
-                player5.setRotate(180);
+                player5.setRotate(205);
                 gridPane.add(player5, 3, 0, 2, 1);
             }
 
