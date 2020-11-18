@@ -1,6 +1,5 @@
 public class Spieler {
     int points = 0;
-    Tisch tisch;
     Hand cardHand;
     String playerName;
     int blackChips = 0, whiteChips = 0;
@@ -11,10 +10,9 @@ public class Spieler {
      * @param cardHand aktuelle Karten auf der Hand
      * @param playerName Spieler Name
      */
-    public Spieler(Hand cardHand, String playerName, Tisch tisch) {
+    public Spieler(Hand cardHand, String playerName) {
         this.cardHand = cardHand;
         this.playerName = playerName;
-        this.tisch = tisch;
     }
 
     /**
@@ -93,10 +91,6 @@ public class Spieler {
      * tauscht 10 weiße Chips gegen einen schwarzen Chip
      */
     void chipTausch() {
-        if(tisch.getBlackChips() >= 1 && whiteChips >= 10) {
-            tisch.takeChips(-10, 1);
-            blackChips++;
-            whiteChips -= 10;
-        }
+
     }
 }

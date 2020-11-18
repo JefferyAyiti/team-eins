@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -25,11 +26,12 @@ public class Main extends Application{
     static TestLoadImageUsingClass loader;
     static double sceneWidth = 0;
     static double sceneHeight = 0;
-
+    static  Tisch tisch;
+    static Spiellogik spiellogik;
 
     //Wird später im Menü festgelegt
     private static int anzSpieler = 6;//2 + (int) (Math.random() * 4);
-    static Tisch tisch = new Tisch(anzSpieler);
+
 
     public static void main(String[] args) {
         loader = new TestLoadImageUsingClass();
@@ -49,10 +51,7 @@ public class Main extends Application{
      * @throws Exception
      */
     private static void initGame() throws Exception {
-        //initialisiere GrundTisch
 
-        tisch.initNachziehstapel();
-        tisch.mischenNachziehstapel();
 
         //initialisiere Spieler mit handkarten
         haende = new Hand[anzSpieler];
@@ -60,11 +59,13 @@ public class Main extends Application{
 
         for (int i = 0; i < anzSpieler; i++) {
             haende[i] = new Hand();
-            spieler[i] = new Spieler(haende[i], "Spieler " + (i + 1), tisch);
+            spieler[i] = new Spieler(haende[i], "Spieler " + (i + 1));
 
-            initSpieler(spieler[i], haende[i], tisch);
         }
-
+        tisch = new Tisch(spieler);
+        spiellogik = new Spiellogik(tisch);
+        tisch.initNachziehstapel();
+        tisch.mischenNachziehstapel();
 
         //gebe jeden Spieler (anzSpieler) 6 Karten in Reihenfolge
         for (int i = 0; i < 6; i++) {
@@ -75,11 +76,6 @@ public class Main extends Application{
         }
 
         tisch.karteAblegen(tisch.karteZiehen()); //Ablagestapel
-    }
-
-    private static void initSpieler(Spieler spielerI, Hand hand, Tisch tisch) {
-        hand.setSpieler(spielerI);
-        hand.setTisch(tisch);
     }
 
 
@@ -110,7 +106,8 @@ public class Main extends Application{
 
 
     /**
-     * Erstellt die Fläche auf dem Tisch für einen einzelnen Spieler, d.h. Karten, Chips, Name etc
+     * Erstellt die Fläche auf dem Tisch für einen einzelnen Spieler,
+     * d.h. Karten, Chips, Name etc
      * @param playerId
      * @return Gibt ein Panel zurück
      */
@@ -140,13 +137,19 @@ public class Main extends Application{
             //imgView.setTranslateX(left + i * 60);
             imgView.setPreserveRatio(true);
             imgView.setSmooth(true);
-            System.out.println(classPrimaryStage.getWidth());
             imgView.setFitWidth(playerId==0?55:40);
 
 
             if(playerId!=0) {
                 imgView.setTranslateX(-30*i);
                 imgView.setRotate(-spieler[playerId].getCardCount()/2*10+i*10);
+            } else {
+                int finalI = i;
+                imgView.setOnMouseClicked(mouseEvent -> {
+                    spiellogik.karteLegen(spieler[playerId],
+                            spieler[playerId].getCardHand().getKarte(finalI) );
+                    buildStage(classPrimaryStage);
+                });
             }
             cards.getChildren().add(imgView);
         }
@@ -183,10 +186,10 @@ public class Main extends Application{
 
 
     /**
-     * Bildet die Stage neu, sodass Änderungen im SPiel dargestellt werden
+     * Bildet die Stage (neu), sodass Änderungen im Spiel dargestellt werden
      * @param primaryStage
      */
-    public void buildStage(Stage primaryStage) {
+    private void buildStage(Stage primaryStage) {
         try {
             StackPane root = new StackPane();
             classPrimaryStage = primaryStage;
@@ -194,9 +197,13 @@ public class Main extends Application{
             if(sceneWidth == 0) {
                 sceneWidth = 600;
             }
+            else
+                sceneWidth = classPrimaryStage.getScene().getWidth();
             if(sceneHeight == 0) {
                 sceneHeight = 400;
-            }
+            } else
+                sceneHeight = classPrimaryStage.getScene().getHeight();
+
             Scene scene = new Scene(root, sceneWidth, sceneHeight);
             BackgroundImage myBI = new BackgroundImage(table1,
                     BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
@@ -206,23 +213,29 @@ public class Main extends Application{
 
             GridPane table = new GridPane();
             //karten auf dem Tisch
-            Pane ablagestapel = new Pane();
+            Pane nachziehstapel = new Pane();
             for (int i = 0; i < tisch.getAblageStapelSize(); i++) {
                 ImageView imgView = new ImageView(image);
                 imgView.setY(i * 0.1);
                 imgView.setX(i * 0.3);
+                imgView.setOnMouseClicked(mouseEvent -> {
+                    spiellogik.karteNachziehen(spieler[0]);
+                    buildStage(classPrimaryStage);
+                });
                 imgView.setPreserveRatio(true);
                 imgView.setSmooth(true);
                 imgView.setFitWidth(60);
-                ablagestapel.getChildren().add(imgView);
+                nachziehstapel.getChildren().add(imgView);
             }
-            table.add(ablagestapel, 0,0, 1, 1);
+            table.add(nachziehstapel, 0,0, 1, 1);
 
             //Ablagestapel
             ImageView imgView = new ImageView(
                     cardsArray[tisch.getObereKarteAblagestapel().getValue() - 1]);
+
             //TEST_EVENT:
-            imgView.setOnMouseClicked(event_ablage);
+
+
             imgView.setPreserveRatio(true);
             imgView.setFitWidth(60);
             table.add(imgView, 2,0, 1, 1);

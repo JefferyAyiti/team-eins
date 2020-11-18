@@ -1,6 +1,5 @@
 public class Tisch {
 
-    private int spieler;
     private BlackChip chipsblack = new BlackChip();
     private WhiteChip whiteChip = new WhiteChip();
     private int blackCh;
@@ -8,16 +7,22 @@ public class Tisch {
     private int durchgangNr;
     private Stapel nachziehStapel = new Stapel(true);
     private Stapel ablageStapel = new Stapel(false);
+    private Spieler[] spieler;
 
-    /**
-     * @param anzSpieler
-     */
-    public Tisch(int anzSpieler) {
+
+
+    public Tisch(Spieler[] spieler) {
         blackCh = chipsblack.getMaxChips();
         whiteCh = whiteChip.getMaxChips();
-        spieler = anzSpieler;
+        this.spieler = spieler;
     }
 
+    /**
+     * @return Gibt die Liste der Spieler zurück
+     */
+    Spieler[] getSpieler() {
+        return spieler;
+    }
 
     /**
      * Setzt Durchgang auf 0
@@ -92,7 +97,7 @@ public class Tisch {
      * @return Anzahl Spieler
      */
     public int getAnzSpieler(){
-        return spieler;
+        return spieler.length;
     }
 
     /**
