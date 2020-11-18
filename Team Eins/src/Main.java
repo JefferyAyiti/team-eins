@@ -82,7 +82,7 @@ public class Main extends Application{
     //GUI
 
     Image image = loader.getImg("images/SVG/Back.svg");
-    Image card7 = loader.getImg("images/SVG/Card7.svg");
+    Image card1 = loader.getImg("images/SVG/Card1.svg");
     Image card2 = loader.getImg("images/SVG/Card2.svg");
     Image card3 = loader.getImg("images/SVG/Card3.svg");
     Image card4 = loader.getImg("images/SVG/Card4.svg");
@@ -91,7 +91,7 @@ public class Main extends Application{
     Image lama = loader.getImg("images/SVG/Lama.svg");
     Image table1 = loader.getImg("images/table2.svg");
 
-    Image[] cardsArray = {card2, card3, card4, card5, card6, card7, null, null, null, lama};
+    Image[] cardsArray = {card1, card2, card3, card4, card5, card6, null, null, null, lama};
 
     Image whiteChipImage = new Image("/images/chips/white.png");
     Image blackChipImage = new Image("/images/chips/black.png");
