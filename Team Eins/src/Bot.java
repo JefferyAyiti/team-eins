@@ -46,7 +46,7 @@ public class Bot extends Spieler{
 
         boolean abgelegt = false;
 
-        if(!folded){
+        if(inGame()){
             if(zug){
                 //Chips umtauschen
                 while(this.whiteChips >= 10){
@@ -133,9 +133,6 @@ public class Bot extends Spieler{
      * Die Methode ist eine Helper Methode für die playSchwierigkeit() Methoden.
      * Ähnelt der Methode aus der Spiellogik.
      */
-    private void aussteigen(){
-        this.setFolded(true);
-    }
 
     /**
      * Tauscht 10 weiße Chips gegen 1 schwarzen Chip aus.
