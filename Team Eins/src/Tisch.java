@@ -37,8 +37,8 @@ public class Tisch {
     }
 
     /**
-     * Schwarze/ Weiße Chips werden von dem Chip Stapel entfernt/hinzugefügt, der als Integer verwaltet wird.
-     * Um Chips hinzuzufügen, muss der Parameter nur negativ angegeben werden.
+     * weiße/schwarze Chips werden von dem Chip Stapel entfernt/hinzugefügt, der als Integer verwaltet wird.
+     * Um den Tisch Chips hinzuzufügen, muss der Parameter nur negativ angegeben werden.
      * @param whiteChips
      * @param blackChips
      */
