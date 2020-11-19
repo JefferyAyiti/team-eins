@@ -3,7 +3,7 @@ public class Spieler {
     Hand cardHand;
     String playerName;
     int blackChips = 0, whiteChips = 0;
-    boolean folded = false;
+    private boolean aussteigen = false;
 
     /**
      * Erstellt Spieler Object mit Spielername
@@ -45,14 +45,16 @@ public void setCardHand(Hand hand) {
     public void setPoints(int points) {
         this.points = points;
     }
-
+    public void einsteigen(){
+        aussteigen = false;
+    }
+    public void aussteigen(){
+        aussteigen = true;
+    }
     public boolean inGame() {
-        return folded;
+        return !aussteigen;
     }
 
-    public void setFolded(boolean folded) {
-        this.folded = folded;
-    }
 
     /**
      * Gibt zurück wie viele schwarze Chips der Spieler hat.

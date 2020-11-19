@@ -27,8 +27,11 @@ public class Spiellogik {
                     || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
                     || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)  //1 auf Lama
             ) {*/
+            if(spieler.inGame()){ //Unerfolgereich wenn aussgestiegen
                 spieler.getCardHand().removeKarte((HandKarte) karte);
                 tisch.karteAblegen(karte);
+            }
+
            /* } else {
                 throw new Exception();
             }
@@ -48,7 +51,10 @@ public class Spiellogik {
         try {
             //TODO
             // regelüberprüfung
-            spieler.getCardHand().addKarte(tisch.karteZiehen());
+            if(spieler.inGame()){ //Unerfolgereich wenn Spieler aussgestiegen ist
+                spieler.getCardHand().addKarte(tisch.karteZiehen());
+            }
+
         } catch (Exception e) {
         }
     }
@@ -135,6 +141,7 @@ public class Spiellogik {
     }
 
     public void aussteigen(Spieler spieler) {
+        spieler.aussteigen();
 
     }
 

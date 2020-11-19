@@ -62,8 +62,8 @@ public class Hand {
      * @param karte
      */
     public void addKarte(Karte karte){
-        HandKarte hk = new HandKarte(karte.getValue(), false, tisch, this);
-        handKarten.add(hk);
+            HandKarte hk = new HandKarte(karte.getValue(), false, tisch, this);
+            handKarten.add(hk);
     }
 
     /**
