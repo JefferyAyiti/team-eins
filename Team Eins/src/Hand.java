@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Hand {
     private int valueSum;
@@ -27,10 +26,23 @@ public class Hand {
     }
 
     /**
-     *
-     * @return Gibt die gesamt Karten Summe aus
+     * Alle Kartewerte in eins Set bringen und danach summieren
      */
-    public int getSum(){
+    public void setValueSum() {
+        int sum = 0;
+        Set<Integer> ziffern = new HashSet<>();
+        for (HandKarte karte:handKarten) {
+            ziffern.add(karte.getValue());
+        }
+        for (Integer i:ziffern) {sum += i; }
+        valueSum = sum;
+    }
+
+    /**
+     *
+     * @return Ziffern einmalig summieren
+     */
+    public int getValueSum(){
         return valueSum;
     }
 

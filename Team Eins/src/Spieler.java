@@ -43,8 +43,9 @@ public void setCardHand(Hand hand) {
      * @param points Punktestand des Spielers
      */
     public void setPoints(int points) {
-        this.points = points;
+        this.points += points;
     }
+
     public void einsteigen(){
         aussteigen = false;
     }

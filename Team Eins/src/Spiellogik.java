@@ -140,9 +140,15 @@ public class Spiellogik {
         return aktion;
     }
 
+    /**
+     * @param spieler
+     * Beim Aussteigen wird keine neue Zuege erkannt
+     */
     public void aussteigen(Spieler spieler) {
         spieler.aussteigen();
-
+        /*spieler.getCardHand().setValueSum();
+        int punkte = spieler.getCardHand().getValueSum();
+        spieler.setPoints(punkte);*/
     }
 
     Map<Spieler, Integer> ranglisteErstellen() {
@@ -174,7 +180,7 @@ public class Spiellogik {
 
         tisch.karteAblegen(tisch.karteZiehen()); //Ablagestapel
         tisch.nextDurchgang();
-
+        //TODO Alle ausgestiegene Spieler einsteigen lassen
     }
 
 }
