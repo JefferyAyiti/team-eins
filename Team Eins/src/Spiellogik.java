@@ -1,6 +1,4 @@
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class Spiellogik {
     private Stack<Spieler> letzteSpieler = new Stack();
@@ -12,46 +10,83 @@ public class Spiellogik {
         spielerListe = tisch.getSpieler();
     }
 
-    public void durchgang(){
+    public void durchgang() {
 
     }
-    /** Ein Spieler legt eine Karte aus seiner Hand auf den Ablagestapel
+
+    /**
+     * Ein Spieler legt eine Karte aus seiner Hand auf den Ablagestapel
+     *
      * @param spieler
      * @param karte
      */
     public void karteLegen(Spieler spieler, Karte karte) {
         try {
-            if(tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
-                    ||tisch.getObereKarteAblagestapel().value == karte.value - 1   //Handkarte ist um eins größer als die oberste Ablagekarte
-                    ||(tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
-                    ||(tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)  //1 auf Lama
-            ){
+            if (tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
+                    || tisch.getObereKarteAblagestapel().value == karte.value - 1   //Handkarte ist um eins größer als die oberste Ablagekarte
+                    || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
+                    || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)  //1 auf Lama
+            ) {
                 spieler.getCardHand().removeKarte((HandKarte) karte);
                 tisch.karteAblegen(karte);
-            }
-
-            else {
+            } else {
                 throw new Exception();
             }
 
+        } catch (Exception e) {
         }
-        catch (Exception e){}
     }
 
 
-    /** Ein Spieler zieht eine KArte vom Nachziehstapel,
+    /**
+     * Ein Spieler zieht eine KArte vom Nachziehstapel,
      * diese wird seiner Hand hinzugefügt
+     *
      * @param spieler
      */
-    public void karteNachziehen(Spieler spieler)  {
+    public void karteNachziehen(Spieler spieler) {
         try {
             //TODO
             // regelüberprüfung
             spieler.getCardHand().addKarte(tisch.karteZiehen());
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
+    /**
+     * Errechnet die Summe der verbliebenen Karten auf der Hand
+     * und nimmt entsprechend Chips vom Tisch (möglichst schwarze zuerst)
+     * @param spieler
+     */
     public void chipsKassieren(Spieler spieler) {
+        Set<Karte> handkarten = new LinkedHashSet<>();
+        //Karten als Menge damit nur einmalig gezählt wird
+        for (Karte c : spieler.getCardHand().getHandKarte()) {
+            handkarten.add(c);
+        }
+
+        int summe = 0;
+        //aufaddieren
+        for (Karte c : handkarten) {
+            summe += c.getValue();
+        }
+
+
+        int schwarzeChips = summe / 10;
+        int weisseChips = summe % 10;
+
+        //versuche zuerst schwarze chips zu nehmen
+
+        while (schwarzeChips > 0 && tisch.getBlackChips() > 0) {
+            tisch.takeChips(0, 1);
+            spieler.setBlackChips(spieler.getBlackChips() + 1);
+            schwarzeChips--;
+        }
+
+        weisseChips += schwarzeChips * 10;
+        tisch.takeChips(weisseChips,0);
+        spieler.setWhiteChips(spieler.getWhiteChips()+weisseChips);
+
 
     }
 
@@ -71,10 +106,12 @@ public class Spiellogik {
         return new HashMap<>();
     }
 
-    /** Initiiert eine neue Runde, d.h. Stapel mischen und neue Karten verteilen
+    /**
+     * Initiiert eine neue Runde, d.h. Stapel mischen und neue Karten verteilen
+     *
      * @throws Exception
      */
-    public void neueRunde() throws Exception {
+    public void initNeueRunde() throws Exception {
         for (int i = 0; i < Main.spieler.length; i++) {
             Main.haende[i] = new Hand();
             Main.spieler[i].setCardHand(Main.haende[i]);

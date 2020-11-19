@@ -15,7 +15,7 @@ public class Spieler {
 
 
     /**
-     * Weißt dem Spieler eine Kartenhand zu
+     * Weist dem Spieler eine Kartenhand zu
      * @param hand
      */
 public void setCardHand(Hand hand) {

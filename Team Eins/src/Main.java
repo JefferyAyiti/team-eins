@@ -70,7 +70,7 @@ public class Main extends Application{
         tisch = new Tisch(spieler);
         spiellogik = new Spiellogik(tisch);
 
-        spiellogik.neueRunde();
+        spiellogik.initNeueRunde();
 
     }
 
