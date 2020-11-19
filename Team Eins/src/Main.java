@@ -97,6 +97,8 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("L.A.M.A - Team Eins");
         buildStage(primaryStage);
+        primaryStage.setMinWidth(600);
+        primaryStage.setMinHeight(400);
 
 
     }
@@ -150,7 +152,7 @@ public class Main extends Application{
                 imgView.setOnMouseClicked(mouseEvent -> {
                     spiellogik.karteLegen(spieler[playerId],
                             spieler[playerId].getCardHand().getKarte(finalI) );
-                    buildStage(classPrimaryStage);
+                    buildStage(classPrimaryStage); // buildstage is used to update the screen
                 });
             }
             cards.getChildren().add(imgView);
