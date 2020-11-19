@@ -22,17 +22,17 @@ public class Spiellogik {
      */
     public void karteLegen(Spieler spieler, Karte karte) {
         try {
-            if (tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
+           /* if (tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
                     || tisch.getObereKarteAblagestapel().value == karte.value - 1   //Handkarte ist um eins größer als die oberste Ablagekarte
                     || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
                     || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)  //1 auf Lama
-            ) {
+            ) {*/
                 spieler.getCardHand().removeKarte((HandKarte) karte);
                 tisch.karteAblegen(karte);
-            } else {
+           /* } else {
                 throw new Exception();
             }
-
+*/
         } catch (Exception e) {
         }
     }
@@ -113,9 +113,26 @@ public class Spiellogik {
         return transaktion;
     }
 
-    public void chipAbgeben(Spieler spieler, Chip chip) {
-
-    }
+    /**
+     * Wenn Spieler keine karten auf der Hand hat kann er 1 Chip zurück geben
+     * @param spieler Spieler der die Aktiion ausführt
+     * @param chip Chip den der Spieler Abgeben möchte
+     * @return true wenn Chips zum zurück geben vorhanden sind sonst false
+     */
+        public boolean chipAbgeben(Spieler spieler, Chip chip) {
+            boolean aktion=false;
+            if(spieler.getBlackChips() >0 || spieler.getWhiteChips() >0) {
+                if (chip.getValue() == -1) {
+                    spieler.setWhiteChips(spieler.getWhiteChips() + 1);
+                    tisch.takeChips(-1, 0);
+                } else {
+                    spieler.setBlackChips(spieler.getBlackChips() + 1);
+                    tisch.takeChips(0, -1);
+                }
+                aktion=true;
+            }
+            return aktion;
+        }
 
     public void aussteigen(Spieler spieler) {
 
