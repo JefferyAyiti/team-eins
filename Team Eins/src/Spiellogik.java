@@ -3,25 +3,37 @@ import java.util.Map;
 import java.util.Stack;
 
 public class Spiellogik {
-    Stack<Spieler> letzteSpieler = new Stack();
-    Tisch tisch;
-    Spieler[] spielerliste;
+    private Stack<Spieler> letzteSpieler = new Stack();
+    private Tisch tisch;
+    private Spieler[] spielerListe;
 
     public Spiellogik(Tisch tisch) {
         this.tisch = tisch;
-        spielerliste = tisch.getSpieler();
+        spielerListe = tisch.getSpieler();
     }
 
+    public void durchgang(){
+
+    }
     /** Ein Spieler legt eine Karte aus seiner Hand auf den Ablagestapel
      * @param spieler
      * @param karte
      */
-    void karteLegen(Spieler spieler, Karte karte) {
+    public void karteLegen(Spieler spieler, Karte karte) {
         try {
-            //TODO
-            // regelüberprüfung
-            spieler.getCardHand().removeKarte((HandKarte) karte);
-            tisch.karteAblegen(karte);
+            if(tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
+                    ||tisch.getObereKarteAblagestapel().value == karte.value - 1   //Handkarte ist um eins größer als die oberste Ablagekarte
+                    ||(tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
+                    ||(tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)  //1 auf Lama
+            ){
+                spieler.getCardHand().removeKarte((HandKarte) karte);
+                tisch.karteAblegen(karte);
+            }
+
+            else {
+                throw new Exception();
+            }
+
         }
         catch (Exception e){}
     }
@@ -30,7 +42,7 @@ public class Spiellogik {
     /** Ein Spieler zieht eine KArte vom Nachziehstapel
      * @param spieler
      */
-    void karteNachziehen(Spieler spieler)  {
+    public void karteNachziehen(Spieler spieler)  {
         try {
             //TODO
             // regelüberprüfung
@@ -38,19 +50,19 @@ public class Spiellogik {
         } catch (Exception e) {}
     }
 
-    void chipsKassieren(Spieler spieler) {
+    public void chipsKassieren(Spieler spieler) {
 
     }
 
-    void chipsTauschen(Spieler spieler) {
+    public void chipsTauschen(Spieler spieler) {
 
     }
 
-    void chipAbgeben(Spieler spieler, Chip chip) {
+    public void chipAbgeben(Spieler spieler, Chip chip) {
 
     }
 
-    void aussteigen(Spieler spieler) {
+    public void aussteigen(Spieler spieler) {
 
     }
 
