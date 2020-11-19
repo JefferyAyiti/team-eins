@@ -1,3 +1,6 @@
+/**
+ * Die Tisch Klasse dient zur verwaltung der Spieler und als Schnittstelle der GUI. Informationen werden von hier an andere Klassen weitergegeben.
+ */
 public class Tisch {
 
     private BlackChip chipsblack = new BlackChip();
@@ -18,7 +21,7 @@ public class Tisch {
     }
 
     /**
-     * @return Gibt die Liste der Spieler zurück
+     * @return Gibt die Liste der aktuellen Spieler zurück, die "an dem Tisch sitzen".
      */
     Spieler[] getSpieler() {
         return spieler;
@@ -26,14 +29,16 @@ public class Tisch {
 
 
     /**
-     *Erhöt den Durchgang um 1
+     *Erhöt die durchgangNr (Durchgangsnummer) um 1.
+     * Methode ist ein Counter um die Durchgänge zu zählen.
      */
     public void nextDurchgang(){
         durchgangNr += 1;
     }
 
     /**
-     * Bestimmte Chips werden von dem Chip Stapel entfernt
+     * Schwarze/ Weiße Chips werden von dem Chip Stapel entfernt/hinzugefügt, der als Integer verwaltet wird.
+     * Um Chips hinzuzufügen, muss der Parameter nur negativ angegeben werden.
      * @param whiteChips
      * @param blackChips
      */
@@ -43,7 +48,7 @@ public class Tisch {
     }
 
     /**
-     * @return Oberste Karte des Nachziehstapels und entfernt diese vom Stapel
+     * @return Oberste Karte des Nachziehstapels und entfernt diese vom Stapel.
      * @throws Exception
      */
     public Karte karteZiehen() throws Exception {
@@ -60,7 +65,8 @@ public class Tisch {
 
     /**
      * Initiert den Nachziehstapel. 56 Karten werden hinzugefügt.
-     * @throws Exception
+     * 8*(card1, card2, card3, card4, card5, card6, lama)
+     * @throws Exception von Methode Stapel.addCard().
      */
     public void initNachziehstapel() throws Exception {
         for (int i = 0; i<7; i++){
@@ -79,7 +85,7 @@ public class Tisch {
     }
 
     /**
-     *Nachziehstapel wird gemischt
+     *Methode um den Nachziehstapel zu mischen.
      */
     public void mischenNachziehstapel(){
         nachziehStapel.mischen();
@@ -88,50 +94,50 @@ public class Tisch {
     //*****************Getter*******************
 
     /**
-     * @return Anzahl Spieler
+     * @return gibt die Anzahl der aktuellen Spieler zurück.
      */
     public int getAnzSpieler(){
         return spieler.length;
     }
 
     /**
-     * @return Anzahl weiße Chips
+     * @return Gibt die Anzahl der aktuellen weißen Chips zurück, die auf dem Tisch liegen/vorhanden sind.
      */
     public int getWhiteChips() {
         return whiteCh;
     }
 
     /**
-     * @return Anzahl schwaze Chips
+     * @return Gibt die Anzahl der aktuellen schwarzen Chips zurück, die auf dem Tisch liegen/vorhanden sind.
      */
     public int getBlackChips(){
         return blackCh;
     }
 
     /**
-     * @return Oberste Karte des Ablagestapel. Diese wird nicht entfernt.
-     * @throws Exception
+     * @return Gibt Oberste Karte des Ablagestapels zurück. Diese wird nicht entfernt.
+     * @throws Exception von Methode Stapel.getTopCard().
      */
     public Karte getObereKarteAblagestapel() throws Exception {
         return ablageStapel.getTopCard();
     }
 
     /**
-     * @return Aktuelle durchgangsNummer
+     * @return Gibt aktuelle durchgangNr (Durchgangsnummer) in Integer zurück
      */
     public int getDurchgangNr(){
         return durchgangNr;
     }
 
     /**
-     * @return Größe des Nachziehstapels
+     * @return Gibt größe des Nachziehstapels in Integer zurück.
      */
     public int getNachziehStapelSize(){
         return nachziehStapel.getCardCount();
     }
 
     /**
-     * @return Größe des Ablagestapels
+     * @return Gibt größe des Ablagestapels in Integer zurück.
      */
     public int getAblageStapelSize(){
         return ablageStapel.getCardCount();

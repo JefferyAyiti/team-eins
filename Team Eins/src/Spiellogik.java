@@ -90,8 +90,27 @@ public class Spiellogik {
 
     }
 
-    public void chipsTauschen(Spieler spieler) {
+    /**
+     * Tauscht 10 weiße Chips gegen 1 schwarzen Chip aus.
+     * @param spieler
+     * @return Wenn nicht genügend weiße Chips vorhanden sind und
+     * Wenn nicht genügend schwarze Chips auf dem Tisch liegen: transaktion = false
+     * sonst: transaktion = true
+     */
+    public boolean chipsTauschen(Spieler spieler) {
 
+        boolean transaktion = false;
+
+        if(spieler.getWhiteChips() >= 10 || tisch.getBlackChips() != 0){
+
+            spieler.setBlackChips(spieler.getBlackChips() + 1);
+            spieler.setWhiteChips(spieler.getWhiteChips() - 10);
+
+            tisch.takeChips(-10, 1);
+
+            transaktion = true;
+        }
+        return transaktion;
     }
 
     public void chipAbgeben(Spieler spieler, Chip chip) {
