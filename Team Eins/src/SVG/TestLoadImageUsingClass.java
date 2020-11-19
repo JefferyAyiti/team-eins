@@ -5,20 +5,23 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 
+import java.io.File;
 import java.io.InputStream;
 
 public class TestLoadImageUsingClass {
 
 
 	public static void installSvgLoader() {
-
+		SvgImageLoaderFactory.install();
 	}
 
 
 	public Image getImg(String path) {
-		SvgImageLoaderFactory.install(new PrimitiveDimensionProvider());
+
 		InputStream imageData = this.getClass().getClassLoader()
 				.getResourceAsStream(path);
+
+
 
 		Image image;
 		if(path.contains("SVG")) {

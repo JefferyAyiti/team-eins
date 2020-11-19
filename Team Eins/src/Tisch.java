@@ -4,7 +4,7 @@ public class Tisch {
     private WhiteChip whiteChip = new WhiteChip();
     private int blackCh;
     private int whiteCh;
-    private int durchgangNr;
+    private int durchgangNr = 0;
     private Stapel nachziehStapel = new Stapel(true);
     private Stapel ablageStapel = new Stapel(false);
     private Spieler[] spieler;
@@ -24,12 +24,6 @@ public class Tisch {
         return spieler;
     }
 
-    /**
-     * Setzt Durchgang auf 0
-     */
-    public void neuerDurchgang(){
-        durchgangNr = 0;
-    }
 
     /**
      *Erhöt den Durchgang um 1

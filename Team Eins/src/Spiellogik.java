@@ -39,7 +39,8 @@ public class Spiellogik {
     }
 
 
-    /** Ein Spieler zieht eine KArte vom Nachziehstapel
+    /** Ein Spieler zieht eine KArte vom Nachziehstapel,
+     * diese wird seiner Hand hinzugefügt
      * @param spieler
      */
     public void karteNachziehen(Spieler spieler)  {
@@ -68,6 +69,32 @@ public class Spiellogik {
 
     Map<Spieler, Integer> ranglisteErstellen() {
         return new HashMap<>();
+    }
+
+    /** Initiiert eine neue Runde, d.h. Stapel mischen und neue Karten verteilen
+     * @throws Exception
+     */
+    public void neueRunde() throws Exception {
+        for (int i = 0; i < Main.spieler.length; i++) {
+            Main.haende[i] = new Hand();
+            Main.spieler[i].setCardHand(Main.haende[i]);
+
+        }
+
+        tisch.initNachziehstapel();
+        tisch.mischenNachziehstapel();
+
+        //gebe jeden Spieler (anzSpieler) 6 Karten in Reihenfolge
+        for (int i = 0; i < 6; i++) {
+            for (int s = 0; s < Main.spieler.length; s++) {
+                Main.haende[s].addKarte(tisch.karteZiehen());
+            }
+
+        }
+
+        tisch.karteAblegen(tisch.karteZiehen()); //Ablagestapel
+        tisch.nextDurchgang();
+
     }
 
 }

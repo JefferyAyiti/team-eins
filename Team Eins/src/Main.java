@@ -16,8 +16,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import org.w3c.dom.ls.LSOutput;
 
 import javax.swing.*;
+
+import static java.lang.Integer.min;
 
 public class Main extends Application{
 
@@ -45,9 +48,12 @@ public class Main extends Application{
         launch(args);
     }
 
+
+
     /**
      *
-     * Erstellt Stapel, Spieler und deren initialen handkarten
+     * Erstellt Tisch, Nachzieh- und Abalgestapel, Spieler
+     * und startet die erste Runde im Spiel
      * @throws Exception
      */
     private static void initGame() throws Exception {
@@ -58,28 +64,19 @@ public class Main extends Application{
         spieler = new Spieler[anzSpieler];
 
         for (int i = 0; i < anzSpieler; i++) {
-            haende[i] = new Hand();
-            spieler[i] = new Spieler(haende[i], "Spieler " + (i + 1));
+            spieler[i] = new Spieler("Spieler " + (i + 1));
 
         }
         tisch = new Tisch(spieler);
         spiellogik = new Spiellogik(tisch);
-        tisch.initNachziehstapel();
-        tisch.mischenNachziehstapel();
 
-        //gebe jeden Spieler (anzSpieler) 6 Karten in Reihenfolge
-        for (int i = 0; i < 6; i++) {
-            for (int s = 0; s < anzSpieler; s++) {
-                haende[s].addKarte(tisch.karteZiehen());
-            }
+        spiellogik.neueRunde();
 
-        }
-
-        tisch.karteAblegen(tisch.karteZiehen()); //Ablagestapel
     }
 
 
     //GUI
+
 
     Image image = loader.getImg("images/SVG/Back.svg");
     Image card1 = loader.getImg("images/SVG/Card1.svg");
@@ -126,12 +123,17 @@ public class Main extends Application{
 
         //verdeckte Karten
 
-        for (int i = 0; i < spieler[playerId].getCardCount(); i++) {
+        int cardcount = spieler[playerId].getCardCount();
+        if(cardcount > 6 && playerId != 0) {
+            plr.setText(spieler[playerId].getName()+" ("+cardcount+")");
+        }
+        for (int i = 0; i < cardcount; i++) {
             ImageView imgView = new ImageView(image);
             if (playerId == 0) {
                 imgView = new ImageView(
                         cardsArray[spieler[playerId].getCardHand().getKarte(i).getValue() - 1]);
-            }
+            } else if(i > 6)
+                continue;
 
 
             //imgView.setTranslateX(left + i * 60);
@@ -142,7 +144,7 @@ public class Main extends Application{
 
             if(playerId!=0) {
                 imgView.setTranslateX(-30*i);
-                imgView.setRotate(-spieler[playerId].getCardCount()/2*10+i*10);
+                imgView.setRotate(-cardcount/2*10+i*10);
             } else {
                 int finalI = i;
                 imgView.setOnMouseClicked(mouseEvent -> {
@@ -156,7 +158,7 @@ public class Main extends Application{
 
 
         if(playerId!=0) {
-            cards.setTranslateX(+(spieler[playerId].getCardCount()*30)/2-20);
+            cards.setTranslateX(+(min(6,spieler[playerId].getCardCount())*30)/2-20);
         }
         pane.getChildren().add(cards);
         Pane chips = new VBox();

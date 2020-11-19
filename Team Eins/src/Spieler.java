@@ -6,14 +6,21 @@ public class Spieler {
     boolean folded = false;
 
     /**
-     * Erstellt Spieler Object mit Handkartem, Spielername, und Tisch
-     * @param cardHand aktuelle Karten auf der Hand
+     * Erstellt Spieler Object mit Spielername
      * @param playerName Spieler Name
      */
-    public Spieler(Hand cardHand, String playerName) {
-        this.cardHand = cardHand;
+    public Spieler(String playerName) {
         this.playerName = playerName;
     }
+
+
+    /**
+     * Weißt dem Spieler eine Kartenhand zu
+     * @param hand
+     */
+public void setCardHand(Hand hand) {
+        cardHand = hand;
+}
 
     /**
      *Gibt den Namen des Spielers zurück.

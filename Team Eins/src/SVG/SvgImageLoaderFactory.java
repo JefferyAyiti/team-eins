@@ -1,15 +1,13 @@
 package SVG;
 
-import java.io.IOException;
-import java.io.InputStream;
-
+import SVG.dimension.DefaultDimensionProvider;
+import SVG.dimension.DimensionProvider;
 import com.sun.javafx.iio.ImageFormatDescription;
 import com.sun.javafx.iio.ImageLoader;
 import com.sun.javafx.iio.ImageLoaderFactory;
 import com.sun.javafx.iio.ImageStorage;
 
-import SVG.dimension.DefaultDimensionProvider;
-import SVG.dimension.DimensionProvider;
+import java.io.InputStream;
 
 public class SvgImageLoaderFactory implements ImageLoaderFactory {
 	private static final SvgImageLoaderFactory instance = new SvgImageLoaderFactory();
@@ -36,7 +34,7 @@ public class SvgImageLoaderFactory implements ImageLoaderFactory {
 	}
 
 	@Override
-	public ImageLoader createImageLoader(InputStream input) throws IOException {
+	public ImageLoader createImageLoader(InputStream input) {
 		return new SvgImageLoader(input, dimensionProvider);
 	}
 }
