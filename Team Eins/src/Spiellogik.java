@@ -114,7 +114,7 @@ public class Spiellogik {
     }
 
     /**
-     * Wenn Spieler keine karten auf der Hand hat kann er 1 Chip zurück geben
+     * gibt einen Chip an den Tisch zurück
      * @param spieler Spieler der die Aktiion ausführt
      * @param chip Chip den der Spieler Abgeben möchte
      * @return true wenn Chips zum zurückgeben vorhanden sind ansonsten false
