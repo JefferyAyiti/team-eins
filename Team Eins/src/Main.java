@@ -124,7 +124,7 @@ public class Main extends Application{
         //verdeckte Karten
 
         int cardcount = spieler[playerId].getCardCount();
-        if(cardcount > 6 && playerId != 0) {
+        if(cardcount > 7 && playerId != 0) {
             plr.setText(spieler[playerId].getName()+" ("+cardcount+")");
         }
         for (int i = 0; i < cardcount; i++) {

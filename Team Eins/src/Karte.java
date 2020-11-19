@@ -1,5 +1,5 @@
 public class Karte {
-int value;
+final int value;
 boolean covered;
 
     /**
