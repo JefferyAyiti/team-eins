@@ -44,7 +44,9 @@ public class Bot extends Spieler{
      */
     public void playSchwierigkeitMittel(){
 
+        boolean gleicheKarte = true;
         boolean abgelegt = false;
+        boolean noChange = false;
 
         if(inGame()){
             if(zug){
@@ -53,31 +55,32 @@ public class Bot extends Spieler{
                     this.chipsTauschen();
                 }
 
-                //for Schleifen für das Karten legen
-                for(int i = 0;i < this.getCardCount() ; i++){
-                    HandKarte karte = this.cardHand.getKarte(i);
+                while(!noChange){
 
-                    try {
-                        if(tisch.getObereKarteAblagestapel().value == karte.value ){//gleicher Wert
-                            this.karteLegen(karte);
-                            abgelegt = true;
+                    noChange = true;
+                    //for Schleife für das Karten legen
+                    for(int i = 0;i < this.getCardCount() ; i++){
+                        HandKarte karte = this.cardHand.getKarte(i);
+
+                        try {
+                            if(gleicheKarte && tisch.getObereKarteAblagestapel().value == karte.value ){//gleicher Wert
+                                this.karteLegen(karte);
+                                abgelegt = true;
+                                noChange = false;
+
+                            }else if(!gleicheKarte && (tisch.getObereKarteAblagestapel().value == karte.value - 1  || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
+                                    || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1) )  ){// Handkarte um eins größer
+                                this.karteLegen(karte);
+                                abgelegt = true;
+                                noChange = false;
+                                i = 100;
+                            }
+                        } catch (Exception e) {
                         }
-                    } catch (Exception e) {
                     }
+                    gleicheKarte = !gleicheKarte;
                 }
 
-                for(int i = 0;i < this.getCardCount() ; i++){
-                    HandKarte karte = this.cardHand.getKarte(i);
-
-                    try {
-                        if(tisch.getObereKarteAblagestapel().value == karte.value - 1  || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
-                                || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)   ){// Handkarte um eins größer
-                            this.karteLegen(karte);
-                            abgelegt = true;
-                        }
-                    } catch (Exception e) {
-                    }
-                }
                 //Kartenlegen Ende//
 
                 //Prüfen ob noch Karten vorhanden
@@ -125,14 +128,6 @@ public class Bot extends Spieler{
             tisch.takeChips(-1,0);
         }
     }
-
-    /**
-     * Setzt folded = true.
-     * Somit steigt der Bot aus.
-     *
-     * Die Methode ist eine Helper Methode für die playSchwierigkeit() Methoden.
-     * Ähnelt der Methode aus der Spiellogik.
-     */
 
     /**
      * Tauscht 10 weiße Chips gegen 1 schwarzen Chip aus.
