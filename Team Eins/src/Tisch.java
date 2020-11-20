@@ -145,17 +145,28 @@ public class Tisch {
         return ablageStapel.getCardCount();
     }
 
+
+    /**
+     * Wählt zufällig ein Spieler
+     */
     public void ersteSpieler(){
         int erste = (int) (Math.random()*getAnzSpieler());
         aktiv = erste;
     }
-    public void naechste(){
+
+    /**
+     * Kommt auf naechste Spieler
+     */
+    public void naechsteSpieler(){
         aktiv = (aktiv+1)%getAnzSpieler();
     }
 
+    /**
+     * @return Spieler
+     * gibt der Spieler der gerade spielt zurück
+     */
     public Spieler getAktivSpieler(){
         return spielerList[aktiv];
-        //Todo delay till next player
     }
 
 }
