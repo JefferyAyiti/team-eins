@@ -7,7 +7,7 @@ public class Spiellogik {
 
     public Spiellogik(Tisch tisch) {
         this.tisch = tisch;
-        spielerListe = tisch.getSpieler();
+        spielerListe = tisch.getSpielerList();
     }
 
     public void durchgang() {

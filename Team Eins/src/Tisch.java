@@ -10,21 +10,23 @@ public class Tisch {
     private int durchgangNr = 0;
     private Stapel nachziehStapel = new Stapel(true);
     private Stapel ablageStapel = new Stapel(false);
-    private Spieler[] spieler;
+    private Spieler[] spielerList;
+    private int aktiv = 0;
+
 
 
 
     public Tisch(Spieler[] spieler) {
         blackCh = chipsblack.getMaxChips();
         whiteCh = whiteChip.getMaxChips();
-        this.spieler = spieler;
+        this.spielerList = spieler;
     }
 
     /**
      * @return Gibt die Liste der aktuellen Spieler zurück, die "an dem Tisch sitzen".
      */
-    Spieler[] getSpieler() {
-        return spieler;
+    Spieler[] getSpielerList() {
+        return spielerList;
     }
 
 
@@ -97,7 +99,7 @@ public class Tisch {
      * @return gibt die Anzahl der aktuellen Spieler zurück.
      */
     public int getAnzSpieler(){
-        return spieler.length;
+        return spielerList.length;
     }
 
     /**
@@ -142,4 +144,18 @@ public class Tisch {
     public int getAblageStapelSize(){
         return ablageStapel.getCardCount();
     }
+
+    public void ersteSpieler(){
+        int erste = (int) (Math.random()*getAnzSpieler());
+        aktiv = erste;
+    }
+    public void naechste(){
+        aktiv = (aktiv+1)%getAnzSpieler();
+    }
+
+    public Spieler getAktivSpieler(){
+        return spielerList[aktiv];
+        //Todo delay till next player
+    }
+
 }
