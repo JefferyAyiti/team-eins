@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Spiellogik {
     private Stack<Spieler> letzteSpieler = new Stack();
-    private Tisch tisch;
+    public Tisch tisch;
     private Spieler[] spielerListe;
 
     public Spiellogik(Tisch tisch) {
