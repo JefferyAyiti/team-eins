@@ -16,14 +16,19 @@ public class TestLoadImageUsingClass {
 
 	public Image getImg(String path) {
 
+		return getImg(path, 1);
+	}
+
+	public Image getImg(String path, double factor) {
+
 		InputStream imageData = this.getClass().getClassLoader()
 				.getResourceAsStream(path);
 
 
 
 		Image image;
-		if(path.contains("SVG")) {
-			image = new Image(imageData, 60, 90, true, true);
+		if(!path.contains("table")) {
+			image = new Image(imageData, 55*factor, 82.5*factor, true, true);
 		} else
 			image = new Image(imageData);
 		return image;
