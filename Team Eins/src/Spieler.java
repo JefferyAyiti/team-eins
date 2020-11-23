@@ -53,6 +53,7 @@ public class Spieler {
     }
     public void aussteigen(){
         aussteigen = true;
+        Main.tisch.naechste();
     }
     public boolean inGame() {
         return !aussteigen;

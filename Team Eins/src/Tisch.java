@@ -151,7 +151,9 @@ public class Tisch {
      * Kommt auf naechste Spieler
      */
     public Spieler naechste(){
-        aktiv = (aktiv+1)%getAnzSpieler();
+        do {
+            aktiv = (aktiv+1)%getAnzSpieler();}
+        while(!spielerList[aktiv].inGame());
         return spielerList[aktiv];
     }
 

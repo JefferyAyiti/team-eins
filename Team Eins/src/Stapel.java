@@ -62,7 +62,7 @@ public class Stapel {
             stapel.add(karte);
             cardCount = cardCount + 1;
             topCard = stapel.peek();
-        }
+        } else
         throw new Exception();
     }
 

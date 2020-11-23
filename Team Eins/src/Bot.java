@@ -1,4 +1,4 @@
-public class Bot extends Spieler{
+public class Bot extends Spieler {
 
     private int schwierigkeit;
     private Tisch tisch = Main.tisch;
@@ -17,10 +17,16 @@ public class Bot extends Spieler{
 
     boolean play() {
         setZug(true);
-        switch(schwierigkeit) {
-            case 1:playSchwierigkeitLeicht();break;
-            case 2:playSchwierigkeitMittel();break;
-            case 3:playSchwierigkeitSchwer();break;
+        switch (schwierigkeit) {
+            case 1:
+                playSchwierigkeitLeicht();
+                break;
+            case 2:
+                playSchwierigkeitMittel();
+                break;
+            case 3:
+                playSchwierigkeitSchwer();
+                break;
         }
 
         //Main.tisch.naechste();
@@ -30,14 +36,14 @@ public class Bot extends Spieler{
     /**
      * @return Gibt den schwierigkeitsgrad des Bots zurück. (1 := Leicht, 2:= Mittel, 3 := Schwer)
      */
-    public int getSchwierigkeit(){
+    public int getSchwierigkeit() {
         return schwierigkeit;
     }
 
     /**
      * TODO
      */
-    public void playSchwierigkeitLeicht(){
+    public void playSchwierigkeitLeicht() {
 
     }
 
@@ -49,38 +55,38 @@ public class Bot extends Spieler{
      * - Wenn keine Karten vorhanden größtmöglichen Chip abgeben
      * - Karte ziehen wenn möglich (mit einer wskeit)
      * - sonst Zug beendet
-     *
+     * <p>
      * Um Methode zu verwenden muss setZug(true) aufgerufen werden.
      * Methode setzt setZug(false) automatisch
      */
-    public void playSchwierigkeitMittel(){
+    public void playSchwierigkeitMittel() {
 
         boolean gleicheKarte = true;
         boolean abgelegt = false;
         boolean noChange = false;
 
-        if(inGame()){
-            if(zug){
+        if (inGame()) {
+            if (zug) {
                 //Chips umtauschen
-                while(this.whiteChips >= 10){
+                while (this.whiteChips >= 10) {
                     this.chipsTauschen();
                 }
 
-                while(!noChange){
+                while (!noChange) {
 
                     noChange = true;
                     //for Schleife für das Karten legen
-                    for(int i = 0;i < this.getCardCount() ; i++){
+                    for (int i = 0; i < this.getCardCount(); i++) {
                         HandKarte karte = this.cardHand.getKarte(i);
 
                         try {
-                            if(gleicheKarte && tisch.getObereKarteAblagestapel().value == karte.value ){//gleicher Wert
+                            if (gleicheKarte && tisch.getObereKarteAblagestapel().value == karte.value) {//gleicher Wert
                                 this.karteLegen(karte);
                                 abgelegt = true;
                                 noChange = false;
 
-                            }else if(!gleicheKarte && (tisch.getObereKarteAblagestapel().value == karte.value - 1  || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
-                                    || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1) )  ){// Handkarte um eins größer
+                            } else if (!gleicheKarte && (tisch.getObereKarteAblagestapel().value == karte.value - 1 || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
+                                    || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1))) {// Handkarte um eins größer
                                 this.karteLegen(karte);
                                 abgelegt = true;
                                 noChange = false;
@@ -95,7 +101,7 @@ public class Bot extends Spieler{
                 //Kartenlegen Ende//
 
                 //Prüfen ob noch Karten vorhanden
-                if(this.getCardCount() == 0){
+                if (this.getCardCount() == 0) {
                     this.chipAbgeben();
                     this.aussteigen();
                     this.setZug(false);
@@ -103,10 +109,10 @@ public class Bot extends Spieler{
 
                 //Karten ziehen wenn noch keine Karte abgelegt wurde, wenn man am Zug ist, Wenn man mehr als 3 Karten hat,
                 //und 50% wskeit kommt dazu. Sonst wird ausgestiegen
-                if(this.zug && !abgelegt && this.getCardCount() >= 4 && Math.random() <= 0.5){
+                if (this.zug && !abgelegt && this.getCardCount() >= 4 && Math.random() <= 0.5) {
                     this.karteNachziehen();
                     this.setZug(false);
-                }else{
+                } else {
                     this.aussteigen();
                     this.setZug(false);
                 }
@@ -117,41 +123,60 @@ public class Bot extends Spieler{
     /**
      * TODO
      */
-    public void playSchwierigkeitSchwer(){
-        Main.spiellogik.karteNachziehen(this);
+    public void playSchwierigkeitSchwer() {
+        Karte card;
+        Boolean ging;
+        Main.spiellogik.chipsTauschen(this);
+
+        for (int i = 0; i < this.getCardCount(); i++) {
+            card = this.getCardHand().getKarte(i);
+            ging = Main.spiellogik.karteLegen(this, card);
+            if (ging) {
+                System.out.println("\tLege " + card.getValue());
+                return;
+            }
+        }
+        if (Main.spiellogik.karteNachziehen(this)) {
+            System.out.println("\tZiehe");
+            return;
+        } else {
+            System.out.println("\tSteige aus");
+            Main.spiellogik.aussteigen(this);
+        }
+
     }
 
     /**
      * Lässt den Bot Chips ablegen, wenn er alle Karten abgelegt hat.
-     *
+     * <p>
      * Die Methode ist eine Helper Methode für die playSchwierigkeit() Methoden.
      * Ähnelt der Methode aus der Spiellogik.
      */
-    private void chipAbgeben(){
-        if(this.getBlackChips() > 0){
-            this.setBlackChips(this.getBlackChips() -1);
+    private void chipAbgeben() {
+        if (this.getBlackChips() > 0) {
+            this.setBlackChips(this.getBlackChips() - 1);
 
-            tisch.takeChips(0,-1);
+            tisch.takeChips(0, -1);
 
-        }else if(this.getWhiteChips() > 0){
+        } else if (this.getWhiteChips() > 0) {
             this.setWhiteChips(this.getWhiteChips() - 1);
 
-            tisch.takeChips(-1,0);
+            tisch.takeChips(-1, 0);
         }
     }
 
     /**
      * Tauscht 10 weiße Chips gegen 1 schwarzen Chip aus.
-     *
+     * <p>
      * Die Methode ist Public, da falls es zu wenig weiße Chips auf dem Feld gibt, man den Bot forcieren kann, seine Chips
      * zu tauschen.
-     *
+     * <p>
      * Die Methode ist eine Helper Methode für die playSchwierigkeit() Methoden.
      * Ähnelt der Methode aus der Spiellogik.
      */
-    public void chipsTauschen(){
+    public void chipsTauschen() {
 
-        if(this.getWhiteChips() >= 10 || tisch.getBlackChips() > 0){
+        if (this.getWhiteChips() >= 10 || tisch.getBlackChips() > 0) {
 
             this.setBlackChips(this.getBlackChips() + 1);
             this.setWhiteChips(this.getWhiteChips() - 10);
@@ -163,14 +188,14 @@ public class Bot extends Spieler{
 
     /**
      * Lässt den Bot eine Karte nachziehen.
-     *
+     * <p>
      * Die Methode ist eine Helper Methode für die playSchwierigkeit() Methoden.
      * Ähnelt der Methode aus der Spiellogik.
      */
-    private void karteNachziehen(){
-       try {
-           //TODO
-           // regelüberprüfung
+    private void karteNachziehen() {
+        try {
+            //TODO
+            // regelüberprüfung
             this.getCardHand().addKarte(tisch.karteZiehen());
         } catch (Exception e) {
         }
@@ -179,12 +204,10 @@ public class Bot extends Spieler{
     /**
      * Lässt den Bot eine Karte legen, wenn die Regeln es zulassen.
      *
-     * @param karte
-     *
-     * Die Methode ist eine Helper Methode für die playSchwierigkeit() Methoden.
-     * Ähnelt der Methode aus der Spiellogik.
+     * @param karte Die Methode ist eine Helper Methode für die playSchwierigkeit() Methoden.
+     *              Ähnelt der Methode aus der Spiellogik.
      */
-    private void karteLegen(HandKarte karte){
+    private void karteLegen(HandKarte karte) {
         try {
             if (karte.isPlayable()) {
                 this.getCardHand().removeKarte(karte);
@@ -199,12 +222,12 @@ public class Bot extends Spieler{
     /**
      * Gibt dem Bot bescheid, dass sein Zug beginnen kann.
      * Eine playSchwierigkeit() Methode muss allerdings aufgerufen werden, damit der Bot beginnen kann.
-     *
+     * <p>
      * Setzt den Parameter selbständig auf false, wenn er fertig ist.
      *
      * @param entryZug
      */
-    public void setZug(boolean entryZug){
+    public void setZug(boolean entryZug) {
         zug = entryZug;
     }
 

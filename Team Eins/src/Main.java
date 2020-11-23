@@ -10,7 +10,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +25,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 import java.util.TimerTask;
 import java.util.Timer;
 
@@ -36,7 +42,6 @@ public class Main extends Application {
     static Spiellogik spiellogik;
     double zoomfactor = 1;
     volatile long resize = 0;
-    volatile boolean resizeFlag;
 
     //Wird später im Menü festgelegt
     private static int anzSpieler = 6;//2 + (int) (Math.random() * 4);
@@ -73,7 +78,7 @@ public class Main extends Application {
 
         spieler[0] = new Spieler("Spieler 1");
         for (int i = 1; i < anzSpieler; i++) {
-            spieler[i] = new Bot("Bot " + (i + 1), 2);
+            spieler[i] = new Bot("Bot " + (i + 1), 3);
 
         }
         tisch = new Tisch(spieler);
@@ -116,10 +121,10 @@ public class Main extends Application {
         buildStage(primaryStage);
 
         Timer timer = new Timer();
-        timer.schedule(new MyTask1(), 1000, 300);
+        timer.schedule(new MyTask1(), 3000, 300);
 
         Timer timer2 = new Timer();
-        timer2.schedule(new moveCheck(), 1000, 3000);
+        timer2.schedule(new moveCheck(), 3000, 3000);
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
         {
@@ -165,6 +170,9 @@ public class Main extends Application {
         }
 
 
+        ColorAdjust desaturate = new ColorAdjust();
+        desaturate.setSaturation(-1);
+
 
         StackPane cards = new StackPane();
         cards.setAlignment(Pos.BASELINE_CENTER);
@@ -175,6 +183,8 @@ public class Main extends Application {
 
         for (int i = 0; i < cardcount; i++) {
             ImageView imgView = new ImageView(image);
+            if(!spieler[playerId].inGame())
+                imgView.setEffect(desaturate);
             if (playerId == 0) {
                 imgView = new ImageView(
                         cardsArray[spieler[playerId].getCardHand().getKarte(i).getValue() - 1]);
@@ -197,6 +207,46 @@ public class Main extends Application {
                     spiellogik.karteLegen(spieler[playerId],
                             spieler[playerId].getCardHand().getKarte(finalI));
                     buildStage(classPrimaryStage);
+                    //Chip tausch
+                    if (spieler[playerId].getCardHand().getHandKarte().isEmpty()) {
+                        Chip tausch;
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Glückwunsch");
+                        alert.setHeaderText("Willst du einen Chip tauschen?");
+
+                        ButtonType buttonTypeWhite = new ButtonType("weiß");
+                        ButtonType buttonTypeBlack = new ButtonType("schwarz");
+                        ButtonType buttonTypeCancel = new ButtonType("schließen", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+                        //spieler hat weiße und Schwarze Chips
+                        if(spieler[playerId].getWhiteChips()>=1 && spieler[playerId].getBlackChips()>=1 ) {
+                            alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeBlack, buttonTypeCancel);
+                            //nur weiße
+                        }else if (spieler[playerId].getWhiteChips()>=1){
+                            alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeCancel);
+                            //nur schwarze
+                        }else if(spieler[playerId].getBlackChips()>=1){
+                            alert.getButtonTypes().setAll(buttonTypeBlack, buttonTypeCancel);
+                        }else{
+                            alert.setHeaderText("Du hast keine Chips zum abgeben");
+                            alert.getButtonTypes().setAll(buttonTypeCancel);
+                        }
+
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() == buttonTypeWhite){
+                            // ... user chose "weiß"
+                            tausch=new WhiteChip();
+                            spiellogik.chipAbgeben(spieler[playerId], tausch);
+                        } else if (result.get() == buttonTypeBlack) {
+                            // ... user chose "schwarz"
+                            tausch=new BlackChip();
+                            spiellogik.chipAbgeben(spieler[playerId], tausch);
+                        }else {
+                            // ... user chose CANCEL or closed the dialog
+                        }
+
+                    }
+
                 });
             }
             if (playerId == 0) {
@@ -420,26 +470,26 @@ public class Main extends Application {
     void getZoomedImages() {
 
 
-            double factor;
-            if (sceneWidth / sceneHeight > 1.5) {
-                factor = sceneHeight / 400;
-            } else
-                factor = sceneWidth / 600;
+        double factor;
+        if (sceneWidth / sceneHeight > 1.5) {
+            factor = sceneHeight / 400;
+        } else
+            factor = sceneWidth / 600;
 
 
-            factor = Double.min(factor, 2);
-            zoomfactor = factor;
-            //System.out.println(factor);
+        factor = Double.min(factor, 2);
+        zoomfactor = factor;
+        //System.out.println(factor);
 
-            image = loader.getImg("images/SVG/Back.svg", factor);
-            card1 = loader.getImg("images/SVG/Card1.svg", factor);
-            card2 = loader.getImg("images/SVG/Card2.svg", factor);
-            card3 = loader.getImg("images/SVG/Card3.svg", factor);
-            card4 = loader.getImg("images/SVG/Card4.svg", factor);
-            card5 = loader.getImg("images/SVG/Card5.svg", factor);
-            card6 = loader.getImg("images/SVG/Card6.svg", factor);
-            lama = loader.getImg("images/SVG/Lama.svg", factor);
-            table1 = loader.getImg("images/table2.svg", factor);
+        image = loader.getImg("images/SVG/Back.svg", factor);
+        card1 = loader.getImg("images/SVG/Card1.svg", factor);
+        card2 = loader.getImg("images/SVG/Card2.svg", factor);
+        card3 = loader.getImg("images/SVG/Card3.svg", factor);
+        card4 = loader.getImg("images/SVG/Card4.svg", factor);
+        card5 = loader.getImg("images/SVG/Card5.svg", factor);
+        card6 = loader.getImg("images/SVG/Card6.svg", factor);
+        lama = loader.getImg("images/SVG/Lama.svg", factor);
+        table1 = loader.getImg("images/table2.svg", factor);
 
 
 
