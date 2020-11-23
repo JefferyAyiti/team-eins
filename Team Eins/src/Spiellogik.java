@@ -100,6 +100,7 @@ public class Spiellogik {
                     }
                     if(!spieler.isLetzerSpielerDurchgang()){  //Spieler darf noch seine Karten ablegen
                         tisch.naechste();
+                        System.out.println("next");
                     }
                     return true;
 

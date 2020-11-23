@@ -1,5 +1,6 @@
 import SVG.TestLoadImageUsingClass;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -69,8 +70,9 @@ public class Main extends Application {
         haende = new Hand[anzSpieler];
         spieler = new Spieler[anzSpieler];
 
-        for (int i = 0; i < anzSpieler; i++) {
-            spieler[i] = new Spieler("Spieler " + (i + 1));
+        spieler[0] = new Spieler("Spieler 1");
+        for (int i = 1; i < anzSpieler; i++) {
+            spieler[i] = new Bot("Bot " + (i + 1), 2);
 
         }
         tisch = new Tisch(spieler);
@@ -101,8 +103,8 @@ public class Main extends Application {
     Image blackChipImage = new Image("/images/chips/black.png");
 
     public void resize() {
-        if(System.currentTimeMillis() > resize+500) {
-            System.out.println("bup");
+
+        if(System.currentTimeMillis() < resize+500) {
             getZoomedImages();
             buildStage(classPrimaryStage);
         }
@@ -115,14 +117,18 @@ public class Main extends Application {
         Timer timer = new Timer();
         timer.schedule(new MyTask1(), 1000, 300);
 
+        Timer timer2 = new Timer();
+        timer2.schedule(new moveCheck(), 1000, 3000);
+
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
         {
-            if (resize < System.currentTimeMillis() - 500)
-                getZoomedImages();
+            resize = System.currentTimeMillis();
+
         };
 
         primaryStage.widthProperty().addListener(stageSizeListener);
         primaryStage.heightProperty().addListener(stageSizeListener);
+
     }
 
 
@@ -143,6 +149,9 @@ public class Main extends Application {
 
         Label plr = new Label(spieler[playerId].getName());
         plr.setTextFill(Color.WHITE);
+        if(spieler[playerId] == tisch.getAktivSpieler()) {
+            plr.setTextFill(Color.YELLOW);
+        }
         plr.setTranslateY(-15);
         pane.getChildren().add(plr);
 
@@ -215,10 +224,12 @@ public class Main extends Application {
         pane.getChildren().add(chips);
 
         switch(playerId) {
-            case 1: pane.setTranslateY(+30*zoomfactor); break;
-            case 3: pane.setTranslateX(-30*zoomfactor); pane.setTranslateY(10*zoomfactor); break;
-            case 5: pane.setTranslateX(30*zoomfactor); pane.setTranslateY(10*zoomfactor); break;
-            case 2: pane.setTranslateY(+30*zoomfactor); break;
+            case 1:
+            case 5:
+                pane.setTranslateY(+30*zoomfactor); break;
+            case 4: pane.setTranslateX(30*zoomfactor); pane.setTranslateY(10+10*zoomfactor); break;
+            case 3: pane.setTranslateY(10*zoomfactor); break;
+            case 2: pane.setTranslateX(-30*zoomfactor); pane.setTranslateY(10+10*zoomfactor); break;
         }
         return pane;
     }
@@ -365,26 +376,26 @@ public class Main extends Application {
 
             if (anzSpieler > 2) {
                 Node player2 = makepanel(2);
-                player2.setRotate(-90);
-                gridPane.add(player2, 4, 2, 1, 1);
+                gridPane.add(player2, 0, 0, 2, 1);
+                player2.setRotate(155);
             }
 
             if (anzSpieler > 3) {
                 Node player3 = makepanel(3);
-                player3.setRotate(155);
-                gridPane.add(player3, 0, 0, 2, 1);
+                player3.setRotate(180);
+                gridPane.add(player3, 2, 0, 1, 1);
             }
 
             if (anzSpieler > 4) {
                 Node player4 = makepanel(4);
-                player4.setRotate(180);
-                gridPane.add(player4, 2, 0, 1, 1);
+                player4.setRotate(205);
+                gridPane.add(player4, 3, 0, 2, 1);
             }
 
             if (anzSpieler > 5) {
                 Node player5 = makepanel(5);
-                player5.setRotate(205);
-                gridPane.add(player5, 3, 0, 2, 1);
+                player5.setRotate(-90);
+                gridPane.add(player5, 4, 2, 2, 1);
             }
 
 
@@ -403,7 +414,7 @@ public class Main extends Application {
 
     void getZoomedImages() {
 
-        if (resize < System.currentTimeMillis()-500) {
+
             double factor;
             if (sceneWidth / sceneHeight > 1.5) {
                 factor = sceneHeight / 400;
@@ -424,8 +435,7 @@ public class Main extends Application {
             card6 = loader.getImg("images/SVG/Card6.svg", factor);
             lama = loader.getImg("images/SVG/Lama.svg", factor);
             table1 = loader.getImg("images/table2.svg", factor);
-            resize = System.currentTimeMillis();
-        }
+
 
 
     }
@@ -435,7 +445,25 @@ public class Main extends Application {
         public void run() {
             sceneWidth = classPrimaryStage.getScene().getWidth();
             sceneHeight = classPrimaryStage.getScene().getHeight();
-            getZoomedImages();
+            Platform.runLater(() -> {
+                resize();
+            });
+
+        }
+    }
+
+    class moveCheck extends TimerTask {
+        @Override
+        public void run() {
+            if(tisch.getAktivSpieler() instanceof Bot) {
+                System.out.println("Bot "+tisch.getAktivSpieler().getName()+" spielt");
+                ((Bot) tisch.getAktivSpieler()).play();
+                Platform.runLater(() -> {
+                    buildStage(classPrimaryStage);
+                });
+
+
+            }
         }
     }
 
