@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
@@ -149,8 +150,10 @@ public class Main extends Application {
 
         Label plr = new Label(spieler[playerId].getName());
         plr.setTextFill(Color.WHITE);
+        plr.setFont(Font.font("Verdana", 12 * zoomfactor));
         if(spieler[playerId] == tisch.getAktivSpieler()) {
             plr.setTextFill(Color.YELLOW);
+            plr.setFont(Font.font("Verdana", FontWeight.BOLD, 12 * zoomfactor));
         }
         plr.setTranslateY(-15);
         pane.getChildren().add(plr);
@@ -161,7 +164,7 @@ public class Main extends Application {
             cardcount = 7;
         }
 
-        plr.setFont(Font.font("Verdana", 12 * zoomfactor));
+
 
         StackPane cards = new StackPane();
         cards.setAlignment(Pos.BASELINE_CENTER);
@@ -458,7 +461,7 @@ public class Main extends Application {
         @Override
         public void run() {
             if(tisch.getAktivSpieler() instanceof Bot) {
-                System.out.println("Bot "+tisch.getAktivSpieler().getName()+" spielt");
+                System.out.println(tisch.getAktivSpieler().getName()+" spielt");
                 ((Bot) tisch.getAktivSpieler()).play();
                 Platform.runLater(() -> {
                     buildStage(classPrimaryStage);
