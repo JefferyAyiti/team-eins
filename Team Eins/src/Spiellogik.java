@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.*;
 
 /**
@@ -83,7 +84,7 @@ public class Spiellogik {
      * @return boolean der anzeigt, ob der Zug erfolgreich war
      */
     public boolean karteLegen(Spieler spieler, Karte karte) {
-        if(tisch.getAktivSpieler() == spieler){
+        if(tisch.getAktivSpieler() == spieler && spieler.inGame()){
             try {
                 if (tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
                     || tisch.getObereKarteAblagestapel().value == karte.value - 1   //Handkarte ist um eins größer als die oberste Ablagekarte
@@ -100,24 +101,23 @@ public class Spiellogik {
                     }
                     if(!spieler.isLetzerSpielerDurchgang()){  //Spieler darf noch seine Karten ablegen
                         tisch.naechste();
-                        System.out.println("next");
                     }
                     return true;
 
 
 
             }   else {
-
                 return false;
             }
 
         } catch (Exception e) {
+                e.printStackTrace();
                 return false;
 
         }}
-     else {
+
          return false;
-        }
+
 
     }
 

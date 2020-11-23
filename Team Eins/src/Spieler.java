@@ -53,6 +53,7 @@ public void setCardHand(Hand hand) {
     }
     public void aussteigen(){
         aussteigen = true;
+        Main.tisch.naechste();
     }
     public boolean inGame() {
         return !aussteigen;
