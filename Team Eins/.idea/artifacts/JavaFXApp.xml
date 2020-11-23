@@ -16,7 +16,6 @@
       <element id="archive" name="JavaFXApp.jar">
         <element id="module-output" name="Team Eins" />
       </element>
-      <element id="library" level="project" name="JavaFX" />
     </root>
   </artifact>
 </component>
