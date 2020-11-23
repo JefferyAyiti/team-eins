@@ -6,6 +6,9 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,6 +22,8 @@ import javafx.stage.Stage;
 import org.w3c.dom.ls.LSOutput;
 
 import javax.swing.*;
+
+import java.util.Optional;
 
 import static java.lang.Integer.min;
 
@@ -153,6 +158,46 @@ public class Main extends Application{
                     spiellogik.karteLegen(spieler[playerId],
                             spieler[playerId].getCardHand().getKarte(finalI) );
                     buildStage(classPrimaryStage); // buildstage is used to update the screen
+                    //Chip tausch
+                    if (spieler[playerId].getCardHand().getHandKarte().isEmpty()) {
+                        Chip tausch;
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Glückwunsch");
+                        alert.setHeaderText("Willst du einen Chip tauschen?");
+
+                        ButtonType buttonTypeWhite = new ButtonType("weiß");
+                        ButtonType buttonTypeBlack = new ButtonType("schwarz");
+                        ButtonType buttonTypeCancel = new ButtonType("schließen", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+                        //spieler hat weiße und Schwarze Chips
+                        if(spieler[playerId].getWhiteChips()>=1 && spieler[playerId].getBlackChips()>=1 ) {
+                            alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeBlack, buttonTypeCancel);
+                        //nur weiße
+                        }else if (spieler[playerId].getWhiteChips()>=1){
+                            alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeCancel);
+                        //nur schwarze
+                        }else if(spieler[playerId].getBlackChips()>=1){
+                            alert.getButtonTypes().setAll(buttonTypeBlack, buttonTypeCancel);
+                        }else{
+                            alert.setHeaderText("Du hast keine Chips zum abgeben");
+                            alert.getButtonTypes().setAll(buttonTypeCancel);
+                        }
+
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() == buttonTypeWhite){
+                            // ... user chose "weiß"
+                            tausch=new WhiteChip();
+                            spiellogik.chipAbgeben(spieler[playerId], tausch);
+                        } else if (result.get() == buttonTypeBlack) {
+                            // ... user chose "schwarz"
+                            tausch=new BlackChip();
+                            spiellogik.chipAbgeben(spieler[playerId], tausch);
+                        }else {
+                            // ... user chose CANCEL or closed the dialog
+                        }
+
+                    }
+
                 });
             }
             cards.getChildren().add(imgView);
