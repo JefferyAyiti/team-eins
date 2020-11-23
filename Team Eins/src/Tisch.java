@@ -149,16 +149,19 @@ public class Tisch {
     /**
      * Wählt zufällig ein Spieler
      */
-    public void ersteSpieler(){
+
+    public Spieler ersteSpieler(){
         int erste = (int) (Math.random()*getAnzSpieler());
         aktiv = erste;
+        return spielerList[aktiv];
     }
 
     /**
      * Kommt auf naechste Spieler
      */
-    public void naechsteSpieler(){
+    public Spieler naechste(){
         aktiv = (aktiv+1)%getAnzSpieler();
+        return spielerList[aktiv];
     }
 
     /**
@@ -167,6 +170,7 @@ public class Tisch {
      */
     public Spieler getAktivSpieler(){
         return spielerList[aktiv];
+        //Todo delay till next player
     }
 
 }
