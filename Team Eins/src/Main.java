@@ -72,7 +72,7 @@ public class Main extends Application {
 
         spieler[0] = new Spieler("Spieler 1");
         for (int i = 1; i < anzSpieler; i++) {
-            spieler[i] = new Bot("Bot " + (i + 1), 2);
+            spieler[i] = new Bot("Bot " + (i + 1), 3);
 
         }
         tisch = new Tisch(spieler);
@@ -267,10 +267,10 @@ public class Main extends Application {
             GridPane table = new GridPane();
             //karten auf dem Tisch
             Pane nachziehstapel = new Pane();
-            for (int i = 0; i < tisch.getAblageStapelSize(); i++) {
+            for (int i = 0; i < tisch.getNachziehStapelSize(); i++) {
                 ImageView imgView = new ImageView(image);
-                imgView.setY(i * 0.1);
-                imgView.setX(i * 0.3);
+                imgView.setY(i * 0.2);
+                imgView.setX(i * 0.2);
                 imgView.setOnMouseClicked(mouseEvent -> {
                     spiellogik.karteNachziehen(spieler[0]);
                     buildStage(classPrimaryStage);
@@ -283,20 +283,22 @@ public class Main extends Application {
             table.add(nachziehstapel, 0, 0, 1, 1);
 
             //Ablagestapel
-            ImageView imgView = new ImageView(
-                    cardsArray[tisch.getObereKarteAblagestapel().getValue() - 1]);
-
-            //TEST_EVENT:
-
-
-            imgView.setPreserveRatio(true);
-            imgView.setFitWidth(60 * zoomfactor);
-            table.add(imgView, 2, 0, 1, 1);
+            Pane ablagestapel = new Pane();
+            for (int i = 0; i < tisch.getAblageStapelSize(); i++) {
+                ImageView imgView = new ImageView(cardsArray[tisch.getObereKarteAblagestapel().getValue() - 1]);
+                imgView.setY(i * 0.3);
+                imgView.setX(i * 0.2);
+                imgView.setFitWidth(60 * zoomfactor);
+                imgView.setPreserveRatio(true);
+                imgView.setSmooth(true);
+                ablagestapel.getChildren().add(imgView);
+            }
+            table.add(ablagestapel, 2, 0, 1, 1);
 
             GridPane chipsgrid = new GridPane();
             chipsgrid.setAlignment(Pos.CENTER);
 
-            imgView = new ImageView(blackChipImage);
+            ImageView imgView = new ImageView(blackChipImage);
             imgView.setFitHeight(20 * zoomfactor);
             imgView.setFitWidth(20 * zoomfactor);
             chipsgrid.add(imgView, 0, 0, 1, 1);

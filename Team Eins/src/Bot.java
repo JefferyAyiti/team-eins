@@ -23,7 +23,7 @@ public class Bot extends Spieler{
             case 3:playSchwierigkeitSchwer();break;
         }
 
-        Main.tisch.naechste();
+        //Main.tisch.naechste();
         return true;
     }
 
@@ -118,7 +118,7 @@ public class Bot extends Spieler{
      * TODO
      */
     public void playSchwierigkeitSchwer(){
-
+        Main.spiellogik.karteNachziehen(this);
     }
 
     /**

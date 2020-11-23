@@ -161,7 +161,6 @@ public class Tisch {
      */
     public Spieler naechste(){
         aktiv = (aktiv+1)%getAnzSpieler();
-        System.out.println(aktiv);
         return spielerList[aktiv];
     }
 
