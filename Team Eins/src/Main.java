@@ -72,7 +72,7 @@ public class Main extends Application {
 
         spieler[0] = new Spieler("Spieler 1");
         for (int i = 1; i < anzSpieler; i++) {
-            spieler[i] = new Bot("Bot " + (i + 1), 3);
+            spieler[i] = new Bot("Bot " + (i + 1), 2);
 
         }
         tisch = new Tisch(spieler);
