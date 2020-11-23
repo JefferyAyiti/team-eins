@@ -1,7 +1,7 @@
 public class Bot extends Spieler {
 
     private int schwierigkeit;
-    private Tisch tisch = Main.tisch;
+   // private Tisch tisch = Main.tisch;
     private boolean zug = false;
 
     /**
@@ -60,61 +60,62 @@ public class Bot extends Spieler {
      * Methode setzt setZug(false) automatisch
      */
     public void playSchwierigkeitMittel() {
+        Tisch tisch = Main.tisch;
+        Spiellogik logik = Main.spiellogik;
 
         boolean gleicheKarte = true;
         boolean abgelegt = false;
-        boolean noChange = false;
+        boolean noChange = true;
 
         if (inGame()) {
             if (zug) {
                 //Chips umtauschen
                 while (this.whiteChips >= 10) {
-                    this.chipsTauschen();
+                    logik.chipsTauschen(this);
+                    System.out.println("\t tausche");
                 }
 
-                while (!noChange) {
+                //for Schleife für das Karten legen
+                for (int i = 0; i < this.getCardCount(); i++) {
+                    HandKarte karte = this.cardHand.getKarte(i);
 
-                    noChange = true;
-                    //for Schleife für das Karten legen
-                    for (int i = 0; i < this.getCardCount(); i++) {
-                        HandKarte karte = this.cardHand.getKarte(i);
-
-                        try {
-                            if (gleicheKarte && tisch.getObereKarteAblagestapel().value == karte.value) {//gleicher Wert
-                                this.karteLegen(karte);
-                                abgelegt = true;
-                                noChange = false;
-
-                            } else if (!gleicheKarte && (tisch.getObereKarteAblagestapel().value == karte.value - 1 || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
-                                    || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1))) {// Handkarte um eins größer
-                                this.karteLegen(karte);
-                                abgelegt = true;
-                                noChange = false;
-                                i = 100;
-                            }
-                        } catch (Exception e) {
-                        }
+                    if (gleicheKarte && tisch.getObereKarteAblagestapel().value == karte.value) {//gleicher Wert
+                        System.out.println("\t lege gleich " + karte.getValue());
+                        logik.karteLegen(this, karte);
+                        abgelegt = true;
+                        noChange = false;
+                        break;
                     }
-                    gleicheKarte = !gleicheKarte;
                 }
 
+                for (int i = 0; i < this.getCardCount() && noChange; i++) {
+                    HandKarte karte = this.cardHand.getKarte(i);
+
+                    if ((tisch.getObereKarteAblagestapel().value == karte.value - 1
+                            || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
+                            || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1))) {// Handkarte um eins größer
+                        System.out.println("\t lege höher " + karte.getValue());
+                        logik.karteLegen(this, karte);
+                        abgelegt = true;
+                        break;
+                    }
+                }
                 //Kartenlegen Ende//
 
                 //Prüfen ob noch Karten vorhanden
                 if (this.getCardCount() == 0) {
-                    this.chipAbgeben();
-                    this.aussteigen();
-                    this.setZug(false);
+                    Main.spiellogik.aussteigen(this);
+                    System.out.println("\t steige aus keine Karten");
                 }
 
                 //Karten ziehen wenn noch keine Karte abgelegt wurde, wenn man am Zug ist, Wenn man mehr als 3 Karten hat,
-                //und 50% wskeit kommt dazu. Sonst wird ausgestiegen
-                if (this.zug && !abgelegt && this.getCardCount() >= 4 && Math.random() <= 0.5) {
-                    this.karteNachziehen();
-                    this.setZug(false);
-                } else {
-                    this.aussteigen();
-                    this.setZug(false);
+                //und 20% wskeit kommt dazu. Sonst wird ausgestiegen
+                if (!abgelegt && (this.getCardCount() >= 4 && Math.random() <= 0.2)  ){
+                    Main.spiellogik.karteNachziehen(this);
+                    System.out.println("\t Karte nachziehen");
+                }else if(!abgelegt){
+                    Main.spiellogik.aussteigen(this);
+                    System.out.println("\t steige aus");
                 }
             }
         }
@@ -153,6 +154,7 @@ public class Bot extends Spieler {
      * Ähnelt der Methode aus der Spiellogik.
      */
     private void chipAbgeben() {
+        Tisch tisch = Main.tisch;
         if (this.getBlackChips() > 0) {
             this.setBlackChips(this.getBlackChips() - 1);
 
@@ -175,6 +177,7 @@ public class Bot extends Spieler {
      * Ähnelt der Methode aus der Spiellogik.
      */
     public void chipsTauschen() {
+        Tisch tisch = Main.tisch;
 
         if (this.getWhiteChips() >= 10 || tisch.getBlackChips() > 0) {
 
@@ -183,39 +186,6 @@ public class Bot extends Spieler {
 
             tisch.takeChips(-10, 1);
 
-        }
-    }
-
-    /**
-     * Lässt den Bot eine Karte nachziehen.
-     * <p>
-     * Die Methode ist eine Helper Methode für die playSchwierigkeit() Methoden.
-     * Ähnelt der Methode aus der Spiellogik.
-     */
-    private void karteNachziehen() {
-        try {
-            //TODO
-            // regelüberprüfung
-            this.getCardHand().addKarte(tisch.karteZiehen());
-        } catch (Exception e) {
-        }
-    }
-
-    /**
-     * Lässt den Bot eine Karte legen, wenn die Regeln es zulassen.
-     *
-     * @param karte Die Methode ist eine Helper Methode für die playSchwierigkeit() Methoden.
-     *              Ähnelt der Methode aus der Spiellogik.
-     */
-    private void karteLegen(HandKarte karte) {
-        try {
-            if (karte.isPlayable()) {
-                this.getCardHand().removeKarte(karte);
-                tisch.karteAblegen(karte);
-            }
-
-
-        } catch (Exception e) {
         }
     }
 
