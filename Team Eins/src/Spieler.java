@@ -3,6 +3,8 @@ public class Spieler {
     Hand cardHand;
     String playerName;
     int blackChips = 0, whiteChips = 0;
+    boolean folded = false;
+    private boolean letzerSpielerDurchgang = false;
     private boolean aussteigen = false;
 
     /**
@@ -102,5 +104,20 @@ public void setCardHand(Hand hand) {
      */
     void chipTausch() {
 
+    }
+
+
+    /**
+     * @return letzerSpielerDurchgang.Gibt an ab der Spieler noch am Ende ablegen darf(ohne nachziehen).
+     */
+    public boolean isLetzerSpielerDurchgang(){
+        return letzerSpielerDurchgang;
+    }
+
+    /**
+     * setter-Methode für letzerSpielerDurchgang
+     */
+    public void setLetzerSpielerDurchgang(boolean ende) {
+        this.letzerSpielerDurchgang = ende;
     }
 }

@@ -1,61 +1,145 @@
 import java.util.*;
 
+/**
+ * Spiellogik regelt die Runden des Spiels
+ */
 public class Spiellogik {
-    private Stack<Spieler> letzteSpieler = new Stack();
-    public Tisch tisch;
-    private Spieler[] spielerListe;
+    private final Stack<Spieler> letzteSpieler = new Stack();
+    public final Tisch tisch;
+    private final Spieler[] spielerListe;
 
+
+    /** Initialisiere Spiellogik mit dem Tisch
+     * @param tisch Das ist der Tisch, auf dem gespielt wird
+     */
     public Spiellogik(Tisch tisch) {
         this.tisch = tisch;
-        spielerListe = tisch.getSpielerList();
+        this.spielerListe = tisch.getSpielerList();
     }
 
-    public void durchgang() {
+
+    /**
+     * einSpielerUebrig überprüft die Regel,ob es einen einzigen Spieler am Ende gibt
+     * der nochmal seine Karten ablegen darf.
+     */
+    private void einSpielerUebrig(){
+
+        int len = spielerListe.length;
+        Spieler letzterSpieler = null;
+        //uebruefen ob es einen einzigen Spieler gibt der noch Handkarten hat
+        // -> dieser Spieler darf noch Karten ablegen
+        int anzahlSpielerNichtFertig = 0;
+
+        for (int i = 0; i < len; i++) { //spielerListe durchgehen und gucken wie viele Spieler noch spielen
+            if (spielerListe[i].inGame()) {  //spieler ist ausgestiegen
+                anzahlSpielerNichtFertig += 1;
+                letzterSpieler = spielerListe[i];
+            }
+
+        }
+
+        if (anzahlSpielerNichtFertig == 1) {
+            letzterSpieler.setLetzerSpielerDurchgang(true);//nur noch ein Spieler hat Handkarten
+        }
+        else { //gibt noch mehr als 1 Spieler die Handkarten haben
+            if (tisch.getDurchgangNr() >= 2){
+                tisch.naechste();
+            }
+
+        }
+
 
     }
+    /** rundeBeenden regelt das Ende einer Runde. Zusätzlich zu dem Abkassieren der Chips, wird überprüft, ob das Spiel zu Ende ist
+     * oder eine neue Runde gestartet werden muss.
+     * @throws Exception
+     */
+    private void rundeBeenden() throws Exception {
+        int len = spielerListe.length;
+        for (int i = 0; i < len; i++) { //jeder Spieler kassiert Chips
+        chipsKassieren(spielerListe[i]);
+        spielerListe[i].einsteigen();  //Spieler können wieder Züge machen
+
+    }
+        for (int i = 0; i < len; i++) { //spielerListe durchgehen
+            if (spielerListe[i].points == -40) {
+                System.out.println(ranglisteErstellen());  //ein Spieler hat -40 Punkte -> Spiel ist zu Ende
+                return;
+            }
+        }
+
+        initNeueRunde();
+        return ;
+    }
+
+
+
 
     /**
      * Ein Spieler legt eine Karte aus seiner Hand auf den Ablagestapel
      *
-     * @param spieler
-     * @param karte
+     * @param spieler Spieler der dran ist
+     * @param karte Karte die gelegt werden soll
+     * @return boolean der anzeigt, ob der Zug erfolgreich war
      */
-    public void karteLegen(Spieler spieler, Karte karte) {
-        try {
-           /* if (tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
+    public boolean karteLegen(Spieler spieler, Karte karte) {
+        if(tisch.getAktivSpieler() == spieler){
+            try {
+                if (tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
                     || tisch.getObereKarteAblagestapel().value == karte.value - 1   //Handkarte ist um eins größer als die oberste Ablagekarte
                     || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
-                    || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)  //1 auf Lama
-            ) {*/
-            if(spieler.inGame()){ //Unerfolgereich wenn aussgestiegen
-                spieler.getCardHand().removeKarte((HandKarte) karte);
-                tisch.karteAblegen(karte);
+                    || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)){
+
+                    spieler.getCardHand().removeKarte((HandKarte) karte);
+                    tisch.karteAblegen(karte);
+                    if(spieler.cardHand.getHandKarte().size()== 0){   //hat der Spieler noch Handkarten?
+                        spieler.setLetzerSpielerDurchgang(false);
+                        spieler.aussteigen();    // Spieler kann keinen Zug mehr machen
+                        rundeBeenden();    //ein Spieler hat keine Karten mehr oder der letzte Spieler ist fertig mit seinem Zug
+
+                    }
+                    if(!spieler.isLetzerSpielerDurchgang()){  //Spieler darf noch seine Karten ablegen
+                        tisch.naechste();
+                    }
+                    return true;
+
+
+
+            }   else {
+
+                return false;
             }
 
-           /* } else {
-                throw new Exception();
-            }
-*/
         } catch (Exception e) {
+                return false;
+
+        }}
+     else {
+         return false;
         }
+
     }
 
 
     /**
-     * Ein Spieler zieht eine KArte vom Nachziehstapel,
-     * diese wird seiner Hand hinzugefügt
-     *
-     * @param spieler
+     * Ein Spieler zieht eine Karte vom Nachziehstapel,diese wird seiner Hand hinzugefügt
+     * @param spieler Spieler der dran ist
+     * @return boolean der anzeigt, ob der Zug erfolgreich war
      */
-    public void karteNachziehen(Spieler spieler) {
-        try {
-            //TODO
-            // regelüberprüfung
-            if(spieler.inGame()){ //Unerfolgereich wenn Spieler aussgestiegen ist
-                spieler.getCardHand().addKarte(tisch.karteZiehen());
-            }
+    public boolean karteNachziehen(Spieler spieler){
+        if(!spieler.isLetzerSpielerDurchgang() && tisch.getAktivSpieler() == spieler){
+            try {
 
-        } catch (Exception e) {
+                 spieler.getCardHand().addKarte(tisch.karteZiehen());
+                 tisch.naechste();
+                 return false;
+
+            } catch (Exception e) {
+                return false;
+
+            }}
+        else {
+            return false;
         }
     }
 
@@ -145,7 +229,11 @@ public class Spiellogik {
      * Beim Aussteigen wird keine neue Zuege erkannt
      */
     public void aussteigen(Spieler spieler) {
-        spieler.aussteigen();
+        if(tisch.getAktivSpieler() == spieler){
+            spieler.aussteigen();
+            einSpielerUebrig();
+        }
+
         /*spieler.getCardHand().setValueSum();
         int punkte = spieler.getCardHand().getValueSum();
         spieler.setPoints(punkte);*/
@@ -161,6 +249,7 @@ public class Spiellogik {
      * @throws Exception
      */
     public void initNeueRunde() throws Exception {
+
         for (int i = 0; i < Main.spieler.length; i++) {
             Main.haende[i] = new Hand();
             Main.spieler[i].setCardHand(Main.haende[i]);
@@ -170,8 +259,11 @@ public class Spiellogik {
         tisch.initNachziehstapel();
         tisch.mischenNachziehstapel();
 
+
+
         //gebe jeden Spieler (anzSpieler) 6 Karten in Reihenfolge
         for (int i = 0; i < 6; i++) {
+
             for (int s = 0; s < Main.spieler.length; s++) {
                 Main.haende[s].addKarte(tisch.karteZiehen());
             }
@@ -180,7 +272,11 @@ public class Spiellogik {
 
         tisch.karteAblegen(tisch.karteZiehen()); //Ablagestapel
         tisch.nextDurchgang();
-        //TODO Alle ausgestiegene Spieler einsteigen lassen
+
+        einSpielerUebrig();
+        return;
+
+        //TODO Alle ausgestiegene Spieler einsteigen lassen(geklärt oben)
     }
 
 }
