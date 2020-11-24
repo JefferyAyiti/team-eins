@@ -81,7 +81,7 @@ public class Bot extends Spieler {
      * Um Methode zu verwenden muss setZug(true) aufgerufen werden.
      * Methode setzt setZug(false) automatisch
      */
-    public void playSchwierigkeitMittel() {
+    public void playSchwierigkeitMittel(){
         Tisch tisch = Main.tisch;
         Spiellogik logik = Main.spiellogik;
 
