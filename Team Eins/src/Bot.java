@@ -141,11 +141,7 @@ public class Bot extends Spieler {
             return;
         } else {
             System.out.println("\tSteige aus");
-            try {
-                Main.spiellogik.aussteigen(this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Main.spiellogik.aussteigen(this);
         }
 
     }
