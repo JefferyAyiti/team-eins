@@ -264,23 +264,28 @@ public class Main extends Application {
        /* if (playerId != 0) {
             cards.setTranslateX(+(min(6, spieler[playerId].getCardCount()) * 30) / 2 - 20);
         }*/
+        int chipsize = 15;
         pane.getChildren().add(cards);
         GridPane chips = new GridPane();
         //chips.setMaxWidth(60 * zoomfactor);
         ImageView blChip = new ImageView(blackChipImage);
-        blChip.setFitHeight(10 * zoomfactor);
-        blChip.setFitWidth(10 * zoomfactor);
+        blChip.setFitHeight(chipsize * zoomfactor);
+        blChip.setFitWidth(chipsize * zoomfactor);
 
         blChip.setOnMouseClicked( mouseEvent -> {
-
+            BlackChip bye = new BlackChip();
+            spiellogik.chipAbgeben(spieler[playerId], bye );
+            buildStage(classPrimaryStage);
         });
 
         ImageView whChip = new ImageView(whiteChipImage);
-        whChip.setFitHeight(10 * zoomfactor);
-        whChip.setFitWidth(10* zoomfactor);
+        whChip.setFitHeight(chipsize * zoomfactor);
+        whChip.setFitWidth(chipsize* zoomfactor);
 
         whChip.setOnMouseClicked(mouseEvent -> {
-
+            WhiteChip tschuss = new WhiteChip();
+            spiellogik.chipAbgeben(spieler[playerId], tschuss );
+            buildStage(classPrimaryStage);
         });
 
         chips.add(blChip,0,0);
