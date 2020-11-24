@@ -24,7 +24,7 @@ public class Spiellogik {
      * einSpielerUebrig überprüft die Regel,ob es einen einzigen Spieler am Ende gibt
      * der nochmal seine Karten ablegen darf.
      */
-    private void einSpielerUebrig() throws Exception {
+    private void einSpielerUebrig() {
 
         int len = spielerListe.length;
         Spieler letzterSpieler = null;
@@ -60,7 +60,7 @@ public class Spiellogik {
      * oder eine neue Runde gestartet werden muss.
      * @throws Exception
      */
-    private void rundeBeenden() throws Exception {
+    private void rundeBeenden(){
         int len = spielerListe.length;
         for (int i = 0; i < len; i++) { //jeder Spieler kassiert Chips
         chipsKassieren(spielerListe[i]);
@@ -198,7 +198,7 @@ public class Spiellogik {
 
         boolean transaktion = false;
 
-        if(spieler.getWhiteChips() >= 10 || tisch.getBlackChips() != 0){
+        if(spieler.getWhiteChips() >= 10){
 
             spieler.setBlackChips(spieler.getBlackChips() + 1);
             spieler.setWhiteChips(spieler.getWhiteChips() - 10);
@@ -235,7 +235,7 @@ public class Spiellogik {
      * @param spieler
      * Beim Aussteigen wird keine neue Zuege erkannt
      */
-    public void aussteigen(Spieler spieler) throws Exception {
+    public void aussteigen(Spieler spieler) {
         if(tisch.getAktivSpieler() == spieler && spieler.inGame()){
             spieler.aussteigen();
             einSpielerUebrig();  //ueberpruefen wie viele Spieler diese Runde noch spielen
@@ -257,7 +257,7 @@ public class Spiellogik {
      *
      * @throws Exception
      */
-    public void initNeueRunde() throws Exception {
+    public void initNeueRunde()  {
         rundeBeendet = false; //neue Runde startet
         for (int i = 0; i < Main.spieler.length; i++) {
             Main.haende[i] = new Hand();

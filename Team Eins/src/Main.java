@@ -105,8 +105,8 @@ public class Main extends Application {
 
     Image[] cardsArray = {card1, card2, card3, card4, card5, card6, null, null, null, lama};
 
-    Image whiteChipImage = new Image("/images/chips/white.png");
-    Image blackChipImage = new Image("/images/chips/black.png");
+    Image blackChipImage = new Image("/images/SVG/blackChip.svg");
+    Image whiteChipImage = new Image("/images/SVG/whiteChip.svg");
 
     public void resize() {
 
@@ -352,8 +352,8 @@ public class Main extends Application {
             chipsgrid.setAlignment(Pos.CENTER);
 
             ImageView imgView = new ImageView(blackChipImage);
-            imgView.setFitHeight(20 * zoomfactor);
-            imgView.setFitWidth(20 * zoomfactor);
+            imgView.setFitHeight(25 * zoomfactor);
+            imgView.setFitWidth(25 * zoomfactor);
             chipsgrid.add(imgView, 0, 0, 1, 1);
             Text ChipText = new Text();
             ChipText.setText(" " + tisch.getBlackChips());
@@ -362,8 +362,8 @@ public class Main extends Application {
             chipsgrid.add(ChipText, 1, 0, 1, 1);
 
             imgView = new ImageView(whiteChipImage);
-            imgView.setFitHeight(20 * zoomfactor);
-            imgView.setFitWidth(20 * zoomfactor);
+            imgView.setFitHeight(25 * zoomfactor);
+            imgView.setFitWidth(25 * zoomfactor);
             chipsgrid.add(imgView, 0, 1, 1, 1);
             ChipText = new Text();
             ChipText.setText(" " + tisch.getWhiteChips());

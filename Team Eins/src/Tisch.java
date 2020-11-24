@@ -20,6 +20,7 @@ public class Tisch {
         blackCh = chipsblack.getMaxChips();
         whiteCh = whiteChip.getMaxChips();
         this.spielerList = spieler;
+        aktiv = (int) (Math.random()*getAnzSpieler());
     }
 
     /**
@@ -147,16 +148,6 @@ public class Tisch {
 
 
     /**
-     * Wählt zufällig ein Spieler
-     */
-
-    public Spieler ersteSpieler(){
-        int erste = (int) (Math.random()*getAnzSpieler());
-        aktiv = erste;
-        return spielerList[aktiv];
-    }
-
-    /**
      * Kommt auf naechste Spieler
      */
     public Spieler naechste(){
@@ -172,7 +163,6 @@ public class Tisch {
      */
     public Spieler getAktivSpieler(){
         return spielerList[aktiv];
-        //Todo delay till next player
     }
 
 }

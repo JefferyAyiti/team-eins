@@ -20,7 +20,7 @@ public class Spieler {
      * Weist dem Spieler eine Kartenhand zu
      * @param hand
      */
-public void setCardHand(Hand hand) {
+    public void setCardHand(Hand hand) {
         cardHand = hand;
 }
 
@@ -28,7 +28,7 @@ public void setCardHand(Hand hand) {
      *Gibt den Namen des Spielers zurück.
      * @return Spielername
      */
- public String getName() {
+    public String getName() {
         return playerName;
  }
 
