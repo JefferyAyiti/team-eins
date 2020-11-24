@@ -107,6 +107,7 @@ public class Spiellogik {
                         spieler.aussteigen();    // Spieler kann keinen Zug mehr machen
                         rundeBeendet = true;
                         rundeBeenden();    //ein Spieler hat keine Karten mehr oder der letzte Spieler ist fertig mit seinem Zug
+                        return true;
 
                     }
                     if(!spieler.isLetzerSpielerDurchgang()){//Spieler darf noch seine Karten ablegen
