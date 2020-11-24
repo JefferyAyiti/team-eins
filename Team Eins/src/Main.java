@@ -265,18 +265,45 @@ public class Main extends Application {
             cards.setTranslateX(+(min(6, spieler[playerId].getCardCount()) * 30) / 2 - 20);
         }*/
         pane.getChildren().add(cards);
-        Pane chips = new VBox();
+        GridPane chips = new GridPane();
         //chips.setMaxWidth(60 * zoomfactor);
+        ImageView blChip = new ImageView(blackChipImage);
+        blChip.setFitHeight(10 * zoomfactor);
+        blChip.setFitWidth(10 * zoomfactor);
+
+        blChip.setOnMouseClicked( mouseEvent -> {
+
+        });
+
+        ImageView whChip = new ImageView(whiteChipImage);
+        whChip.setFitHeight(10 * zoomfactor);
+        whChip.setFitWidth(10* zoomfactor);
+
+        whChip.setOnMouseClicked(mouseEvent -> {
+
+        });
+
+        chips.add(blChip,0,0);
+        chips.add(whChip,0,1);
+
         Text text = new Text();
         text.setFill(Color.WHITE);
         text.setFont(Font.font("Verdana", 12 * zoomfactor));
-        text.setText("⚪: " + spieler[playerId].getWhiteChips() +
-                "    ⚫: " + spieler[playerId].getBlackChips());
+        text.setText(""+spieler[playerId].getBlackChips());
+        chips.add(text, 1,0);
+
+        text = new Text();
+        text.setFill(Color.WHITE);
+        text.setFont(Font.font("Verdana", 12 * zoomfactor));
+        text.setText(spieler[playerId].getWhiteChips() +"");
+
+        chips.add(text, 1,1);
         //chips.setY(102);
-        chips.getChildren().add(text);
+
 
         HBox bottom = new HBox(chips);
         bottom.setAlignment(Pos.CENTER);
+        bottom.setSpacing(10);
 
         //Aussteigen
         if(playerId == ich) {
