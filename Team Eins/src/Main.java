@@ -67,10 +67,8 @@ public class Main extends Application {
     /**
      * Erstellt Tisch, Nachzieh- und Abalgestapel, Spieler
      * und startet die erste Runde im Spiel
-     *
-     * @throws Exception
      */
-    private static void initGame() throws Exception {
+    private static void initGame(){
 
 
         //initialisiere Spieler mit handkarten
@@ -79,7 +77,7 @@ public class Main extends Application {
 
         spieler[0] = new Spieler("Spieler 1");
         for (int i = 1; i < anzSpieler; i++) {
-            spieler[i] = new Bot("Bot " + (i + 1), 3);
+            spieler[i] = new Bot("Bot " + (i + 1), 1);
 
         }
         tisch = new Tisch(spieler);

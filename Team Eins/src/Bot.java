@@ -50,6 +50,8 @@ public class Bot extends Spieler {
         Karte card;
         Main.spiellogik.chipsTauschen(this);
 
+        //Main.spiellogik.aussteigen(this);
+
         for (int i = 0; i < this.getCardCount(); i++) {
             card = this.getCardHand().getKarte(i);
             if (Main.spiellogik.karteLegen(this, card)) {
