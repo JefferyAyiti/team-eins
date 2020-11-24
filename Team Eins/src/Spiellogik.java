@@ -66,6 +66,9 @@ public class Spiellogik {
         for (int i = 0; i < len; i++) { //jeder Spieler kassiert Chips
         chipsKassieren(spielerListe[i]);
         spielerListe[i].einsteigen();  //Spieler können wieder Züge machen
+        spielerListe[i].setLetzerSpielerDurchgang(false);
+
+
 
     }
         for (int i = 0; i < len; i++) { //spielerListe durchgehen
