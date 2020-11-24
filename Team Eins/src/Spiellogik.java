@@ -252,9 +252,36 @@ public class Spiellogik {
         spieler.setPoints(punkte);*/
     }
 
-    Map<Spieler, Integer> ranglisteErstellen() {
-        return new HashMap<>();
+    /**
+     * erstellt eine Rangliste der Spieler
+     * @return sortierte LinkedHashMap mit Spielern und deren Punktestand
+     */
+    public Map<Spieler, Integer> ranglisteErstellen() {
+
+        //Map mit spielern + Spielstand erstellen
+        Map<Spieler, Integer> punktestand = new HashMap<Spieler,Integer>();
+        for (Spieler s : tisch.getSpielerList()) {
+            punktestand.put(s,s.getPoints());
+        }
+
+        //sortieren
+        List<Map.Entry<Spieler,Integer>> spielstand = new LinkedList<Map.Entry<Spieler,Integer> >(punktestand.entrySet());
+        Collections.sort(spielstand, new Comparator<Map.Entry<Spieler, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Spieler, Integer> o1, Map.Entry<Spieler, Integer> o2) {
+                return o2.getValue()-o1.getValue();
+            }
+        });
+
+        //sortierete Map
+        Map<Spieler, Integer> rangliste = new LinkedHashMap<Spieler,Integer>();
+        for (Map.Entry<Spieler, Integer> aa : spielstand) {
+            rangliste.put(aa.getKey(), aa.getValue());
+        }
+
+        return rangliste;
     }
+
 
     /**
      * Initiiert eine neue Runde, d.h. Stapel mischen und neue Karten verteilen
