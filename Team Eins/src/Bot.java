@@ -41,9 +41,29 @@ public class Bot extends Spieler {
     }
 
     /**
-     * TODO
+     * Bot versucht immer Chips zu tauschen, danach spielt er in folgender Reihenfolge:
+     * - Versuch in der Reihenfolge der Handkarte eine Karte abzulegen.
+     * - Wenn ablegen nicht möglich ziehe eine Karte vom Stapel
+     * - Wenn ziehen nicht möglich steige aus.
      */
     public void playSchwierigkeitLeicht() {
+        Karte card;
+        Main.spiellogik.chipsTauschen(this);
+
+        for (int i = 0; i < this.getCardCount(); i++) {
+            card = this.getCardHand().getKarte(i);
+            if (Main.spiellogik.karteLegen(this, card)) {
+                System.out.println("\tLege " + card.getValue());
+                return;
+            }
+        }
+        if (Main.spiellogik.karteNachziehen(this)) {
+            System.out.println("\tZiehe");
+            return;
+        } else {
+            System.out.println("\tSteige aus");
+            Main.spiellogik.aussteigen(this);
+        }
 
     }
 
@@ -79,7 +99,7 @@ public class Bot extends Spieler {
                 for (int i = 0; i < this.getCardCount(); i++) {
                     HandKarte karte = this.cardHand.getKarte(i);
 
-                    if (gleicheKarte && tisch.getObereKarteAblagestapel().value == karte.value) {//gleicher Wert
+                    if (gleicheKarte && Main.tisch.getObereKarteAblagestapel().value == karte.value) {//gleicher Wert
                         System.out.println("\t lege gleich " + karte.getValue());
                         logik.karteLegen(this, karte);
                         abgelegt = true;
@@ -121,30 +141,9 @@ public class Bot extends Spieler {
         }
     }
 
-    /**
-     * TODO
-     */
+
     public void playSchwierigkeitSchwer() {
-        Karte card;
-        Boolean ging;
-        Main.spiellogik.chipsTauschen(this);
-
-        for (int i = 0; i < this.getCardCount(); i++) {
-            card = this.getCardHand().getKarte(i);
-            ging = Main.spiellogik.karteLegen(this, card);
-            if (ging) {
-                System.out.println("\tLege " + card.getValue());
-                return;
-            }
-        }
-        if (Main.spiellogik.karteNachziehen(this)) {
-            System.out.println("\tZiehe");
-            return;
-        } else {
-            System.out.println("\tSteige aus");
-            Main.spiellogik.aussteigen(this);
-        }
-
+        //TODO
     }
 
     /**

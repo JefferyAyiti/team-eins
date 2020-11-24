@@ -38,9 +38,9 @@ public class Stapel {
      * @return Karte die gezogen wurde
      * @throws Exception
      */
-    public Karte ziehen() throws Exception {
+    public Karte ziehen()  {
         if(stapel.isEmpty()){
-            throw new Exception("Stapel leer");
+           return null;
         }
 
         if(coverCard){    //Ziehstapel
@@ -49,7 +49,7 @@ public class Stapel {
             return karte;
         }
 
-        throw new Exception("Stapel leer");
+        return null;
     }
 
 
@@ -57,13 +57,14 @@ public class Stapel {
      * @param karte Diese Karte wird auf dem Ablagestapel gelegt
      * @throws Exception
      */
-    public void ablegen(Karte karte) throws Exception {
+    public boolean ablegen(Karte karte) {
         if (!coverCard){    //Ablagestapel
             stapel.add(karte);
             cardCount = cardCount + 1;
             topCard = stapel.peek();
+            return true;
         } else
-        throw new Exception();
+        return false;
     }
 
     /**Mische den Kartenstapel
@@ -102,18 +103,14 @@ public class Stapel {
      * @return coverCard
      * @throws Exception
      */
-    public Karte getTopCard() throws Exception {
-        if(!coverCard){
+    public Karte getTopCard(){
             return topCard;
-        }
-        throw new Exception();
     }
 
     /**Füge zu dem Ziehstapel die Karte hinzu.
      * @param karte Diese Karte wird zum Ziehstapel hinzugefügt
-     * @throws Exception
      */
-    public void addCard(Karte karte) throws Exception {
+    public void addCard(Karte karte) {
         if(coverCard){
             stapel.push(karte);
             cardCount = cardCount + 1;

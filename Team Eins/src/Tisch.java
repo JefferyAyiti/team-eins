@@ -11,7 +11,7 @@ public class Tisch {
     private Stapel nachziehStapel = new Stapel(true);
     private Stapel ablageStapel = new Stapel(false);
     private Spieler[] spielerList;
-    private int aktiv = 0;
+    private volatile int aktiv = 0;
 
 
 
@@ -54,7 +54,7 @@ public class Tisch {
      * @return Oberste Karte des Nachziehstapels und entfernt diese vom Stapel.
      * @throws Exception
      */
-    public Karte karteZiehen() throws Exception {
+    public Karte karteZiehen() {
         return nachziehStapel.ziehen();
     }
 
@@ -62,7 +62,7 @@ public class Tisch {
      * Legt gewählte Karte auf den AblageStapel
      * @param karte
      */
-    public void karteAblegen(Karte karte) throws Exception {
+    public void karteAblegen(Karte karte) {
         ablageStapel.ablegen(karte);
     }
 
@@ -71,7 +71,7 @@ public class Tisch {
      * 8*(card1, card2, card3, card4, card5, card6, lama)
      * @throws Exception von Methode Stapel.addCard().
      */
-    public void initNachziehstapel() throws Exception {
+    public void initNachziehstapel() {
         for (int i = 0; i<7; i++){
             for(int j = 0; j<8; j++){
                 switch (i){
@@ -121,7 +121,7 @@ public class Tisch {
      * @return Gibt Oberste Karte des Ablagestapels zurück. Diese wird nicht entfernt.
      * @throws Exception von Methode Stapel.getTopCard().
      */
-    public Karte getObereKarteAblagestapel() throws Exception {
+    public Karte getObereKarteAblagestapel(){
         return ablageStapel.getTopCard();
     }
 
@@ -154,6 +154,7 @@ public class Tisch {
         do {
             aktiv = (aktiv+1)%getAnzSpieler();}
         while(!spielerList[aktiv].inGame());
+        System.out.println("Spieler '"+spielerList[aktiv].getName()+"' ist dran:");
         return spielerList[aktiv];
     }
 

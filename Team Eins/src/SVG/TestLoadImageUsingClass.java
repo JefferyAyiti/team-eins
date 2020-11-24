@@ -28,7 +28,7 @@ public class TestLoadImageUsingClass {
 
 		Image image;
 		if(!path.contains("table")) {
-			image = new Image(imageData, 55*factor, 82.5*factor, true, true);
+			image = new Image(imageData, 55*factor, 82.5*factor, true, false);
 		} else
 			image = new Image(imageData);
 		return image;

@@ -98,6 +98,8 @@ public class Spiellogik {
 
                     spieler.getCardHand().removeKarte((HandKarte) karte);
                     tisch.karteAblegen(karte);
+                    tisch.naechste();
+
                     if(spieler.cardHand.getHandKarte().size()== 0){   //hat der Spieler noch Handkarten?
                         spieler.setLetzerSpielerDurchgang(false);
                         spieler.aussteigen();    // Spieler kann keinen Zug mehr machen
@@ -105,17 +107,9 @@ public class Spiellogik {
                         rundeBeenden();    //ein Spieler hat keine Karten mehr oder der letzte Spieler ist fertig mit seinem Zug
 
                     }
-                    if(!spieler.isLetzerSpielerDurchgang()){  //Spieler darf noch seine Karten ablegen
-                        tisch.naechste();
-                    }
+
                     return true;
-
-
-
-            }   else {
-                return false;
             }
-
         } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -139,7 +133,7 @@ public class Spiellogik {
 
                  spieler.getCardHand().addKarte(tisch.karteZiehen());
                  tisch.naechste();
-                 return false;
+                 return true;
 
             } catch (Exception e) {
                 return false;
@@ -196,18 +190,17 @@ public class Spiellogik {
      */
     public boolean chipsTauschen(Spieler spieler) {
 
-        boolean transaktion = false;
-
-        if(spieler.getWhiteChips() >= 10){
+        if(spieler.getWhiteChips() >= 10 && tisch.getBlackChips() > 0){
 
             spieler.setBlackChips(spieler.getBlackChips() + 1);
             spieler.setWhiteChips(spieler.getWhiteChips() - 10);
 
             tisch.takeChips(-10, 1);
 
-            transaktion = true;
+            System.out.println("\t Chpips getauscht");
+            return true;
         }
-        return transaktion;
+        return false;
     }
 
     /**

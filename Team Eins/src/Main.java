@@ -42,6 +42,7 @@ public class Main extends Application {
     static Spiellogik spiellogik;
     double zoomfactor = 1;
     volatile long resize = 0;
+    int ich = 0;
 
     //Wird später im Menü festgelegt
     private static int anzSpieler = 6;//2 + (int) (Math.random() * 4);
@@ -78,7 +79,7 @@ public class Main extends Application {
 
         spieler[0] = new Spieler("Spieler 1");
         for (int i = 1; i < anzSpieler; i++) {
-            spieler[i] = new Bot("Bot " + (i + 1), 3);
+            spieler[i] = new Bot("Bot " + (i + 1), 1);
 
         }
         tisch = new Tisch(spieler);
@@ -183,8 +184,7 @@ public class Main extends Application {
 
         for (int i = 0; i < cardcount; i++) {
             ImageView imgView = new ImageView(image);
-            if(!spieler[playerId].inGame())
-                imgView.setEffect(desaturate);
+
             if (playerId == 0) {
                 imgView = new ImageView(
                         cardsArray[spieler[playerId].getCardHand().getKarte(i).getValue() - 1]);
@@ -257,6 +257,8 @@ public class Main extends Application {
                 }
             }
 
+            if(!spieler[playerId].inGame())
+                imgView.setEffect(desaturate);
             cards.getChildren().add(imgView);
         }
 
@@ -266,15 +268,34 @@ public class Main extends Application {
         }*/
         pane.getChildren().add(cards);
         Pane chips = new VBox();
-        chips.setMaxWidth(60 * zoomfactor);
-        chips.setStyle("-fx-background-color:rgba(255,255,255,0.5); -fx-margin-top:5px;");
+        //chips.setMaxWidth(60 * zoomfactor);
         Text text = new Text();
+        text.setFill(Color.WHITE);
         text.setFont(Font.font("Verdana", 12 * zoomfactor));
         text.setText("⚪: " + spieler[playerId].getWhiteChips() +
                 "    ⚫: " + spieler[playerId].getBlackChips());
         //chips.setY(102);
         chips.getChildren().add(text);
-        pane.getChildren().add(chips);
+
+        HBox bottom = new HBox(chips);
+        bottom.setAlignment(Pos.CENTER);
+
+        //Aussteigen
+        if(playerId == ich) {
+
+        ImageView exit = new ImageView(loader.getImg("images/exit.svg", zoomfactor*0.5));
+        exit.setTranslateY(-3);
+        chips.setTranslateY(10);
+            bottom.getChildren().add(exit);
+
+            exit.setOnMouseClicked(mouseEvent -> {
+            spiellogik.aussteigen(spieler[playerId]);
+            buildStage(classPrimaryStage);
+        });
+
+        }
+
+        pane.getChildren().add(bottom);
 
         switch(playerId) {
             case 1:
@@ -313,7 +334,7 @@ public class Main extends Application {
 
             Scene scene = new Scene(root, sceneWidth, sceneHeight);
             BackgroundImage myBI = new BackgroundImage(table1,
-                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                    BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                     new BackgroundSize(100, 100, true, true, false, true));
 
 
@@ -511,7 +532,6 @@ public class Main extends Application {
         @Override
         public void run() {
             if(tisch.getAktivSpieler() instanceof Bot) {
-                System.out.println(tisch.getAktivSpieler().getName()+" spielt");
                 ((Bot) tisch.getAktivSpieler()).play();
                 Platform.runLater(() -> {
                     buildStage(classPrimaryStage);
