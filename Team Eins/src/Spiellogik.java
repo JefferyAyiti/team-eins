@@ -214,22 +214,25 @@ public class Spiellogik {
     }
 
     /**
-     * gibt einen Chip an den Tisch zurück
+     * gibt einen Chip an den Tisch zurück. Nur moglich wenn
+     * der Spieler keine Karte im Hand hat
      * @param spieler Spieler der die Aktiion ausführt
      * @param chip Chip den der Spieler Abgeben möchte
      * @return true wenn Chips zum zurückgeben vorhanden sind ansonsten false
      */
     public boolean chipAbgeben(Spieler spieler, Chip chip) {
         boolean aktion=false;
-        if(spieler.getBlackChips() >0 || spieler.getWhiteChips() >0) {
-            if (chip.getValue() == -1) {
-                spieler.setWhiteChips(spieler.getWhiteChips() + 1);
-                tisch.takeChips(-1, 0);
-            } else {
-                spieler.setBlackChips(spieler.getBlackChips() + 1);
-                tisch.takeChips(0, -1);
+        if(spieler.getCardCount() == 0){
+            if(spieler.getBlackChips() >0 || spieler.getWhiteChips() >0) {
+                if (chip.getValue() == -1) {
+                    spieler.setWhiteChips(spieler.getWhiteChips() - 1);
+                    tisch.takeChips(1, 0);
+                } else {
+                    spieler.setBlackChips(spieler.getBlackChips() - 1);
+                    tisch.takeChips(0, 1);
+                }
+                aktion=true;
             }
-            aktion=true;
         }
         return aktion;
     }

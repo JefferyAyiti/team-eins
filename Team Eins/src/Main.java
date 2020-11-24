@@ -276,6 +276,7 @@ public class Main extends Application {
             BlackChip bye = new BlackChip();
             spiellogik.chipAbgeben(spieler[playerId], bye );
             buildStage(classPrimaryStage);
+            //TODO Nur ein proRunde click erlauben
         });
 
         ImageView whChip = new ImageView(whiteChipImage);
@@ -286,7 +287,9 @@ public class Main extends Application {
             WhiteChip tschuss = new WhiteChip();
             spiellogik.chipAbgeben(spieler[playerId], tschuss );
             buildStage(classPrimaryStage);
+            //TODO Nur ein click proRunde erlauben
         });
+
 
         chips.add(blChip,0,0);
         chips.add(whChip,0,1);
