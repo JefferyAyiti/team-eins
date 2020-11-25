@@ -69,7 +69,8 @@ public class Spiellogik {
 
     }
         for (int i = 0; i < len; i++) { //spielerListe durchgehen
-            if (spielerListe[i].points == -40) {
+
+            if ((spielerListe[i].getBlackChips()*10 + spielerListe[i].getWhiteChips()) >= 40) {
                 System.out.println(ranglisteErstellen());  //ein Spieler hat -40 Punkte -> Spiel ist zu Ende
                 return;
             }
@@ -255,6 +256,7 @@ public class Spiellogik {
 
         if(tisch.getAktivSpieler() == spieler && spieler.inGame()){
             spieler.aussteigen();
+            spieler.setLetzerSpielerDurchgang(false);
             einSpielerUebrig();  //ueberpruefen wie viele Spieler diese Runde noch spielen
 
 
