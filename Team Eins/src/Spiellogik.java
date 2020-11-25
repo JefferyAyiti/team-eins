@@ -160,9 +160,19 @@ public class Spiellogik {
      */
     public void chipsKassieren(Spieler spieler) {
         Set<Karte> handkarten = new LinkedHashSet<>();
+
         //Karten als Menge damit nur einmalig gezählt wird
         for (Karte c : spieler.getCardHand().getHandKarte()) {
-            handkarten.add(c);
+            boolean doppelt = false;
+            for(Karte a: handkarten){
+                if (c.value == a.value){
+                    doppelt = true;
+                }
+            }
+            if(!doppelt){
+                handkarten.add(c);
+            }
+
         }
 
         int summe = 0;
@@ -201,7 +211,7 @@ public class Spiellogik {
 
         boolean transaktion = false;
 
-        if(spieler.getWhiteChips() >= 10){
+        if(spieler.getWhiteChips() >= 10 && tisch.getBlackChips() > 0){
 
             spieler.setBlackChips(spieler.getBlackChips() + 1);
             spieler.setWhiteChips(spieler.getWhiteChips() - 10);
