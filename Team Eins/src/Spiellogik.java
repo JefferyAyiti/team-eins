@@ -321,9 +321,8 @@ public class Spiellogik {
 
         }
 
-        tisch.karteAblegen(tisch.karteZiehen()); //Ablagestapel
         tisch.nextDurchgang();
-
+        tisch.karteAblegen(tisch.karteZiehen()); //Ablagestapel
         einSpielerUebrig();
         return;
 

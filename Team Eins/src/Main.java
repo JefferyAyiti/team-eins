@@ -153,11 +153,14 @@ public class Main extends Application {
         VBox.setMargin(pane, new Insets(0, 0 ,5 ,0));
 
         Label plr = new Label(spieler[playerId].getName());
+        if(playerId > 1 && playerId < 5) {
+            plr.setRotate(180);
+        }
         plr.setTextFill(Color.WHITE);
         plr.setFont(Font.font("Verdana", 12 * zoomfactor));
         if(spieler[playerId] == tisch.getAktivSpieler()) {
             plr.setTextFill(Color.YELLOW);
-            plr.setFont(Font.font("Verdana", FontWeight.BOLD, 12 * zoomfactor));
+            plr.setFont(Font.font("Verdana", FontWeight.BOLD, 14 * zoomfactor));
         }
         plr.setTranslateY(-15);
         pane.getChildren().add(plr);
@@ -316,9 +319,13 @@ public class Main extends Application {
         //Aussteigen
         if(playerId == ich) {
 
-        ImageView exit = new ImageView(loader.getImg("images/exit.svg", zoomfactor*0.5));
-        exit.setTranslateY(-3);
-        chips.setTranslateY(10);
+        ImageView exit = new ImageView(loader.getImg("images/exit.svg", zoomfactor*0.4));
+        exit.setTranslateY(1);
+        chips.setTranslateY(1);
+            if(playerId > 1 && playerId < 5) {
+                chips.setRotate(180);
+            }
+
             bottom.getChildren().add(exit);
 
             exit.setOnMouseClicked(mouseEvent -> {
