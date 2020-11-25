@@ -1,3 +1,4 @@
+import SVG.SvgImageLoaderFactory;
 import SVG.TestLoadImageUsingClass;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -32,6 +33,7 @@ import java.util.Timer;
 
 
 public class Main extends Application {
+
 
     static Hand[] haende;
     static Spieler[] spieler;
@@ -271,7 +273,7 @@ public class Main extends Application {
         ImageView blChip = new ImageView(blackChipImage);
         blChip.setFitHeight(chipsize * zoomfactor);
         blChip.setFitWidth(chipsize * zoomfactor);
-
+        //Chip counter unter die Karte
         blChip.setOnMouseClicked( mouseEvent -> {
             BlackChip bye = new BlackChip();
             spiellogik.chipAbgeben(spieler[playerId], bye );
