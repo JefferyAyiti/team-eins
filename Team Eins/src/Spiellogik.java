@@ -69,7 +69,9 @@ public class Spiellogik {
 
     }
         for (int i = 0; i < len; i++) { //spielerListe durchgehen
-            if (spielerListe[i].points == -40) {
+
+            if ((spielerListe[i].getBlackChips()*10 + spielerListe[i].getWhiteChips()) >= 40) {
+                alleAussteigen();
                 System.out.println(ranglisteErstellen());  //ein Spieler hat -40 Punkte -> Spiel ist zu Ende
                 return;
             }
@@ -80,7 +82,16 @@ public class Spiellogik {
     }
 
 
+    /**
+     * Alle Spieler steigen aus dem Spiel aus
+     */
+    public void alleAussteigen(){
+        int len = spielerListe.length;
+        for (int i = 0; i < len; i++) { //jeder Spieler kassiert Chips
+            spielerListe[i].aussteigen();  //Spieler können wieder Züge machen
 
+        }
+    }
 
     /**
      * Ein Spieler legt eine Karte aus seiner Hand auf den Ablagestapel
@@ -255,6 +266,7 @@ public class Spiellogik {
 
         if(tisch.getAktivSpieler() == spieler && spieler.inGame()){
             spieler.aussteigen();
+            spieler.setLetzerSpielerDurchgang(false);
             einSpielerUebrig();  //ueberpruefen wie viele Spieler diese Runde noch spielen
 
 
