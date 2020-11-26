@@ -67,7 +67,22 @@ public class Spiellogik {
         chipsKassieren(spielerListe[i]);
         spielerListe[i].einsteigen();  //Spieler können wieder Züge machen
 
-    }
+        }
+
+        if(tisch.getWhiteChips() <= 0 ){
+            while(tisch.getWhiteChips() <= 0 ){
+            Map<Spieler,Integer> rangliste = ranglisteErstellenNurWeißeChips();
+            Integer weißeChips =  (new ArrayList<Integer>(rangliste.values()).get(0));
+            Spieler spieler = (new ArrayList<>(rangliste.keySet()).get(0));
+            if(weißeChips > 10){
+            spieler.setWhiteChips(spieler.whiteChips - 10);
+            spieler.setBlackChips(spieler.getBlackChips()+1);
+            tisch.takeChips(-10,1);}
+
+            }
+
+        }
+
         for (int i = 0; i < len; i++) { //spielerListe durchgehen
 
             if ((spielerListe[i].getBlackChips()*10 + spielerListe[i].getWhiteChips()) >= 40) {
@@ -307,12 +322,42 @@ public class Spiellogik {
         return rangliste;
     }
 
+    /**
+     * erstellt eine Rangliste der Spieler, wobei nur Weiße Chips betrachtet werden
+     * @return sortierte LinkedHashMap mit Spielern und deren Anzahl an Weißen Chips
+     */
+    public Map<Spieler, Integer> ranglisteErstellenNurWeißeChips() {
+
+        //Map mit spielern + Spielstand erstellen
+        Map<Spieler, Integer> punktestand = new HashMap<Spieler,Integer>();
+        for (Spieler s : tisch.getSpielerList()) {
+            punktestand.put(s,s.getWhiteChips());
+        }
+
+        //sortieren
+        List<Map.Entry<Spieler,Integer>> spielstand = new LinkedList<Map.Entry<Spieler,Integer> >(punktestand.entrySet());
+        Collections.sort(spielstand, new Comparator<Map.Entry<Spieler, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Spieler, Integer> o1, Map.Entry<Spieler, Integer> o2) {
+                return o2.getValue()-o1.getValue();
+            }
+        });
+
+        //sortierete Map
+        Map<Spieler, Integer> rangliste = new LinkedHashMap<Spieler,Integer>();
+        for (Map.Entry<Spieler, Integer> aa : spielstand) {
+            rangliste.put(aa.getKey(), aa.getValue());
+        }
+
+        return rangliste;
+    }
+
 
     /**
      * Initiiert eine neue Runde, d.h. Stapel mischen und neue Karten verteilen
      */
     public void initNeueRunde() {
-
+        rundeBeendet = false;
         for (int i = 0; i < Main.spieler.length; i++) {
             Main.haende[i] = new Hand();
             Main.spieler[i].setCardHand(Main.haende[i]);
@@ -344,7 +389,7 @@ public class Spiellogik {
      * @return rundeBeendet. Zeigt an, ob runde beendet wurde.
      */
     public boolean getRundeBeendet(){
-        return getRundeBeendet();
+        return rundeBeendet;
     }
 
 }
