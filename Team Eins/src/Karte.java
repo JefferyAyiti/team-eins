@@ -1,4 +1,4 @@
-public class Karte {
+public class Karte implements Comparable {
 final int value;
 boolean covered;
 
@@ -40,6 +40,16 @@ boolean covered;
      */
     public void unCover() {
         covered = false;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Karte comp = (Karte)o;
+        if(this.getValue() == comp.getValue())
+            return 0;
+        else if(this.getValue() > comp.getValue())
+            return 1;
+        else return -1;
     }
 }
 

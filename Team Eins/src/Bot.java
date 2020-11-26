@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Bot extends Spieler {
 
     private int schwierigkeit;
@@ -145,7 +149,29 @@ public class Bot extends Spieler {
 
 
     public void playSchwierigkeitSchwer() {
-        //TODO
+        Karte card;
+        Main.spiellogik.chipsTauschen(this);
+
+        //Sortiere nach Kartenwert
+        List cards = new ArrayList();
+        cards.addAll(this.getCardHand().getHandKarte());
+        Collections.sort(cards);
+
+        //höchster wert wird zuerst versucht zu legen
+        for (int i = 0; i < cards.size(); i++) {
+            card = this.getCardHand().getKarte(i);
+            if (Main.spiellogik.karteLegen(this, card)) {
+                System.out.println("\tLege " + card.getValue());
+                return;
+            }
+        }
+        if (Main.spiellogik.karteNachziehen(this)) {
+            System.out.println("\tZiehe");
+            return;
+        } else {
+            System.out.println("\tSteige aus");
+            Main.spiellogik.aussteigen(this);
+        }
     }
 
     /**
