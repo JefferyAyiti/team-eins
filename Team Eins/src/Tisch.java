@@ -37,6 +37,8 @@ public class Tisch {
      */
     public void nextDurchgang(){
         durchgangNr += 1;
+        ablageStapel = new Stapel(false);
+
     }
 
     /**
