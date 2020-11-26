@@ -25,6 +25,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.util.Optional;
 import java.util.TimerTask;
@@ -119,6 +120,7 @@ public class Main extends Application {
         primaryStage.setTitle("L.A.M.A - Team Eins");
         buildStage(primaryStage);
 
+
         Timer timer = new Timer();
         timer.schedule(new MyTask1(), 3000, 300);
 
@@ -131,9 +133,17 @@ public class Main extends Application {
 
         };
 
+
         primaryStage.widthProperty().addListener(stageSizeListener);
         primaryStage.heightProperty().addListener(stageSizeListener);
 
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                timer.cancel();
+                timer2.cancel();
+            }
+        });
     }
 
 
