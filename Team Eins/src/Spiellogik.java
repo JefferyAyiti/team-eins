@@ -76,9 +76,8 @@ public class Spiellogik {
                 return;
             }
         }
-
+        Main.rundeEnde();
         initNeueRunde();
-        return ;
     }
 
 
