@@ -289,21 +289,14 @@ public class Main extends Application {
         //Chip counter unter die Karte
         blChip.setOnMouseClicked( mouseEvent -> {
             BlackChip bye = new BlackChip();
-            spiellogik.chipAbgeben(spieler[playerId], bye );
+            spiellogik.chipsTauschen(spieler[playerId]);
             buildStage(classPrimaryStage);
-            //TODO Nur ein click proRunde  erlauben
         });
 
         ImageView whChip = new ImageView(whiteChipImage);
         whChip.setFitHeight(chipsize * zoomfactor);
         whChip.setFitWidth(chipsize* zoomfactor);
 
-        whChip.setOnMouseClicked(mouseEvent -> {
-            WhiteChip tschuss = new WhiteChip();
-            spiellogik.chipAbgeben(spieler[playerId], tschuss );
-            buildStage(classPrimaryStage);
-            //TODO Nur ein click proRunde erlauben(kann momentan nicht testen)
-        });
 
 
         chips.add(blChip,0,0);
