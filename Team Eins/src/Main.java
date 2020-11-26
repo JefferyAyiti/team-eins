@@ -4,17 +4,19 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,9 +30,7 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.util.Optional;
-import java.util.TimerTask;
-import java.util.Timer;
+import java.util.*;
 
 
 public class Main extends Application {
@@ -46,6 +46,7 @@ public class Main extends Application {
     double zoomfactor = 1;
     volatile long resize = 0;
     int ich = 0;
+    Stage classPrimaryStage;
 
     //Wird später im Menü festgelegt
     private static int anzSpieler = 6;//2 + (int) (Math.random() * 4);
@@ -78,14 +79,14 @@ public class Main extends Application {
         haende = new Hand[anzSpieler];
         spieler = new Spieler[anzSpieler];
 
-        spieler[0] = new Spieler("Spieler 1");
+        //spieler[0]= new Bot("Spieler",1);
+       spieler[0] = new Spieler("Spieler 1");
         for (int i = 1; i < anzSpieler; i++) {
             spieler[i] = new Bot("Bot " + (i + 1), 1);
 
         }
         tisch = new Tisch(spieler);
         spiellogik = new Spiellogik(tisch);
-
         spiellogik.initNeueRunde();
 
 
@@ -351,9 +352,10 @@ public class Main extends Application {
             case 2: pane.setTranslateX(-30*zoomfactor); pane.setTranslateY(10+10*zoomfactor); break;
         }
         return pane;
+
     }
 
-    Stage classPrimaryStage;
+
 
 
 
@@ -525,9 +527,14 @@ public class Main extends Application {
 
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
             primaryStage.setScene(scene);
+            if(spiellogik.getRundeBeendet()) {
+                showRangliste(primaryStage, spiellogik.ranglisteErstellen());
+
+            }
             sceneWidth = scene.getWidth();
             sceneHeight = scene.getHeight();
             primaryStage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -560,6 +567,45 @@ public class Main extends Application {
 
 
     }
+     Scene showRangliste(Stage stage, Map<Spieler, Integer> ranking) throws InterruptedException {
+
+         Stage old = stage;
+         Scene spielfeld = stage.getScene();
+
+
+        // create an ListView based on key items in the map.
+         ObservableMap<Spieler, Integer> observableExtensionToMimeMap = FXCollections.observableMap(ranking);
+         ListView<String> liste = new ListView<>();
+         for (Map.Entry<Spieler, Integer> r : ranking.entrySet()) {
+             liste.getItems().add(r.getKey().getName() + "=" + r.getValue());
+         }
+         liste.setPrefWidth(sceneWidth / 2);
+         liste.setPrefHeight(sceneHeight / 1.2);
+
+         Button nextRound = new Button("nächste Runde");
+         nextRound.setOnAction(e -> {
+                     spiellogik.initNeueRunde();
+                     stage.setScene(spielfeld);
+
+                 }
+         );
+
+         String css = Main.class.getResource("Rangliste.css").toExternalForm();
+
+         HBox buttons = new HBox(nextRound);
+         buttons.setAlignment(Pos.BOTTOM_CENTER);
+         VBox vbox = new VBox(liste, buttons);
+
+
+         Scene rangliste = new Scene(vbox, sceneWidth, sceneHeight);
+         rangliste.getStylesheets().add(css);
+         System.out.println("gibt Rangliste aus");
+         stage.setScene(rangliste);
+
+         return rangliste;
+     }
+
+
 
     class MyTask1 extends TimerTask {
         @Override
