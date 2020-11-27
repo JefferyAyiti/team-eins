@@ -41,6 +41,7 @@ public class Spiellogik {
         if(anzahlSpielerNichtFertig == 0){
             rundeBeendet = true;
             rundeBeenden();
+            initNeueRunde();
         }
 
         else if (anzahlSpielerNichtFertig == 1) {
@@ -58,28 +59,6 @@ public class Spiellogik {
 
 
     }
-    /** rundeBeenden regelt das Ende einer Runde. Zusätzlich zu dem Abkassieren der Chips, wird überprüft, ob das Spiel zu Ende ist
-     * oder eine neue Runde gestartet werden muss.
-     */
-    private void rundeBeenden()  {
-        int len = spielerListe.length;
-        for (int i = 0; i < len; i++) { //jeder Spieler kassiert Chips
-        chipsKassieren(spielerListe[i]);
-        spielerListe[i].einsteigen();  //Spieler können wieder Züge machen
-
-    }
-        for (int i = 0; i < len; i++) { //spielerListe durchgehen
-
-            if ((spielerListe[i].getBlackChips()*10 + spielerListe[i].getWhiteChips()) >= 40) {
-                alleAussteigen();
-                System.out.println(ranglisteErstellen());  //ein Spieler hat -40 Punkte -> Spiel ist zu Ende
-                return;
-            }
-        }
-        Main.rundeEnde();
-        initNeueRunde();
-    }
-
 
     /**
      * Alle Spieler steigen aus dem Spiel aus
@@ -113,7 +92,7 @@ public class Spiellogik {
                         spieler.setLetzerSpielerDurchgang(false);
                         spieler.aussteigen();    // Spieler kann keinen Zug mehr machen
                         rundeBeendet = true;
-                        rundeBeenden();    //ein Spieler hat keine Karten mehr oder der letzte Spieler ist fertig mit seinem Zug
+                        rundeBeenden(); //ein Spieler hat keine Karten mehr oder der letzte Spieler ist fertig mit seinem Zug
 
                     }
                     if(!spieler.isLetzerSpielerDurchgang()){//Spieler darf noch seine Karten ablegen
@@ -207,6 +186,8 @@ public class Spiellogik {
         tisch.takeChips(weisseChips,0);
         spieler.setWhiteChips(spieler.getWhiteChips()+weisseChips);
 
+        int punktzahl = (spieler.getWhiteChips() * -1)+(spieler.getBlackChips()*-10);
+        spieler.setPoints(punktzahl);
 
     }
 
@@ -247,14 +228,17 @@ public class Spiellogik {
                 if (chip.getValue() == -1) {
                     spieler.setWhiteChips(spieler.getWhiteChips() - 1);
                     tisch.takeChips(1, 0);
+                    spieler.setPoints(-1);
                 } else {
                     spieler.setBlackChips(spieler.getBlackChips() - 1);
                     tisch.takeChips(0, 1);
+                    spieler.setPoints(-10);
                 }
                 aktion=true;
             }
         }
         return aktion;
+
     }
 
     /**
@@ -307,10 +291,37 @@ public class Spiellogik {
     }
 
 
+    /** rundeBeenden regelt das Ende einer Runde. Zusätzlich zu dem Abkassieren der Chips, wird überprüft, ob das Spiel zu Ende ist
+     * oder eine neue Runde gestartet werden muss.
+     */
+    private void rundeBeenden()  {
+
+
+        int len = spielerListe.length;
+        for (int i = 0; i < len; i++) { //jeder Spieler kassiert Chips
+            chipsKassieren(spielerListe[i]);
+            spielerListe[i].einsteigen();  //Spieler können wieder Züge machen
+
+        }
+        for (int i = 0; i < len; i++) { //spielerListe durchgehen
+
+            if ((spielerListe[i].getBlackChips()*10 + spielerListe[i].getWhiteChips()) >= 40) {
+                alleAussteigen();
+                System.out.println(ranglisteErstellen());  //ein Spieler hat -40 Punkte -> Spiel ist zu Ende
+                return;
+            }
+        }
+        rundeBeendet=true;
+        return ;
+    }
+
+
+
     /**
      * Initiiert eine neue Runde, d.h. Stapel mischen und neue Karten verteilen
      */
     public void initNeueRunde() {
+        rundeBeendet=false;
 
         for (int i = 0; i < Main.spieler.length; i++) {
             Main.haende[i] = new Hand();
@@ -343,7 +354,7 @@ public class Spiellogik {
      * @return rundeBeendet. Zeigt an, ob runde beendet wurde.
      */
     public boolean getRundeBeendet(){
-        return getRundeBeendet();
+        return rundeBeendet;
     }
 
 }
