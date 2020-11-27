@@ -65,8 +65,6 @@ public class Main extends Application {
         }
         launch(args);
 
-
-
     }
 
 
@@ -81,8 +79,8 @@ public class Main extends Application {
         haende = new Hand[anzSpieler];
         spieler = new Spieler[anzSpieler];
 
-        //spieler[0]= new Bot("Spieler",1);
-       spieler[0] = new Spieler("Spieler 1");
+        spieler[0]= new Bot("Spieler",1);
+       //spieler[0] = new Spieler("Spieler 1");
         for (int i = 1; i < anzSpieler; i++) {
             spieler[i] = new Bot("Bot " + (i + 1), 1);
 
@@ -721,7 +719,8 @@ public class Main extends Application {
         VBox rang = new VBox();
 
         Text list = new Text();
-        list.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit");
+        String test = spiellogik.ranglisteErstellen().toString();
+        list.setText(test);
         rang.getChildren().add(list);
         layout.setCenter(rang);
         rang.setPadding(new Insets(30f));

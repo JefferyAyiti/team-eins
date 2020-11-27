@@ -34,7 +34,7 @@
     -fx-font-size: 160%;
     -fx-border-color: black;
     -fx-border-width: 5;
-    -fx-background-image: url("oberflaeche.jpg");
+    -fx-background-image: url("images/oberflaeche.jpg");
     -fx-text-fill: white;
     -fx-focus-traversable:false ;
     -fx-font-family: "Ink Free";
