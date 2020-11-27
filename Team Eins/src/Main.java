@@ -602,7 +602,6 @@ public class Main extends Application {
          for (Map.Entry<Spieler, Integer> r : ranking.entrySet()) {
              liste.getItems().add("Platz "+platz+":\t\t" +r.getKey().getName()+"\t\t\t" + r.getValue());
              platz++;
-
          }
 
          Button nextRound;
@@ -664,7 +663,6 @@ public class Main extends Application {
 
         return rangliste;
      }
-
 
 
     class MyTask1 extends TimerTask {
