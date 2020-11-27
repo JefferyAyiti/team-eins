@@ -9,6 +9,7 @@ public class Spiellogik {
     public final Tisch tisch;
     private final Spieler[] spielerListe;
     private boolean rundeBeendet = false;
+    boolean spielBeendet = false;
 
 
     /** Initialisiere Spiellogik mit dem Tisch
@@ -314,6 +315,7 @@ public class Spiellogik {
             if ((spielerListe[i].getBlackChips()*10 + spielerListe[i].getWhiteChips()) >= 40) {
                 alleAussteigen();
                 System.out.println(ranglisteErstellen());  //ein Spieler hat -40 Punkte -> Spiel ist zu Ende
+                spielBeendet = true;
                 return;
             }
         }

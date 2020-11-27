@@ -125,10 +125,10 @@ public class Main extends Application {
 
 
         Timer timer = new Timer();
-        timer.schedule(new MyTask1(), 3000, 300);
+        timer.schedule(new MyTask1(), 3000, 500);
 
         Timer timer2 = new Timer();
-        timer2.schedule(new moveCheck(), 3000, 3000);
+        timer2.schedule(new moveCheck(), 3000, 100);
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
         {
@@ -605,13 +605,23 @@ public class Main extends Application {
          liste.setPrefWidth(sceneWidth / 2);
          liste.setPrefHeight(sceneHeight / 1.2);
 
-         Button nextRound = new Button("nächste Runde");
-         nextRound.setOnAction(e -> {
-                     spiellogik.initNeueRunde();
-                     stage.setScene(spielfeld);
+         Button nextRound;
+         if(!spiellogik.spielBeendet) {
+             nextRound = new Button("nächste Runde");
+             nextRound.setOnAction(e -> {
+                         spiellogik.initNeueRunde();
+                         buildStage(classPrimaryStage);
 
-                 }
-         );
+                     }
+             );
+
+         } else {
+             nextRound = new Button("Spiel beenden");
+             nextRound.setOnAction(e -> {
+                         classPrimaryStage.close();
+                     }
+             );
+         }
 
          String css = Main.class.getResource("Rangliste.css").toExternalForm();
 
