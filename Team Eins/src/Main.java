@@ -563,46 +563,76 @@ public class Main extends Application {
         card6 = loader.getImg("images/SVG/Card6.svg", factor);
         lama = loader.getImg("images/SVG/Lama.svg", factor);
         table1 = loader.getImg("images/table2.svg", factor);
+        //score = loader.getImg("images/SVG/Score.svg",factor);
 
 
 
     }
+    //Image score = loader.getImg("images/Score.svg");
      Scene showRangliste(Stage stage, Map<Spieler, Integer> ranking) throws InterruptedException {
 
-         Stage old = stage;
-         Scene spielfeld = stage.getScene();
-
+        Stage old = stage;
+        Scene spielfeld = stage.getScene();
+        int platz=1;
 
         // create an ListView based on key items in the map.
-         ObservableMap<Spieler, Integer> observableExtensionToMimeMap = FXCollections.observableMap(ranking);
-         ListView<String> liste = new ListView<>();
+        ObservableMap<Spieler, Integer> observableExtensionToMimeMap = FXCollections.observableMap(ranking);
+        ListView<String> liste = new ListView<>();
          for (Map.Entry<Spieler, Integer> r : ranking.entrySet()) {
-             liste.getItems().add(r.getKey().getName() + "=" + r.getValue());
+             liste.getItems().add("Platz "+platz+":\t\t" +r.getKey().getName()+"\t\t\t" + r.getValue());
+             platz++;
+
          }
-         liste.setPrefWidth(sceneWidth / 2);
-         liste.setPrefHeight(sceneHeight / 1.2);
 
-         Button nextRound = new Button("nächste Runde");
-         nextRound.setOnAction(e -> {
-                     spiellogik.initNeueRunde();
+         //neue Runde starte/ zurück zu ursprünglichen scene
+        Button nextRound = new Button("nächste Runde");
+        nextRound.setOnAction(e -> {
                      stage.setScene(spielfeld);
-
+                     spiellogik.initNeueRunde(); //neue Runde starten
                  }
-         );
+        );
 
-         String css = Main.class.getResource("Rangliste.css").toExternalForm();
+        //Darstellung
+        Label titel= new Label("Rangliste");
+        HBox top= new HBox(titel);
+        top.setMinHeight(sceneHeight/6);
+        top.setAlignment(Pos.CENTER);
 
-         HBox buttons = new HBox(nextRound);
-         buttons.setAlignment(Pos.BOTTOM_CENTER);
-         VBox vbox = new VBox(liste, buttons);
+        HBox bottom= new HBox(nextRound);
+        bottom.setMinHeight(sceneHeight/6);
+        bottom.setAlignment(Pos.CENTER);
+
+        VBox left = new VBox();
+        left.setMinWidth(sceneWidth/10);
+
+        VBox right = new VBox();
+        right.setMinWidth(sceneWidth/10);
+
+        Pane center= new Pane (liste);
+        center.setMaxHeight(liste.getHeight());
+        BorderPane root = new BorderPane();
+        root.setTop(top);
+        root.setCenter(liste);
+        root.setRight(right);
+        root.setBottom(bottom);
+        root.setLeft(left);
+
+        //Hintergrund
+         BackgroundImage myBI = new BackgroundImage(table1,
+                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+                 new BackgroundSize(100, 100, true, true, false, true));
+        root.setBackground(new Background(myBI));
 
 
-         Scene rangliste = new Scene(vbox, sceneWidth, sceneHeight);
-         rangliste.getStylesheets().add(css);
-         System.out.println("gibt Rangliste aus");
-         stage.setScene(rangliste);
+        //neue Scene
+        String css = Main.class.getResource("Rangliste.css").toExternalForm();
+        Scene rangliste = new Scene(root, sceneWidth, sceneHeight);
+        rangliste.getStylesheets().add(css);
 
-         return rangliste;
+        System.out.println("gibt Rangliste aus");
+        stage.setScene(rangliste);
+
+        return rangliste;
      }
 
 
