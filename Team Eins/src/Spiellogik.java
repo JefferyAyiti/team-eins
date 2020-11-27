@@ -11,7 +11,6 @@ public class Spiellogik {
     private boolean rundeBeendet = false;
     boolean spielBeendet = false;
 
-
     /** Initialisiere Spiellogik mit dem Tisch
      * @param tisch Das ist der Tisch, auf dem gespielt wird
      */
@@ -81,6 +80,7 @@ public class Spiellogik {
     public boolean karteLegen(Spieler spieler, Karte karte) {
         if(tisch.getAktivSpieler() == spieler && spieler.inGame()){
             try {
+                Boolean karteAbgelegt = false;
                 if (tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
                     || tisch.getObereKarteAblagestapel().value == karte.value - 1   //Handkarte ist um eins größer als die oberste Ablagekarte
                     || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
@@ -90,12 +90,13 @@ public class Spiellogik {
                     tisch.karteAblegen(karte);
                     if(spieler.cardHand.getHandKarte().size()== 0){   //hat der Spieler noch Handkarten?
                         spieler.setLetzerSpielerDurchgang(false);
+                        karteAbgelegt = true;
                         spieler.aussteigen();    // Spieler kann keinen Zug mehr machen
                         rundeBeendet = true;
                         rundeBeenden(); //ein Spieler hat keine Karten mehr oder der letzte Spieler ist fertig mit seinem Zug
 
                     }
-                    if(!spieler.isLetzerSpielerDurchgang()){//Spieler darf noch seine Karten ablegen
+                    if(!spieler.isLetzerSpielerDurchgang() && karteAbgelegt == false){//Spieler darf noch seine Karten ablegen
                         tisch.naechste();
                     }
 
@@ -304,6 +305,7 @@ public class Spiellogik {
                 if(weißeChips > 10){
                     spieler.setWhiteChips(spieler.whiteChips - 10);
                     spieler.setBlackChips(spieler.getBlackChips()+1);
+                    spieler.chipTausch();
                     tisch.takeChips(-10,1);}
 
             }
@@ -358,7 +360,6 @@ public class Spiellogik {
      * Initiiert eine neue Runde, d.h. Stapel mischen und neue Karten verteilen
      */
     public void initNeueRunde() {
-        rundeBeendet=false;
 
         for (int i = 0; i < Main.spieler.length; i++) {
             Main.haende[i] = new Hand();
