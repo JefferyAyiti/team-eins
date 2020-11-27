@@ -9,6 +9,7 @@ public class Spiellogik {
     public final Tisch tisch;
     private final Spieler[] spielerListe;
     private boolean rundeBeendet = false;
+    boolean spielBeendet = false;
 
 
     /** Initialisiere Spiellogik mit dem Tisch
@@ -41,7 +42,6 @@ public class Spiellogik {
         if(anzahlSpielerNichtFertig == 0){
             rundeBeendet = true;
             rundeBeenden();
-            initNeueRunde();
         }
 
         else if (anzahlSpielerNichtFertig == 1) {
@@ -89,6 +89,9 @@ public class Spiellogik {
                     spieler.getCardHand().removeKarte((HandKarte) karte);
                     tisch.karteAblegen(karte);
                     if(spieler.cardHand.getHandKarte().size()== 0){   //hat der Spieler noch Handkarten?
+                        if(spieler instanceof Bot){
+                            ((Bot) spieler).chipAbgeben();
+                        }
                         spieler.setLetzerSpielerDurchgang(false);
                         spieler.aussteigen();    // Spieler kann keinen Zug mehr machen
                         rundeBeendet = true;
@@ -148,26 +151,19 @@ public class Spiellogik {
      * @param spieler
      */
     public void chipsKassieren(Spieler spieler) {
-        Set<Karte> handkarten = new LinkedHashSet<>();
+        Set<Integer> handkarten = new LinkedHashSet<>();
 
-        //Karten als Menge damit nur einmalig gezählt wird
-        for (Karte c : spieler.getCardHand().getHandKarte()) {
-            boolean doppelt = false;
-            for(Karte a: handkarten){
-                if (c.value == a.value){
-                    doppelt = true;
-                }
-            }
-            if(!doppelt){
-                handkarten.add(c);
-            }
 
-        }
+      for(Karte c:spieler.getCardHand().getHandKarte()) {
+          handkarten.add(c.getValue());
+      }
 
         int summe = 0;
+      if(spieler == spielerListe[0])
+          System.out.println(handkarten);
         //aufaddieren
-        for (Karte c : handkarten) {
-            summe += c.getValue();
+        for (Integer c : handkarten) {
+            summe += c;
         }
 
 
@@ -322,6 +318,7 @@ public class Spiellogik {
             if ((spielerListe[i].getBlackChips()*10 + spielerListe[i].getWhiteChips()) >= 40) {
                 alleAussteigen();
                 System.out.println(ranglisteErstellen());  //ein Spieler hat -40 Punkte -> Spiel ist zu Ende
+                spielBeendet = true;
                 return;
             }
         }

@@ -125,10 +125,10 @@ public class Main extends Application {
 
 
         Timer timer = new Timer();
-        timer.schedule(new MyTask1(), 3000, 300);
+        timer.schedule(new MyTask1(), 3000, 500);
 
         Timer timer2 = new Timer();
-        timer2.schedule(new moveCheck(), 3000, 3000);
+        timer2.schedule(new moveCheck(), 3000, 100);
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
         {
@@ -522,6 +522,29 @@ public class Main extends Application {
             }
 
 
+            //Scoreboard
+            GridPane score = new GridPane();
+            score.setTranslateY(10);
+            score.setTranslateX(-10);
+            VBox names = new VBox();
+            VBox sc = new VBox();
+            for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
+                //System.out.println(entry.getKey().getName() + ":" + entry.getValue());
+                Label name = new Label(entry.getKey().getName());
+                name.setTextFill(Color.WHITE);
+                name.setFont(new Font(10*zoomfactor));
+                names.getChildren().add(name);
+                Label sco = new Label(Integer.toString(entry.getValue()));
+                sco.setFont(new Font(10*zoomfactor));
+                sco.setTextFill(Color.WHITE);
+                sc.getChildren().add(sco);
+            }
+
+            score.addRow(0, names, sc);
+            score.setHgap(15);
+            score.setAlignment(Pos.CENTER_RIGHT);
+            gridPane.add(score, 4, 4, 1 ,1);
+
             root.getChildren().add(gridPane);
 
 
@@ -563,12 +586,10 @@ public class Main extends Application {
         card6 = loader.getImg("images/SVG/Card6.svg", factor);
         lama = loader.getImg("images/SVG/Lama.svg", factor);
         table1 = loader.getImg("images/table2.svg", factor);
-        //score = loader.getImg("images/SVG/Score.svg",factor);
 
 
 
     }
-    //Image score = loader.getImg("images/Score.svg");
      Scene showRangliste(Stage stage, Map<Spieler, Integer> ranking) throws InterruptedException {
 
         Stage old = stage;
@@ -584,13 +605,22 @@ public class Main extends Application {
 
          }
 
-         //neue Runde starte/ zurück zu ursprünglichen scene
-        Button nextRound = new Button("nächste Runde");
-        nextRound.setOnAction(e -> {
-                     stage.setScene(spielfeld);
-                     spiellogik.initNeueRunde(); //neue Runde starten
-                 }
-        );
+         Button nextRound;
+         if(!spiellogik.spielBeendet) {
+             nextRound = new Button("nächste Runde");
+             nextRound.setOnAction(e -> {
+                        stage.setScene(spielfeld);
+                        spiellogik.initNeueRunde();
+                     }
+             );
+
+         } else {
+             nextRound = new Button("Spiel beenden");
+             nextRound.setOnAction(e -> {
+                         classPrimaryStage.close();
+                     }
+             );
+         }
 
         //Darstellung
         Label titel= new Label("Rangliste");
@@ -652,7 +682,7 @@ public class Main extends Application {
     class moveCheck extends TimerTask {
         @Override
         public void run() {
-            if(tisch.getAktivSpieler() instanceof Bot) {
+            if(tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
                 ((Bot) tisch.getAktivSpieler()).play();
                 Platform.runLater(() -> {
                     buildStage(classPrimaryStage);

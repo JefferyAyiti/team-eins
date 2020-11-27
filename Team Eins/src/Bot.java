@@ -128,12 +128,6 @@ public class Bot extends Spieler {
                 }
                 //Kartenlegen Ende//
 
-                //Prüfen ob noch Karten vorhanden
-                if (this.getCardCount() == 0) {
-                    Main.spiellogik.aussteigen(this);
-                    System.out.println("\t steige aus keine Karten");
-                }
-
                 //Karten ziehen wenn noch keine Karte abgelegt wurde, wenn man am Zug ist, Wenn man mehr als 3 Karten hat,
                 //und 20% wskeit kommt dazu. Sonst wird ausgestiegen
                 if (!abgelegt && (this.getCardCount() >= 4 && Math.random() <= 0.2)  ){
@@ -180,17 +174,13 @@ public class Bot extends Spieler {
      * Die Methode ist eine Helper Methode für die playSchwierigkeit() Methoden.
      * Ähnelt der Methode aus der Spiellogik.
      */
-    private void chipAbgeben() {
+    public void chipAbgeben() {
         Tisch tisch = Main.tisch;
         if (this.getBlackChips() > 0) {
-            this.setBlackChips(this.getBlackChips() - 1);
-
-            tisch.takeChips(0, -1);
+            Main.spiellogik.chipAbgeben(this, new BlackChip());
 
         } else if (this.getWhiteChips() > 0) {
-            this.setWhiteChips(this.getWhiteChips() - 1);
-
-            tisch.takeChips(-1, 0);
+            Main.spiellogik.chipAbgeben(this, new WhiteChip());
         }
     }
 
