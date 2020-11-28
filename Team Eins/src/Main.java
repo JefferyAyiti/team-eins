@@ -66,13 +66,38 @@ public class Main extends Application {
         launch(args);
 
     }
+    private static Image image;
+    private static Image card1;
+    private static Image card3;
+    private static Image card4;
+    private static Image card2;
+    private static Image card5;
+    private static Image card6;
+    private static Image lama;
+    private static Image table1;
 
+    Image[] cardsArray = {card1, card2, card3, card4, card5, card6, null, null, null, lama};
+
+    private static Image blackChipImage;
+    private static Image whiteChipImage;
 
     /**
      * Erstellt Tisch, Nachzieh- und Abalgestapel, Spieler
      * und startet die erste Runde im Spiel
      */
     private static void initGame(){
+        SvgImageLoaderFactory.install();
+        image = new Image("images/SVG/Back.svg");
+        card1 = new Image("images/SVG/Card1.svg");
+        card3 = new Image("images/SVG/Card3.svg");
+        card4 = new Image("images/SVG/Card4.svg");
+        card2 = new Image("images/SVG/Card2.svg");
+        card5 = new Image("images/SVG/Card5.svg");
+        card6 = new Image("images/SVG/Card6.svg");
+        lama =  new Image("images/SVG/Lama.svg");
+        table1 =new Image("images/table2.svg");
+        blackChipImage = new Image("/images/SVG/blackChip.svg");
+        whiteChipImage = new Image("/images/SVG/whiteChip.svg");
 
 
         //initialisiere Spieler mit handkarten
@@ -96,20 +121,7 @@ public class Main extends Application {
     //GUI
 
 
-    Image image = loader.getImg("images/SVG/Back.svg");
-    Image card1 = loader.getImg("images/SVG/Card1.svg");
-    Image card2 = loader.getImg("images/SVG/Card2.svg");
-    Image card3 = loader.getImg("images/SVG/Card3.svg");
-    Image card4 = loader.getImg("images/SVG/Card4.svg");
-    Image card5 = loader.getImg("images/SVG/Card5.svg");
-    Image card6 = loader.getImg("images/SVG/Card6.svg");
-    Image lama = loader.getImg("images/SVG/Lama.svg");
-    Image table1 = loader.getImg("images/table2.svg");
 
-    Image[] cardsArray = {card1, card2, card3, card4, card5, card6, null, null, null, lama};
-
-    Image blackChipImage = new Image("/images/SVG/blackChip.svg");
-    Image whiteChipImage = new Image("/images/SVG/whiteChip.svg");
 
     public void resize() {
 
