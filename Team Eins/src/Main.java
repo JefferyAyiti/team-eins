@@ -658,6 +658,7 @@ public class Main extends Application {
         root.setBottom(bottom);
         root.setLeft(left);
 
+
         //Hintergrund
          BackgroundImage myBI = new BackgroundImage(table1,
                  BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
@@ -701,60 +702,6 @@ public class Main extends Application {
 
             }
         }
-    }
-
-    public static void rundeEnde(){
-        Stage prompt = new Stage();
-
-        prompt.initModality(Modality.APPLICATION_MODAL);
-        prompt.initStyle(StageStyle.UNDECORATED);
-        prompt.setResizable(false);
-        prompt.setHeight(600);
-        prompt.setWidth(500);
-        prompt.setOpacity(0.9f);
-
-
-
-        BorderPane layout = new BorderPane();
-
-
-        //Header
-        Label text = new Label("Die Runde ist beendet.");
-        text.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
-        text.setTextFill(Color.ORANGERED);
-        VBox textBox = new VBox(text);
-        textBox.setAlignment(Pos.CENTER);
-        textBox.setPadding(new Insets(30f));
-        layout.setTop(textBox);
-
-        //Rangliste
-        VBox rang = new VBox();
-
-        Text list = new Text();
-        String test = spiellogik.ranglisteErstellen().toString();
-        list.setText(test);
-        rang.getChildren().add(list);
-        layout.setCenter(rang);
-        rang.setPadding(new Insets(30f));
-
-        //Buttons
-        Button button1 = new Button("Weiter");
-        Button button2 = new Button("Spiel Verlassen");
-
-        button1.setOnMouseClicked(mouseEvent -> prompt.close());
-        button2.setOnMouseClicked(mouseEvent -> prompt.close());
-
-        HBox buttons = new HBox();
-        buttons.getChildren().addAll(button1,button2);
-        buttons.setAlignment(Pos.TOP_CENTER);
-        buttons.setPadding(new Insets(30f));
-
-        buttons.setSpacing(32f);
-        layout.setBottom(buttons);
-
-        Scene scene = new Scene(layout);
-        prompt.setScene(scene);
-        prompt.showAndWait();
     }
 
 
