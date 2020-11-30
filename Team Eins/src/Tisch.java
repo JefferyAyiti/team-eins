@@ -74,6 +74,7 @@ public class Tisch {
      * @throws Exception von Methode Stapel.addCard().
      */
     public void initNachziehstapel() {
+        nachziehStapel = new Stapel(true);
         for (int i = 0; i<7; i++){
             for(int j = 0; j<8; j++){
                 switch (i){
