@@ -622,6 +622,7 @@ public class Main extends Application {
              nextRound.setOnAction(e -> {
                         stage.setScene(spielfeld);
                         spiellogik.initNeueRunde();
+                        buildStage(classPrimaryStage);
                      }
              );
 
