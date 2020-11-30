@@ -27,7 +27,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 import java.util.*;
@@ -63,24 +65,47 @@ public class Main extends Application {
         }
         launch(args);
 
-
-
     }
+    private static Image image;
+    private static Image card1;
+    private static Image card3;
+    private static Image card4;
+    private static Image card2;
+    private static Image card5;
+    private static Image card6;
+    private static Image lama;
+    private static Image table1;
 
+    Image[] cardsArray = {card1, card2, card3, card4, card5, card6, null, null, null, lama};
+
+    private static Image blackChipImage;
+    private static Image whiteChipImage;
 
     /**
      * Erstellt Tisch, Nachzieh- und Abalgestapel, Spieler
      * und startet die erste Runde im Spiel
      */
     private static void initGame(){
+        SvgImageLoaderFactory.install();
+        image = new Image("images/SVG/Back.svg");
+        card1 = new Image("images/SVG/Card1.svg");
+        card3 = new Image("images/SVG/Card3.svg");
+        card4 = new Image("images/SVG/Card4.svg");
+        card2 = new Image("images/SVG/Card2.svg");
+        card5 = new Image("images/SVG/Card5.svg");
+        card6 = new Image("images/SVG/Card6.svg");
+        lama =  new Image("images/SVG/Lama.svg");
+        table1 =new Image("images/table2.svg");
+        blackChipImage = new Image("/images/SVG/blackChip.svg");
+        whiteChipImage = new Image("/images/SVG/whiteChip.svg");
 
 
         //initialisiere Spieler mit handkarten
         haende = new Hand[anzSpieler];
         spieler = new Spieler[anzSpieler];
 
-        //spieler[0]= new Bot("Spieler",1);
-       spieler[0] = new Spieler("Spieler 1");
+        spieler[0]= new Bot("Spieler",1);
+       //spieler[0] = new Spieler("Spieler 1");
         for (int i = 1; i < anzSpieler; i++) {
             spieler[i] = new Bot("Bot " + (i + 1), 1);
 
@@ -96,20 +121,7 @@ public class Main extends Application {
     //GUI
 
 
-    Image image = loader.getImg("images/SVG/Back.svg");
-    Image card1 = loader.getImg("images/SVG/Card1.svg");
-    Image card2 = loader.getImg("images/SVG/Card2.svg");
-    Image card3 = loader.getImg("images/SVG/Card3.svg");
-    Image card4 = loader.getImg("images/SVG/Card4.svg");
-    Image card5 = loader.getImg("images/SVG/Card5.svg");
-    Image card6 = loader.getImg("images/SVG/Card6.svg");
-    Image lama = loader.getImg("images/SVG/Lama.svg");
-    Image table1 = loader.getImg("images/table2.svg");
 
-    Image[] cardsArray = {card1, card2, card3, card4, card5, card6, null, null, null, lama};
-
-    Image blackChipImage = new Image("/images/SVG/blackChip.svg");
-    Image whiteChipImage = new Image("/images/SVG/whiteChip.svg");
 
     public void resize() {
 
@@ -592,26 +604,24 @@ public class Main extends Application {
     }
      Scene showRangliste(Stage stage, Map<Spieler, Integer> ranking) throws InterruptedException {
 
-         Stage old = stage;
-         Scene spielfeld = stage.getScene();
-
+        Stage old = stage;
+        Scene spielfeld = stage.getScene();
+        int platz=1;
 
         // create an ListView based on key items in the map.
-         ObservableMap<Spieler, Integer> observableExtensionToMimeMap = FXCollections.observableMap(ranking);
-         ListView<String> liste = new ListView<>();
+        ObservableMap<Spieler, Integer> observableExtensionToMimeMap = FXCollections.observableMap(ranking);
+        ListView<String> liste = new ListView<>();
          for (Map.Entry<Spieler, Integer> r : ranking.entrySet()) {
-             liste.getItems().add(r.getKey().getName() + "=" + r.getValue());
+             liste.getItems().add("Platz "+platz+":\t\t" +r.getKey().getName()+"\t\t\t" + r.getValue());
+             platz++;
          }
-         liste.setPrefWidth(sceneWidth / 2);
-         liste.setPrefHeight(sceneHeight / 1.2);
 
          Button nextRound;
          if(!spiellogik.spielBeendet) {
              nextRound = new Button("nächste Runde");
              nextRound.setOnAction(e -> {
-                         spiellogik.initNeueRunde();
-                         buildStage(classPrimaryStage);
-
+                        stage.setScene(spielfeld);
+                        spiellogik.initNeueRunde();
                      }
              );
 
@@ -623,21 +633,49 @@ public class Main extends Application {
              );
          }
 
-         String css = Main.class.getResource("Rangliste.css").toExternalForm();
+        //Darstellung
+        Label titel= new Label("Rangliste");
+        HBox top= new HBox(titel);
+        top.setMinHeight(sceneHeight/6);
+        top.setAlignment(Pos.CENTER);
 
-         HBox buttons = new HBox(nextRound);
-         buttons.setAlignment(Pos.BOTTOM_CENTER);
-         VBox vbox = new VBox(liste, buttons);
+        HBox bottom= new HBox(nextRound);
+        bottom.setMinHeight(sceneHeight/6);
+        bottom.setAlignment(Pos.CENTER);
+
+        VBox left = new VBox();
+        left.setMinWidth(sceneWidth/10);
+
+        VBox right = new VBox();
+        right.setMinWidth(sceneWidth/10);
+
+        Pane center= new Pane (liste);
+        center.setMaxHeight(liste.getHeight());
+        BorderPane root = new BorderPane();
+        root.setTop(top);
+        root.setCenter(liste);
+        root.setRight(right);
+        root.setBottom(bottom);
+        root.setLeft(left);
 
 
-         Scene rangliste = new Scene(vbox, sceneWidth, sceneHeight);
-         rangliste.getStylesheets().add(css);
-         System.out.println("gibt Rangliste aus");
-         stage.setScene(rangliste);
+        //Hintergrund
+         BackgroundImage myBI = new BackgroundImage(table1,
+                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+                 new BackgroundSize(100, 100, true, true, false, true));
+        root.setBackground(new Background(myBI));
 
-         return rangliste;
+
+        //neue Scene
+        String css = Main.class.getResource("Rangliste.css").toExternalForm();
+        Scene rangliste = new Scene(root, sceneWidth, sceneHeight);
+        rangliste.getStylesheets().add(css);
+
+        System.out.println("gibt Rangliste aus");
+        stage.setScene(rangliste);
+
+        return rangliste;
      }
-
 
 
     class MyTask1 extends TimerTask {

@@ -89,6 +89,9 @@ public class Spiellogik {
                     spieler.getCardHand().removeKarte((HandKarte) karte);
                     tisch.karteAblegen(karte);
                     if(spieler.cardHand.getHandKarte().size()== 0){   //hat der Spieler noch Handkarten?
+                        if(spieler instanceof Bot){
+                            ((Bot) spieler).chipAbgeben();
+                        }
                         spieler.setLetzerSpielerDurchgang(false);
                         karteAbgelegt = true;
                         spieler.aussteigen();    // Spieler kann keinen Zug mehr machen
