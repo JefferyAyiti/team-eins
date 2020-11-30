@@ -14,6 +14,7 @@
     -fx-text-fill: white;
     -fx-alignment: center;
     -fx-opacity: 0.8;
+    -fx-font-family: "Ink Free";
 
 }
 .list-cell.odd{
@@ -31,7 +32,7 @@
     -fx-focus-traversable:false ;
 }
 .list-view{
-    -fx-font-size: 160%;
+
     -fx-border-color: black;
     -fx-border-width: 5;
     -fx-background-image: url("images/oberflaeche.jpg");

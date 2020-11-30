@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.skin.VirtualFlow;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,6 +33,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
+import javax.security.auth.callback.Callback;
 import java.util.*;
 
 
@@ -605,8 +607,6 @@ public class Main extends Application {
     }
      Scene showRangliste(Stage stage, Map<Spieler, Integer> ranking) throws InterruptedException {
 
-        Stage old = stage;
-        Scene spielfeld = stage.getScene();
         int platz=1;
 
         // create an ListView based on key items in the map.
@@ -616,12 +616,28 @@ public class Main extends Application {
              liste.getItems().add("Platz "+platz+":\t\t" +r.getKey().getName()+"\t\t\t" + r.getValue());
              platz++;
          }
+         //textgröße
+         liste.setCellFactory(cell -> {
+             return new ListCell<String>() {
+                 @Override
+                 protected void updateItem(String item, boolean empty) {
+                     super.updateItem(item, empty);
+                     if (item != null) {
+                         setText(item);
+
+                         // decide to add a new styleClass
+                         // getStyleClass().add("costume style");
+                         // decide the new font size
+                         setFont(Font.font(18*zoomfactor));
+                     }
+                 }
+             };
+         });
 
          Button nextRound;
          if(!spiellogik.spielBeendet) {
              nextRound = new Button("nächste Runde");
              nextRound.setOnAction(e -> {
-                        stage.setScene(spielfeld);
                         spiellogik.initNeueRunde();
                         buildStage(classPrimaryStage);
                      }
