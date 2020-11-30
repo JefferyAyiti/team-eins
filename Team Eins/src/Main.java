@@ -104,10 +104,10 @@ public class Main extends Application {
         haende = new Hand[anzSpieler];
         spieler = new Spieler[anzSpieler];
 
-        spieler[0]= new Bot("Spieler",1);
-       //spieler[0] = new Spieler("Spieler 1");
+        //spieler[0]= new Bot("Spieler",2);
+       spieler[0] = new Spieler("Spieler 1");
         for (int i = 1; i < anzSpieler; i++) {
-            spieler[i] = new Bot("Bot " + (i + 1), 1);
+            spieler[i] = new Bot("Bot " + (i + 1), 2);
 
         }
         tisch = new Tisch(spieler);
@@ -232,7 +232,6 @@ public class Main extends Application {
                 imgView.setOnMouseClicked(mouseEvent -> {
                     spiellogik.karteLegen(spieler[playerId],
                             spieler[playerId].getCardHand().getKarte(finalI));
-                    buildStage(classPrimaryStage);
                     //Chip tausch
                     if (spieler[playerId].getCardHand().getHandKarte().isEmpty()) {
                         Chip tausch;
@@ -272,6 +271,8 @@ public class Main extends Application {
                         }
 
                     }
+                    buildStage(classPrimaryStage);
+
 
                 });
             }
