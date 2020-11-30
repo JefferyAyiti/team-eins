@@ -45,7 +45,7 @@ public class Spieler {
      * @param points Punktestand des Spielers
      */
     public void setPoints(int points) {
-        this.points += points;
+        this.points = points;
     }
 
     public void einsteigen(){
