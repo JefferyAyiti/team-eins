@@ -613,7 +613,7 @@ public class Main extends Application {
         ObservableMap<Spieler, Integer> observableExtensionToMimeMap = FXCollections.observableMap(ranking);
         ListView<String> liste = new ListView<>();
          for (Map.Entry<Spieler, Integer> r : ranking.entrySet()) {
-             liste.getItems().add("Platz "+platz+":\t\t" +r.getKey().getName()+"\t\t\t" + r.getValue());
+             liste.getItems().add("\t"+"Platz "+platz+":\t\t" +r.getKey().getName()+"\t\t\t" + r.getValue()+"\t");
              platz++;
          }
          //textgröße
