@@ -7,16 +7,14 @@
     -fx-font-size: 150%;
 }
 .list-cell {
-    -fx-font-family: "Ink Free";
-       -fx-highlight-fill: transparent;
+    -fx-fit-to-height: true;
+    -fx-highlight-fill: transparent;
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-text-fill: white;
     -fx-alignment: center;
     -fx-opacity: 0.8;
     -fx-focus-traversable: false;
-
-
 }
 .list-cell.odd{
     -fx-background-color:transparent ;
@@ -27,7 +25,6 @@
 }
 
 .list-cell:filled:selected{
-    -fx-font-family: "Ink Free";
     -fx-highlight-fill: transparent;
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -39,10 +36,12 @@
 .list-view{
     -fx-border-color: black;
     -fx-border-width: 5;
+    -fx-background-image: url("images/oberflaeche.jpg");
     -fx-text-fill: white;
     -fx-focus-traversable:false ;
     -fx-font-family: "Ink Free";
-    -fx-background-image: url("oberflaeche.jpg");
+
+
 
 }
 .HBox{
