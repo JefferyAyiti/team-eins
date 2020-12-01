@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Bot extends Spieler {
 
@@ -142,14 +140,26 @@ public class Bot extends Spieler {
     }
 
 
+    /**
+     * Schwerer Bot
+     * Versucht zuerst die höchsten Werte abzulegen
+     * ANsonsten schaue die Summe meiner Handkarten und wieviele Karten
+     *      die Gegner noch haben
+     *      - Wenn ich höchsten 8 Strafpunkte bekommen würde und min einer meiner Gegner
+     *          höchstens noch 2 Karten hat steige ich aus
+     *  Ansonsten ziehe ich
+     *  Wenn Nachziehstapel leer steige ich ebenfalls aus
+     */
     public void playSchwierigkeitSchwer() {
         Karte card;
         Main.spiellogik.chipsTauschen(this);
 
         //Sortiere nach Kartenwert
-        List cards = new ArrayList();
+        List<Karte> cards = new ArrayList();
         cards.addAll(this.getCardHand().getHandKarte());
         Collections.sort(cards);
+
+
 
         //höchster wert wird zuerst versucht zu legen
         for (int i = 0; i < cards.size(); i++) {
@@ -159,11 +169,35 @@ public class Bot extends Spieler {
                 return;
             }
         }
+
+        //wenn legen nicht möglich, ziehen oder aussteigen?
+        Set<Integer> cardvals = new HashSet<>();
+        for(Karte c :cards) {
+            cardvals.add(c.getValue());
+        }
+        int handsumme = 0;
+        for(int val:cardvals) {
+            handsumme += val;
+        }
+        int minHandKartCoundGegner = Integer.MAX_VALUE;
+        for(Spieler sp: Main.tisch.getSpielerList()) {
+            if(sp.inGame() && sp.getCardCount() < minHandKartCoundGegner) {
+                minHandKartCoundGegner = sp.getCardCount();
+            }
+        }
+        if(handsumme <= 8 && minHandKartCoundGegner <= 2) {
+            System.out.println("\tSteige sicherheitshalber aus");
+            Main.spiellogik.aussteigen(this);
+            return;
+        }
+
+        //ziehen
         if (Main.spiellogik.karteNachziehen(this)) {
             System.out.println("\tZiehe");
             return;
+        //ziehen nicht möglich -> aussteigen
         } else {
-            System.out.println("\tSteige aus");
+            System.out.println("\tSteige gezwungenermaßen aus");
             Main.spiellogik.aussteigen(this);
         }
     }

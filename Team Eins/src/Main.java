@@ -260,7 +260,7 @@ public class Main extends Application {
                         Chip tausch;
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Glückwunsch");
-                        alert.setHeaderText("Willst du einen Chip tauschen?");
+                        alert.setHeaderText("Willst du einen Chip abgeben?");
 
                         ButtonType buttonTypeWhite = new ButtonType("weiß");
                         ButtonType buttonTypeBlack = new ButtonType("schwarz");
@@ -611,6 +611,10 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Lädt die SVG-Grafiken mit einem Zoom-Faktor neu, sodass
+     * diese immer scharf aussehen
+     */
     void getZoomedImages() {
 
 
@@ -634,10 +638,9 @@ public class Main extends Application {
         card6 = loader.getImg("images/SVG/Card6.svg", factor);
         lama = loader.getImg("images/SVG/Lama.svg", factor);
         table1 = loader.getImg("images/table2.svg", factor);
-
-
-
     }
+
+
      Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
 
         int platz=1;
@@ -669,7 +672,7 @@ public class Main extends Application {
 
          Button nextRound;
          if(!spiellogik.spielBeendet) {
-             nextRound = new Button("nächste Runde");
+             nextRound = new Button("Nächste Runde");
              nextRound.setOnAction(e -> {
                         spiellogik.initNeueRunde();
                         buildStage(classPrimaryStage);
@@ -758,7 +761,6 @@ public class Main extends Application {
             if(tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
                 if(System.currentTimeMillis()-lastmove < botPlayTime) {
                     try {
-                        System.out.println(botPlayTime-(System.currentTimeMillis()-lastmove));
                         Thread.sleep(botPlayTime-(System.currentTimeMillis()-lastmove));
                     } catch (InterruptedException e) {
                     }
