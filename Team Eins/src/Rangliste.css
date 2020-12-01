@@ -5,69 +5,24 @@
     -fx-pref-height: 30px;
     -fx-pref-width: 140px;
     -fx-font-size: 150%;
-}
-.list-cell {
-    -fx-fit-to-height: true;
-    -fx-highlight-fill: transparent;
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-text-fill: white;
     -fx-alignment: center;
-    -fx-opacity: 0.8;
-    -fx-focus-traversable: false;
-}
-.list-cell.odd{
-    -fx-background-color:transparent ;
 }
 
-.list-cell:empty {
-    -fx-opacity: 0;
-}
-
-.list-cell:filled:selected{
-    -fx-highlight-fill: transparent;
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-text-fill: white;
-    -fx-alignment: center;
-    -fx-opacity: 0.8;
-    -fx-focus-traversable: false;
-}
-.list-view{
-    -fx-border-color: black;
-    -fx-border-width: 5;
-    -fx-background-image: url("images/oberflaeche.jpg");
-    -fx-text-fill: white;
-    -fx-focus-traversable:false ;
-    -fx-font-family: "Ink Free";
-
-
-
-}
 .HBox{
-    -fx-alignment: Center;
-    -fx-fit-to-height: true;
-    -fx-fill-width: true;
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+    -fx-alignment: left;
 }
 .VBox{
-    -fx-fit-to-width: true;
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+    -fx-alignment: left;
 }
 .label{
-
     -fx-text-alignment: center;
     -fx-text-fill: white;
-    -fx-font-family:"Script MT Bold";
     -fx-font-weight: bold;
     -fx-opacity: 0.8;
-
-
 }
-.BorderPane{
-    -fx-border-color: transparent;
+.BorderPane {
+    -fx-alignment: center;
 }
+
 
 

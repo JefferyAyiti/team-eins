@@ -3,38 +3,25 @@ import SVG.TestLoadImageUsingClass;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.skin.VirtualFlow;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
-import javax.security.auth.callback.Callback;
 import java.util.*;
 
 
@@ -53,7 +40,7 @@ public class Main extends Application {
     double zoomfactor = 1;
     volatile long resize = 0;
     int ich = 0;
-    final long botPlayTime = 2000;
+    final long botPlayTime = 200;
     Stage classPrimaryStage;
 
     private static final String IDLE_BUTTON_STYLE = "-fx-background-color: transparent;";
@@ -88,7 +75,6 @@ public class Main extends Application {
     private static Image card6;
     private static Image lama;
     private static Image table1;
-    private static Image score;
 
     Image[] cardsArray = {card1, card2, card3, card4, card5, card6, null, null, null, lama};
 
@@ -112,7 +98,7 @@ public class Main extends Application {
         table1 =new Image("images/table2.svg");
         blackChipImage = new Image("/images/SVG/blackChip.svg");
         whiteChipImage = new Image("/images/SVG/whiteChip.svg");
-        //score = new Image("images/Score.svg");
+
 
 
         //initialisiere Spieler mit handkarten
@@ -643,32 +629,36 @@ public class Main extends Application {
 
      Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
 
-        int platz=1;
+        int p=1;
 
-        // create an ListView based on key items in the map.
-        ObservableMap<Spieler, Integer> observableExtensionToMimeMap = FXCollections.observableMap(ranking);
-        ListView<String> liste = new ListView<>();
-         for (Map.Entry<Spieler, Integer> r : ranking.entrySet()) {
-             liste.getItems().add("\t"+"Platz "+platz+":\t\t\t\t" +r.getKey().getName()+"\t\t\t\t" + r.getValue()+"\t");
-             platz++;
+         //Scoreboard
+         VBox names = new VBox(new Label(""));
+         VBox sc = new VBox(new Label(""));
+         VBox platz = new VBox(new Label(""));
+         GridPane center = new GridPane();
+
+         for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
+             //System.out.println(entry.getKey().getName() + ":" + entry.getValue());
+             Label rang = new Label("\t"+p + ". Platz: ");
+             platz.getChildren().add(rang);
+             rang.setFont(new Font("Ink Free",20*zoomfactor));
+             Label name = new Label(entry.getKey().getName());
+             name.setTextFill(Color.WHITE);
+             name.setFont(new Font("Ink Free",20*zoomfactor));
+             names.getChildren().add(name);
+             Label sco = new Label(Integer.toString(entry.getValue())+"\t");
+             sco.setFont(new Font("Ink Free",20*zoomfactor));
+             sco.setTextFill(Color.WHITE);
+             sc.getChildren().add(sco);
+             p++;
          }
-         //textgröße
-         liste.setCellFactory(cell -> {
-             return new ListCell<String>() {
-                 @Override
-                 protected void updateItem(String item, boolean empty) {
-                     super.updateItem(item, empty);
-                     if (item != null) {
-                         setText(item);
 
-                         // decide to add a new styleClass
-                         // getStyleClass().add("costume style");
-                         // decide the new font size
-                         setFont(Font.font(16*zoomfactor));
-                     }
-                 }
-             };
-         });
+         center.addRow(0,platz, names, sc);
+         center.setHgap(60*zoomfactor);
+         center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
+        center.setMinHeight(250*zoomfactor);
+        center.setMinWidth(200*zoomfactor);
+
 
          Button nextRound;
          if(!spiellogik.spielBeendet) {
@@ -689,32 +679,33 @@ public class Main extends Application {
 
         //Darstellung
         Label titel= new Label("Rangliste");
-        titel.setFont(new Font(50*zoomfactor));
+        titel.setFont(new Font("Script MT Bold", 50*zoomfactor));
+
         HBox top= new HBox(titel);
-        top.setMinHeight(sceneHeight/6);
+        top.setMinHeight(sceneHeight/8);
         top.setAlignment(Pos.CENTER);
 
         HBox bottom= new HBox(nextRound);
-        bottom.setMinHeight(sceneHeight/6);
+        bottom.setMinHeight(sceneHeight/8);
         bottom.setAlignment(Pos.CENTER);
 
         VBox left = new VBox();
-        left.setMinWidth(sceneWidth/10);
+        left.setMinWidth(sceneWidth/7);
         left.setAlignment(Pos.TOP_LEFT);
 
         VBox right = new VBox();
-        right.setMinWidth(sceneWidth/10);
+        right.setMinWidth(sceneWidth/7);
         right.setAlignment(Pos.TOP_RIGHT);
 
-        VBox center= new VBox (liste);
         center.setAlignment(Pos.TOP_LEFT);
-        center.setMaxHeight(liste.getHeight());
+        center.setMaxHeight(center.getHeight());
         BorderPane root = new BorderPane();
         root.setTop(top);
-        root.setCenter(liste);
+        root.setCenter(center);
         root.setRight(right);
         root.setBottom(bottom);
         root.setLeft(left);
+
 
 
         //Hintergrund
@@ -724,7 +715,7 @@ public class Main extends Application {
          liste.setBackground(new Background(myBI2));
         */
 
-         BackgroundImage myBI = new BackgroundImage(table1,
+        BackgroundImage myBI = new BackgroundImage(table1,
                  BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                  new BackgroundSize(100, 100, true, true, false, true));
         root.setBackground(new Background(myBI));
