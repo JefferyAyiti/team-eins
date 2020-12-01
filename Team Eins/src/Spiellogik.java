@@ -225,11 +225,11 @@ public class Spiellogik {
                 if (chip.getValue() == -1) {
                     spieler.setWhiteChips(spieler.getWhiteChips() - 1);
                     tisch.takeChips(1, 0);
-                    spieler.setPoints(spieler.getPoints()-1);
+                    spieler.setPoints(spieler.getPoints()+1);
                 } else {
                     spieler.setBlackChips(spieler.getBlackChips() - 1);
                     tisch.takeChips(0, 1);
-                    spieler.setPoints(spieler.getPoints()-10);
+                    spieler.setPoints(spieler.getPoints()+10);
                 }
                 aktion=true;
             }
