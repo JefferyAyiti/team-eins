@@ -108,8 +108,12 @@ public class Main extends Application {
 
         //spieler[0]= new Bot("Spieler",2);
        spieler[0] = new Spieler("Spieler 1");
+       int level;
+       String[] botname = {"EZ-", "Mid-", "Hard-"};
         for (int i = 1; i < anzSpieler; i++) {
-            spieler[i] = new Bot("Bot " + (i + 1), 3);
+            level = (int)(Math.random()*3+1);
+            System.out.println(level);
+            spieler[i] = new Bot(botname[level-1]+"Bot " + (i + 1), level);
 
         }
         tisch = new Tisch(spieler);
@@ -138,11 +142,11 @@ public class Main extends Application {
         buildStage(primaryStage);
 
 
-        Timer timer = new Timer();
-        timer.schedule(new MyTask1(), 3000, 500);
+        Timer resizecheck = new Timer();
+        resizecheck.schedule(new MyTask1(), 3000, 500);
 
-        Timer timer2 = new Timer();
-        timer2.schedule(new moveCheck(), 3000, 100);
+        Timer bots = new Timer();
+        bots.schedule(new moveCheck(), 3000, 2000);
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
         {
@@ -157,8 +161,8 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                timer.cancel();
-                timer2.cancel();
+                bots.cancel();
+                resizecheck.cancel();
             }
         });
     }
@@ -279,7 +283,7 @@ public class Main extends Application {
                 });
             }
             if (playerId == 0) {
-                if (cardcount > 8) {
+                if (cardcount > 7) {
                     imgView.setTranslateX(10 * (cardcount % 2) + cardcount / 2 * 20 * zoomfactor - 20 * zoomfactor * i);
                 } else {
                     imgView.setTranslateX((cardcount%2==0?55/2 * zoomfactor:0)+55 * zoomfactor * (i - cardcount / 2));
