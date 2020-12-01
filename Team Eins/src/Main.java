@@ -112,7 +112,7 @@ public class Main extends Application {
         table1 =new Image("images/table2.svg");
         blackChipImage = new Image("/images/SVG/blackChip.svg");
         whiteChipImage = new Image("/images/SVG/whiteChip.svg");
-        score = new Image("images/Score.svg");
+        //score = new Image("images/Score.svg");
 
 
         //initialisiere Spieler mit handkarten
