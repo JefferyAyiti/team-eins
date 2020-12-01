@@ -566,7 +566,7 @@ public class Main extends Application {
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
             primaryStage.setScene(scene);
             if(spiellogik.getRundeBeendet()) {
-                showRangliste(primaryStage, spiellogik.ranglisteErstellen());
+                showRangliste(spiellogik.ranglisteErstellen());
 
             }
             sceneWidth = scene.getWidth();
@@ -605,7 +605,7 @@ public class Main extends Application {
 
 
     }
-     Scene showRangliste(Stage stage, Map<Spieler, Integer> ranking) throws InterruptedException {
+     Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
 
         int platz=1;
 
@@ -690,7 +690,7 @@ public class Main extends Application {
         rangliste.getStylesheets().add(css);
 
         System.out.println("gibt Rangliste aus");
-        stage.setScene(rangliste);
+        classPrimaryStage.setScene(rangliste);
 
         return rangliste;
      }
