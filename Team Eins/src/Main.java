@@ -748,7 +748,6 @@ public class Main extends Application {
             if(tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
                 if(System.currentTimeMillis()-lastmove < botPlayTime) {
                     try {
-                        System.out.println(botPlayTime-(System.currentTimeMillis()-lastmove));
                         Thread.sleep(botPlayTime-(System.currentTimeMillis()-lastmove));
                     } catch (InterruptedException e) {
                     }
