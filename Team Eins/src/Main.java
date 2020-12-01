@@ -37,6 +37,8 @@ import javax.security.auth.callback.Callback;
 import java.util.*;
 
 
+
+
 public class Main extends Application {
 
 
@@ -52,6 +54,13 @@ public class Main extends Application {
     int ich = 0;
     final long botPlayTime = 2000;
     Stage classPrimaryStage;
+
+    private static final String IDLE_BUTTON_STYLE = "-fx-background-color: transparent;";
+    private static final String HOVERED_BUTTON_STYLE =
+            "-fx-background-insets: 10; " +
+                    "-fx-background-radius: 10; " +
+                    "-fx-cursor:hand;"+
+                    "-fx-effect: dropshadow(three-pass-box, yellow, 10, 0, 0, 0);";
 
     //Wird später im Menü festgelegt
     private static int anzSpieler = 6;//2 + (int) (Math.random() * 4);
@@ -221,6 +230,10 @@ public class Main extends Application {
             if (playerId == 0) {
                 imgView = new ImageView(
                         cardsArray[spieler[playerId].getCardHand().getKarte(i).getValue() - 1]);
+                ImageView finalImgView = imgView;
+                imgView.setOnMouseEntered(e -> finalImgView.setStyle(HOVERED_BUTTON_STYLE));
+                ImageView finalImgView1 = imgView;
+                imgView.setOnMouseExited(e -> finalImgView1.setStyle(IDLE_BUTTON_STYLE));
             } else if (i > 6)
                 continue;
 
@@ -308,17 +321,21 @@ public class Main extends Application {
         blChip.setFitHeight(chipsize * zoomfactor);
         blChip.setFitWidth(chipsize * zoomfactor);
         //Chip counter unter die Karte
-        blChip.setOnMouseClicked( mouseEvent -> {
-            BlackChip bye = new BlackChip();
-            spiellogik.chipsTauschen(spieler[playerId]);
-            buildStage(classPrimaryStage);
-        });
 
         ImageView whChip = new ImageView(whiteChipImage);
         whChip.setFitHeight(chipsize * zoomfactor);
         whChip.setFitWidth(chipsize* zoomfactor);
 
+        if(ich == playerId) {
+            chips.setOnMouseClicked(mouseEvent -> {
+                spiellogik.chipsTauschen(spieler[playerId]);
+                buildStage(classPrimaryStage);
+            });
 
+
+            chips.setOnMouseEntered(e -> chips.setStyle(HOVERED_BUTTON_STYLE));
+            chips.setOnMouseExited(e -> chips.setStyle(IDLE_BUTTON_STYLE));
+        }
 
         chips.add(blChip,0,0);
         chips.add(whChip,0,1);
@@ -340,7 +357,7 @@ public class Main extends Application {
 
         HBox bottom = new HBox(chips);
         bottom.setAlignment(Pos.CENTER);
-        bottom.setSpacing(10);
+        bottom.setSpacing(30);
 
         //Aussteigen
         if(playerId == ich) {
@@ -349,9 +366,11 @@ public class Main extends Application {
         exit.setTranslateY(1);
         chips.setTranslateY(1);
             if(playerId > 1 && playerId < 5) {
-                chips.setRotate(180);
+
             }
 
+            exit.setOnMouseEntered(e -> exit.setStyle(HOVERED_BUTTON_STYLE));
+            exit.setOnMouseExited(e -> exit.setStyle(IDLE_BUTTON_STYLE));
             bottom.getChildren().add(exit);
 
             exit.setOnMouseClicked(mouseEvent -> {
@@ -406,16 +425,19 @@ public class Main extends Application {
 
 
             GridPane table = new GridPane();
-            //karten auf dem Tisch
+            //Nachziehstapel
             Pane nachziehstapel = new Pane();
             for (int i = 0; i < tisch.getNachziehStapelSize(); i++) {
                 ImageView imgView = new ImageView(image);
                 imgView.setY(i * 0.2);
                 imgView.setX(i * 0.2);
+
                 imgView.setOnMouseClicked(mouseEvent -> {
                     spiellogik.karteNachziehen(spieler[0]);
                     buildStage(classPrimaryStage);
                 });
+                imgView.setOnMouseEntered(e -> imgView.setStyle(HOVERED_BUTTON_STYLE));
+                imgView.setOnMouseExited(e -> imgView.setStyle(IDLE_BUTTON_STYLE));
                 imgView.setPreserveRatio(true);
                 imgView.setSmooth(true);
                 imgView.setFitWidth(60 * zoomfactor); // Visuelle Große des Nachzeihstapel ändern
@@ -548,13 +570,15 @@ public class Main extends Application {
             score.setTranslateX(-10);
             VBox names = new VBox();
             VBox sc = new VBox();
+            names.setAlignment(Pos.TOP_LEFT);
+            sc.setAlignment(Pos.TOP_RIGHT);
             for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
                 //System.out.println(entry.getKey().getName() + ":" + entry.getValue());
                 Label name = new Label(entry.getKey().getName());
                 name.setTextFill(Color.WHITE);
                 name.setFont(new Font(10*zoomfactor));
                 names.getChildren().add(name);
-                Label sco = new Label(Integer.toString(entry.getValue()));
+                Label sco = new Label(Integer.toString(Math.abs(entry.getValue())));
                 sco.setFont(new Font(10*zoomfactor));
                 sco.setTextFill(Color.WHITE);
                 sc.getChildren().add(sco);
@@ -669,11 +693,14 @@ public class Main extends Application {
 
         VBox left = new VBox();
         left.setMinWidth(sceneWidth/10);
+        left.setAlignment(Pos.TOP_LEFT);
 
         VBox right = new VBox();
         right.setMinWidth(sceneWidth/10);
+        right.setAlignment(Pos.TOP_RIGHT);
 
-        Pane center= new Pane (liste);
+        VBox center= new VBox (liste);
+        center.setAlignment(Pos.TOP_LEFT);
         center.setMaxHeight(liste.getHeight());
         BorderPane root = new BorderPane();
         root.setTop(top);
