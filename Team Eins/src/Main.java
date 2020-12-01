@@ -50,6 +50,7 @@ public class Main extends Application {
     double zoomfactor = 1;
     volatile long resize = 0;
     int ich = 0;
+    final long botPlayTime = 2000;
     Stage classPrimaryStage;
 
     //Wird später im Menü festgelegt
@@ -146,7 +147,7 @@ public class Main extends Application {
         resizecheck.schedule(new MyTask1(), 3000, 500);
 
         Timer bots = new Timer();
-        bots.schedule(new moveCheck(), 3000, 2000);
+        bots.schedule(new moveCheck(), botPlayTime, botPlayTime);
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
         {
@@ -575,6 +576,7 @@ public class Main extends Application {
             }
             sceneWidth = scene.getWidth();
             sceneHeight = scene.getHeight();
+            lastmove = System.currentTimeMillis();
             primaryStage.show();
 
         } catch (Exception e) {
@@ -712,14 +714,23 @@ public class Main extends Application {
         }
     }
 
+    long lastmove = 0;
     class moveCheck extends TimerTask {
         @Override
         public void run() {
             if(tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
+                if(System.currentTimeMillis()-lastmove < botPlayTime) {
+                    try {
+                        System.out.println(botPlayTime-(System.currentTimeMillis()-lastmove));
+                        Thread.sleep(botPlayTime-(System.currentTimeMillis()-lastmove));
+                    } catch (InterruptedException e) {
+                    }
+                }
                 ((Bot) tisch.getAktivSpieler()).play();
                 Platform.runLater(() -> {
                     buildStage(classPrimaryStage);
                 });
+                lastmove = System.currentTimeMillis();
 
 
             }
