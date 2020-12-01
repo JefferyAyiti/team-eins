@@ -24,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -87,6 +88,7 @@ public class Main extends Application {
     private static Image card6;
     private static Image lama;
     private static Image table1;
+    private static Image score;
 
     Image[] cardsArray = {card1, card2, card3, card4, card5, card6, null, null, null, lama};
 
@@ -110,6 +112,7 @@ public class Main extends Application {
         table1 =new Image("images/table2.svg");
         blackChipImage = new Image("/images/SVG/blackChip.svg");
         whiteChipImage = new Image("/images/SVG/whiteChip.svg");
+        score = new Image("images/Score.svg");
 
 
         //initialisiere Spieler mit handkarten
@@ -643,7 +646,7 @@ public class Main extends Application {
         ObservableMap<Spieler, Integer> observableExtensionToMimeMap = FXCollections.observableMap(ranking);
         ListView<String> liste = new ListView<>();
          for (Map.Entry<Spieler, Integer> r : ranking.entrySet()) {
-             liste.getItems().add("\t"+"Platz "+platz+":\t\t" +r.getKey().getName()+"\t\t\t" + r.getValue()+"\t");
+             liste.getItems().add("\t"+"Platz "+platz+":\t\t\t\t" +r.getKey().getName()+"\t\t\t\t" + r.getValue()+"\t");
              platz++;
          }
          //textgröße
@@ -658,7 +661,7 @@ public class Main extends Application {
                          // decide to add a new styleClass
                          // getStyleClass().add("costume style");
                          // decide the new font size
-                         setFont(Font.font(18*zoomfactor));
+                         setFont(Font.font(16*zoomfactor));
                      }
                  }
              };
@@ -683,6 +686,7 @@ public class Main extends Application {
 
         //Darstellung
         Label titel= new Label("Rangliste");
+        titel.setFont(new Font(50*zoomfactor));
         HBox top= new HBox(titel);
         top.setMinHeight(sceneHeight/6);
         top.setAlignment(Pos.CENTER);
@@ -711,6 +715,12 @@ public class Main extends Application {
 
 
         //Hintergrund
+         /*BackgroundImage myBI2 = new BackgroundImage(score,
+                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+                 new BackgroundSize(100, 100, true, true, false, true));
+         liste.setBackground(new Background(myBI2));
+        */
+
          BackgroundImage myBI = new BackgroundImage(table1,
                  BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                  new BackgroundSize(100, 100, true, true, false, true));
