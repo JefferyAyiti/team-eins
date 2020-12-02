@@ -1,12 +1,13 @@
 public class Spieler {
     int points = 0;
+    int oldScore=0;
     Hand cardHand;
     String playerName;
     int blackChips = 0, whiteChips = 0;
     boolean folded = false;
     private boolean letzerSpielerDurchgang = false;
     private boolean aussteigen = false;
-    int oldScore=0;
+
 
     /**
      * Erstellt Spieler Object mit Spielername
@@ -134,7 +135,7 @@ public class Spieler {
      * legt alten Punktestand fest
      * @param alt alter Punktestand
      */
-    public void setOldScore(int alt){
-        oldScore= alt;
+    public void setOldScore(int alt) {
+        oldScore = alt;
     }
 }
