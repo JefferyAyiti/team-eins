@@ -40,7 +40,7 @@ public class Main extends Application {
     double zoomfactor = 1;
     volatile long resize = 0;
     int ich = 0;
-    final long botPlayTime = 200;
+    final long botPlayTime = 2000;
     Stage classPrimaryStage;
 
     private static final String IDLE_BUTTON_STYLE = "-fx-background-color: transparent;";
@@ -638,16 +638,19 @@ public class Main extends Application {
              //Punktestand
              int dif = entry.getKey().getPoints()-entry.getKey().getOldScore() ;
 
-             Label kassiert = new Label( Integer.toString(dif) + "\t");
+
+             Label kassiert;
+             if (dif < 0) {
+                 kassiert = new Label( Integer.toString(dif) + "\t");
+                 kassiert.setTextFill(Color.RED);
+             }else{
+                 kassiert = new Label( "+"+Integer.toString(dif) + "\t");
+                 kassiert.setTextFill(Color.LIGHTGREEN);
+
+             }
              kassiert.setFont(new Font("Ink Free",18*zoomfactor));
              kassiert.setStyle("-fx-font-weight: bold");
-                System.out.println(entry.getKey().getName()+":  -  alt:"+entry.getKey().getOldScore()+"   neu:"+entry.getKey().getPoints()+"   dif:"+dif);
-             if (dif < 0) {
-                 kassiert.setTextFill(Color.RED);
 
-             }else{
-                 kassiert.setTextFill(Color.LIGHTGREEN);
-             }
 
              differ.getChildren().add(kassiert);
 
@@ -658,6 +661,7 @@ public class Main extends Application {
 
              p++;
 
+             System.out.println(entry.getKey().getName()+":  -  alt:"+entry.getKey().getOldScore()+"   neu:"+entry.getKey().getPoints()+"   dif:"+dif);
          }
 
          center.addRow(0,platz, names, score, differ);
