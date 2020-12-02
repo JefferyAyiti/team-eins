@@ -152,6 +152,7 @@ public class Spiellogik {
      * @param spieler
      */
     public void chipsKassieren(Spieler spieler) {
+        spieler.setOldScore(spieler.getPoints());
         Set<Integer> handkarten = new LinkedHashSet<>();
 
 
@@ -187,6 +188,8 @@ public class Spiellogik {
         spieler.setPoints(punktzahl);
 
     }
+
+
 
     /**
      * Tauscht 10 weiße Chips gegen 1 schwarzen Chip aus.
