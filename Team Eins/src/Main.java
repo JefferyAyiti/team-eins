@@ -25,8 +25,6 @@ import javafx.stage.WindowEvent;
 import java.util.*;
 
 
-
-
 public class Main extends Application {
 
 
@@ -40,14 +38,14 @@ public class Main extends Application {
     double zoomfactor = 1;
     volatile long resize = 0;
     int ich = 0;
-    final long botPlayTime = 200;
+    final long botPlayTime = 2000;
     Stage classPrimaryStage;
 
     private static final String IDLE_BUTTON_STYLE = "-fx-background-color: transparent;";
     private static final String HOVERED_BUTTON_STYLE =
             "-fx-background-insets: 10; " +
                     "-fx-background-radius: 10; " +
-                    "-fx-cursor:hand;"+
+                    "-fx-cursor:hand;" +
                     "-fx-effect: dropshadow(three-pass-box, yellow, 10, 0, 0, 0);";
 
     //Wird später im Menü festgelegt
@@ -57,15 +55,10 @@ public class Main extends Application {
     public static void main(String[] args) {
         loader = new TestLoadImageUsingClass();
         loader.installSvgLoader();
-        try {
-            initGame();
-
-        } catch (Exception e) {
-
-        }
         launch(args);
 
     }
+
     private static Image image;
     private static Image card1;
     private static Image card3;
@@ -76,7 +69,8 @@ public class Main extends Application {
     private static Image lama;
     private static Image table1;
 
-    Image[] cardsArray = {card1, card2, card3, card4, card5, card6, null, null, null, lama};
+
+    Image[] cardsArray;
 
     private static Image blackChipImage;
     private static Image whiteChipImage;
@@ -85,34 +79,20 @@ public class Main extends Application {
      * Erstellt Tisch, Nachzieh- und Abalgestapel, Spieler
      * und startet die erste Runde im Spiel
      */
-    private static void initGame(){
-        SvgImageLoaderFactory.install();
-        image = new Image("images/SVG/Back.svg");
-        card1 = new Image("images/SVG/Card1.svg");
-        card3 = new Image("images/SVG/Card3.svg");
-        card4 = new Image("images/SVG/Card4.svg");
-        card2 = new Image("images/SVG/Card2.svg");
-        card5 = new Image("images/SVG/Card5.svg");
-        card6 = new Image("images/SVG/Card6.svg");
-        lama =  new Image("images/SVG/Lama.svg");
-        table1 =new Image("images/table2.svg");
-        blackChipImage = new Image("/images/SVG/blackChip.svg");
-        whiteChipImage = new Image("/images/SVG/whiteChip.svg");
-
-
+    private static void initGame() {
 
         //initialisiere Spieler mit handkarten
         haende = new Hand[anzSpieler];
         spieler = new Spieler[anzSpieler];
 
         //spieler[0]= new Bot("Spieler",2);
-       spieler[0] = new Spieler("Spieler 1");
-       int level;
-       String[] botname = {"EZ-", "Mid-", "Hard-"};
+        spieler[0] = new Spieler("Spieler 1");
+        int level;
+        String[] botname = {"EZ-", "Mid-", "Hard-"};
         for (int i = 1; i < anzSpieler; i++) {
-            level = (int)(Math.random()*3+1);
+            level = (int) (Math.random() * 3 + 1);
             System.out.println(level);
-            spieler[i] = new Bot(botname[level-1]+"Bot " + (i + 1), level);
+            spieler[i] = new Bot(botname[level - 1] + "Bot " + (i + 1), level);
 
         }
         tisch = new Tisch(spieler);
@@ -126,11 +106,9 @@ public class Main extends Application {
     //GUI
 
 
-
-
     public void resize() {
 
-        if(System.currentTimeMillis() < resize+500) {
+        if (System.currentTimeMillis() < resize + 500) {
             getZoomedImages();
             buildStage(classPrimaryStage);
         }
@@ -138,33 +116,27 @@ public class Main extends Application {
 
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("L.A.M.A - Team Eins");
-        buildStage(primaryStage);
+
+        image = new Image("images/SVG/Back.svg");
+        card1 = new Image("images/SVG/Card1.svg");
+        card3 = new Image("images/SVG/Card3.svg");
+        card4 = new Image("images/SVG/Card4.svg");
+        card2 = new Image("images/SVG/Card2.svg");
+        card5 = new Image("images/SVG/Card5.svg");
+        card6 = new Image("images/SVG/Card6.svg");
+        lama = new Image("images/SVG/Lama.svg");
+        table1 = new Image("images/table2.svg");
+        blackChipImage = new Image("/images/SVG/blackChip.svg");
+        whiteChipImage = new Image("/images/SVG/whiteChip.svg");
+        cardsArray = new Image[]{card1, card2, card3, card4, card5,
+                card6, null, null, null, lama};
+
+        classPrimaryStage = primaryStage;
+        showSettingsMenu(classPrimaryStage);
 
 
-        Timer resizecheck = new Timer();
-        resizecheck.schedule(new MyTask1(), 3000, 500);
-
-        Timer bots = new Timer();
-        bots.schedule(new moveCheck(), botPlayTime, botPlayTime);
-
-        ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
-        {
-            resize = System.currentTimeMillis();
-
-        };
-
-
-        primaryStage.widthProperty().addListener(stageSizeListener);
-        primaryStage.heightProperty().addListener(stageSizeListener);
-
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                bots.cancel();
-                resizecheck.cancel();
-            }
-        });
     }
+
 
 
     /**
@@ -180,15 +152,15 @@ public class Main extends Application {
         VBox pane = new VBox();
         pane.setAlignment(Pos.BOTTOM_CENTER);
         //pane.setStyle("-fx-background-color:#eeeeee;");
-        VBox.setMargin(pane, new Insets(0, 0 ,5 ,0));
+        VBox.setMargin(pane, new Insets(0, 0, 5, 0));
 
         Label plr = new Label(spieler[playerId].getName());
-        if(playerId > 1 && playerId < 5) {
+        if (playerId > 1 && playerId < 5) {
             plr.setRotate(180);
         }
         plr.setTextFill(Color.WHITE);
         plr.setFont(Font.font("Verdana", 12 * zoomfactor));
-        if(spieler[playerId] == tisch.getAktivSpieler()) {
+        if (spieler[playerId] == tisch.getAktivSpieler()) {
             plr.setTextFill(Color.YELLOW);
             plr.setFont(Font.font("Verdana", FontWeight.BOLD, 14 * zoomfactor));
         }
@@ -233,7 +205,7 @@ public class Main extends Application {
 
 
             if (playerId != 0) {
-                imgView.setTranslateX(-cardcount/2*10+10*i);
+                imgView.setTranslateX(-cardcount / 2 * 10 + 10 * i);
                 imgView.setTranslateY(-10);
                 imgView.setRotate(-cardcount / 2 * 15 + i * 15);
             } else {
@@ -253,29 +225,29 @@ public class Main extends Application {
                         ButtonType buttonTypeCancel = new ButtonType("schließen", ButtonBar.ButtonData.CANCEL_CLOSE);
 
                         //spieler hat weiße und Schwarze Chips
-                        if(spieler[playerId].getWhiteChips()>=1 && spieler[playerId].getBlackChips()>=1 ) {
+                        if (spieler[playerId].getWhiteChips() >= 1 && spieler[playerId].getBlackChips() >= 1) {
                             alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeBlack, buttonTypeCancel);
                             //nur weiße
-                        }else if (spieler[playerId].getWhiteChips()>=1){
+                        } else if (spieler[playerId].getWhiteChips() >= 1) {
                             alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeCancel);
                             //nur schwarze
-                        }else if(spieler[playerId].getBlackChips()>=1){
+                        } else if (spieler[playerId].getBlackChips() >= 1) {
                             alert.getButtonTypes().setAll(buttonTypeBlack, buttonTypeCancel);
-                        }else{
+                        } else {
                             alert.setHeaderText("Du hast keine Chips zum abgeben");
                             alert.getButtonTypes().setAll(buttonTypeCancel);
                         }
 
                         Optional<ButtonType> result = alert.showAndWait();
-                        if (result.get() == buttonTypeWhite){
+                        if (result.get() == buttonTypeWhite) {
                             // ... user chose "weiß"
-                            tausch=new WhiteChip();
+                            tausch = new WhiteChip();
                             spiellogik.chipAbgeben(spieler[playerId], tausch);
                         } else if (result.get() == buttonTypeBlack) {
                             // ... user chose "schwarz"
-                            tausch=new BlackChip();
+                            tausch = new BlackChip();
                             spiellogik.chipAbgeben(spieler[playerId], tausch);
-                        }else {
+                        } else {
                             // ... user chose CANCEL or closed the dialog
                         }
 
@@ -289,11 +261,11 @@ public class Main extends Application {
                 if (cardcount > 7) {
                     imgView.setTranslateX(10 * (cardcount % 2) + cardcount / 2 * 20 * zoomfactor - 20 * zoomfactor * i);
                 } else {
-                    imgView.setTranslateX((cardcount%2==0?55/2 * zoomfactor:0)+55 * zoomfactor * (i - cardcount / 2));
+                    imgView.setTranslateX((cardcount % 2 == 0 ? 55 / 2 * zoomfactor : 0) + 55 * zoomfactor * (i - cardcount / 2));
                 }
             }
 
-            if(!spieler[playerId].inGame())
+            if (!spieler[playerId].inGame())
                 imgView.setEffect(desaturate);
             cards.getChildren().add(imgView);
         }
@@ -313,9 +285,9 @@ public class Main extends Application {
 
         ImageView whChip = new ImageView(whiteChipImage);
         whChip.setFitHeight(chipsize * zoomfactor);
-        whChip.setFitWidth(chipsize* zoomfactor);
+        whChip.setFitWidth(chipsize * zoomfactor);
 
-        if(ich == playerId) {
+        if (ich == playerId) {
             chips.setOnMouseClicked(mouseEvent -> {
                 spiellogik.chipsTauschen(spieler[playerId]);
                 buildStage(classPrimaryStage);
@@ -326,21 +298,21 @@ public class Main extends Application {
             chips.setOnMouseExited(e -> chips.setStyle(IDLE_BUTTON_STYLE));
         }
 
-        chips.add(blChip,0,0);
-        chips.add(whChip,0,1);
+        chips.add(blChip, 0, 0);
+        chips.add(whChip, 0, 1);
 
         Text text = new Text();
         text.setFill(Color.WHITE);
         text.setFont(Font.font("Verdana", 12 * zoomfactor));
-        text.setText(""+spieler[playerId].getBlackChips());
-        chips.add(text, 1,0);
+        text.setText("" + spieler[playerId].getBlackChips());
+        chips.add(text, 1, 0);
 
         text = new Text();
         text.setFill(Color.WHITE);
         text.setFont(Font.font("Verdana", 12 * zoomfactor));
-        text.setText(spieler[playerId].getWhiteChips() +"");
+        text.setText(spieler[playerId].getWhiteChips() + "");
 
-        chips.add(text, 1,1);
+        chips.add(text, 1, 1);
         //chips.setY(102);
 
 
@@ -349,12 +321,12 @@ public class Main extends Application {
         bottom.setSpacing(30);
 
         //Aussteigen
-        if(playerId == ich) {
+        if (playerId == ich) {
 
-        ImageView exit = new ImageView(loader.getImg("images/exit.svg", zoomfactor*0.4));
-        exit.setTranslateY(1);
-        chips.setTranslateY(1);
-            if(playerId > 1 && playerId < 5) {
+            ImageView exit = new ImageView(loader.getImg("images/exit.svg", zoomfactor * 0.4));
+            exit.setTranslateY(1);
+            chips.setTranslateY(1);
+            if (playerId > 1 && playerId < 5) {
 
             }
 
@@ -363,29 +335,34 @@ public class Main extends Application {
             bottom.getChildren().add(exit);
 
             exit.setOnMouseClicked(mouseEvent -> {
-            spiellogik.aussteigen(spieler[playerId]);
-            buildStage(classPrimaryStage);
-        });
+                spiellogik.aussteigen(spieler[playerId]);
+                buildStage(classPrimaryStage);
+            });
 
         }
 
         pane.getChildren().add(bottom);
 
-        switch(playerId) {
+        switch (playerId) {
             case 1:
             case 5:
-                pane.setTranslateY(+30*zoomfactor); break;
-            case 4: pane.setTranslateX(30*zoomfactor); pane.setTranslateY(10+10*zoomfactor); break;
-            case 3: pane.setTranslateY(10*zoomfactor); break;
-            case 2: pane.setTranslateX(-30*zoomfactor); pane.setTranslateY(10+10*zoomfactor); break;
+                pane.setTranslateY(+30 * zoomfactor);
+                break;
+            case 4:
+                pane.setTranslateX(30 * zoomfactor);
+                pane.setTranslateY(10 + 10 * zoomfactor);
+                break;
+            case 3:
+                pane.setTranslateY(10 * zoomfactor);
+                break;
+            case 2:
+                pane.setTranslateX(-30 * zoomfactor);
+                pane.setTranslateY(10 + 10 * zoomfactor);
+                break;
         }
         return pane;
 
     }
-
-
-
-
 
 
     /**
@@ -565,10 +542,10 @@ public class Main extends Application {
                 //System.out.println(entry.getKey().getName() + ":" + entry.getValue());
                 Label name = new Label(entry.getKey().getName());
                 name.setTextFill(Color.WHITE);
-                name.setFont(new Font(10*zoomfactor));
+                name.setFont(new Font(10 * zoomfactor));
                 names.getChildren().add(name);
                 Label sco = new Label(Integer.toString(Math.abs(entry.getValue())));
-                sco.setFont(new Font(10*zoomfactor));
+                sco.setFont(new Font(10 * zoomfactor));
                 sco.setTextFill(Color.WHITE);
                 sc.getChildren().add(sco);
             }
@@ -576,14 +553,14 @@ public class Main extends Application {
             score.addRow(0, names, sc);
             score.setHgap(15);
             score.setAlignment(Pos.CENTER_RIGHT);
-            gridPane.add(score, 4, 4, 1 ,1);
+            gridPane.add(score, 4, 4, 1, 1);
 
             root.getChildren().add(gridPane);
 
 
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
             primaryStage.setScene(scene);
-            if(spiellogik.getRundeBeendet()) {
+            if (spiellogik.getRundeBeendet()) {
                 showRangliste(spiellogik.ranglisteErstellen());
 
             }
@@ -627,74 +604,74 @@ public class Main extends Application {
     }
 
 
-     Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
+    Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
 
-        int p=1;
+        int p = 1;
 
-         //Scoreboard
-         VBox names = new VBox(new Label(""));
-         VBox sc = new VBox(new Label(""));
-         VBox platz = new VBox(new Label(""));
-         GridPane center = new GridPane();
+        //Scoreboard
+        VBox names = new VBox(new Label(""));
+        VBox sc = new VBox(new Label(""));
+        VBox platz = new VBox(new Label(""));
+        GridPane center = new GridPane();
 
-         for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
-             //System.out.println(entry.getKey().getName() + ":" + entry.getValue());
-             Label rang = new Label("\t"+p + ". Platz: ");
-             platz.getChildren().add(rang);
-             rang.setFont(new Font("Ink Free",20*zoomfactor));
-             Label name = new Label(entry.getKey().getName());
-             name.setTextFill(Color.WHITE);
-             name.setFont(new Font("Ink Free",20*zoomfactor));
-             names.getChildren().add(name);
-             Label sco = new Label(Integer.toString(entry.getValue())+"\t");
-             sco.setFont(new Font("Ink Free",20*zoomfactor));
-             sco.setTextFill(Color.WHITE);
-             sc.getChildren().add(sco);
-             p++;
-         }
+        for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
+            //System.out.println(entry.getKey().getName() + ":" + entry.getValue());
+            Label rang = new Label("\t" + p + ". Platz: ");
+            platz.getChildren().add(rang);
+            rang.setFont(new Font("Ink Free", 20 * zoomfactor));
+            Label name = new Label(entry.getKey().getName());
+            name.setTextFill(Color.WHITE);
+            name.setFont(new Font("Ink Free", 20 * zoomfactor));
+            names.getChildren().add(name);
+            Label sco = new Label(Integer.toString(entry.getValue()) + "\t");
+            sco.setFont(new Font("Ink Free", 20 * zoomfactor));
+            sco.setTextFill(Color.WHITE);
+            sc.getChildren().add(sco);
+            p++;
+        }
 
-         center.addRow(0,platz, names, sc);
-         center.setHgap(60*zoomfactor);
-         center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
-        center.setMinHeight(250*zoomfactor);
-        center.setMinWidth(200*zoomfactor);
+        center.addRow(0, platz, names, sc);
+        center.setHgap(60 * zoomfactor);
+        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
+        center.setMinHeight(250 * zoomfactor);
+        center.setMinWidth(200 * zoomfactor);
 
 
-         Button nextRound;
-         if(!spiellogik.spielBeendet) {
-             nextRound = new Button("Nächste Runde");
-             nextRound.setOnAction(e -> {
+        Button nextRound;
+        if (!spiellogik.spielBeendet) {
+            nextRound = new Button("Nächste Runde");
+            nextRound.setOnAction(e -> {
                         spiellogik.initNeueRunde();
                         buildStage(classPrimaryStage);
-                     }
-             );
+                    }
+            );
 
-         } else {
-             nextRound = new Button("Spiel beenden");
-             nextRound.setOnAction(e -> {
-                         classPrimaryStage.close();
-                     }
-             );
-         }
+        } else {
+            nextRound = new Button("Spiel beenden");
+            nextRound.setOnAction(e -> {
+                        classPrimaryStage.close();
+                    }
+            );
+        }
 
         //Darstellung
-        Label titel= new Label("Rangliste");
-        titel.setFont(new Font("Script MT Bold", 50*zoomfactor));
+        Label titel = new Label("Rangliste");
+        titel.setFont(new Font("Script MT Bold", 50 * zoomfactor));
 
-        HBox top= new HBox(titel);
-        top.setMinHeight(sceneHeight/8);
+        HBox top = new HBox(titel);
+        top.setMinHeight(sceneHeight / 8);
         top.setAlignment(Pos.CENTER);
 
-        HBox bottom= new HBox(nextRound);
-        bottom.setMinHeight(sceneHeight/8);
+        HBox bottom = new HBox(nextRound);
+        bottom.setMinHeight(sceneHeight / 8);
         bottom.setAlignment(Pos.CENTER);
 
         VBox left = new VBox();
-        left.setMinWidth(sceneWidth/7);
+        left.setMinWidth(sceneWidth / 7);
         left.setAlignment(Pos.TOP_LEFT);
 
         VBox right = new VBox();
-        right.setMinWidth(sceneWidth/7);
+        right.setMinWidth(sceneWidth / 7);
         right.setAlignment(Pos.TOP_RIGHT);
 
         center.setAlignment(Pos.TOP_LEFT);
@@ -707,7 +684,6 @@ public class Main extends Application {
         root.setLeft(left);
 
 
-
         //Hintergrund
          /*BackgroundImage myBI2 = new BackgroundImage(score,
                  BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
@@ -716,8 +692,8 @@ public class Main extends Application {
         */
 
         BackgroundImage myBI = new BackgroundImage(table1,
-                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-                 new BackgroundSize(100, 100, true, true, false, true));
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+                new BackgroundSize(100, 100, true, true, false, true));
         root.setBackground(new Background(myBI));
 
 
@@ -730,7 +706,32 @@ public class Main extends Application {
         classPrimaryStage.setScene(rangliste);
 
         return rangliste;
-     }
+    }
+
+    /**
+     * @param PrimaryStage
+     * Erzeug und zeit das Hauptmenü zu Beginn des Spiels an
+     */
+    void showSettingsMenu(Stage PrimaryStage) {
+        VBox men = new VBox(new Label("hier könnte Ihr Menü erscheinen"));
+        Button start;
+
+        start = new Button("Spiel starten");
+        start.setOnAction(e -> {
+                    initGame();
+                    sceneWidth = 600;
+                    sceneHeight = 400;
+                    runTimers(PrimaryStage);
+                    getZoomedImages();
+                    buildStage(PrimaryStage);
+                }
+        );
+
+        men.getChildren().addAll(start);
+        Scene menu = new Scene(men, 600, 400);
+        PrimaryStage.setScene(menu);
+        PrimaryStage.show();
+    }
 
 
     class MyTask1 extends TimerTask {
@@ -746,13 +747,14 @@ public class Main extends Application {
     }
 
     long lastmove = 0;
+
     class moveCheck extends TimerTask {
         @Override
         public void run() {
-            if(tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
-                if(System.currentTimeMillis()-lastmove < botPlayTime) {
+            if (tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
+                if (System.currentTimeMillis() - lastmove < botPlayTime) {
                     try {
-                        Thread.sleep(botPlayTime-(System.currentTimeMillis()-lastmove));
+                        Thread.sleep(botPlayTime - (System.currentTimeMillis() - lastmove));
                     } catch (InterruptedException e) {
                     }
                 }
@@ -767,5 +769,35 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Startet die Timer für Bots und Resize-Check, sobald das Hauptmenü verlassen wurde
+     * @param ps Stage
+     *
+     */
+    void runTimers(Stage ps) {
+        Timer resizecheck = new Timer();
+        resizecheck.schedule(new MyTask1(), 3000, 500);
+
+        Timer bots = new Timer();
+        bots.schedule(new moveCheck(), botPlayTime*2, botPlayTime);
+
+        ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
+        {
+            resize = System.currentTimeMillis();
+
+        };
+
+
+        ps.widthProperty().addListener(stageSizeListener);
+        ps.heightProperty().addListener(stageSizeListener);
+
+        ps.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                bots.cancel();
+                resizecheck.cancel();
+            }
+        });
+    }
 
 }
