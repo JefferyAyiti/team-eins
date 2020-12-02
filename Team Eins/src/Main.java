@@ -635,23 +635,19 @@ public class Main extends Application {
              name.setFont(new Font("Ink Free",18*zoomfactor));
              names.getChildren().add(name);
              //Punktestand
-             int dif = entry.getKey().getOldScore()-entry.getKey().getPoints() ;
+             int dif = entry.getKey().getPoints()-entry.getKey().getOldScore() ;
 
-             Label kassiert;
-             if (dif == 0) {
-                 kassiert = new Label(Integer.toString(dif) + "\t");
-                 kassiert.setTextFill(Color.GREEN);
-
-             } else if(dif <0){
-                 kassiert = new Label("+" + Integer.toString(dif) + "\t");
-                 kassiert.setTextFill(Color.GREEN);
-
-             }else{
-                 kassiert = new Label("-"+Integer.toString(dif)+"\t");
-                 kassiert.setTextFill(Color.RED);
-             }
+             Label kassiert = new Label( Integer.toString(dif) + "\t");
              kassiert.setFont(new Font("Ink Free",18*zoomfactor));
              kassiert.setStyle("-fx-font-weight: bold");
+
+             if (dif < 0) {
+                 kassiert.setTextFill(Color.RED);
+
+             }else{
+                 kassiert.setTextFill(Color.GREEN);
+             }
+
              differ.getChildren().add(kassiert);
 
              Label sco = new Label(Integer.toString(entry.getValue()));
