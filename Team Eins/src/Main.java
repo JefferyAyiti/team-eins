@@ -772,6 +772,7 @@ public class Main extends Application {
                         6
                 );
         ComboBox playeranzselect = new ComboBox(ploptions);
+        playeranzselect.getSelectionModel().select(4);
         center.addRow(1, new Label("Spieleranzahl: "), playeranzselect);
 
 
@@ -785,9 +786,11 @@ public class Main extends Application {
                         "Schwer"
                 );
         ComboBox botselect = new ComboBox(botoptions);
+        botselect.getSelectionModel().select(0);
         center.addRow(2, new Label("Bot-Schwierigkeit: "), botselect);
 
         center.setHgap(60 * zoomfactor);
+        center.setId("MMcenter");
         center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
         center.setMinHeight(250 * zoomfactor);
         center.setMinWidth(200 * zoomfactor);
@@ -811,6 +814,7 @@ public class Main extends Application {
 
         //Darstellung
         Label titel = new Label("Hauptmenü");
+        titel.setTextFill(Color.WHITE);
         titel.setFont(new Font("Script MT Bold", 36 * zoomfactor));
 
         HBox top = new HBox(titel);
@@ -823,6 +827,7 @@ public class Main extends Application {
                     botPlayTime = (long) slider.getValue();
                     botlevel = botselect.getSelectionModel().getSelectedIndex();
                     myName = namefield.getText();
+                    if(myName == "") myName = "Spieler";
                     anzSpieler = (int)playeranzselect.getValue();
                     initGame();
                     sceneWidth = 600;
