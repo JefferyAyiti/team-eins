@@ -135,7 +135,7 @@ public class Spiellogik {
 
                  spieler.getCardHand().addKarte(tisch.karteZiehen());
                  tisch.naechste();
-                 return false;
+                 return true;
 
             } catch (Exception e) {
                 return false;

@@ -157,7 +157,9 @@ public class Tisch {
         do {
             aktiv = (aktiv+1)%getAnzSpieler();}
         while(!spielerList[aktiv].inGame());
-        System.out.println("Spieler '"+spielerList[aktiv].getName()+"' ist dran:");
+
+        if(!(spielerList[aktiv] instanceof Bot))
+            System.out.println(spielerList[aktiv].getName()+" ist dran:");
         return spielerList[aktiv];
     }
 

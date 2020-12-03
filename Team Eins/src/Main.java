@@ -35,7 +35,7 @@ public class Main extends Application {
     static TestLoadImageUsingClass loader;
     static double sceneWidth = 0;
     static double sceneHeight = 0;
-    static Tisch tisch;
+    static volatile Tisch tisch;
     static Spiellogik spiellogik;
     double zoomfactor = 1;
     volatile long resize = 0;
@@ -408,7 +408,8 @@ public class Main extends Application {
 
                 if (i == tisch.getNachziehStapelSize()-1) {
                     imgView.setOnMouseClicked(mouseEvent -> {
-                        spiellogik.karteNachziehen(spieler[0]);
+                        if(spiellogik.karteNachziehen(spieler[0]))
+                            System.out.println("\t Ziehe Karte");
                         buildStage(classPrimaryStage);
                     });
                 imgView.setOnMouseEntered(e -> imgView.setStyle(HOVERED_BUTTON_STYLE));
@@ -899,6 +900,7 @@ public class Main extends Application {
                     } catch (InterruptedException e) {
                     }
                 }
+                System.out.println("Spieler '"+tisch.getAktivSpieler().getName()+"' ist dran:");
                 ((Bot) tisch.getAktivSpieler()).play();
                 Platform.runLater(() -> {
                     buildStage(classPrimaryStage);
