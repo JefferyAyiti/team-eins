@@ -213,10 +213,10 @@ public class Bot extends Spieler {
         Tisch tisch = Main.tisch;
         if (this.getBlackChips() > 0) {
             Main.spiellogik.chipAbgeben(this, new BlackChip());
-            System.out.println("Bot gibt schwarzen Chip ab");
+            System.out.println(this.getName()+" gibt schwarzen Chip ab");
         } else if (this.getWhiteChips() > 0) {
             Main.spiellogik.chipAbgeben(this, new WhiteChip());
-            System.out.println("Bot gibt weißen Chip ab");
+            System.out.println(this.getName()+" gibt weißen Chip ab");
         }
     }
 

@@ -331,9 +331,9 @@ public class Main extends Application {
         //Aussteigen
         if (playerId == ich) {
 
-            ImageView exit = new ImageView(loader.getImg("images/exit.svg", zoomfactor * 0.4));
-            exit.setTranslateY(1);
-            chips.setTranslateY(1);
+            ImageView exit = new ImageView(loader.getImg("images/SVG/no-touch.svg", zoomfactor * 0.7));
+            exit.setTranslateY(-7);
+            chips.setTranslateY(7);
             if (playerId > 1 && playerId < 5) {
 
             }
@@ -627,55 +627,61 @@ public class Main extends Application {
 
         GridPane center = new GridPane();
 
-        for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
-            //Platz
-            Label rang = new Label("\t" + p + ". Platz: " + "\t");
-            rang.setFont(new Font("Ink Free", 18 * zoomfactor));
-            rang.setTextFill(Color.WHITE);
-            platz.getChildren().add(rang);
-            //Spieler
-            Label name = new Label(entry.getKey().getName() + "\t");
-            name.setTextFill(Color.WHITE);
-            name.setFont(new Font("Ink Free", 18 * zoomfactor));
-            names.getChildren().add(name);
-            //Punktestand
-            int dif = entry.getKey().getPoints() - entry.getKey().getOldScore();
+         for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
+             //Platz
+             Label rang = new Label("\t"+p + ". Platz: "+"\t");
+             rang.setFont(new Font("Ink Free",19*zoomfactor));
+             rang.setTextFill(Color.WHITE);
+             platz.getChildren().add(rang);
+             //platz.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.4 ,0 ,0 )");
+             //Spieler
+             Label name = new Label(entry.getKey().getName() +"    \t");
+             name.setTextFill(Color.WHITE);
+             name.setFont(new Font("Ink Free",19*zoomfactor));
+             names.getChildren().add(name);
+             //names.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.4 ,0 ,0 )");
+
+             //Punktestand
+             int dif = entry.getKey().getPoints()-entry.getKey().getOldScore() ;
 
 
-            Label kassiert;
-            if (dif < 0) {
-                kassiert = new Label(Integer.toString(dif) + "\t");
-                kassiert.setTextFill(Color.RED);
-            } else {
-                kassiert = new Label("+" + Integer.toString(dif) + "\t");
-                kassiert.setTextFill(Color.LIGHTGREEN);
+             Label kassiert;
+             if (dif < 0) {
+                 kassiert = new Label( Integer.toString(dif)+"\t");
+                 kassiert.setTextFill(Color.web("#f76254"));
+             }else{
+                 kassiert = new Label( "+"+Integer.toString(dif)+"\t");
+                 kassiert.setTextFill(Color.LIGHTGREEN);
 
-            }
-            kassiert.setFont(new Font("Ink Free", 18 * zoomfactor));
-            kassiert.setStyle("-fx-font-weight: bold");
+             }
+             kassiert.setFont(new Font("Ink Free",19*zoomfactor));
+             kassiert.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.7 ,0 ,0 ); -fx-font-weight: bolder");
+
+
 
 
             differ.getChildren().add(kassiert);
 
-            Label sco = new Label(Integer.toString(entry.getValue()));
-            sco.setFont(new Font("Ink Free", 18 * zoomfactor));
-            sco.setTextFill(Color.WHITE);
-            score.getChildren().add(sco);
+             Label sco = new Label(Integer.toString(entry.getValue()));
+             sco.setFont(new Font("Ink Free",19*zoomfactor));
+             sco.setTextFill(Color.WHITE);
+             score.getChildren().add(sco);
+             //score.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.6 ,0 ,0 )");
 
             p++;
 
             System.out.println(entry.getKey().getName() + ":  -  alt:" + entry.getKey().getOldScore() + "   neu:" + entry.getKey().getPoints() + "   dif:" + dif);
         }
 
-        center.addRow(0, platz, names, score, differ);
-        center.setHgap(30 * zoomfactor);
-        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
-        center.setMinHeight(250 * zoomfactor);
-        center.setMinWidth(200 * zoomfactor);
+         center.addRow(0,platz, names, score, differ);
+         center.setHgap(30*zoomfactor);
+         center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
+         center.setMinHeight(250*zoomfactor);
+         center.setMinWidth(300*zoomfactor);
 
         HBox bottom = new HBox();
         bottom.setSpacing(15);
-        bottom.setMinHeight(sceneHeight / 8);
+        //bottom.setMinHeight(sceneHeight / 8);
         bottom.setAlignment(Pos.CENTER);
 
         Button nextRound;
@@ -712,18 +718,18 @@ public class Main extends Application {
         titel.setFont(new Font("Script MT Bold", 50 * zoomfactor));
         titel.setTextFill(Color.WHITE);
 
-        HBox top = new HBox(titel);
-        top.setMinHeight(sceneHeight / 8);
+        HBox top= new HBox(titel);
+        //top.setMinHeight(sceneHeight/8);
         top.setAlignment(Pos.CENTER);
 
 
 
         VBox left = new VBox();
-        left.setMinWidth(sceneWidth / 7);
+        left.setMinWidth(sceneWidth / 10);
         left.setAlignment(Pos.TOP_LEFT);
 
         VBox right = new VBox();
-        right.setMinWidth(sceneWidth / 7);
+        right.setMinWidth(sceneWidth / 10);
         right.setAlignment(Pos.TOP_RIGHT);
 
         center.setAlignment(Pos.TOP_LEFT);
@@ -734,6 +740,7 @@ public class Main extends Application {
         root.setRight(right);
         root.setBottom(bottom);
         root.setLeft(left);
+
 
 
         //Hintergrund

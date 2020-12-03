@@ -152,6 +152,7 @@ public class Spiellogik {
      * @param spieler
      */
     public void chipsKassieren(Spieler spieler) {
+       int alt = spieler.getOldScore();
         Set<Integer> handkarten = new LinkedHashSet<>();
 
 
@@ -185,6 +186,7 @@ public class Spiellogik {
 
         int punktzahl = (spieler.getWhiteChips() * -1)+(spieler.getBlackChips()*-10);
         spieler.setPoints(punktzahl);
+
 
     }
 
@@ -220,7 +222,6 @@ public class Spiellogik {
      * @return true wenn Chips zum zurückgeben vorhanden sind ansonsten false
      */
     public boolean chipAbgeben(Spieler spieler, Chip chip) {
-        spieler.setOldScore(spieler.getPoints());
         boolean aktion=false;
         if(spieler.getCardCount() == 0){
             if(spieler.getBlackChips() >0 || spieler.getWhiteChips() >0) {
@@ -374,7 +375,7 @@ public class Spiellogik {
         for (int i = 0; i < Main.spieler.length; i++) {
             Main.haende[i] = new Hand();
             Main.spieler[i].setCardHand(Main.haende[i]);
-
+            Main.spieler[i].setOldScore(Main.spieler[i].getPoints());
         }
 
         tisch.initNachziehstapel();
