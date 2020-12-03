@@ -1,6 +1,6 @@
 .button {
     -fx-text-fill: black;
-    -fx-background-color: lightgray;
+    -fx-background-color: rgba(255,255,255,0.4);
     -fx-fit-to-height: true;
     -fx-pref-height: 30px;
     -fx-pref-width: 140px;
@@ -24,5 +24,9 @@
     -fx-alignment: center;
 }
 
+.combo-box, .text-input, .slider .track {
+    -fx-background-color:rgba(255,255,255,0.4);
+    -fx-control-inner-background: rgba(255,255,255,0.4);
+}
 
 

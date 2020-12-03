@@ -3,6 +3,8 @@ import SVG.TestLoadImageUsingClass;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -38,7 +40,8 @@ public class Main extends Application {
     double zoomfactor = 1;
     volatile long resize = 0;
     int ich = 0;
-    final long botPlayTime = 2000;
+    long botPlayTime = 2000;
+    private static int botlevel = 0;
     Stage classPrimaryStage;
 
     private static final String IDLE_BUTTON_STYLE = "-fx-background-color: transparent;";
@@ -70,6 +73,7 @@ public class Main extends Application {
     private static Image table1;
 
 
+
     Image[] cardsArray;
 
     private static Image blackChipImage;
@@ -86,11 +90,11 @@ public class Main extends Application {
         spieler = new Spieler[anzSpieler];
 
         //spieler[0]= new Bot("Spieler",2);
-        spieler[0] = new Spieler("Spieler 1");
+        spieler[0] = new Spieler(myName);
         int level;
         String[] botname = {"EZ-", "Mid-", "Hard-"};
         for (int i = 1; i < anzSpieler; i++) {
-            level = (int) (Math.random() * 3 + 1);
+            level = botlevel==0?(int) (Math.random() * 3 + 1):botlevel;
             System.out.println(level);
             spieler[i] = new Bot(botname[level - 1] + "Bot " + (i + 1), level);
 
@@ -708,16 +712,82 @@ public class Main extends Application {
         return rangliste;
     }
 
+    static String myName;
     /**
      * @param PrimaryStage
      * Erzeug und zeit das Hauptmenü zu Beginn des Spiels an
      */
     void showSettingsMenu(Stage PrimaryStage) {
-        VBox men = new VBox(new Label("hier könnte Ihr Menü erscheinen"));
-        Button start;
+        GridPane center = new GridPane();
+        center.setVgap(10);
 
-        start = new Button("Spiel starten");
+        //Spielername
+        TextField namefield = new TextField();
+        //namefield.setStyle("-fx-background-color:rgba(255,255,255,0.3);");
+        center.addRow(0, new Label("Spielername: "), namefield);
+
+        //Spieleranzahl
+        ObservableList<Integer> ploptions =
+                FXCollections.observableArrayList(
+                        2,
+                        3,
+                        4,
+                        5,
+                        6
+                );
+        ComboBox playeranzselect = new ComboBox(ploptions);
+        center.addRow(1, new Label("Spieleranzahl: "), playeranzselect);
+
+
+        //Boteinstellungen
+        //Schwierigkeit
+        ObservableList<String> botoptions =
+                FXCollections.observableArrayList(
+                        "Zufällig",
+                        "Leicht",
+                        "Mittel",
+                        "Schwer"
+                );
+        ComboBox botselect = new ComboBox(botoptions);
+        center.addRow(2, new Label("Bot-Schwierigkeit: "), botselect);
+
+        center.setHgap(60 * zoomfactor);
+        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
+        center.setMinHeight(250 * zoomfactor);
+        center.setMinWidth(200 * zoomfactor);
+
+        //Geschwindigkeit
+        Slider slider = new Slider();
+        slider.setMin(500);
+        slider.setMax(5000);
+        slider.setValue((slider.getMax()-slider.getMin())/2+slider.getMin());
+        System.out.println(slider.getValue());
+        slider.setShowTickMarks(false);
+        slider.setShowTickLabels(false);
+        slider.setMinorTickCount(1000);
+        slider.setMajorTickUnit(1000);
+        slider.setBlockIncrement(10);
+        slider.setPrefSize(150, 5);
+
+        center.addRow(3, new Label("Bot-Bedenkzeit: "), slider);
+
+
+
+        //Darstellung
+        Label titel = new Label("Hauptmenü");
+        titel.setFont(new Font("Script MT Bold", 36 * zoomfactor));
+
+        HBox top = new HBox(titel);
+        top.setMinHeight(sceneHeight / 8);
+        top.setAlignment(Pos.CENTER);
+
+        Button start = new Button("Spiel starten");
+        start.setTranslateY(-10);
         start.setOnAction(e -> {
+                    botPlayTime = (long) slider.getValue();
+                    botlevel = botselect.getSelectionModel().getSelectedIndex();
+                    myName = namefield.getText();
+                    anzSpieler = (int)playeranzselect.getValue();
                     initGame();
                     sceneWidth = 600;
                     sceneHeight = 400;
@@ -727,8 +797,29 @@ public class Main extends Application {
                 }
         );
 
-        men.getChildren().addAll(start);
-        Scene menu = new Scene(men, 600, 400);
+        HBox bottom = new HBox(start);
+        bottom.setMinHeight(sceneHeight / 8);
+        bottom.setAlignment(Pos.CENTER);
+
+        center.setAlignment(Pos.TOP_LEFT);
+        center.setMaxHeight(center.getHeight());
+        BorderPane root = new BorderPane();
+        root.setTop(top);
+        root.setCenter(center);
+        root.setBottom(bottom);
+
+
+        BackgroundImage myBI = new BackgroundImage(table1,
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+                new BackgroundSize(100, 100, true, true, false, true));
+        root.setBackground(new Background(myBI));
+
+
+        //neue Scene
+        String css = Main.class.getResource("Rangliste.css").toExternalForm();
+        Scene menu = new Scene(root, 600, 400);
+        menu.getStylesheets().add(css);
+
         PrimaryStage.setScene(menu);
         PrimaryStage.show();
     }
