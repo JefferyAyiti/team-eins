@@ -27,8 +27,6 @@ import javafx.stage.WindowEvent;
 import java.util.*;
 
 
-
-
 public class Main extends Application {
 
 
@@ -81,7 +79,6 @@ public class Main extends Application {
     private static Image table1;
 
 
-
     Image[] cardsArray;
 
     private static Image blackChipImage;
@@ -102,7 +99,7 @@ public class Main extends Application {
         int level;
         String[] botname = {"EZ-", "Mid-", "Hard-"};
         for (int i = 1; i < anzSpieler; i++) {
-            level = botlevel==0?(int) (Math.random() * 3 + 1):botlevel;
+            level = botlevel == 0 ? (int) (Math.random() * 3 + 1) : botlevel;
             System.out.println(level);
             spieler[i] = new Bot(botname[level - 1] + "Bot " + (i + 1), level);
 
@@ -148,7 +145,6 @@ public class Main extends Application {
 
 
     }
-
 
 
     /**
@@ -410,12 +406,14 @@ public class Main extends Application {
                 imgView.setY(i * 0.2);
                 imgView.setX(i * 0.2);
 
-                imgView.setOnMouseClicked(mouseEvent -> {
-                    spiellogik.karteNachziehen(spieler[0]);
-                    buildStage(classPrimaryStage);
-                });
+                if (i == tisch.getNachziehStapelSize()-1) {
+                    imgView.setOnMouseClicked(mouseEvent -> {
+                        spiellogik.karteNachziehen(spieler[0]);
+                        buildStage(classPrimaryStage);
+                    });
                 imgView.setOnMouseEntered(e -> imgView.setStyle(HOVERED_BUTTON_STYLE));
                 imgView.setOnMouseExited(e -> imgView.setStyle(IDLE_BUTTON_STYLE));
+            }
                 imgView.setPreserveRatio(true);
                 imgView.setSmooth(true);
                 imgView.setFitWidth(60 * zoomfactor); // Visuelle Große des Nachzeihstapel ändern
@@ -616,64 +614,68 @@ public class Main extends Application {
     }
 
 
-     Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
-         System.out.println("gibt Rangliste aus");
-        int p=1;
+    Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
+        System.out.println("gibt Rangliste aus");
+        int p = 1;
 
-         //Scoreboard
-         VBox names = new VBox(new Label(""));
-         VBox score = new VBox(new Label(""));
-         VBox differ = new VBox(new Label(""));
-         VBox platz = new VBox(new Label(""));
+        //Scoreboard
+        VBox names = new VBox(new Label(""));
+        VBox score = new VBox(new Label(""));
+        VBox differ = new VBox(new Label(""));
+        VBox platz = new VBox(new Label(""));
 
-         GridPane center = new GridPane();
+        GridPane center = new GridPane();
 
-         for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
-             //Platz
-             Label rang = new Label("\t"+p + ". Platz: "+"\t");
-             rang.setFont(new Font("Ink Free",18*zoomfactor));
-             rang.setTextFill(Color.WHITE);
-             platz.getChildren().add(rang);
-             //Spieler
-             Label name = new Label(entry.getKey().getName() +"\t");
-             name.setTextFill(Color.WHITE);
-             name.setFont(new Font("Ink Free",18*zoomfactor));
-             names.getChildren().add(name);
-             //Punktestand
-             int dif = entry.getKey().getPoints()-entry.getKey().getOldScore() ;
-
-
-             Label kassiert;
-             if (dif < 0) {
-                 kassiert = new Label( Integer.toString(dif) + "\t");
-                 kassiert.setTextFill(Color.RED);
-             }else{
-                 kassiert = new Label( "+"+Integer.toString(dif) + "\t");
-                 kassiert.setTextFill(Color.LIGHTGREEN);
-
-             }
-             kassiert.setFont(new Font("Ink Free",18*zoomfactor));
-             kassiert.setStyle("-fx-font-weight: bold");
+        for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
+            //Platz
+            Label rang = new Label("\t" + p + ". Platz: " + "\t");
+            rang.setFont(new Font("Ink Free", 18 * zoomfactor));
+            rang.setTextFill(Color.WHITE);
+            platz.getChildren().add(rang);
+            //Spieler
+            Label name = new Label(entry.getKey().getName() + "\t");
+            name.setTextFill(Color.WHITE);
+            name.setFont(new Font("Ink Free", 18 * zoomfactor));
+            names.getChildren().add(name);
+            //Punktestand
+            int dif = entry.getKey().getPoints() - entry.getKey().getOldScore();
 
 
-             differ.getChildren().add(kassiert);
+            Label kassiert;
+            if (dif < 0) {
+                kassiert = new Label(Integer.toString(dif) + "\t");
+                kassiert.setTextFill(Color.RED);
+            } else {
+                kassiert = new Label("+" + Integer.toString(dif) + "\t");
+                kassiert.setTextFill(Color.LIGHTGREEN);
 
-             Label sco = new Label(Integer.toString(entry.getValue()));
-             sco.setFont(new Font("Ink Free",18*zoomfactor));
-             sco.setTextFill(Color.WHITE);
-             score.getChildren().add(sco);
+            }
+            kassiert.setFont(new Font("Ink Free", 18 * zoomfactor));
+            kassiert.setStyle("-fx-font-weight: bold");
 
-             p++;
 
-             System.out.println(entry.getKey().getName()+":  -  alt:"+entry.getKey().getOldScore()+"   neu:"+entry.getKey().getPoints()+"   dif:"+dif);
-         }
+            differ.getChildren().add(kassiert);
 
-         center.addRow(0,platz, names, score, differ);
-         center.setHgap(30*zoomfactor);
-         center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
-         center.setMinHeight(250*zoomfactor);
-         center.setMinWidth(200*zoomfactor);
+            Label sco = new Label(Integer.toString(entry.getValue()));
+            sco.setFont(new Font("Ink Free", 18 * zoomfactor));
+            sco.setTextFill(Color.WHITE);
+            score.getChildren().add(sco);
 
+            p++;
+
+            System.out.println(entry.getKey().getName() + ":  -  alt:" + entry.getKey().getOldScore() + "   neu:" + entry.getKey().getPoints() + "   dif:" + dif);
+        }
+
+        center.addRow(0, platz, names, score, differ);
+        center.setHgap(30 * zoomfactor);
+        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
+        center.setMinHeight(250 * zoomfactor);
+        center.setMinWidth(200 * zoomfactor);
+
+        HBox bottom = new HBox();
+        bottom.setSpacing(15);
+        bottom.setMinHeight(sceneHeight / 8);
+        bottom.setAlignment(Pos.CENTER);
 
         Button nextRound;
         if (!spiellogik.spielBeendet) {
@@ -684,34 +686,43 @@ public class Main extends Application {
                     }
             );
 
-         } else {
-             nextRound = new Button("Spiel beenden");
-             nextRound.setOnAction(e -> {
-                         classPrimaryStage.close();
+        } else {
+            Button endGame = new Button("Spiel beenden");
+            endGame.setOnAction(e -> {
+                        classPrimaryStage.close();
+                        bots.cancel();
+                        resizecheck.cancel();
+                    }
+            );
+            bottom.getChildren().add(endGame);
 
-                     }
-             );
-         }
+            nextRound = new Button("Hauptmenü");
+            nextRound.setOnAction(e -> {
+                        showSettingsMenu(classPrimaryStage);
+
+                    }
+            );
+        }
+
+        bottom.getChildren().add(nextRound);
 
         //Darstellung
-        Label titel= new Label("Rangliste");
-        titel.setFont(new Font("Script MT Bold", 50*zoomfactor));
+        Label titel = new Label("Rangliste");
+        titel.setFont(new Font("Script MT Bold", 50 * zoomfactor));
         titel.setTextFill(Color.WHITE);
 
-        HBox top= new HBox(titel);
-        top.setMinHeight(sceneHeight/8);
+        HBox top = new HBox(titel);
+        top.setMinHeight(sceneHeight / 8);
         top.setAlignment(Pos.CENTER);
 
-        HBox bottom= new HBox(nextRound);
-        bottom.setMinHeight(sceneHeight/8);
-        bottom.setAlignment(Pos.CENTER);
+
 
         VBox left = new VBox();
-        left.setMinWidth(sceneWidth/7);
+        left.setMinWidth(sceneWidth / 7);
         left.setAlignment(Pos.TOP_LEFT);
 
         VBox right = new VBox();
-        right.setMinWidth(sceneWidth/7);
+        right.setMinWidth(sceneWidth / 7);
         right.setAlignment(Pos.TOP_RIGHT);
 
         center.setAlignment(Pos.TOP_LEFT);
@@ -724,7 +735,6 @@ public class Main extends Application {
         root.setLeft(left);
 
 
-
         //Hintergrund
          /*BackgroundImage myBI2 = new BackgroundImage(score,
                  BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
@@ -733,8 +743,8 @@ public class Main extends Application {
         */
 
         BackgroundImage myBI = new BackgroundImage(table1,
-                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-                 new BackgroundSize(100, 100, true, true, false, true));
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+                new BackgroundSize(100, 100, true, true, false, true));
         root.setBackground(new Background(myBI));
 
 
@@ -749,16 +759,16 @@ public class Main extends Application {
     }
 
     static String myName;
+
     /**
-     * @param PrimaryStage
-     * Erzeug und zeit das Hauptmenü zu Beginn des Spiels an
+     * @param PrimaryStage Erzeug und zeit das Hauptmenü zu Beginn des Spiels an
      */
     void showSettingsMenu(Stage PrimaryStage) {
         GridPane center = new GridPane();
         center.setVgap(10);
 
         //Spielername
-        TextField namefield = new TextField();
+        TextField namefield = new TextField(myName);
         //namefield.setStyle("-fx-background-color:rgba(255,255,255,0.3);");
         center.addRow(0, new Label("Spielername: "), namefield);
 
@@ -799,7 +809,7 @@ public class Main extends Application {
         Slider slider = new Slider();
         slider.setMin(500);
         slider.setMax(5000);
-        slider.setValue((slider.getMax()-slider.getMin())/2+slider.getMin());
+        slider.setValue((slider.getMax() - slider.getMin()) / 2 + slider.getMin());
         System.out.println(slider.getValue());
         slider.setShowTickMarks(false);
         slider.setShowTickLabels(false);
@@ -809,7 +819,6 @@ public class Main extends Application {
         slider.setPrefSize(150, 5);
 
         center.addRow(3, new Label("Bot-Bedenkzeit: "), slider);
-
 
 
         //Darstellung
@@ -827,8 +836,8 @@ public class Main extends Application {
                     botPlayTime = (long) slider.getValue();
                     botlevel = botselect.getSelectionModel().getSelectedIndex();
                     myName = namefield.getText();
-                    if(myName == "") myName = "Spieler";
-                    anzSpieler = (int)playeranzselect.getValue();
+                    if (myName == null || myName.equals("")) myName = "Spieler";
+                    anzSpieler = (int) playeranzselect.getValue();
                     initGame();
                     sceneWidth = 600;
                     sceneHeight = 400;
@@ -879,6 +888,7 @@ public class Main extends Application {
     }
 
     long lastmove = 0;
+
     class moveCheck extends TimerTask {
         @Override
         public void run() {
@@ -902,15 +912,18 @@ public class Main extends Application {
 
     /**
      * Startet die Timer für Bots und Resize-Check, sobald das Hauptmenü verlassen wurde
-     * @param ps Stage
      *
+     * @param ps Stage
      */
+    Timer bots;
+    Timer resizecheck;
+
     void runTimers(Stage ps) {
-        Timer resizecheck = new Timer();
+        resizecheck = new Timer();
         resizecheck.schedule(new MyTask1(), 3000, 500);
 
-        Timer bots = new Timer();
-        bots.schedule(new moveCheck(), botPlayTime*2, botPlayTime);
+        bots = new Timer();
+        bots.schedule(new moveCheck(), botPlayTime * 2, botPlayTime);
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
         {
