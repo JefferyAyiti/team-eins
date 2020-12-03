@@ -27,6 +27,8 @@ import javafx.stage.WindowEvent;
 import java.util.*;
 
 
+
+
 public class Main extends Application {
 
 
@@ -58,6 +60,12 @@ public class Main extends Application {
     public static void main(String[] args) {
         loader = new TestLoadImageUsingClass();
         loader.installSvgLoader();
+        try {
+            initGame();
+
+        } catch (Exception e) {
+
+        }
         launch(args);
 
     }
@@ -608,37 +616,63 @@ public class Main extends Application {
     }
 
 
-    Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
+     Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
+         System.out.println("gibt Rangliste aus");
+        int p=1;
 
-        int p = 1;
+         //Scoreboard
+         VBox names = new VBox(new Label(""));
+         VBox score = new VBox(new Label(""));
+         VBox differ = new VBox(new Label(""));
+         VBox platz = new VBox(new Label(""));
 
-        //Scoreboard
-        VBox names = new VBox(new Label(""));
-        VBox sc = new VBox(new Label(""));
-        VBox platz = new VBox(new Label(""));
-        GridPane center = new GridPane();
+         GridPane center = new GridPane();
 
-        for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
-            //System.out.println(entry.getKey().getName() + ":" + entry.getValue());
-            Label rang = new Label("\t" + p + ". Platz: ");
-            platz.getChildren().add(rang);
-            rang.setFont(new Font("Ink Free", 20 * zoomfactor));
-            Label name = new Label(entry.getKey().getName());
-            name.setTextFill(Color.WHITE);
-            name.setFont(new Font("Ink Free", 20 * zoomfactor));
-            names.getChildren().add(name);
-            Label sco = new Label(Integer.toString(entry.getValue()) + "\t");
-            sco.setFont(new Font("Ink Free", 20 * zoomfactor));
-            sco.setTextFill(Color.WHITE);
-            sc.getChildren().add(sco);
-            p++;
-        }
+         for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
+             //Platz
+             Label rang = new Label("\t"+p + ". Platz: "+"\t");
+             rang.setFont(new Font("Ink Free",18*zoomfactor));
+             rang.setTextFill(Color.WHITE);
+             platz.getChildren().add(rang);
+             //Spieler
+             Label name = new Label(entry.getKey().getName() +"\t");
+             name.setTextFill(Color.WHITE);
+             name.setFont(new Font("Ink Free",18*zoomfactor));
+             names.getChildren().add(name);
+             //Punktestand
+             int dif = entry.getKey().getPoints()-entry.getKey().getOldScore() ;
 
-        center.addRow(0, platz, names, sc);
-        center.setHgap(60 * zoomfactor);
-        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
-        center.setMinHeight(250 * zoomfactor);
-        center.setMinWidth(200 * zoomfactor);
+
+             Label kassiert;
+             if (dif < 0) {
+                 kassiert = new Label( Integer.toString(dif) + "\t");
+                 kassiert.setTextFill(Color.RED);
+             }else{
+                 kassiert = new Label( "+"+Integer.toString(dif) + "\t");
+                 kassiert.setTextFill(Color.LIGHTGREEN);
+
+             }
+             kassiert.setFont(new Font("Ink Free",18*zoomfactor));
+             kassiert.setStyle("-fx-font-weight: bold");
+
+
+             differ.getChildren().add(kassiert);
+
+             Label sco = new Label(Integer.toString(entry.getValue()));
+             sco.setFont(new Font("Ink Free",18*zoomfactor));
+             sco.setTextFill(Color.WHITE);
+             score.getChildren().add(sco);
+
+             p++;
+
+             System.out.println(entry.getKey().getName()+":  -  alt:"+entry.getKey().getOldScore()+"   neu:"+entry.getKey().getPoints()+"   dif:"+dif);
+         }
+
+         center.addRow(0,platz, names, score, differ);
+         center.setHgap(30*zoomfactor);
+         center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
+         center.setMinHeight(250*zoomfactor);
+         center.setMinWidth(200*zoomfactor);
 
 
         Button nextRound;
@@ -650,32 +684,34 @@ public class Main extends Application {
                     }
             );
 
-        } else {
-            nextRound = new Button("Spiel beenden");
-            nextRound.setOnAction(e -> {
-                        classPrimaryStage.close();
-                    }
-            );
-        }
+         } else {
+             nextRound = new Button("Spiel beenden");
+             nextRound.setOnAction(e -> {
+                         classPrimaryStage.close();
+
+                     }
+             );
+         }
 
         //Darstellung
-        Label titel = new Label("Rangliste");
-        titel.setFont(new Font("Script MT Bold", 50 * zoomfactor));
+        Label titel= new Label("Rangliste");
+        titel.setFont(new Font("Script MT Bold", 50*zoomfactor));
+        titel.setTextFill(Color.WHITE);
 
-        HBox top = new HBox(titel);
-        top.setMinHeight(sceneHeight / 8);
+        HBox top= new HBox(titel);
+        top.setMinHeight(sceneHeight/8);
         top.setAlignment(Pos.CENTER);
 
-        HBox bottom = new HBox(nextRound);
-        bottom.setMinHeight(sceneHeight / 8);
+        HBox bottom= new HBox(nextRound);
+        bottom.setMinHeight(sceneHeight/8);
         bottom.setAlignment(Pos.CENTER);
 
         VBox left = new VBox();
-        left.setMinWidth(sceneWidth / 7);
+        left.setMinWidth(sceneWidth/7);
         left.setAlignment(Pos.TOP_LEFT);
 
         VBox right = new VBox();
-        right.setMinWidth(sceneWidth / 7);
+        right.setMinWidth(sceneWidth/7);
         right.setAlignment(Pos.TOP_RIGHT);
 
         center.setAlignment(Pos.TOP_LEFT);
@@ -688,6 +724,7 @@ public class Main extends Application {
         root.setLeft(left);
 
 
+
         //Hintergrund
          /*BackgroundImage myBI2 = new BackgroundImage(score,
                  BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
@@ -696,8 +733,8 @@ public class Main extends Application {
         */
 
         BackgroundImage myBI = new BackgroundImage(table1,
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-                new BackgroundSize(100, 100, true, true, false, true));
+                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+                 new BackgroundSize(100, 100, true, true, false, true));
         root.setBackground(new Background(myBI));
 
 
@@ -706,7 +743,6 @@ public class Main extends Application {
         Scene rangliste = new Scene(root, sceneWidth, sceneHeight);
         rangliste.getStylesheets().add(css);
 
-        System.out.println("gibt Rangliste aus");
         classPrimaryStage.setScene(rangliste);
 
         return rangliste;
@@ -838,7 +874,6 @@ public class Main extends Application {
     }
 
     long lastmove = 0;
-
     class moveCheck extends TimerTask {
         @Override
         public void run() {

@@ -16,7 +16,6 @@
 }
 .label{
     -fx-text-alignment: center;
-    -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-opacity: 0.8;
 }

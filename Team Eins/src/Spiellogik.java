@@ -188,6 +188,8 @@ public class Spiellogik {
 
     }
 
+
+
     /**
      * Tauscht 10 weiße Chips gegen 1 schwarzen Chip aus.
      * @param spieler
@@ -196,7 +198,6 @@ public class Spiellogik {
      * sonst: transaktion = true
      */
     public boolean chipsTauschen(Spieler spieler) {
-
         boolean transaktion = false;
 
         if(spieler.getWhiteChips() >= 10 && tisch.getBlackChips() > 0){
@@ -219,6 +220,7 @@ public class Spiellogik {
      * @return true wenn Chips zum zurückgeben vorhanden sind ansonsten false
      */
     public boolean chipAbgeben(Spieler spieler, Chip chip) {
+        spieler.setOldScore(spieler.getPoints());
         boolean aktion=false;
         if(spieler.getCardCount() == 0){
             if(spieler.getBlackChips() >0 || spieler.getWhiteChips() >0) {
@@ -226,15 +228,18 @@ public class Spiellogik {
                     spieler.setWhiteChips(spieler.getWhiteChips() - 1);
                     tisch.takeChips(1, 0);
                     spieler.setPoints(spieler.getPoints()+1);
+
                 } else {
                     spieler.setBlackChips(spieler.getBlackChips() - 1);
                     tisch.takeChips(0, 1);
                     spieler.setPoints(spieler.getPoints()+10);
+
                 }
                 aktion=true;
             }
         }
         return aktion;
+
 
     }
 
@@ -293,10 +298,10 @@ public class Spiellogik {
      */
     private void rundeBeenden()  {
 
-
         int len = spielerListe.length;
         for (int i = 0; i < len; i++) { //jeder Spieler kassiert Chips
             chipsKassieren(spielerListe[i]);
+            //System.out.println("setOldScore(rundeBeenden):  "+ spielerListe[i].getName()+" - old: "+ spielerListe[i].getOldScore()+ " neu: "+ spielerListe[i].getPoints());
             spielerListe[i].einsteigen();  //Spieler können wieder Züge machen
 
         }
@@ -319,12 +324,13 @@ public class Spiellogik {
 
             if ((spielerListe[i].getBlackChips()*10 + spielerListe[i].getWhiteChips()) >= 40) {
                 alleAussteigen();
-                System.out.println(ranglisteErstellen());  //ein Spieler hat -40 Punkte -> Spiel ist zu Ende
+                //ein Spieler hat -40 Punkte -> Spiel ist zu Ende
                 spielBeendet = true;
 
                 return;
             }
         }
+        System.out.println("Runde beendet");
         rundeBeendet=true;
         return ;
     }

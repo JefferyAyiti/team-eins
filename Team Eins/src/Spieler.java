@@ -1,11 +1,13 @@
 public class Spieler {
     int points = 0;
+    int oldScore=0;
     Hand cardHand;
     String playerName;
     int blackChips = 0, whiteChips = 0;
     boolean folded = false;
     private boolean letzerSpielerDurchgang = false;
     private boolean aussteigen = false;
+
 
     /**
      * Erstellt Spieler Object mit Spielername
@@ -18,7 +20,7 @@ public class Spieler {
 
     /**
      * Weist dem Spieler eine Kartenhand zu
-     * @param hand
+     * @param hand aktuelle Karten auf der Hand
      */
     public void setCardHand(Hand hand) {
         cardHand = hand;
@@ -120,5 +122,20 @@ public class Spieler {
      */
     public void setLetzerSpielerDurchgang(boolean ende) {
         this.letzerSpielerDurchgang = ende;
+    }
+
+    /**
+     * @return gibt alten Punktestand zurück
+     */
+    public int getOldScore() {
+        return oldScore;
+    }
+
+    /**
+     * legt alten Punktestand fest
+     * @param alt alter Punktestand
+     */
+    public void setOldScore(int alt) {
+        oldScore = alt;
     }
 }
