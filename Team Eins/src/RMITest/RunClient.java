@@ -12,6 +12,7 @@ public class RunClient {
     private static RMIClient client;
 
     public static void main(String[] args) throws RemoteException, NotBoundException, InterruptedException {
+        System.setProperty("java.security.policy","file:///tmp/test.policy");
         String name = "client1";
 
         Timer timer;
@@ -66,4 +67,3 @@ public class RunClient {
         }
     }
 }
-

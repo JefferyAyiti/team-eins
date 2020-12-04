@@ -11,7 +11,7 @@ public class RMIClient {
     private final server server;
 
     public RMIClient() throws RemoteException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry("localhost", 52365);
+        Registry registry = LocateRegistry.getRegistry("localhost", 8001);
         server = (server) registry.lookup("Server");
     }
 
