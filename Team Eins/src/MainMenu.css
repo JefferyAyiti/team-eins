@@ -28,5 +28,19 @@
     -fx-control-inner-background: rgba(255,255,255,0.4);
 }
 
+#MMcenter > .label,
+{
+    -fx-text-fill:white;
+}
 
 
+#MMcenter {
+    -fx-padding:50px;
+}
+
+
+##MMtop > .label
+{
+    -fx-text-fill:white;
+
+}

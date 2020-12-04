@@ -33,14 +33,14 @@ public class Main extends Application {
     static Hand[] haende;
     static Spieler[] spieler;
     static TestLoadImageUsingClass loader;
-    static double sceneWidth = 0;
-    static double sceneHeight = 0;
+    static double sceneWidth = 600;
+    static double sceneHeight = 400;
     static volatile Tisch tisch;
     static Spiellogik spiellogik;
     double zoomfactor = 1;
     volatile long resize = 0;
     int ich = 0;
-    long botPlayTime = 2000;
+    long botPlayTime = 0;
     private static int botlevel = 0;
     Stage classPrimaryStage;
 
@@ -406,15 +406,15 @@ public class Main extends Application {
                 imgView.setY(i * 0.2);
                 imgView.setX(i * 0.2);
 
-                if (i == tisch.getNachziehStapelSize()-1) {
+                if (i == tisch.getNachziehStapelSize() - 1) {
                     imgView.setOnMouseClicked(mouseEvent -> {
-                        if(spiellogik.karteNachziehen(spieler[0]))
+                        if (spiellogik.karteNachziehen(spieler[0]))
                             System.out.println("\t Ziehe Karte");
                         buildStage(classPrimaryStage);
                     });
-                imgView.setOnMouseEntered(e -> imgView.setStyle(HOVERED_BUTTON_STYLE));
-                imgView.setOnMouseExited(e -> imgView.setStyle(IDLE_BUTTON_STYLE));
-            }
+                    imgView.setOnMouseEntered(e -> imgView.setStyle(HOVERED_BUTTON_STYLE));
+                    imgView.setOnMouseExited(e -> imgView.setStyle(IDLE_BUTTON_STYLE));
+                }
                 imgView.setPreserveRatio(true);
                 imgView.setSmooth(true);
                 imgView.setFitWidth(60 * zoomfactor); // Visuelle Große des Nachzeihstapel ändern
@@ -627,57 +627,55 @@ public class Main extends Application {
 
         GridPane center = new GridPane();
 
-         for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
-             //Platz
-             Label rang = new Label("\t"+p + ". Platz: "+"\t");
-             rang.setFont(new Font("Ink Free",19*zoomfactor));
-             rang.setTextFill(Color.WHITE);
-             platz.getChildren().add(rang);
-             //platz.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.4 ,0 ,0 )");
-             //Spieler
-             Label name = new Label(entry.getKey().getName() +"    \t");
-             name.setTextFill(Color.WHITE);
-             name.setFont(new Font("Ink Free",19*zoomfactor));
-             names.getChildren().add(name);
-             //names.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.4 ,0 ,0 )");
+        for (Map.Entry<Spieler, Integer> entry : spiellogik.ranglisteErstellen().entrySet()) {
+            //Platz
+            Label rang = new Label("\t" + p + ". Platz: " + "\t");
+            rang.setFont(new Font("Ink Free", 19 * zoomfactor));
+            rang.setTextFill(Color.WHITE);
+            platz.getChildren().add(rang);
+            //platz.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.4 ,0 ,0 )");
+            //Spieler
+            Label name = new Label(entry.getKey().getName() + "    \t");
+            name.setTextFill(Color.WHITE);
+            name.setFont(new Font("Ink Free", 19 * zoomfactor));
+            names.getChildren().add(name);
+            //names.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.4 ,0 ,0 )");
 
-             //Punktestand
-             int dif = entry.getKey().getPoints()-entry.getKey().getOldScore() ;
-
-
-             Label kassiert;
-             if (dif < 0) {
-                 kassiert = new Label( Integer.toString(dif)+"\t");
-                 kassiert.setTextFill(Color.web("#f76254"));
-             }else{
-                 kassiert = new Label( "+"+Integer.toString(dif)+"\t");
-                 kassiert.setTextFill(Color.LIGHTGREEN);
-
-             }
-             kassiert.setFont(new Font("Ink Free",19*zoomfactor));
-             kassiert.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.7 ,0 ,0 ); -fx-font-weight: bolder");
+            //Punktestand
+            int dif = entry.getKey().getPoints() - entry.getKey().getOldScore();
 
 
+            Label kassiert;
+            if (dif < 0) {
+                kassiert = new Label(Integer.toString(dif) + "\t");
+                kassiert.setTextFill(Color.web("#f76254"));
+            } else {
+                kassiert = new Label("+" + Integer.toString(dif) + "\t");
+                kassiert.setTextFill(Color.LIGHTGREEN);
+
+            }
+            kassiert.setFont(new Font("Ink Free", 19 * zoomfactor));
+            kassiert.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.7 ,0 ,0 ); -fx-font-weight: bolder");
 
 
             differ.getChildren().add(kassiert);
 
-             Label sco = new Label(Integer.toString(entry.getValue()));
-             sco.setFont(new Font("Ink Free",19*zoomfactor));
-             sco.setTextFill(Color.WHITE);
-             score.getChildren().add(sco);
-             //score.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.6 ,0 ,0 )");
+            Label sco = new Label(Integer.toString(entry.getValue()));
+            sco.setFont(new Font("Ink Free", 19 * zoomfactor));
+            sco.setTextFill(Color.WHITE);
+            score.getChildren().add(sco);
+            //score.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.6 ,0 ,0 )");
 
             p++;
 
             System.out.println(entry.getKey().getName() + ":  -  alt:" + entry.getKey().getOldScore() + "   neu:" + entry.getKey().getPoints() + "   dif:" + dif);
         }
 
-         center.addRow(0,platz, names, score, differ);
-         center.setHgap(30*zoomfactor);
-         center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
-         center.setMinHeight(250*zoomfactor);
-         center.setMinWidth(300*zoomfactor);
+        center.addRow(0, platz, names, score, differ);
+        center.setHgap(30 * zoomfactor);
+        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
+        center.setMinHeight(250 * zoomfactor);
+        center.setMinWidth(300 * zoomfactor);
 
         HBox bottom = new HBox();
         bottom.setSpacing(15);
@@ -685,8 +683,10 @@ public class Main extends Application {
         bottom.setAlignment(Pos.CENTER);
 
         Button nextRound;
+
         if (!spiellogik.spielBeendet) {
             nextRound = new Button("Nächste Runde");
+            nextRound.setTranslateY(-15);
             nextRound.setOnAction(e -> {
                         spiellogik.initNeueRunde();
                         buildStage(classPrimaryStage);
@@ -695,6 +695,7 @@ public class Main extends Application {
 
         } else {
             Button endGame = new Button("Spiel beenden");
+            endGame.setTranslateY(-15);
             endGame.setOnAction(e -> {
                         classPrimaryStage.close();
                         bots.cancel();
@@ -718,10 +719,9 @@ public class Main extends Application {
         titel.setFont(new Font("Script MT Bold", 50 * zoomfactor));
         titel.setTextFill(Color.WHITE);
 
-        HBox top= new HBox(titel);
+        HBox top = new HBox(titel);
         //top.setMinHeight(sceneHeight/8);
         top.setAlignment(Pos.CENTER);
-
 
 
         VBox left = new VBox();
@@ -740,7 +740,6 @@ public class Main extends Application {
         root.setRight(right);
         root.setBottom(bottom);
         root.setLeft(left);
-
 
 
         //Hintergrund
@@ -767,9 +766,10 @@ public class Main extends Application {
     }
 
     static String myName;
+    static int playMode = 0;
 
     /**
-     * @param PrimaryStage Erzeug und zeit das Hauptmenü zu Beginn des Spiels an
+     * @param PrimaryStage Erzeugt und zeigt das Hauptmenü zu Beginn des Spiels an
      */
     void showSettingsMenu(Stage PrimaryStage) {
         GridPane center = new GridPane();
@@ -777,8 +777,17 @@ public class Main extends Application {
 
         //Spielername
         TextField namefield = new TextField(myName);
-        //namefield.setStyle("-fx-background-color:rgba(255,255,255,0.3);");
         center.addRow(0, new Label("Spielername: "), namefield);
+
+        TextField ip = new TextField("localhost");;
+        TextField port = new TextField("50099");
+        if(playMode == 2) {
+            //IP:Port
+            center.addRow(1, new Label("Server-IP: "), ip);
+            center.addRow(2, new Label("Server-Port: "), port);
+
+        }
+
 
         //Spieleranzahl
         ObservableList<Integer> ploptions =
@@ -791,7 +800,8 @@ public class Main extends Application {
                 );
         ComboBox playeranzselect = new ComboBox(ploptions);
         playeranzselect.getSelectionModel().select(4);
-        center.addRow(1, new Label("Spieleranzahl: "), playeranzselect);
+        if (playMode < 2)
+            center.addRow(1, new Label("Spieleranzahl: "), playeranzselect);
 
 
         //Boteinstellungen
@@ -805,7 +815,9 @@ public class Main extends Application {
                 );
         ComboBox botselect = new ComboBox(botoptions);
         botselect.getSelectionModel().select(0);
-        center.addRow(2, new Label("Bot-Schwierigkeit: "), botselect);
+        if (playMode < 2)
+            center.addRow(2, new Label("Bot-Schwierigkeit: "), botselect);
+
 
         center.setHgap(60 * zoomfactor);
         center.setId("MMcenter");
@@ -817,16 +829,15 @@ public class Main extends Application {
         Slider slider = new Slider();
         slider.setMin(500);
         slider.setMax(5000);
-        slider.setValue((slider.getMax() - slider.getMin()) / 2 + slider.getMin());
-        System.out.println(slider.getValue());
+        slider.setValue(botPlayTime == 0?(slider.getMax() - slider.getMin()) / 2 + slider.getMin():botPlayTime);
         slider.setShowTickMarks(false);
         slider.setShowTickLabels(false);
         slider.setMinorTickCount(1000);
         slider.setMajorTickUnit(1000);
         slider.setBlockIncrement(10);
         slider.setPrefSize(150, 5);
-
-        center.addRow(3, new Label("Bot-Bedenkzeit: "), slider);
+        if (playMode < 2)
+            center.addRow(3, new Label("Bot-Bedenkzeit: "), slider);
 
 
         //Darstellung
@@ -834,37 +845,82 @@ public class Main extends Application {
         titel.setTextFill(Color.WHITE);
         titel.setFont(new Font("Script MT Bold", 36 * zoomfactor));
 
-        HBox top = new HBox(titel);
+        VBox top = new VBox(titel);
         top.setMinHeight(sceneHeight / 8);
         top.setAlignment(Pos.CENTER);
 
-        Button start = new Button("Spiel starten");
-        start.setTranslateY(-10);
-        start.setOnAction(e -> {
-                    botPlayTime = (long) slider.getValue();
-                    botlevel = botselect.getSelectionModel().getSelectedIndex();
-                    myName = namefield.getText();
-                    if (myName == null || myName.equals("")) myName = "Spieler";
-                    anzSpieler = (int) playeranzselect.getValue();
-                    initGame();
-                    sceneWidth = 600;
-                    sceneHeight = 400;
-                    runTimers(PrimaryStage);
-                    getZoomedImages();
-                    buildStage(PrimaryStage);
-                }
-        );
+        //Singlepalyer / Host / Join
+        HBox multiplayer = new HBox();
+        multiplayer.setSpacing(50);
+        multiplayer.setTranslateY(15);
+        multiplayer.setAlignment(Pos.BOTTOM_CENTER);
+        Label single = new Label("Einzelspieler");
+        single.setOnMouseClicked(e -> {
+            playMode = 0;
+            showSettingsMenu(PrimaryStage);
+        });
 
-        HBox bottom = new HBox(start);
+        Pane host = new Pane(new Label("Server erstellen"));
+        host.setOnMouseClicked(mouseEvent -> {
+            playMode = 1;
+            showSettingsMenu(PrimaryStage);
+        });
+
+        Label join = new Label("Server joinen");
+        join.setOnMouseClicked(e -> {
+            playMode = 2;
+            showSettingsMenu(PrimaryStage);
+        });
+
+        multiplayer.getChildren().addAll(single, host, join);
+        multiplayer.setId("MMtop");
+        BorderPane root = new BorderPane();
+
+        top.getChildren().add(multiplayer);
+        HBox bottom = new HBox();
         bottom.setMinHeight(sceneHeight / 8);
         bottom.setAlignment(Pos.CENTER);
+        root.setBottom(bottom);
+
+
+            Button start = new Button(playMode < 2?"Spiel starten":"Spiel beitreten");
+            start.setTranslateY(-10);
+        if (playMode < 2) {
+            start.setOnAction(e -> {
+                        botPlayTime = (long) slider.getValue();
+                        botlevel = botselect.getSelectionModel().getSelectedIndex();
+                        myName = namefield.getText();
+                        if (myName == null || myName.equals("")) myName = "Spieler";
+                        anzSpieler = (int) playeranzselect.getValue();
+                        initGame();
+                        sceneWidth = 600;
+                        sceneHeight = 400;
+                        runTimers(PrimaryStage);
+                        getZoomedImages();
+                        buildStage(PrimaryStage);
+                    }
+            );
+        } else {
+            start.setOnAction(e -> {
+                        myName = namefield.getText();
+                        if (myName == null || myName.equals("")) myName = "Spieler";
+                System.out.println(ip.getText());
+                System.out.println(port.getText());
+                        getZoomedImages();
+                        showSettingsMenu(PrimaryStage);
+                    }
+            );
+        }
+
+            bottom.getChildren().add(start);
+
+
 
         center.setAlignment(Pos.TOP_LEFT);
         center.setMaxHeight(center.getHeight());
-        BorderPane root = new BorderPane();
+
         root.setTop(top);
         root.setCenter(center);
-        root.setBottom(bottom);
 
 
         BackgroundImage myBI = new BackgroundImage(table1,
@@ -874,9 +930,8 @@ public class Main extends Application {
 
 
         //neue Scene
-        String css = Main.class.getResource("Rangliste.css").toExternalForm();
-        Scene menu = new Scene(root, 600, 400);
-        menu.getStylesheets().add(css);
+        Scene menu = new Scene(root, sceneWidth, sceneHeight);
+        menu.getStylesheets().add("MainMenu.css");
 
         PrimaryStage.setScene(menu);
         PrimaryStage.show();
@@ -907,7 +962,7 @@ public class Main extends Application {
                     } catch (InterruptedException e) {
                     }
                 }
-                System.out.println("Spieler '"+tisch.getAktivSpieler().getName()+"' ist dran:");
+                System.out.println("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
                 ((Bot) tisch.getAktivSpieler()).play();
                 Platform.runLater(() -> {
                     buildStage(classPrimaryStage);
