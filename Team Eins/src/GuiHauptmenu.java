@@ -165,6 +165,7 @@ public class GuiHauptmenu {
                 break;
         }
         start.setTranslateY(-10);
+        bottom.setSpacing(10);
         bottom.getChildren().add(start);
 
         if(Main.playMode == 1 && Main.joined) {
@@ -205,6 +206,9 @@ public class GuiHauptmenu {
     }
 
 
+    /** Führt die Button-Actions im Hauptmenü aus
+     * @param action welcher Button wurde geklickt
+     */
     void setSettings(String action) {
         if (action == "start") { //Single-Player-Spiel
             Main.botPlayTime = (long) slider.getValue();
