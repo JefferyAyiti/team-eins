@@ -1,3 +1,5 @@
+package Main;
+
 public class HandKarte extends Karte {
     private static final int LAMA = 10;
     private Tisch tisch;

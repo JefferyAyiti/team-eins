@@ -1,7 +1,7 @@
-package SVG;
+package GUI.SVG;
 
-import SVG.dimension.DefaultDimensionProvider;
-import SVG.dimension.DimensionProvider;
+import GUI.SVG.dimension.DefaultDimensionProvider;
+import GUI.SVG.dimension.DimensionProvider;
 import com.sun.javafx.iio.ImageFormatDescription;
 import com.sun.javafx.iio.ImageLoader;
 import com.sun.javafx.iio.ImageLoaderFactory;

@@ -1,10 +1,10 @@
-package SVG;
+package GUI.SVG;
 
 import com.sun.javafx.iio.common.ImageDescriptor;
 
 public class SvgDescriptor extends ImageDescriptor {
 
-	private static final String formatName = "SVG";
+	private static final String formatName = "GUI/SVG";
 
 	private static final String[] extensions = { "svg" };
 

@@ -1,3 +1,5 @@
+package Main;
+
 public class Spieler {
     int points = 0;
     int oldScore=0;
@@ -98,7 +100,7 @@ public class Spieler {
      * Gibt zurück wie viele Karten der Spieler auf der Hand hat
      * @return Anzahl der Karten auf der Hand
      */
-    int getCardCount() {
+    public int getCardCount() {
         return cardHand.getHandKarte().size();
     }
 

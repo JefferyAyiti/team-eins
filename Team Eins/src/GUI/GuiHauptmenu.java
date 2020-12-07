@@ -1,3 +1,5 @@
+package GUI;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -7,6 +9,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import Main.*;
 
 public class GuiHauptmenu {
     Slider slider;
@@ -20,7 +23,7 @@ public class GuiHauptmenu {
     /**
      * @param PrimaryStage Erzeugt und zeigt das Hauptmenü zu Beginn des Spiels an
      */
-    void showSettingsMenu(Stage PrimaryStage) {
+    public void showSettingsMenu(Stage PrimaryStage) {
         GridPane center = new GridPane();
         center.setVgap(10);
 
@@ -72,7 +75,7 @@ public class GuiHauptmenu {
 
         center.setHgap(60 * Main.zoomfactor);
         center.setId("MMcenter");
-        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
+        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('/GUI/images/oberflaeche.jpg')");
         center.setMinHeight(250 * Main.zoomfactor);
         center.setMinWidth(200 * Main.zoomfactor);
 
@@ -199,7 +202,7 @@ public class GuiHauptmenu {
 
         //neue Scene
         Scene menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
-        menu.getStylesheets().add("MainMenu.css");
+        menu.getStylesheets().add("Main/MainMenu.css");
 
         PrimaryStage.setScene(menu);
         PrimaryStage.show();
