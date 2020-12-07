@@ -209,7 +209,7 @@ public class Main extends Application {
 
             imgView.setPreserveRatio(true);
             imgView.setSmooth(true); //Visuelle Große der Handkarte ändern
-            imgView.setFitWidth(playerId == 0 ? 80 * zoomfactor : 50 * zoomfactor);
+            imgView.setFitWidth(playerId == 0 ? 75 * zoomfactor : 45 * zoomfactor);
 
 
             if (playerId != 0) {
@@ -417,7 +417,7 @@ public class Main extends Application {
                 }
                 imgView.setPreserveRatio(true);
                 imgView.setSmooth(true);
-                imgView.setFitWidth(60 * zoomfactor); // Visuelle Große des Nachzeihstapel ändern
+                imgView.setFitWidth(52 * zoomfactor); // Visuelle Große des Nachzeihstapel ändern
                 nachziehstapel.getChildren().add(imgView);
             }
             table.add(nachziehstapel, 0, 0, 1, 1);
@@ -428,7 +428,7 @@ public class Main extends Application {
                 ImageView imgView = new ImageView(cardsArray[tisch.getObereKarteAblagestapel().getValue() - 1]);
                 imgView.setY(i * 0.3);
                 imgView.setX(i * 0.2);
-                imgView.setFitWidth(90 * zoomfactor); //Visuelle Große der Ablagestapel ändern
+                imgView.setFitWidth(80 * zoomfactor); //Visuelle Große der Ablagestapel ändern
                 imgView.setPreserveRatio(true);
                 imgView.setSmooth(true);
                 ablagestapel.getChildren().add(imgView);
@@ -984,7 +984,7 @@ public class Main extends Application {
 
     void runTimers(Stage ps) {
         resizecheck = new Timer();
-        resizecheck.schedule(new MyTask1(), 3000, 500);
+        resizecheck.schedule(new MyTask1(), 30, 500);
 
         bots = new Timer();
         bots.schedule(new moveCheck(), botPlayTime * 2, botPlayTime);
