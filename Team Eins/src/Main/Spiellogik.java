@@ -1,15 +1,16 @@
-import java.sql.SQLOutput;
+package Main;
+
 import java.util.*;
 
 /**
  * Spiellogik regelt die Runden des Spiels
  */
 public class Spiellogik {
-    private final Stack<Spieler> letzteSpieler = new Stack();
+    public final Stack<Spieler> letzteSpieler = new Stack();
     public final Tisch tisch;
-    private final Spieler[] spielerListe;
-    private boolean rundeBeendet = false;
-    boolean spielBeendet = false;
+    public final Spieler[] spielerListe;
+    public boolean rundeBeendet = false;
+    public boolean spielBeendet = false;
 
     /** Initialisiere Spiellogik mit dem Tisch
      * @param tisch Das ist der Tisch, auf dem gespielt wird

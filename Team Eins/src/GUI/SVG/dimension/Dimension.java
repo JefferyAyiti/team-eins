@@ -1,4 +1,4 @@
-package SVG.dimension;
+package GUI.SVG.dimension;
 
 public class Dimension {
 	private final float width;

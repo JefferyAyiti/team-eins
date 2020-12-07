@@ -1,4 +1,4 @@
-package SVG;
+package GUI.SVG;
 
 import java.awt.image.BufferedImage;
 

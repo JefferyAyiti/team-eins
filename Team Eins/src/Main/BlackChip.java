@@ -1,3 +1,5 @@
+package Main;
+
 public class BlackChip extends Chip {
 
     private final int MAX_CHIPS = 20;

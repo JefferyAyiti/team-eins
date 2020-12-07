@@ -1,3 +1,5 @@
+package GUI;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -5,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import Main.*;
 
 import java.util.Map;
 
@@ -67,7 +70,7 @@ public class GuiScoreboard {
 
         center.addRow(0, platz, names, score, differ);
         center.setHgap(30 * Main.zoomfactor);
-        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('images/oberflaeche.jpg')");
+        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('/GUI/images/oberflaeche.jpg')");
         center.setMinHeight(250 * Main.zoomfactor);
         center.setMinWidth(300 * Main.zoomfactor);
 
@@ -149,9 +152,8 @@ public class GuiScoreboard {
 
 
         //neue Scene
-        String css = Main.class.getResource("Rangliste.css").toExternalForm();
         Scene rangliste = new Scene(root, Main.sceneWidth, Main.sceneHeight);
-        rangliste.getStylesheets().add(css);
+        rangliste.getStylesheets().add("Main/Rangliste.css");
 
         Main.classPrimaryStage.setScene(rangliste);
 

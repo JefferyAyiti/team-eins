@@ -1,3 +1,5 @@
+package Main;
+
 /**
  * Die Tisch Klasse dient zur verwaltung der Spieler und als Schnittstelle der GUI. Informationen werden von hier an andere Klassen weitergegeben.
  */

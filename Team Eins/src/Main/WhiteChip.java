@@ -1,3 +1,5 @@
+package Main;
+
 public class WhiteChip extends Chip {
 
     private final int MAX_CHIPS = 50;

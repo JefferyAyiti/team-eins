@@ -1,4 +1,4 @@
-package SVG.dimension;
+package GUI.SVG.dimension;
 
 import java.awt.geom.Rectangle2D;
 

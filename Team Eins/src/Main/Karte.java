@@ -1,3 +1,5 @@
+package Main;
+
 public class Karte implements Comparable {
 final int value;
 boolean covered;
