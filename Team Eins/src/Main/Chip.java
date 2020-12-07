@@ -1,3 +1,5 @@
+package Main;
+
 /**
  * Bildet die Oberklasse aller Chips
  */

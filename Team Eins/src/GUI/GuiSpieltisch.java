@@ -1,3 +1,5 @@
+package GUI;
+
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,7 +10,6 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -20,6 +21,7 @@ import javafx.stage.Stage;
 
 import java.util.Map;
 import java.util.Optional;
+import Main.*;
 
 
 
@@ -101,7 +103,7 @@ public class GuiSpieltisch {
 
             imgView.setPreserveRatio(true);
             imgView.setSmooth(true); //Visuelle Große der Handkarte ändern
-            imgView.setFitWidth(playerId == 0 ? 80 * Main.zoomfactor : 50 * Main.zoomfactor);
+            imgView.setFitWidth(playerId == 0 ? 80 * Main.zoomfactor : 40 * Main.zoomfactor);
 
 
             if (playerId != 0) {
@@ -223,7 +225,7 @@ public class GuiSpieltisch {
         //Aussteigen
         if (playerId == Main.ich) {
 
-            ImageView exit = new ImageView(Main.loader.getImg("images/SVG/no-touch.svg", Main.zoomfactor * 0.7));
+            ImageView exit = new ImageView(Main.loader.getImg("GUI/images/SVG/no-touch.svg", Main.zoomfactor * 0.7));
             exit.setTranslateY(-7);
             chips.setTranslateY(7);
             if (playerId > 1 && playerId < 5) {
@@ -270,7 +272,7 @@ public class GuiSpieltisch {
      *
      * @param primaryStage
      */
-    void buildStage(Stage primaryStage) {
+    public void buildStage(Stage primaryStage) {
         try {
             StackPane root = new StackPane();
             Main.classPrimaryStage = primaryStage;

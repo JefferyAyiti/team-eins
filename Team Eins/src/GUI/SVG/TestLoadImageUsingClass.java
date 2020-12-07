@@ -1,4 +1,4 @@
-package SVG;
+package GUI.SVG;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

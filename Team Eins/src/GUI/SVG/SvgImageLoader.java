@@ -1,4 +1,4 @@
-package SVG;
+package GUI.SVG;
 
 import static org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_HEIGHT;
 import static org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_WIDTH;
@@ -18,8 +18,8 @@ import com.sun.javafx.iio.ImageFrame;
 import com.sun.javafx.iio.ImageStorage;
 import com.sun.javafx.iio.common.ImageLoaderImpl;
 
-import SVG.dimension.Dimension;
-import SVG.dimension.DimensionProvider;
+import GUI.SVG.dimension.Dimension;
+import GUI.SVG.dimension.DimensionProvider;
 import javafx.stage.Screen;
 
 public class SvgImageLoader extends ImageLoaderImpl {

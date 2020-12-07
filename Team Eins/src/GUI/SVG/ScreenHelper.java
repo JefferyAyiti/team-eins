@@ -1,4 +1,4 @@
-package SVG;
+package GUI.SVG;
 
 import javafx.stage.Screen;
 
