@@ -80,7 +80,6 @@ public class GuiScoreboard {
 
         if (!Main.spiellogik.spielBeendet) {
             nextRound = new Button("Nächste Runde");
-            nextRound.setTranslateY(-15);
             nextRound.setOnAction(e -> {
                 Main.spiellogik.initNeueRunde();
                 Main.spieltischGui.buildStage(Main.classPrimaryStage);
@@ -105,7 +104,7 @@ public class GuiScoreboard {
                     }
             );
         }
-
+        nextRound.setTranslateY(-15);
         bottom.getChildren().add(nextRound);
 
         //Darstellung

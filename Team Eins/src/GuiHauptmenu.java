@@ -9,6 +9,14 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class GuiHauptmenu {
+    Slider slider;
+    ComboBox botselect;
+    ComboBox playeranzselect;
+    TextField namefield;
+    TextField ip;
+    TextField port;
+
+
     /**
      * @param PrimaryStage Erzeugt und zeigt das Hauptmenü zu Beginn des Spiels an
      */
@@ -17,12 +25,14 @@ public class GuiHauptmenu {
         center.setVgap(10);
 
         //Spielername
-        TextField namefield = new TextField(Main.myName);
-        center.addRow(0, new Label("Spielername: "), namefield);
+        namefield = new TextField(Main.myName);
+        if(!Main.joined)
+            center.addRow(0, new Label("Spielername: "), namefield);
 
-        TextField ip = new TextField("localhost");;
-        TextField port = new TextField("50099");
-        if(Main.playMode == 2) {
+        ip = new TextField("localhost");
+
+        port = new TextField("50099");
+        if (Main.playMode == 2 && !Main.joined) {
             //IP:Port
             center.addRow(1, new Label("Server-IP: "), ip);
             center.addRow(2, new Label("Server-Port: "), port);
@@ -39,7 +49,7 @@ public class GuiHauptmenu {
                         5,
                         6
                 );
-        ComboBox playeranzselect = new ComboBox(ploptions);
+        playeranzselect = new ComboBox(ploptions);
         playeranzselect.getSelectionModel().select(4);
         if (Main.playMode < 2)
             center.addRow(1, new Label("Spieleranzahl: "), playeranzselect);
@@ -54,7 +64,7 @@ public class GuiHauptmenu {
                         "Mittel",
                         "Schwer"
                 );
-        ComboBox botselect = new ComboBox(botoptions);
+        botselect = new ComboBox(botoptions);
         botselect.getSelectionModel().select(0);
         if (Main.playMode < 2)
             center.addRow(2, new Label("Bot-Schwierigkeit: "), botselect);
@@ -67,11 +77,11 @@ public class GuiHauptmenu {
         center.setMinWidth(200 * Main.zoomfactor);
 
         //Geschwindigkeit
-        Slider slider = new Slider();
+        slider = new Slider();
         slider.setMin(500);
         slider.setMax(5000);
-        slider.setValue(Main.botPlayTime == 0?
-                (slider.getMax() - slider.getMin()) / 2 + slider.getMin():
+        slider.setValue(Main.botPlayTime == 0 ?
+                (slider.getMax() - slider.getMin()) / 2 + slider.getMin() :
                 Main.botPlayTime);
         slider.setShowTickMarks(false);
         slider.setShowTickLabels(false);
@@ -100,18 +110,21 @@ public class GuiHauptmenu {
         Label single = new Label("Einzelspieler");
         single.setOnMouseClicked(e -> {
             Main.playMode = 0;
+            Main.joined = false;
             showSettingsMenu(PrimaryStage);
         });
 
         Pane host = new Pane(new Label("Server erstellen"));
         host.setOnMouseClicked(mouseEvent -> {
             Main.playMode = 1;
+            Main.joined = false;
             showSettingsMenu(PrimaryStage);
         });
 
         Label join = new Label("Server joinen");
         join.setOnMouseClicked(e -> {
             Main.playMode = 2;
+            Main.joined = false;
             showSettingsMenu(PrimaryStage);
         });
 
@@ -126,39 +139,50 @@ public class GuiHauptmenu {
         root.setBottom(bottom);
 
 
-        Button start = new Button(Main.playMode < 2?"Spiel starten":"Spiel beitreten");
-        start.setTranslateY(-10);
-        if (Main.playMode < 2) {
-            start.setOnAction(e -> {
-                Main.botPlayTime = (long) slider.getValue();
-                Main.botlevel = botselect.getSelectionModel().getSelectedIndex();
-                Main.myName = namefield.getText();
-                        if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
-                Main.anzSpieler = (int) playeranzselect.getValue();
-                        Main.initGame();
-                Main.sceneWidth = 600;
-                Main.sceneHeight = 400;
-                Main.runTimers(PrimaryStage);
-                GuiZoomLoader.getZoomedImages();
-                Main.spieltischGui.buildStage(PrimaryStage);
-                    }
-            );
-        } else {
-            start.setOnAction(e -> {
-                Main.myName = namefield.getText();
-                        if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
-                        System.out.println(ip.getText());
-                        System.out.println(port.getText());
-                GuiZoomLoader.getZoomedImages();
-                        showSettingsMenu(PrimaryStage);
-                    }
-            );
+        Button start = new Button();
+        switch (Main.playMode) {
+            case 0:
+                start.setText("Spiel starten");
+                start.setOnAction(e -> setSettings("start"));
+                break;
+            case 1:
+                if (!Main.joined) {
+                    start.setText("Raum erstellen");
+                    start.setOnAction(e -> setSettings("create"));
+                } else {
+                    start.setText("Spiel starten");
+                    start.setOnAction(e -> setSettings("startserver"));
+                }
+                break;
+            case 2:
+                if (Main.joined) {
+                    start.setText("Raum verlassen");
+                    start.setOnAction(e -> setSettings("leave"));
+                } else {
+                    start.setText("Spiel beitreten");
+                    start.setOnAction(e -> setSettings("join"));
+                }
+                break;
         }
-
+        start.setTranslateY(-10);
         bottom.getChildren().add(start);
 
+        if(Main.playMode == 1 && Main.joined) {
+            Button close = new Button("Raum schließen");
+            close.setOnAction(e -> setSettings("close"));
+            close.setTranslateY(-10);
+            bottom.getChildren().add(close);
+        }
 
 
+        if (Main.playMode > 0 && Main.joined) {
+            VBox lobby = new VBox(new Label("Lobby:"));
+            lobby.setStyle("-fx-background-color:rgba(255,255,255,0.5);");
+            lobby.setSpacing(10);
+            lobby.setPrefHeight(150);
+            lobby.setMinWidth(100);
+            center.add(lobby, 2, 0, 1, 3);
+        }
         center.setAlignment(Pos.TOP_LEFT);
         center.setMaxHeight(center.getHeight());
 
@@ -180,4 +204,54 @@ public class GuiHauptmenu {
         PrimaryStage.show();
     }
 
+
+    void setSettings(String action) {
+        if (action == "start") { //Single-Player-Spiel
+            Main.botPlayTime = (long) slider.getValue();
+            Main.botlevel = botselect.getSelectionModel().getSelectedIndex();
+            Main.myName = namefield.getText();
+            if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
+            Main.anzSpieler = (int) playeranzselect.getValue();
+            Main.initGame();
+            Main.sceneWidth = 600;
+            Main.sceneHeight = 400;
+            Main.runTimers(Main.classPrimaryStage);
+            Main.spieltischGui.buildStage(Main.classPrimaryStage);
+        } else if (action == "close") { //Host
+            Main.joined = false;
+            //TODO Server beenden
+            showSettingsMenu(Main.classPrimaryStage);
+
+        } else if (action == "create") { //Host
+            Main.joined = true;
+            Main.botPlayTime = (long) slider.getValue();
+            Main.botlevel = botselect.getSelectionModel().getSelectedIndex();
+            Main.myName = namefield.getText();
+            if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
+            Main.anzSpieler = (int) playeranzselect.getValue();
+            //TODO Server erstellen/starten
+            showSettingsMenu(Main.classPrimaryStage);
+
+        } else if (action == "startserver") {
+            //TODO andere menschliche Spieler übergeben,
+            Main.sceneWidth = 600;
+            Main.sceneHeight = 400;
+            Main.initGame();
+            Main.runTimers(Main.classPrimaryStage);
+            Main.spieltischGui.buildStage(Main.classPrimaryStage);
+
+        } else if (action == "join") {
+            Main.joined = true;
+            Main.myName = namefield.getText();
+            if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
+            System.out.println(ip.getText());
+            System.out.println(port.getText());
+            GuiZoomLoader.getZoomedImages();
+            showSettingsMenu(Main.classPrimaryStage);
+
+        } else if (action == "leave") {
+            Main.joined = false;
+            showSettingsMenu(Main.classPrimaryStage);
+        }
+    }
 }

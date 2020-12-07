@@ -25,7 +25,7 @@ public class Main extends Application {
     static long botPlayTime = 0;
     static int botlevel = 0;
     static Stage classPrimaryStage;
-
+    static boolean joined;
     static String myName;
     static int playMode = 0;
 
