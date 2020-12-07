@@ -114,7 +114,8 @@ public class Main extends Application {
         table1 = new Image("images/table2.svg");
         classPrimaryStage = primaryStage;
 
-        Main.image = new Image("/images/SVG/Back.svg");
+        //Main.image = new Image("/images/SVG/Back.svg");
+        Main.image = loader.getImg("images/SVG/Back.svg", 1);
         Main.card1 = new Image("/images/SVG/Card1.svg");
         Main.card3 = new Image("images/SVG/Card3.svg");
         Main.card4 = new Image("images/SVG/Card4.svg");
