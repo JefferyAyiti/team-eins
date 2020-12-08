@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import Main.*;
 
+import static Main.Main.classPrimaryStage;
 import static Main.Main.zoomfactor;
 
 
@@ -291,6 +292,21 @@ public class GuiSpieltisch {
                 Main.sceneHeight = Main.classPrimaryStage.getScene().getHeight();
 
             Scene scene = new Scene(root, Main.sceneWidth, Main.sceneHeight, true, SceneAntialiasing.BALANCED);
+
+            if(Main.inMenu) {
+                Main.hauptmenuGui.showSettingsMenu(classPrimaryStage);
+                return;
+            } else
+            if (Main.spiellogik.getRundeBeendet()) {
+                Main.scoreboardGui.showRangliste(Main.spiellogik.ranglisteErstellen());
+                return;
+            }
+            Main.sceneWidth = scene.getWidth();
+            Main.sceneHeight = scene.getHeight();
+            Main.lastmove = System.currentTimeMillis();
+
+
+
             BackgroundImage myBI = new BackgroundImage(Main.table1,
                     BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                     new BackgroundSize(100, 100, true, true, false, true));
@@ -326,7 +342,7 @@ public class GuiSpieltisch {
             for (int i = 0; i < Main.tisch.getAblageStapelSize(); i++) {
                 ImageView imgView = new ImageView(Main.cardsArray[Main.tisch.ablageStapel.stapel.get(i).getValue()-1]);
                 imgView.setY(Math.random()*3);
-                imgView.setX(Math.random()*3);
+                imgView.setX(15-30*Math.random());
                 imgView.setRotate(15-30*Math.random());
                 imgView.setFitWidth(90 * zoomfactor); //Visuelle Große der Ablagestapel ändern
                 imgView.setPreserveRatio(true);
@@ -471,13 +487,7 @@ public class GuiSpieltisch {
 
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
             primaryStage.setScene(scene);
-            if (Main.spiellogik.getRundeBeendet()) {
-                Main.scoreboardGui.showRangliste(Main.spiellogik.ranglisteErstellen());
 
-            }
-            Main.sceneWidth = scene.getWidth();
-            Main.sceneHeight = scene.getHeight();
-            Main.lastmove = System.currentTimeMillis();
             primaryStage.show();
 
         } catch (Exception e) {
