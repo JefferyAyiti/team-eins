@@ -21,7 +21,7 @@ public class Stapel {
     /**
      * stapel steht für den Stapel dargestellt als stack
      */
-    private Stack<Karte> stapel = new Stack<>();
+    public Stack<Karte> stapel = new Stack<>();
     /**
      * topCard ist die oberste Karte des Stapels
      */

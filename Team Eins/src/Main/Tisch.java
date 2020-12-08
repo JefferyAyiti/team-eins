@@ -11,7 +11,7 @@ public class Tisch {
     private int whiteCh;
     private int durchgangNr = 0;
     private Stapel nachziehStapel = new Stapel(true);
-    private Stapel ablageStapel = new Stapel(false);
+    public Stapel ablageStapel = new Stapel(false);
     private Spieler[] spielerList;
     private volatile int aktiv = 0;
 

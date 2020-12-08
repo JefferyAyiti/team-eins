@@ -9,37 +9,32 @@ import java.io.InputStream;
 public class TestLoadImageUsingClass {
 
 
-	public static void installSvgLoader() {
-		SvgImageLoaderFactory.install();
-	}
+    public static void installSvgLoader() {
+        SvgImageLoaderFactory.install();
+    }
 
 
-	public Image getImg(String path) {
+    public Image getImg(String path) {
 
-		return getImg(path, 1);
-	}
+        return getImg(path, 1);
+    }
 
-	public Image getImg(String path, double factor) {
+    public Image getImg(String path, double factor) {
 
-		InputStream imageData = this.getClass().getClassLoader()
-				.getResourceAsStream(path);
+        InputStream imageData = this.getClass().getClassLoader()
+                .getResourceAsStream(path);
 
 
+        Image image;
+        if (!path.contains("table")) {
+            if (!path.contains("Back"))
+                image = new Image(imageData, 80 * factor, 80*1.5 * factor, true, true);
+            else
+                image = new Image(imageData, 40 * factor, 40*1.5 * factor, true, false);
+        } else
+            image = new Image(imageData);
+        return image;
+    }
 
-		Image image;
-		if(!path.contains("table")) {
-			image = new Image(imageData, 55*factor, 82.5*factor, true, false);
-		} else
-			image = new Image(imageData);
-		return image;
-	}
-
-	public ImageView getImgView(String path) {
-
-		ImageView imageView = new ImageView(getImg(path));
-		imageView.setSmooth(true);
-
-		return imageView;
-	}
 
 }

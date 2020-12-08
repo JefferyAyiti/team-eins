@@ -220,8 +220,7 @@ public class GuiHauptmenu {
             if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
             Main.anzSpieler = (int) playeranzselect.getValue();
             Main.initGame();
-            Main.sceneWidth = 600;
-            Main.sceneHeight = 400;
+
             Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
         } else if (action == "close") { //Host
@@ -241,8 +240,6 @@ public class GuiHauptmenu {
 
         } else if (action == "startserver") {
             //TODO andere menschliche Spieler übergeben,
-            Main.sceneWidth = 600;
-            Main.sceneHeight = 400;
             Main.initGame();
             Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
