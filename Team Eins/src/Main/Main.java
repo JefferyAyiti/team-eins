@@ -5,6 +5,7 @@ import GUI.GuiScoreboard;
 import GUI.GuiSpieltisch;
 import GUI.GuiZoomLoader;
 import GUI.SVG.TestLoadImageUsingClass;
+import RMI.server;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -35,6 +36,7 @@ public class Main extends Application {
     public static String myName;
     public static int playMode = 0;
     public static boolean inMenu = true;
+    public static RMI.server server = null;
 
 
 

@@ -1,5 +1,10 @@
 package GUI;
 
+import RMI.RMIClient;
+import RMI.RunClient;
+import RMI.RunServer;
+import RMI.server;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -11,7 +16,13 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import Main.*;
 
-import static Main.Main.inMenu;
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static Main.Main.*;
 
 public class GuiHauptmenu {
     Slider slider;
@@ -20,6 +31,7 @@ public class GuiHauptmenu {
     TextField namefield;
     TextField ip;
     TextField port;
+    Timer update;
 
 
     /**
@@ -37,7 +49,7 @@ public class GuiHauptmenu {
 
         ip = new TextField("localhost");
 
-        port = new TextField("50099");
+        port = new TextField("8001");
         if (Main.playMode == 2 && !Main.joined) {
             //IP:Port
             center.addRow(1, new Label("Server-IP: "), ip);
@@ -188,6 +200,15 @@ public class GuiHauptmenu {
             lobby.setSpacing(10);
             lobby.setPrefHeight(150);
             lobby.setMinWidth(100);
+
+            try {
+                for(String cl : server.getClients()) {
+                    lobby.getChildren().add(new Label(cl));
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
             center.add(lobby, 2, 0, 1, 3);
         }
         center.setAlignment(Pos.TOP_LEFT);
@@ -229,6 +250,7 @@ public class GuiHauptmenu {
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
         } else if (action == "close") { //Host
             Main.joined = false;
+            update.cancel();
             //TODO Server beenden
             showSettingsMenu(Main.classPrimaryStage);
 
@@ -239,10 +261,31 @@ public class GuiHauptmenu {
             Main.myName = namefield.getText();
             if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
             Main.anzSpieler = (int) playeranzselect.getValue();
-            //TODO Server erstellen/starten
+
+            try {
+                final RunServer runServer = new RunServer("localhost", "Server", 8001, myName);
+                server = runServer.starting();
+                Timer update = new Timer();
+                update.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if(Main.spiellogik == null)
+                        Platform.runLater(() -> showSettingsMenu(Main.classPrimaryStage));
+                        else
+                            Main.spieltischGui.buildStage(Main.classPrimaryStage);
+
+                    }
+                }, 200, 200);
+            } catch (AlreadyBoundException e) {
+                System.out.println("Already bound");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
             showSettingsMenu(Main.classPrimaryStage);
 
         } else if (action == "startserver") {
+            update.cancel();
             inMenu = false;
             //TODO andere menschliche Spieler übergeben,
             Main.initGame();
@@ -250,16 +293,40 @@ public class GuiHauptmenu {
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
 
         } else if (action == "join") {
-            Main.joined = true;
-            Main.myName = namefield.getText();
-            if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
             System.out.println(ip.getText());
             System.out.println(port.getText());
+            Main.myName = namefield.getText();
+            if (Main.myName == null || Main.myName.equals(""))
+                Main.myName = "Spieler";
+
+            try {
+                RunClient runClient = new RunClient(ip.getText(),
+                        Integer.valueOf(port.getText()),
+                        "Server",
+                        Main.myName);
+                server = runClient.client.server;
+                update = new Timer();
+                update.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Platform.runLater(() -> showSettingsMenu(Main.classPrimaryStage));
+                    }
+                }, 200, 200);
+                joined = true;
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Main.myName = namefield.getText();
+            if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
+
             GuiZoomLoader.getZoomedImages();
             showSettingsMenu(Main.classPrimaryStage);
 
         } else if (action == "leave") {
             Main.joined = false;
+            update.cancel();
             showSettingsMenu(Main.classPrimaryStage);
         }
     }

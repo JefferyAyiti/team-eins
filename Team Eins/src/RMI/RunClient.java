@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 
 public class RunClient {
 
-    private static RMIClient client;
+    public static RMIClient client;
     private String CLIENT_NAME;
 
     /**
@@ -21,7 +21,7 @@ public class RunClient {
         //TODO Policy muss hinzugefügt werden
         System.setProperty("java.security.policy","file:///tmp/test.policy");
 
-        client = new RMIClient(IP, Port, Server_Name);
+        client = new RMIClient(IP, Port, Server_Name, Client_Name);
 
 
         System.out.println("Client Started");

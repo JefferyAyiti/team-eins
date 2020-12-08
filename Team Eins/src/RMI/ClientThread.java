@@ -8,7 +8,7 @@ import java.util.TimerTask;
 public class ClientThread implements Runnable{
     private RMIClient client;
     private ServerImpl server;
-    Long aenderung = 0L;
+    long aenderung = 0;
     public ClientThread(ServerImpl server,RMIClient client){
         this.client = client;
         this.server = server;
