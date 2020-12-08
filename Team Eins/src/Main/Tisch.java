@@ -1,9 +1,11 @@
 package Main;
 
+import java.io.Serializable;
+
 /**
  * Die Tisch Klasse dient zur verwaltung der Spieler und als Schnittstelle der GUI. Informationen werden von hier an andere Klassen weitergegeben.
  */
-public class Tisch {
+public class Tisch implements Serializable {
 
     private BlackChip chipsblack = new BlackChip();
     private WhiteChip whiteChip = new WhiteChip();
