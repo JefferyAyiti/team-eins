@@ -11,6 +11,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import Main.*;
 
+import static Main.Main.inMenu;
+
 public class GuiHauptmenu {
     Slider slider;
     ComboBox botselect;
@@ -24,6 +26,7 @@ public class GuiHauptmenu {
      * @param PrimaryStage Erzeugt und zeigt das Hauptmenü zu Beginn des Spiels an
      */
     public void showSettingsMenu(Stage PrimaryStage) {
+        inMenu = true;
         GridPane center = new GridPane();
         center.setVgap(10);
 
@@ -214,14 +217,14 @@ public class GuiHauptmenu {
      */
     void setSettings(String action) {
         if (action == "start") { //Single-Player-Spiel
+            inMenu = false;
             Main.botPlayTime = (long) slider.getValue();
             Main.botlevel = botselect.getSelectionModel().getSelectedIndex();
             Main.myName = namefield.getText();
             if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
             Main.anzSpieler = (int) playeranzselect.getValue();
             Main.initGame();
-            Main.sceneWidth = 600;
-            Main.sceneHeight = 400;
+
             Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
         } else if (action == "close") { //Host
@@ -240,9 +243,8 @@ public class GuiHauptmenu {
             showSettingsMenu(Main.classPrimaryStage);
 
         } else if (action == "startserver") {
+            inMenu = false;
             //TODO andere menschliche Spieler übergeben,
-            Main.sceneWidth = 600;
-            Main.sceneHeight = 400;
             Main.initGame();
             Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);

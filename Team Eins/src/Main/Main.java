@@ -34,6 +34,7 @@ public class Main extends Application {
     public static boolean joined;
     public static String myName;
     public static int playMode = 0;
+    public static boolean inMenu = true;
 
 
 
@@ -44,12 +45,6 @@ public class Main extends Application {
     public static void main(String[] args) {
         loader = new TestLoadImageUsingClass();
         loader.installSvgLoader();
-        try {
-            initGame();
-
-        } catch (Exception e) {
-
-        }
         launch(args);
 
     }
@@ -99,16 +94,16 @@ public class Main extends Application {
         spiellogik = new Spiellogik(tisch);
         spiellogik.initNeueRunde();
 
-
+        resize(true);
     }
 
 
     //GUI
 
 
-    public static void resize() {
+    public static void resize(boolean init) {
 
-        if (System.currentTimeMillis() < resize + 500) {
+        if (System.currentTimeMillis() < resize + 500 || init) {
             GuiZoomLoader.getZoomedImages();
             spieltischGui.buildStage(classPrimaryStage);
         }
@@ -152,7 +147,7 @@ public class Main extends Application {
             sceneWidth = classPrimaryStage.getScene().getWidth();
             sceneHeight = classPrimaryStage.getScene().getHeight();
             Platform.runLater(() -> {
-                resize();
+                resize(false);
             });
 
         }
@@ -191,8 +186,9 @@ public class Main extends Application {
     public static Timer resizecheck;
 
     public static void runTimers(Stage ps) {
+        resize(true);
         resizecheck = new Timer();
-        resizecheck.schedule(new MyTask1(), 3000, 500);
+        resizecheck.schedule(new MyTask1(), 0, 500);
 
         bots = new Timer();
         bots.schedule(new moveCheck(), botPlayTime * 2, botPlayTime);
