@@ -102,6 +102,7 @@ public class GuiScoreboard {
 
             nextRound = new Button("Hauptmenü");
             nextRound.setOnAction(e -> {
+                Main.inMenu = true;
                 Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
 
                     }

@@ -5,11 +5,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -19,10 +21,13 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 import Main.*;
 
+import static Main.Main.classPrimaryStage;
+import static Main.Main.zoomfactor;
 
 
 public class GuiSpieltisch {
@@ -61,10 +66,10 @@ public class GuiSpieltisch {
             plr.setRotate(180);
         }
         plr.setTextFill(Color.WHITE);
-        plr.setFont(Font.font("Verdana", 12 * Main.zoomfactor));
+        plr.setFont(Font.font("Verdana", 12 * zoomfactor));
         if (Main.spieler[playerId] == Main.tisch.getAktivSpieler()) {
             plr.setTextFill(Color.YELLOW);
-            plr.setFont(Font.font("Verdana", FontWeight.BOLD, 14 * Main.zoomfactor));
+            plr.setFont(Font.font("Verdana", FontWeight.BOLD, 14 * zoomfactor));
         }
         plr.setTranslateY(-15);
         pane.getChildren().add(plr);
@@ -103,11 +108,11 @@ public class GuiSpieltisch {
 
             imgView.setPreserveRatio(true);
             imgView.setSmooth(true); //Visuelle Große der Handkarte ändern
-            imgView.setFitWidth(playerId == 0 ? 80 * Main.zoomfactor : 40 * Main.zoomfactor);
+            imgView.setFitWidth(playerId == 0 ? 80 * zoomfactor : 40 * zoomfactor);
 
 
             if (playerId != 0) {
-                imgView.setTranslateX(-cardcount / 2 * 10 + 10 * i);
+                imgView.setTranslateX(-cardcount / 2 * 10*zoomfactor + 10*zoomfactor * i);
                 imgView.setTranslateY(-10);
                 imgView.setRotate(-cardcount / 2 * 15 + i * 15);
             } else {
@@ -161,9 +166,9 @@ public class GuiSpieltisch {
             }
             if (playerId == 0) {
                 if (cardcount > 7) {
-                    imgView.setTranslateX(10 * (cardcount % 2) + cardcount / 2 * 20 * Main.zoomfactor - 20 * Main.zoomfactor * i);
+                    imgView.setTranslateX(10 * (cardcount % 2) + cardcount / 2 * 20 * zoomfactor - 20 * zoomfactor * i);
                 } else {
-                    imgView.setTranslateX((cardcount % 2 == 0 ? 55 / 2 * Main.zoomfactor : 0) + 55 * Main.zoomfactor * (i - cardcount / 2));
+                    imgView.setTranslateX((cardcount % 2 == 0 ? 55 / 2 * zoomfactor : 0) + 55 * zoomfactor * (i - cardcount / 2));
                 }
             }
 
@@ -181,13 +186,13 @@ public class GuiSpieltisch {
         GridPane chips = new GridPane();
         //chips.setMaxWidth(60 * zoomfactor);
         ImageView blChip = new ImageView(Main.blackChipImage);
-        blChip.setFitHeight(chipsize * Main.zoomfactor);
-        blChip.setFitWidth(chipsize * Main.zoomfactor);
+        blChip.setFitHeight(chipsize * zoomfactor);
+        blChip.setFitWidth(chipsize * zoomfactor);
         //Chip counter unter die Karte
 
         ImageView whChip = new ImageView(Main.whiteChipImage);
-        whChip.setFitHeight(chipsize * Main.zoomfactor);
-        whChip.setFitWidth(chipsize * Main.zoomfactor);
+        whChip.setFitHeight(chipsize * zoomfactor);
+        whChip.setFitWidth(chipsize * zoomfactor);
 
         if (Main.ich == playerId) {
             chips.setOnMouseClicked(mouseEvent -> {
@@ -205,13 +210,13 @@ public class GuiSpieltisch {
 
         Text text = new Text();
         text.setFill(Color.WHITE);
-        text.setFont(Font.font("Verdana", 12 * Main.zoomfactor));
+        text.setFont(Font.font("Verdana", 12 * zoomfactor));
         text.setText("" + Main.spieler[playerId].getBlackChips());
         chips.add(text, 1, 0);
 
         text = new Text();
         text.setFill(Color.WHITE);
-        text.setFont(Font.font("Verdana", 12 * Main.zoomfactor));
+        text.setFont(Font.font("Verdana", 12 * zoomfactor));
         text.setText(Main.spieler[playerId].getWhiteChips() + "");
 
         chips.add(text, 1, 1);
@@ -225,7 +230,7 @@ public class GuiSpieltisch {
         //Aussteigen
         if (playerId == Main.ich) {
 
-            ImageView exit = new ImageView(Main.loader.getImg("GUI/images/SVG/no-touch.svg", Main.zoomfactor * 0.7));
+            ImageView exit = new ImageView(Main.loader.getImg("GUI/images/SVG/no-touch.svg", zoomfactor * 0.45));
             exit.setTranslateY(-7);
             chips.setTranslateY(7);
             if (playerId > 1 && playerId < 5) {
@@ -248,18 +253,18 @@ public class GuiSpieltisch {
         switch (playerId) {
             case 1:
             case 5:
-                pane.setTranslateY(+30 * Main.zoomfactor);
+                pane.setTranslateY(+30 * zoomfactor);
                 break;
             case 4:
-                pane.setTranslateX(30 * Main.zoomfactor);
-                pane.setTranslateY(10 + 10 * Main.zoomfactor);
+                pane.setTranslateX(30 * zoomfactor);
+                pane.setTranslateY(10 + 10 * zoomfactor);
                 break;
             case 3:
-                pane.setTranslateY(10 * Main.zoomfactor);
+                pane.setTranslateY(10 * zoomfactor);
                 break;
             case 2:
-                pane.setTranslateX(-30 * Main.zoomfactor);
-                pane.setTranslateY(10 + 10 * Main.zoomfactor);
+                pane.setTranslateX(-30 * zoomfactor);
+                pane.setTranslateY(10 + 10 * zoomfactor);
                 break;
         }
         return pane;
@@ -272,7 +277,7 @@ public class GuiSpieltisch {
      *
      * @param primaryStage
      */
-    public void buildStage(Stage primaryStage) {
+       public void buildStage(Stage primaryStage) {
         try {
             StackPane root = new StackPane();
             Main.classPrimaryStage = primaryStage;
@@ -286,7 +291,22 @@ public class GuiSpieltisch {
             } else
                 Main.sceneHeight = Main.classPrimaryStage.getScene().getHeight();
 
-            Scene scene = new Scene(root, Main.sceneWidth, Main.sceneHeight);
+            Scene scene = new Scene(root, Main.sceneWidth, Main.sceneHeight, true, SceneAntialiasing.BALANCED);
+
+            if(Main.inMenu) {
+                Main.hauptmenuGui.showSettingsMenu(classPrimaryStage);
+                return;
+            } else
+            if (Main.spiellogik.getRundeBeendet()) {
+                Main.scoreboardGui.showRangliste(Main.spiellogik.ranglisteErstellen());
+                return;
+            }
+            Main.sceneWidth = scene.getWidth();
+            Main.sceneHeight = scene.getHeight();
+            Main.lastmove = System.currentTimeMillis();
+
+
+
             BackgroundImage myBI = new BackgroundImage(Main.table1,
                     BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                     new BackgroundSize(100, 100, true, true, false, true));
@@ -294,9 +314,10 @@ public class GuiSpieltisch {
 
             GridPane table = new GridPane();
             //Nachziehstapel
+            Image imageback = Main.loader.getImg("GUI/images/SVG/Back.svg", zoomfactor*2);
             Pane nachziehstapel = new Pane();
             for (int i = 0; i < Main.tisch.getNachziehStapelSize(); i++) {
-                ImageView imgView = new ImageView(Main.image);
+                ImageView imgView = new ImageView(imageback);
                 imgView.setY(i * 0.2);
                 imgView.setX(i * 0.2);
 
@@ -311,7 +332,7 @@ public class GuiSpieltisch {
                 }
                 imgView.setPreserveRatio(true);
                 imgView.setSmooth(true);
-                imgView.setFitWidth(60 * Main.zoomfactor); // Visuelle Große des Nachzeihstapel ändern
+                imgView.setFitWidth(60 * zoomfactor); // Visuelle Große des Nachzeihstapel ändern
                 nachziehstapel.getChildren().add(imgView);
             }
             table.add(nachziehstapel, 0, 0, 1, 1);
@@ -319,10 +340,11 @@ public class GuiSpieltisch {
             //Ablagestapel
             Pane ablagestapel = new Pane();
             for (int i = 0; i < Main.tisch.getAblageStapelSize(); i++) {
-                ImageView imgView = new ImageView(Main.cardsArray[Main.tisch.getObereKarteAblagestapel().getValue() - 1]);
-                imgView.setY(i * 0.3);
-                imgView.setX(i * 0.2);
-                imgView.setFitWidth(90 * Main.zoomfactor); //Visuelle Große der Ablagestapel ändern
+                ImageView imgView = new ImageView(Main.cardsArray[Main.tisch.ablageStapel.stapel.get(i).getValue()-1]);
+                imgView.setY(Math.random()*3);
+                imgView.setX(15-30*Math.random());
+                imgView.setRotate(15-30*Math.random());
+                imgView.setFitWidth(90 * zoomfactor); //Visuelle Große der Ablagestapel ändern
                 imgView.setPreserveRatio(true);
                 imgView.setSmooth(true);
                 ablagestapel.getChildren().add(imgView);
@@ -333,22 +355,22 @@ public class GuiSpieltisch {
             chipsgrid.setAlignment(Pos.CENTER);
 
             ImageView imgView = new ImageView(Main.blackChipImage);
-            imgView.setFitHeight(25 * Main.zoomfactor);
-            imgView.setFitWidth(25 * Main.zoomfactor);
+            imgView.setFitHeight(25 * zoomfactor);
+            imgView.setFitWidth(25 * zoomfactor);
             chipsgrid.add(imgView, 0, 0, 1, 1);
             Text ChipText = new Text();
             ChipText.setText(" " + Main.tisch.getBlackChips());
-            ChipText.setFont(Font.font("Verdana", 20 * Main.zoomfactor));
+            ChipText.setFont(Font.font("Verdana", 20 * zoomfactor));
             ChipText.setFill(Color.WHITE);
             chipsgrid.add(ChipText, 1, 0, 1, 1);
 
             imgView = new ImageView(Main.whiteChipImage);
-            imgView.setFitHeight(25 * Main.zoomfactor);
-            imgView.setFitWidth(25 * Main.zoomfactor);
+            imgView.setFitHeight(25 * zoomfactor);
+            imgView.setFitWidth(25 * zoomfactor);
             chipsgrid.add(imgView, 0, 1, 1, 1);
             ChipText = new Text();
             ChipText.setText(" " + Main.tisch.getWhiteChips());
-            ChipText.setFont(Font.font("Verdana", 20 * Main.zoomfactor));
+            ChipText.setFont(Font.font("Verdana", 20 * zoomfactor));
             ChipText.setFill(Color.WHITE);
 
             chipsgrid.add(ChipText, 1, 1, 1, 1);
@@ -360,7 +382,7 @@ public class GuiSpieltisch {
             gridPane.setAlignment(Pos.TOP_CENTER);
 
             table.getColumnConstraints().add(new ColumnConstraints()); // column 0 is 100 wide
-            table.getColumnConstraints().add(new ColumnConstraints(80 * Main.zoomfactor)); // column 0 is 100 wide
+            table.getColumnConstraints().add(new ColumnConstraints(80 * zoomfactor)); // column 0 is 100 wide
 
             table.add(chipsgrid, 1, 0, 1, 1);
 
@@ -447,10 +469,10 @@ public class GuiSpieltisch {
                 //System.out.println(entry.getKey().getName() + ":" + entry.getValue());
                 Label name = new Label(entry.getKey().getName());
                 name.setTextFill(Color.WHITE);
-                name.setFont(new Font(10 * Main.zoomfactor));
+                name.setFont(new Font(10 * zoomfactor));
                 names.getChildren().add(name);
                 Label sco = new Label(Integer.toString(Math.abs(entry.getValue())));
-                sco.setFont(new Font(10 * Main.zoomfactor));
+                sco.setFont(new Font(10 * zoomfactor));
                 sco.setTextFill(Color.WHITE);
                 sc.getChildren().add(sco);
             }
@@ -465,13 +487,7 @@ public class GuiSpieltisch {
 
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
             primaryStage.setScene(scene);
-            if (Main.spiellogik.getRundeBeendet()) {
-                Main.scoreboardGui.showRangliste(Main.spiellogik.ranglisteErstellen());
 
-            }
-            Main.sceneWidth = scene.getWidth();
-            Main.sceneHeight = scene.getHeight();
-            Main.lastmove = System.currentTimeMillis();
             primaryStage.show();
 
         } catch (Exception e) {
