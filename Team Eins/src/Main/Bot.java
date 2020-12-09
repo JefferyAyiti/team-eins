@@ -1,8 +1,9 @@
 package Main;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Bot extends Spieler {
+public class Bot extends Spieler  implements Serializable {
 
     private int schwierigkeit;
    // private Tisch tisch = Main.tisch;

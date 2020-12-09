@@ -1,6 +1,8 @@
 package Main;
 
-public class Spieler {
+import java.io.Serializable;
+
+public class Spieler  implements Serializable {
     int points = 0;
     int oldScore=0;
     Hand cardHand;

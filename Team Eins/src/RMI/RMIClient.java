@@ -36,7 +36,7 @@ public class RMIClient {
      */
     public void update() {
         try {
-            tisch = server.update();
+            tisch = server.updateTisch();
         } catch (RemoteException e) {
             e.printStackTrace();
         }

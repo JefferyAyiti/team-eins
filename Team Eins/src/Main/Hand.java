@@ -1,8 +1,9 @@
 package Main;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Hand {
+public class Hand  implements Serializable {
     private int valueSum;
     private ArrayList<HandKarte> handKarten = new ArrayList<HandKarte>();
     private Spieler spieler;

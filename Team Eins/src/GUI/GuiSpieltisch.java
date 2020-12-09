@@ -61,22 +61,22 @@ public class GuiSpieltisch {
         //pane.setStyle("-fx-background-color:#eeeeee;");
         VBox.setMargin(pane, new Insets(0, 0, 5, 0));
 
-        Label plr = new Label(Main.spieler[playerId].getName());
-        if (playerId > 1 && playerId < 5) {
+        Label plr = new Label(tisch.getSpielerList()[playerId].getName());
+        if (playerId > (ich+1)%anzSpieler && playerId < (ich+5)%anzSpieler) {
             plr.setRotate(180);
         }
         plr.setTextFill(Color.WHITE);
         plr.setFont(Font.font("Verdana", 12 * zoomfactor));
-        if (Main.spieler[playerId] == Main.tisch.getAktivSpieler()) {
+        if (tisch.getSpielerList()[playerId] == Main.tisch.getAktivSpieler()) {
             plr.setTextFill(Color.YELLOW);
             plr.setFont(Font.font("Verdana", FontWeight.BOLD, 14 * zoomfactor));
         }
         plr.setTranslateY(-15);
         pane.getChildren().add(plr);
 
-        int cardcount = Main.spieler[playerId].getCardCount();
+        int cardcount = tisch.getSpielerList()[playerId].getCardCount();
         if (cardcount > 7 && playerId != ich) {
-            plr.setText(Main.spieler[playerId].getName() + " (" + cardcount + ")");
+            plr.setText(tisch.getSpielerList()[playerId].getName() + " (" + cardcount + ")");
             cardcount = 7;
         }
 
@@ -97,7 +97,7 @@ public class GuiSpieltisch {
 
             if (playerId == ich) {
                 imgView = new ImageView(
-                        Main.cardsArray[Main.spieler[playerId].getCardHand().getKarte(i).getValue() - 1]);
+                        Main.cardsArray[tisch.getSpielerList()[playerId].getCardHand().getKarte(i).getValue() - 1]);
                 ImageView finalImgView = imgView;
                 imgView.setOnMouseEntered(e -> finalImgView.setStyle(HOVERED_BUTTON_STYLE));
                 ImageView finalImgView1 = imgView;
@@ -118,10 +118,10 @@ public class GuiSpieltisch {
             } else {
                 int finalI = i;
                 imgView.setOnMouseClicked(mouseEvent -> {
-                    Main.spiellogik.karteLegen(Main.spieler[playerId],
-                            Main.spieler[playerId].getCardHand().getKarte(finalI));
+                    Main.spiellogik.karteLegen(tisch.getSpielerList()[playerId],
+                            tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI));
                     //Chip tausch
-                    if (Main.spieler[playerId].getCardHand().getHandKarte().isEmpty()) {
+                    if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()) {
                         Chip tausch;
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Glückwunsch");
@@ -132,13 +132,13 @@ public class GuiSpieltisch {
                         ButtonType buttonTypeCancel = new ButtonType("schließen", ButtonBar.ButtonData.CANCEL_CLOSE);
 
                         //spieler hat weiße und Schwarze Chips
-                        if (Main.spieler[playerId].getWhiteChips() >= 1 && Main.spieler[playerId].getBlackChips() >= 1) {
+                        if (tisch.getSpielerList()[playerId].getWhiteChips() >= 1 && tisch.getSpielerList()[playerId].getBlackChips() >= 1) {
                             alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeBlack, buttonTypeCancel);
                             //nur weiße
-                        } else if (Main.spieler[playerId].getWhiteChips() >= 1) {
+                        } else if (tisch.getSpielerList()[playerId].getWhiteChips() >= 1) {
                             alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeCancel);
                             //nur schwarze
-                        } else if (Main.spieler[playerId].getBlackChips() >= 1) {
+                        } else if (tisch.getSpielerList()[playerId].getBlackChips() >= 1) {
                             alert.getButtonTypes().setAll(buttonTypeBlack, buttonTypeCancel);
                         } else {
                             alert.setHeaderText("Du hast keine Chips zum abgeben");
@@ -149,11 +149,11 @@ public class GuiSpieltisch {
                         if (result.get() == buttonTypeWhite) {
                             // ... user chose "weiß"
                             tausch = new WhiteChip();
-                            Main.spiellogik.chipAbgeben(Main.spieler[playerId], tausch);
+                            Main.spiellogik.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
                         } else if (result.get() == buttonTypeBlack) {
                             // ... user chose "schwarz"
                             tausch = new BlackChip();
-                            Main.spiellogik.chipAbgeben(Main.spieler[playerId], tausch);
+                            Main.spiellogik.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
                         } else {
                             // ... user chose CANCEL or closed the dialog
                         }
@@ -172,7 +172,7 @@ public class GuiSpieltisch {
                 }
             }
 
-            if (!Main.spieler[playerId].inGame())
+            if (!tisch.getSpielerList()[playerId].inGame())
                 imgView.setEffect(desaturate);
             cards.getChildren().add(imgView);
         }
@@ -196,7 +196,7 @@ public class GuiSpieltisch {
 
         if (Main.ich == playerId) {
             chips.setOnMouseClicked(mouseEvent -> {
-                Main.spiellogik.chipsTauschen(Main.spieler[playerId]);
+                Main.spiellogik.chipsTauschen(tisch.getSpielerList()[playerId]);
                 buildStage(Main.classPrimaryStage);
             });
 
@@ -211,13 +211,13 @@ public class GuiSpieltisch {
         Text text = new Text();
         text.setFill(Color.WHITE);
         text.setFont(Font.font("Verdana", 12 * zoomfactor));
-        text.setText("" + Main.spieler[playerId].getBlackChips());
+        text.setText("" + tisch.getSpielerList()[playerId].getBlackChips());
         chips.add(text, 1, 0);
 
         text = new Text();
         text.setFill(Color.WHITE);
         text.setFont(Font.font("Verdana", 12 * zoomfactor));
-        text.setText(Main.spieler[playerId].getWhiteChips() + "");
+        text.setText(tisch.getSpielerList()[playerId].getWhiteChips() + "");
 
         chips.add(text, 1, 1);
         //chips.setY(102);
@@ -233,16 +233,14 @@ public class GuiSpieltisch {
             ImageView exit = new ImageView(Main.loader.getImg("GUI/images/SVG/no-touch.svg", zoomfactor * 0.45));
             exit.setTranslateY(-7);
             chips.setTranslateY(7);
-            if (playerId > 1 && playerId < 5) {
 
-            }
 
             exit.setOnMouseEntered(e -> exit.setStyle(HOVERED_BUTTON_STYLE));
             exit.setOnMouseExited(e -> exit.setStyle(IDLE_BUTTON_STYLE));
             bottom.getChildren().add(exit);
 
             exit.setOnMouseClicked(mouseEvent -> {
-                Main.spiellogik.aussteigen(Main.spieler[playerId]);
+                Main.spiellogik.aussteigen(tisch.getSpielerList()[playerId]);
                 buildStage(Main.classPrimaryStage);
             });
 
@@ -250,7 +248,7 @@ public class GuiSpieltisch {
 
         pane.getChildren().add(bottom);
 
-        switch (playerId) {
+        switch ((playerId+ich)%anzSpieler) {
             case 1:
             case 5:
                 pane.setTranslateY(+30 * zoomfactor);
@@ -323,7 +321,7 @@ public class GuiSpieltisch {
 
                 if (i == Main.tisch.getNachziehStapelSize() - 1) {
                     imgView.setOnMouseClicked(mouseEvent -> {
-                        if (Main.spiellogik.karteNachziehen(Main.spieler[0]))
+                        if (Main.spiellogik.karteNachziehen(tisch.getSpielerList()[ich]))
                             System.out.println("\t Ziehe Karte");
                         buildStage(Main.classPrimaryStage);
                     });
@@ -426,32 +424,32 @@ public class GuiSpieltisch {
             //Setting pivot points for the rotation
             rotate.setAngle(90);
 
-            gridPane.add(makepanel(0), 1, 4, 3, 1);
+            gridPane.add(makepanel(ich), 1, 4, 3, 1);
 
-            Node player1 = makepanel(1);
+            Node player1 = makepanel((1+ich)%anzSpieler);
             player1.setRotate(90);
             gridPane.add(player1, 0, 2, 1, 1);
 
             if (Main.anzSpieler > 2) {
-                Node player2 = makepanel(2);
+                Node player2 = makepanel((2+ich)%anzSpieler);
                 gridPane.add(player2, 0, 0, 2, 1);
                 player2.setRotate(155);
             }
 
             if (Main.anzSpieler > 3) {
-                Node player3 = makepanel(3);
+                Node player3 = makepanel((3+ich)%anzSpieler);
                 player3.setRotate(180);
                 gridPane.add(player3, 2, 0, 1, 1);
             }
 
             if (Main.anzSpieler > 4) {
-                Node player4 = makepanel(4);
+                Node player4 = makepanel((4+ich)%anzSpieler);
                 player4.setRotate(205);
                 gridPane.add(player4, 3, 0, 2, 1);
             }
 
             if (Main.anzSpieler > 5) {
-                Node player5 = makepanel(5);
+                Node player5 = makepanel((5+ich)%anzSpieler);
                 player5.setRotate(-90);
                 gridPane.add(player5, 4, 2, 2, 1);
             }

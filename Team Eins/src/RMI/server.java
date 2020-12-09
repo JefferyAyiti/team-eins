@@ -17,12 +17,15 @@ public interface server extends Remote {
     boolean getGameStart() throws RemoteException;
     long getAenderung() throws RemoteException;
     void incAenderung() throws RemoteException;
+    int getAnzahlSpieler() throws RemoteException;
 
     void karteLegen(Spieler spieler, Karte karte) throws RemoteException;
     void karteNachziehen(Spieler spieler) throws RemoteException;
     void chipAbgeben(Spieler spieler, Chip chip) throws RemoteException;
     void chipsTauschen(Spieler spieler) throws RemoteException;
     void aussteigen(Spieler spieler) throws RemoteException;
+    boolean getRundeBeendet() throws RemoteException;
 
-    Tisch update() throws RemoteException;
+    Tisch updateTisch() throws RemoteException;
+    Spiellogik updateSpielloik() throws RemoteException;
 }

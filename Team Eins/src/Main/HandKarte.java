@@ -1,6 +1,8 @@
 package Main;
 
-public class HandKarte extends Karte {
+import java.io.Serializable;
+
+public class HandKarte extends Karte  implements Serializable {
     private static final int LAMA = 10;
     private Tisch tisch;
     private Hand hand;

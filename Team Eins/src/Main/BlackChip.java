@@ -1,6 +1,8 @@
 package Main;
 
-public class BlackChip extends Chip {
+import java.io.Serializable;
+
+public class BlackChip extends Chip  implements Serializable {
 
     private final int MAX_CHIPS = 20;
 

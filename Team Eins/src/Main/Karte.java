@@ -1,6 +1,8 @@
 package Main;
 
-public class Karte implements Comparable {
+import java.io.Serializable;
+
+public class Karte implements Comparable, Serializable {
 final int value;
 boolean covered;
 

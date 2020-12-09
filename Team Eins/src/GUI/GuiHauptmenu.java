@@ -12,11 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import Main.*;
-import org.apache.xpath.operations.Bool;
 
-import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,10 +47,15 @@ public class GuiHauptmenu {
                 } catch (RemoteException e) {
                 }
                 System.out.println(myName+" ist "+ich);
+                inMenu = false;
                 assigned = true;
-                spieltischGui.buildStage(classPrimaryStage);
-                getTisch = new Thread(new ClientThread(Main.server, runClient.client));
-                getTisch.start();
+                tisch = server.updateTisch();
+                anzSpieler = server.getAnzahlSpieler();
+                spiellogik = server.updateSpielloik();
+                update.cancel();
+                Platform.runLater(() -> spieltischGui.buildStage(classPrimaryStage));
+                //getTisch = new Thread(new ClientThread(Main.server, runClient.client));
+                //getTisch.start();
                 return;
 
             }
@@ -332,7 +334,11 @@ public class GuiHauptmenu {
             } catch (Exception e) {}
             inMenu = false;
             gameRunning = true;
-
+            try {
+                ich = server.assignId(uniqueID);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
             Main.initGame();
             Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);

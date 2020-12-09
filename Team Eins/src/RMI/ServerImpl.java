@@ -1,9 +1,6 @@
 package RMI;
 
-import Main.Chip;
-import Main.Karte;
-import Main.Spieler;
-import Main.Tisch;
+import Main.*;
 import javafx.scene.control.Label;
 
 import java.rmi.RemoteException;
@@ -11,8 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static Main.Main.gameRunning;
-import static Main.Main.spiellogik;
+import static Main.Main.*;
 
 public class ServerImpl implements server {
 
@@ -72,6 +68,11 @@ public class ServerImpl implements server {
         aenderung++;
     }
 
+    @Override
+    public int getAnzahlSpieler() throws RemoteException {
+        return anzSpieler;
+    }
+
 
     //Spielzüge
 
@@ -103,8 +104,18 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public Tisch update() throws RemoteException {
-        return null;
+    public boolean getRundeBeendet() throws RemoteException {
+        return spiellogik.getRundeBeendet();
+    }
+
+    @Override
+    public Tisch updateTisch() throws RemoteException {
+        return tisch;
+    }
+
+    @Override
+    public Spiellogik updateSpielloik() throws RemoteException {
+        return spiellogik;
     }
 
 }

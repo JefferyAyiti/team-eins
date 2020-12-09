@@ -30,7 +30,7 @@ public class Tisch implements Serializable {
     /**
      * @return Gibt die Liste der aktuellen Spieler zurück, die "an dem Tisch sitzen".
      */
-    Spieler[] getSpielerList() {
+    public Spieler[] getSpielerList() {
         return spielerList;
     }
 

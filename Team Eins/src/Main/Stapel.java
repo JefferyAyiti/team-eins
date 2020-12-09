@@ -1,5 +1,6 @@
 package Main;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
@@ -7,7 +8,7 @@ import java.util.Stack;
 /**
  * Stapeldatenstruktur für den Zieh und -Ablagestapel.
  */
-public class Stapel {
+public class Stapel implements Serializable {
 
     /**
      * cardCount steht für die Anzahl der Karten im Stapel

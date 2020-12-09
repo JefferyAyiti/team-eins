@@ -1,9 +1,11 @@
 package Main;
 
+import java.io.Serializable;
+
 /**
  * Bildet die Oberklasse aller Chips
  */
-public class Chip {
+public class Chip  implements Serializable {
 
     public int value;
 

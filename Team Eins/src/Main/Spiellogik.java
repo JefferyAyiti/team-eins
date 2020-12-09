@@ -1,11 +1,12 @@
 package Main;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Spiellogik regelt die Runden des Spiels
  */
-public class Spiellogik {
+public class Spiellogik  implements Serializable {
     public final Stack<Spieler> letzteSpieler = new Stack();
     public final Tisch tisch;
     public final Spieler[] spielerListe;
