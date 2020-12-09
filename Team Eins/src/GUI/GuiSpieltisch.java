@@ -21,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
@@ -118,8 +119,21 @@ public class GuiSpieltisch {
             } else {
                 int finalI = i;
                 imgView.setOnMouseClicked(mouseEvent -> {
+                    //Multiplayermodus
+
+                    if(Main.playMode == 2){
+                        try {
+                            server.karteLegen(tisch.getSpielerList()[playerId],
+                                    tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI));
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    else{//lokaler Spielmodus
                     Main.spiellogik.karteLegen(tisch.getSpielerList()[playerId],
-                            tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI));
+                            tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI));}
+
                     //Chip tausch
                     if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()) {
                         Chip tausch;
@@ -149,11 +163,30 @@ public class GuiSpieltisch {
                         if (result.get() == buttonTypeWhite) {
                             // ... user chose "weiß"
                             tausch = new WhiteChip();
-                            Main.spiellogik.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
+                            if(Main.playMode == 2){ //Multiplayermodus
+                                try {
+                                    server.chipAbgeben(tisch.getSpielerList()[playerId],tausch);
+                                } catch (RemoteException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else{//lokaler Spielmodus
+                                Main.spiellogik.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
+                            }
                         } else if (result.get() == buttonTypeBlack) {
                             // ... user chose "schwarz"
                             tausch = new BlackChip();
-                            Main.spiellogik.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
+                            if(Main.playMode == 2){  //Multiplayermodus
+                                try {
+                                    server.chipAbgeben(tisch.getSpielerList()[playerId],tausch);
+                                } catch (RemoteException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else { //lokaler Spielmodus
+                                Main.spiellogik.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
+                            }
+
                         } else {
                             // ... user chose CANCEL or closed the dialog
                         }
@@ -196,7 +229,15 @@ public class GuiSpieltisch {
 
         if (Main.ich == playerId) {
             chips.setOnMouseClicked(mouseEvent -> {
-                Main.spiellogik.chipsTauschen(tisch.getSpielerList()[playerId]);
+                if(Main.playMode == 2){//Multiplaymodus
+                    try {
+                        server.chipsTauschen(tisch.getSpielerList()[playerId]);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else{//lokaler Spielmodus
+                    Main.spiellogik.chipsTauschen(tisch.getSpielerList()[playerId]);}
                 buildStage(Main.classPrimaryStage);
             });
 
@@ -240,7 +281,15 @@ public class GuiSpieltisch {
             bottom.getChildren().add(exit);
 
             exit.setOnMouseClicked(mouseEvent -> {
-                Main.spiellogik.aussteigen(tisch.getSpielerList()[playerId]);
+                if(Main.playMode == 2){//Multiplaymodus
+                    try {
+                        server.aussteigen(tisch.getSpielerList()[playerId]);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else{//lokaler Spielmodus
+                    Main.spiellogik.aussteigen(tisch.getSpielerList()[playerId]);}
                 buildStage(Main.classPrimaryStage);
             });
 
@@ -322,8 +371,17 @@ public class GuiSpieltisch {
 
                 if (i == Main.tisch.getNachziehStapelSize() - 1) {
                     imgView.setOnMouseClicked(mouseEvent -> {
+                        if(Main.playMode == 2){
+                            try {
+                                server.karteNachziehen(tisch.getSpielerList()[ich]);
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                            }
+                            System.out.println("\t Ziehe Karte");
+                        }
                         if (Main.spiellogik.karteNachziehen(tisch.getSpielerList()[ich]))
                             System.out.println("\t Ziehe Karte");
+
                         buildStage(Main.classPrimaryStage);
                     });
                     imgView.setOnMouseEntered(e -> imgView.setStyle(HOVERED_BUTTON_STYLE));
