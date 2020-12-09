@@ -18,6 +18,7 @@ public interface server extends Remote {
     long getAenderung() throws RemoteException;
     void incAenderung() throws RemoteException;
     int getAnzahlSpieler() throws RemoteException;
+    Map<Spieler, Integer> getRangliste() throws RemoteException;
 
     void karteLegen(Spieler spieler, Karte karte) throws RemoteException;
     void karteNachziehen(Spieler spieler) throws RemoteException;
@@ -25,7 +26,7 @@ public interface server extends Remote {
     void chipsTauschen(Spieler spieler) throws RemoteException;
     void aussteigen(Spieler spieler) throws RemoteException;
     boolean getRundeBeendet() throws RemoteException;
+    boolean getSpielBeendet() throws RemoteException;
 
     Tisch updateTisch() throws RemoteException;
-    Spiellogik updateSpiellogik() throws RemoteException;
 }

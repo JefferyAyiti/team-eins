@@ -1,7 +1,6 @@
 package RMI;
 
 import Main.*;
-import javafx.scene.control.Label;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -73,6 +72,11 @@ public class ServerImpl implements server {
         return anzSpieler;
     }
 
+    @Override
+    public Map<Spieler, Integer> getRangliste() throws RemoteException {
+        return spiellogik.ranglisteErstellen();
+    }
+
 
     //Spielzüge
 
@@ -109,13 +113,14 @@ public class ServerImpl implements server {
     }
 
     @Override
+    public boolean getSpielBeendet() throws RemoteException {
+        return spiellogik.spielBeendet;
+    }
+
+    @Override
     public Tisch updateTisch() throws RemoteException {
         return tisch;
     }
 
-    @Override
-    public Spiellogik updateSpiellogik() throws RemoteException {
-        return spiellogik;
-    }
 
 }

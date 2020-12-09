@@ -295,8 +295,9 @@ public class GuiSpieltisch {
                 Main.hauptmenuGui.showSettingsMenu(classPrimaryStage);
                 return;
             } else
-            if (Main.spiellogik.getRundeBeendet()) {
-                Main.scoreboardGui.showRangliste(Main.spiellogik.ranglisteErstellen());
+            if ((Main.server == null && Main.spiellogik.getRundeBeendet()) ||
+                    (Main.server != null && Main.server.getRundeBeendet())) {
+                //Main.scoreboardGui.showRangliste(Main.spiellogik.ranglisteErstellen());
                 return;
             }
             Main.sceneWidth = scene.getWidth();
@@ -463,7 +464,12 @@ public class GuiSpieltisch {
             VBox sc = new VBox();
             names.setAlignment(Pos.TOP_LEFT);
             sc.setAlignment(Pos.TOP_RIGHT);
-            for (Map.Entry<Spieler, Integer> entry : Main.spiellogik.ranglisteErstellen().entrySet()) {
+            Map<Spieler, Integer> rangliste;
+            if(Main.server == null) {
+                rangliste =  Main.spiellogik.ranglisteErstellen();
+            } else rangliste = server.getRangliste();
+
+           for (Map.Entry<Spieler, Integer> entry : rangliste.entrySet()) {
                 //System.out.println(entry.getKey().getName() + ":" + entry.getValue());
                 Label name = new Label(entry.getKey().getName());
                 name.setTextFill(Color.WHITE);

@@ -51,7 +51,6 @@ public class GuiHauptmenu {
                 assigned = true;
                 tisch = server.updateTisch();
                 anzSpieler = server.getAnzahlSpieler();
-                spiellogik = server.updateSpiellogik();
                 update.cancel();
                 Platform.runLater(() -> spieltischGui.buildStage(classPrimaryStage));
                 getTisch = new Thread(new ClientThread(Main.server, runClient.client));
@@ -300,7 +299,7 @@ public class GuiHauptmenu {
             Main.anzSpieler = (int) playeranzselect.getValue();
 
             try {
-                runServer = new RunServer("localhost", "Server", 8001, uniqueID, myName);
+                runServer = new RunServer("25.101.225.129", "Server", 8001, uniqueID, myName);
                 server = runServer.starting();
                 status.setText("Warte auf Spieler");
                 status.setTextFill(Color.LIGHTGREEN);

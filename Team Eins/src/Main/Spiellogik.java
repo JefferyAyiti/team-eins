@@ -12,7 +12,6 @@ import static Main.Main.*;
 public class Spiellogik  implements Serializable {
     public final Stack<Spieler> letzteSpieler = new Stack();
     public final Tisch tisch;
-    public final Spieler[] spielerListe;
     public boolean rundeBeendet = false;
     public boolean spielBeendet = false;
 
@@ -21,7 +20,6 @@ public class Spiellogik  implements Serializable {
      */
     public Spiellogik(Tisch tisch) {
         this.tisch = tisch;
-        this.spielerListe = tisch.getSpielerList();
     }
 
 
@@ -30,16 +28,15 @@ public class Spiellogik  implements Serializable {
      * der nochmal seine Karten ablegen darf.
      */
     private void einSpielerUebrig()  {
-        int len = spielerListe.length;
         Spieler letzterSpieler = null;
         //uebruefen ob es einen einzigen Spieler gibt der noch Handkarten hat
         // -> dieser Spieler darf noch Karten ablegen
         int anzahlSpielerNichtFertig = 0;
 
-        for (int i = 0; i < len; i++) { //spielerListe durchgehen und gucken wie viele Spieler noch spielen
-            if (spielerListe[i].inGame()) {  //spieler ist nicht ausgestiegen
+        for (int i = 0; i < anzSpieler; i++) { //spielerListe durchgehen und gucken wie viele Spieler noch spielen
+            if (Main.tisch.getSpielerList()[i].inGame()) {  //spieler ist nicht ausgestiegen
                 anzahlSpielerNichtFertig += 1;
-                letzterSpieler = spielerListe[i];
+                letzterSpieler = Main.tisch.getSpielerList()[i];
             }
 
         }
@@ -68,9 +65,8 @@ public class Spiellogik  implements Serializable {
      * Alle Spieler steigen aus dem Spiel aus
      */
     public void alleAussteigen(){
-        int len = spielerListe.length;
-        for (int i = 0; i < len; i++) { //jeder Spieler kassiert Chips
-            spielerListe[i].aussteigen();  //Spieler können wieder Züge machen
+        for (int i = 0; i < anzSpieler; i++) { //jeder Spieler kassiert Chips
+            Main.tisch.getSpielerList()[i].aussteigen();  //Spieler können wieder Züge machen
 
         }
     }
@@ -131,7 +127,6 @@ public class Spiellogik  implements Serializable {
             try {
                 Main.server.karteLegen(tisch.getSpielerList()[ich], karte);
                 Main.tisch = server.updateTisch();
-                spiellogik = server.updateSpiellogik();
                 return true;
             } catch (RemoteException e) {
                e.printStackTrace();
@@ -178,7 +173,7 @@ public class Spiellogik  implements Serializable {
       }
 
         int summe = 0;
-      if(spieler == spielerListe[0])
+      if(spieler == Main.tisch.getSpielerList()[0])
           System.out.println(handkarten);
         //aufaddieren
         for (Integer c : handkarten) {
@@ -316,11 +311,10 @@ public class Spiellogik  implements Serializable {
      */
     private void rundeBeenden()  {
 
-        int len = spielerListe.length;
-        for (int i = 0; i < len; i++) { //jeder Spieler kassiert Chips
-            chipsKassieren(spielerListe[i]);
+        for (int i = 0; i < anzSpieler; i++) { //jeder Spieler kassiert Chips
+            chipsKassieren(Main.tisch.getSpielerList()[i]);
             //System.out.println("setOldScore(rundeBeenden):  "+ spielerListe[i].getName()+" - old: "+ spielerListe[i].getOldScore()+ " neu: "+ spielerListe[i].getPoints());
-            spielerListe[i].einsteigen();  //Spieler können wieder Züge machen
+            Main.tisch.getSpielerList()[i].einsteigen();  //Spieler können wieder Züge machen
 
         }
         if(tisch.getWhiteChips() <= 0 ){
@@ -338,9 +332,10 @@ public class Spiellogik  implements Serializable {
 
         }
 
-        for (int i = 0; i < len; i++) { //spielerListe durchgehen
+        for (int i = 0; i < anzSpieler; i++) { //spielerListe durchgehen
 
-            if ((spielerListe[i].getBlackChips()*10 + spielerListe[i].getWhiteChips()) >= 40) {
+            if ((Main.tisch.getSpielerList()[i].getBlackChips()*10 +
+                    Main.tisch.getSpielerList()[i].getWhiteChips()) >= 40) {
                 alleAussteigen();
                 //ein Spieler hat -40 Punkte -> Spiel ist zu Ende
                 spielBeendet = true;

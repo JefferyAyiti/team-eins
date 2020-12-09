@@ -1,5 +1,6 @@
 package GUI;
 
+import RMI.server;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import Main.*;
 
+import java.rmi.RemoteException;
 import java.util.Map;
 
 public class GuiScoreboard {
@@ -79,34 +81,39 @@ public class GuiScoreboard {
         //bottom.setMinHeight(sceneHeight / 8);
         bottom.setAlignment(Pos.CENTER);
 
-        Button nextRound;
+        Button nextRound = new Button();
 
-        if (!Main.spiellogik.spielBeendet) {
-            nextRound = new Button("Nächste Runde");
-            nextRound.setOnAction(e -> {
-                Main.spiellogik.initNeueRunde();
-                Main.spieltischGui.buildStage(Main.classPrimaryStage);
-                    }
-            );
+        try {
+            if ((Main.server != null && !Main.server.getSpielBeendet()) ||
+                    (Main.server == null &&!Main.spiellogik.spielBeendet )) {
+                nextRound = new Button("Nächste Runde");
+                nextRound.setOnAction(e -> {
+                    Main.spiellogik.initNeueRunde();
+                    Main.spieltischGui.buildStage(Main.classPrimaryStage);
+                        }
+                );
 
-        } else {
-            Button endGame = new Button("Spiel beenden");
-            endGame.setTranslateY(-15);
-            endGame.setOnAction(e -> {
-                Main.classPrimaryStage.close();
-                Main.bots.cancel();
-                Main.resizecheck.cancel();
-                    }
-            );
-            bottom.getChildren().add(endGame);
+            } else {
+                Button endGame = new Button("Spiel beenden");
+                endGame.setTranslateY(-15);
+                endGame.setOnAction(e -> {
+                    Main.classPrimaryStage.close();
+                    Main.bots.cancel();
+                    Main.resizecheck.cancel();
+                        }
+                );
+                bottom.getChildren().add(endGame);
 
-            nextRound = new Button("Hauptmenü");
-            nextRound.setOnAction(e -> {
-                Main.inMenu = true;
-                Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
+                nextRound = new Button("Hauptmenü");
+                nextRound.setOnAction(e -> {
+                    Main.inMenu = true;
+                    Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
 
-                    }
-            );
+                        }
+                );
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
         nextRound.setTranslateY(-15);
         bottom.getChildren().add(nextRound);
