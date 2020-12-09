@@ -1,15 +1,15 @@
 package RMI;
 
-import javafx.application.Platform;
+import RMI.Server.Server;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class ClientThread implements Runnable{
     private RMIClient client;
-    private ServerImpl server;
+    private Server server;
     Long aenderung = 0L;
-    public ClientThread(ServerImpl server,RMIClient client){
+    public ClientThread(Server server, RMIClient client){
         this.client = client;
         this.server = server;
     }

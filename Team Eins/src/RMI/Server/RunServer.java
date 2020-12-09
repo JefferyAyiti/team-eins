@@ -1,4 +1,4 @@
-package RMI;
+package RMI.Server;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -9,6 +9,16 @@ public class RunServer {
     static String IP;
     static String SERVER_NAME;
     static int PORT;
+
+    public static void main(String[] args) {
+        try {
+            RunServer test = new RunServer("localhost", "lamaland", 1099);
+        } catch (AlreadyBoundException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Erstellt und startet den Server, mit angegebenen Server namen, IP und Port
@@ -23,24 +33,20 @@ public class RunServer {
         this.IP = ip;
         this.SERVER_NAME = server_Name;
         this.PORT = port;
-
         starting();
     }
 
-
     private void starting() throws RemoteException, AlreadyBoundException {
-
-
-
         System.setProperty("java.rmi.server.hostname",IP);
         // TODO Policy muss hinzugefügt werden
-        System.setProperty("java.security.policy","file:///tmp/test.policy");
+        System.setProperty("java.security.policy","all.policy");
 
-        server server = new ServerImpl();
+        LamaServer server = new Server();
         Registry registry = LocateRegistry.createRegistry(PORT);
         registry.bind(SERVER_NAME , server);
 
-
         System.out.println("Server started");
     }
+
+
 }
