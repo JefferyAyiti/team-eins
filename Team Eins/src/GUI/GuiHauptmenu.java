@@ -52,9 +52,8 @@ public class GuiHauptmenu {
                 tisch = server.updateTisch();
                 anzSpieler = server.getAnzahlSpieler();
                 update.cancel();
+                runClient.client.startClientThread();
                 Platform.runLater(() -> spieltischGui.buildStage(classPrimaryStage));
-                getTisch = new Thread(new ClientThread(Main.server, runClient.client));
-                getTisch.start();
                 return;
 
             }

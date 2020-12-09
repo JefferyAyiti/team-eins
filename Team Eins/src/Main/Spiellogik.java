@@ -79,7 +79,6 @@ public class Spiellogik  implements Serializable {
      * @return boolean der anzeigt, ob der Zug erfolgreich war
      */
     public boolean karteLegen(Spieler spieler, Karte karte) {
-        if(Main.playMode != 2) {
             if (tisch.getAktivSpieler() == spieler && spieler.inGame()) {
                 try {
                     Boolean karteAbgelegt = false;
@@ -105,7 +104,11 @@ public class Spiellogik  implements Serializable {
                             tisch.naechste();
                         }
 
-
+                        if(Main.server != null) {
+                            try {
+                                server.incAenderung();
+                            } catch (RemoteException e) {            }
+                        }
                         return true;
 
 
@@ -123,17 +126,7 @@ public class Spiellogik  implements Serializable {
             return false;
 
         }
-        else {
-            try {
-                Main.server.karteLegen(tisch.getSpielerList()[ich], karte);
-                Main.tisch = server.updateTisch();
-                return true;
-            } catch (RemoteException e) {
-               e.printStackTrace();
-            }
-        }
-        return false;
-    }
+
 
 
     /**
@@ -147,6 +140,11 @@ public class Spiellogik  implements Serializable {
 
                  spieler.getCardHand().addKarte(tisch.karteZiehen());
                  tisch.naechste();
+                if(Main.server != null) {
+                    try {
+                        server.incAenderung();
+                    } catch (RemoteException e) {            }
+                }
                  return true;
 
             } catch (Exception e) {
@@ -199,7 +197,11 @@ public class Spiellogik  implements Serializable {
         int punktzahl = (spieler.getWhiteChips() * -1)+(spieler.getBlackChips()*-10);
         spieler.setPoints(punktzahl);
 
-
+        if(Main.server != null) {
+            try {
+                server.incAenderung();
+            } catch (RemoteException e) {            }
+        }
     }
 
 
@@ -222,6 +224,11 @@ public class Spiellogik  implements Serializable {
             tisch.takeChips(-10, 1);
 
             transaktion = true;
+        }
+        if(Main.server != null) {
+            try {
+                server.incAenderung();
+            } catch (RemoteException e) {            }
         }
         return transaktion;
     }

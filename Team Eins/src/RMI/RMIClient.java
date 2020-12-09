@@ -46,7 +46,7 @@ public class RMIClient {
      * Startet RunClient. Dieser Thread aktualisiert das Attribut tisch in regelmäßigen abständen.
      */
     public void startClientThread(){
-        Thread ct = new Thread(new ClientThread((ServerImpl) server, this));
+        Thread ct = new Thread(new ClientThread( server, this));
         ct.start();
     }
     public Tisch getTisch(){

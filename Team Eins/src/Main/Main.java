@@ -231,6 +231,7 @@ public class Main extends Application {
         ps.setOnCloseRequest(windowEvent -> {
             bots.cancel();
             resizecheck.cancel();
+            System.exit(2);
         });
     }
 
