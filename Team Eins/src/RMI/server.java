@@ -7,10 +7,16 @@ import java.rmi.RemoteException;
 import java.util.Map;
 
 public interface server extends Remote {
+
+
     void addClient(String uid, String client) throws RemoteException;
     void leaveServer(String client) throws RemoteException;
     Map<String, String> getClients() throws RemoteException;
     int assignId(String name) throws RemoteException;
+    void changeName(String uid, String name) throws RemoteException;
+    boolean getGameStart() throws RemoteException;
+    long getAenderung() throws RemoteException;
+    void incAenderung() throws RemoteException;
 
     void karteLegen(Spieler spieler, Karte karte) throws RemoteException;
     void karteNachziehen(Spieler spieler) throws RemoteException;

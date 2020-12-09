@@ -4,22 +4,26 @@ import Main.Chip;
 import Main.Karte;
 import Main.Spieler;
 import Main.Tisch;
+import javafx.scene.control.Label;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static Main.Main.gameRunning;
 import static Main.Main.spiellogik;
 
 public class ServerImpl implements server {
 
-    public Long aenderung;
-    Map<String, String> clients = new HashMap<>();
+
+    Map<String, String> clients = new LinkedHashMap<>();
+    long aenderung = 0;
 
     public ServerImpl() throws RemoteException {
         UnicastRemoteObject.exportObject(this, 0);
     }
+
 
     @Override
     public void addClient(String uid, String name) {
@@ -37,14 +41,39 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public int assignId(String name) {
-        for (int i = 0; i < clients.size(); i++) {
-            if (clients.get(i).equals(name)) {
+    public int assignId(String uid) {
+        int i = 0;
+        for (Map.Entry<String, String> entry : clients.entrySet()) {
+            if(uid.equals(entry.getKey())) {
                 return i;
             }
+            i++;
         }
         return -1;
     }
+
+    @Override
+    public void changeName(String uid, String name) throws RemoteException {
+        clients.replace(uid, name);
+    }
+
+    @Override
+    public boolean getGameStart() throws RemoteException {
+        return gameRunning;
+    }
+
+    @Override
+    public long getAenderung() throws RemoteException {
+        return aenderung;
+    }
+
+    @Override
+    public void incAenderung() throws RemoteException {
+        aenderung++;
+    }
+
+
+    //Spielzüge
 
     @Override
     public void karteLegen(Spieler spieler, Karte karte) throws RemoteException {

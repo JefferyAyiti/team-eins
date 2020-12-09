@@ -12,6 +12,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.rmi.RemoteException;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -39,6 +41,7 @@ public class Main extends Application {
     public static boolean inMenu = true;
     public static RMI.server server = null;
     public static String uniqueID = UUID.randomUUID().toString();
+    public static boolean gameRunning = false;
 
 
 
@@ -86,10 +89,28 @@ public class Main extends Application {
         spieler = new Spieler[anzSpieler];
 
         //spieler[0]= new Bot("Spieler",2);
-        spieler[0] = new Spieler(myName);
+
+        int i = -1;
+        if(server != null) {
+
+            try {
+                for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
+                    i++;
+                    spieler[i] = new Spieler(entry.getValue());
+                    System.out.println(i+" "+entry.getValue()+" erzeugt");
+                }
+
+            } catch (Exception e) {
+            }
+        }
+        if(i == -1) {
+            spieler[0] = new Spieler(myName);
+            System.out.println("Main erzeugt");
+            i=1;
+        }
         int level;
         String[] botname = {"EZ-", "Mid-", "Hard-"};
-        for (int i = 1; i < anzSpieler; i++) {
+        for (i++; i < anzSpieler; i++) {
             level = botlevel == 0 ? (int) (Math.random() * 3 + 1) : botlevel;
             System.out.println(level);
             spieler[i] = new Bot(botname[level - 1] + "Bot " + (i + 1), level);

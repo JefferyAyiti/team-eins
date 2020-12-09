@@ -23,7 +23,6 @@ public class RunClient {
 
         client = new RMIClient(IP, Port, Server_Name, uniqueId, Client_Name);
 
-
         System.out.println("Client Started");
     }
 }

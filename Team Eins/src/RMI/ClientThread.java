@@ -2,14 +2,15 @@ package RMI;
 
 import javafx.application.Platform;
 
+import java.rmi.RemoteException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class ClientThread implements Runnable{
     private RMIClient client;
-    private ServerImpl server;
+    private server server;
     long aenderung = 0;
-    public ClientThread(ServerImpl server,RMIClient client){
+    public ClientThread(server server,RMIClient client){
         this.client = client;
         this.server = server;
     }
@@ -23,9 +24,13 @@ public class ClientThread implements Runnable{
 
             @Override
             public void run() {
-                if (server.aenderung > aenderung){
-                    aenderung = server.aenderung;
-                    client.update();
+                try {
+                    if (server.getAenderung() > aenderung){
+                        aenderung = server.getAenderung();
+                        client.update();
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
                 }
 
             }

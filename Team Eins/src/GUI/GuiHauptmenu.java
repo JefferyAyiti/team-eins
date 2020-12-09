@@ -1,9 +1,6 @@
 package GUI;
 
-import RMI.RMIClient;
-import RMI.RunClient;
-import RMI.RunServer;
-import RMI.server;
+import RMI.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import Main.*;
+import org.apache.xpath.operations.Bool;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -33,6 +31,11 @@ public class GuiHauptmenu {
     TextField ip;
     TextField port;
     Timer update;
+    Label status = new Label();
+    RunServer runServer;
+    RunClient runClient;
+    Thread getTisch;
+    boolean assigned = false;
 
 
     /**
@@ -40,6 +43,23 @@ public class GuiHauptmenu {
      */
     public void showSettingsMenu(Stage PrimaryStage) {
         inMenu = true;
+        try {
+            if(server != null && server.getGameStart() && playMode == 2 && !assigned) {
+                try {
+                    ich = server.assignId(uniqueID);
+                } catch (RemoteException e) {
+                }
+                System.out.println(myName+" ist "+ich);
+                assigned = true;
+                spieltischGui.buildStage(classPrimaryStage);
+                getTisch = new Thread(new ClientThread(Main.server, runClient.client));
+                getTisch.start();
+                return;
+
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         GridPane center = new GridPane();
         center.setVgap(10);
 
@@ -217,6 +237,7 @@ public class GuiHauptmenu {
         center.setMaxHeight(center.getHeight());
 
         root.setTop(top);
+        center.add(status, 0, 3 , center.getColumnCount(), 1);
         root.setCenter(center);
 
 
@@ -232,6 +253,13 @@ public class GuiHauptmenu {
 
         PrimaryStage.setScene(menu);
         PrimaryStage.show();
+
+        PrimaryStage.setOnCloseRequest(windowEvent -> {
+            try {update.cancel();}
+            catch (Exception e) {}
+            try {getTisch.stop();}
+            catch (Exception e) {}
+        });
     }
 
 
@@ -250,10 +278,15 @@ public class GuiHauptmenu {
 
             Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
+
+
         } else if (action == "close") { //Host
             Main.joined = false;
-            update.cancel();
-            //TODO Server beenden
+            try {
+                runServer.stop();
+                update.cancel();
+            } catch (Exception e) {}
+
             showSettingsMenu(Main.classPrimaryStage);
 
         } else if (action == "create") { //Host
@@ -265,8 +298,10 @@ public class GuiHauptmenu {
             Main.anzSpieler = (int) playeranzselect.getValue();
 
             try {
-                final RunServer runServer = new RunServer("localhost", "Server", 8001, uniqueID, myName);
+                runServer = new RunServer("localhost", "Server", 8001, uniqueID, myName);
                 server = runServer.starting();
+                status.setText("Warte auf Spieler");
+                status.setTextFill(Color.LIGHTGREEN);
                 Timer update = new Timer();
                 update.schedule(new TimerTask() {
                     @Override
@@ -274,35 +309,44 @@ public class GuiHauptmenu {
                         if(Main.spiellogik == null)
                         Platform.runLater(() -> showSettingsMenu(Main.classPrimaryStage));
                         else
-                            Main.spieltischGui.buildStage(Main.classPrimaryStage);
+                        {
+                            update.cancel();
+                            Platform.runLater(() -> Main.spieltischGui.buildStage(Main.classPrimaryStage));
+                        }
+
 
                     }
                 }, 200, 200);
-            } catch (AlreadyBoundException e) {
-                System.out.println("Already bound");
-            } catch (RemoteException e) {
+            } catch (Exception e) {
+                status.setTextFill(Color.RED);
+                status.setText("Server konnte nicht gestartet werden");
                 e.printStackTrace();
+
             }
 
             showSettingsMenu(Main.classPrimaryStage);
 
         } else if (action == "startserver") {
-            update.cancel();
+            try {
+                update.cancel();
+            } catch (Exception e) {}
             inMenu = false;
-            //TODO andere menschliche Spieler übergeben,
+            gameRunning = true;
+
             Main.initGame();
             Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
 
+
+
+
         } else if (action == "join") {
-            System.out.println(ip.getText());
-            System.out.println(port.getText());
             Main.myName = namefield.getText();
             if (Main.myName == null || Main.myName.equals(""))
                 Main.myName = "Spieler";
 
             try {
-                RunClient runClient = new RunClient(ip.getText(),
+                runClient = new RunClient(ip.getText(),
                         Integer.valueOf(port.getText()),
                         "Server",
                         uniqueID,
@@ -314,12 +358,15 @@ public class GuiHauptmenu {
                     public void run() {
                         Platform.runLater(() -> showSettingsMenu(Main.classPrimaryStage));
                     }
-                }, 200, 200);
+                }, 1500, 1500);
                 joined = true;
+                status.setText("Verbunden");
+                status.setTextFill(Color.LIGHTGREEN);
 
 
             } catch (Exception e) {
-                e.printStackTrace();
+                status.setText("Verbindung konnte nicht hergestellt werden");
+                status.setTextFill(Color.RED);
             }
             Main.myName = namefield.getText();
             if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
@@ -327,9 +374,17 @@ public class GuiHauptmenu {
             GuiZoomLoader.getZoomedImages();
             showSettingsMenu(Main.classPrimaryStage);
 
+
+
+
+
         } else if (action == "leave") {
             Main.joined = false;
-            update.cancel();
+            try {update.cancel();}
+            catch (Exception e) {}
+            try {
+                server.leaveServer(uniqueID);
+            } catch (RemoteException e) {}
             showSettingsMenu(Main.classPrimaryStage);
         }
     }

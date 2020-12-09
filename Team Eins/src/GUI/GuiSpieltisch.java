@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.Optional;
 import Main.*;
 
-import static Main.Main.classPrimaryStage;
-import static Main.Main.zoomfactor;
+import static Main.Main.*;
+import static Main.Main.ich;
 
 
 public class GuiSpieltisch {
@@ -75,7 +75,7 @@ public class GuiSpieltisch {
         pane.getChildren().add(plr);
 
         int cardcount = Main.spieler[playerId].getCardCount();
-        if (cardcount > 7 && playerId != 0) {
+        if (cardcount > 7 && playerId != ich) {
             plr.setText(Main.spieler[playerId].getName() + " (" + cardcount + ")");
             cardcount = 7;
         }
@@ -95,7 +95,7 @@ public class GuiSpieltisch {
         for (int i = 0; i < cardcount; i++) {
             ImageView imgView = new ImageView(Main.image);
 
-            if (playerId == 0) {
+            if (playerId == ich) {
                 imgView = new ImageView(
                         Main.cardsArray[Main.spieler[playerId].getCardHand().getKarte(i).getValue() - 1]);
                 ImageView finalImgView = imgView;
@@ -108,10 +108,10 @@ public class GuiSpieltisch {
 
             imgView.setPreserveRatio(true);
             imgView.setSmooth(true); //Visuelle Große der Handkarte ändern
-            imgView.setFitWidth(playerId == 0 ? 80 * zoomfactor : 40 * zoomfactor);
+            imgView.setFitWidth(playerId == ich ? 80 * zoomfactor : 40 * zoomfactor);
 
 
-            if (playerId != 0) {
+            if (playerId != ich) {
                 imgView.setTranslateX(-cardcount / 2 * 10*zoomfactor + 10*zoomfactor * i);
                 imgView.setTranslateY(-10);
                 imgView.setRotate(-cardcount / 2 * 15 + i * 15);
@@ -164,7 +164,7 @@ public class GuiSpieltisch {
 
                 });
             }
-            if (playerId == 0) {
+            if (playerId == ich) {
                 if (cardcount > 7) {
                     imgView.setTranslateX(10 * (cardcount % 2) + cardcount / 2 * 20 * zoomfactor - 20 * zoomfactor * i);
                 } else {
@@ -178,7 +178,7 @@ public class GuiSpieltisch {
         }
 
 
-       /* if (playerId != 0) {
+       /* if (playerId != ich) {
             cards.setTranslateX(+(min(6, spieler[playerId].getCardCount()) * 30) / 2 - 20);
         }*/
         int chipsize = 15;

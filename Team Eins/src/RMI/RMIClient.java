@@ -2,6 +2,7 @@ package RMI;
 
 import Main.Main;
 import Main.Tisch;
+import javafx.application.Platform;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -39,15 +40,15 @@ public class RMIClient {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        Main.spieltischGui.buildStage(Main.classPrimaryStage);
+        Platform.runLater(() -> Main.spieltischGui.buildStage(Main.classPrimaryStage));
     }
 
     /**
      * Startet RunClient. Dieser Thread aktualisiert das Attribut tisch in regelmäßigen abständen.
      */
     public void startClientThread(){
-        ClientThread ct = new ClientThread((ServerImpl) server, this);
-        ct.run();
+        Thread ct = new Thread(new ClientThread((ServerImpl) server, this));
+        ct.start();
     }
     public Tisch getTisch(){
         return tisch;
