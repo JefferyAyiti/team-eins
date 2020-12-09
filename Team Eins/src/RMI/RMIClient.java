@@ -12,7 +12,6 @@ import java.rmi.registry.Registry;
 public class RMIClient {
     public final server server;
     String cname;
-    private Tisch tisch;
 
     /**
      * @param IP Server IP
@@ -36,7 +35,8 @@ public class RMIClient {
      */
     public void update() {
         try {
-            tisch = server.updateTisch();
+            Main.tisch = server.updateTisch();
+            Main.spiellogik = server.updateSpiellogik();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -51,6 +51,6 @@ public class RMIClient {
         ct.start();
     }
     public Tisch getTisch(){
-        return tisch;
+        return Main.tisch;
     }
 }

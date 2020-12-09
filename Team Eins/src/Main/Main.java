@@ -106,13 +106,12 @@ public class Main extends Application {
         if(i == -1) {
             spieler[0] = new Spieler(myName);
             System.out.println("Main erzeugt");
-            i=1;
+            i=0;
         }
         int level;
         String[] botname = {"EZ-", "Mid-", "Hard-"};
         for (i++; i < anzSpieler; i++) {
             level = botlevel == 0 ? (int) (Math.random() * 3 + 1) : botlevel;
-            System.out.println(level);
             spieler[i] = new Bot(botname[level - 1] + "Bot " + (i + 1), level);
 
         }

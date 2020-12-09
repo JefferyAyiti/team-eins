@@ -27,5 +27,5 @@ public interface server extends Remote {
     boolean getRundeBeendet() throws RemoteException;
 
     Tisch updateTisch() throws RemoteException;
-    Spiellogik updateSpielloik() throws RemoteException;
+    Spiellogik updateSpiellogik() throws RemoteException;
 }

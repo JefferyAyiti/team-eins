@@ -51,11 +51,11 @@ public class GuiHauptmenu {
                 assigned = true;
                 tisch = server.updateTisch();
                 anzSpieler = server.getAnzahlSpieler();
-                spiellogik = server.updateSpielloik();
+                spiellogik = server.updateSpiellogik();
                 update.cancel();
                 Platform.runLater(() -> spieltischGui.buildStage(classPrimaryStage));
-                //getTisch = new Thread(new ClientThread(Main.server, runClient.client));
-                //getTisch.start();
+                getTisch = new Thread(new ClientThread(Main.server, runClient.client));
+                getTisch.start();
                 return;
 
             }

@@ -114,7 +114,7 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public Spiellogik updateSpielloik() throws RemoteException {
+    public Spiellogik updateSpiellogik() throws RemoteException {
         return spiellogik;
     }
 

@@ -1,7 +1,10 @@
 package Main;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.*;
+
+import static Main.Main.*;
 
 /**
  * Spiellogik regelt die Runden des Spiels
@@ -80,49 +83,61 @@ public class Spiellogik  implements Serializable {
      * @return boolean der anzeigt, ob der Zug erfolgreich war
      */
     public boolean karteLegen(Spieler spieler, Karte karte) {
-        if(tisch.getAktivSpieler() == spieler && spieler.inGame()){
-            try {
-                Boolean karteAbgelegt = false;
-                if (tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
-                    || tisch.getObereKarteAblagestapel().value == karte.value - 1   //Handkarte ist um eins größer als die oberste Ablagekarte
-                    || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
-                    || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)){
+        if(Main.playMode != 2) {
+            if (tisch.getAktivSpieler() == spieler && spieler.inGame()) {
+                try {
+                    Boolean karteAbgelegt = false;
+                    if (tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
+                            || tisch.getObereKarteAblagestapel().value == karte.value - 1   //Handkarte ist um eins größer als die oberste Ablagekarte
+                            || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
+                            || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)) {
 
-                    spieler.getCardHand().removeKarte((HandKarte) karte);
-                    tisch.karteAblegen(karte);
-                    if(spieler.cardHand.getHandKarte().size()== 0){   //hat der Spieler noch Handkarten?
-                        if(spieler instanceof Bot){
-                            ((Bot) spieler).chipAbgeben();
+                        spieler.getCardHand().removeKarte((HandKarte) karte);
+                        tisch.karteAblegen(karte);
+                        if (spieler.cardHand.getHandKarte().size() == 0) {   //hat der Spieler noch Handkarten?
+                            if (spieler instanceof Bot) {
+                                ((Bot) spieler).chipAbgeben();
+                            }
+                            spieler.setLetzerSpielerDurchgang(false);
+                            karteAbgelegt = true;
+                            spieler.aussteigen();    // Spieler kann keinen Zug mehr machen
+                            rundeBeendet = true;
+                            rundeBeenden(); //ein Spieler hat keine Karten mehr oder der letzte Spieler ist fertig mit seinem Zug
+
                         }
-                        spieler.setLetzerSpielerDurchgang(false);
-                        karteAbgelegt = true;
-                        spieler.aussteigen();    // Spieler kann keinen Zug mehr machen
-                        rundeBeendet = true;
-                        rundeBeenden(); //ein Spieler hat keine Karten mehr oder der letzte Spieler ist fertig mit seinem Zug
+                        if (!spieler.isLetzerSpielerDurchgang() && karteAbgelegt == false) {//Spieler darf noch seine Karten ablegen
+                            tisch.naechste();
+                        }
 
+
+                        return true;
+
+
+                    } else {
+                        return false;
                     }
-                    if(!spieler.isLetzerSpielerDurchgang() && karteAbgelegt == false){//Spieler darf noch seine Karten ablegen
-                        tisch.naechste();
-                    }
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
 
-                    return true;
-
-
-
-            }   else {
-                return false;
+                }
             }
 
-        } catch (Exception e) {
-                e.printStackTrace();
-                return false;
+            return false;
 
-        }}
-
-         return false;
-
-
+        }
+        else {
+            try {
+                Main.server.karteLegen(tisch.getSpielerList()[ich], karte);
+                Main.tisch = server.updateTisch();
+                spiellogik = server.updateSpiellogik();
+                return true;
+            } catch (RemoteException e) {
+               e.printStackTrace();
+            }
+        }
+        return false;
     }
 
 
