@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 
 public class Main extends Application {
@@ -37,6 +38,7 @@ public class Main extends Application {
     public static int playMode = 0;
     public static boolean inMenu = true;
     public static RMI.server server = null;
+    public static String uniqueID = UUID.randomUUID().toString();
 
 
 
@@ -45,6 +47,7 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        System.out.println(uniqueID);
         loader = new TestLoadImageUsingClass();
         loader.installSvgLoader();
         launch(args);

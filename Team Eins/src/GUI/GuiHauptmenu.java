@@ -19,6 +19,7 @@ import Main.*;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -202,9 +203,10 @@ public class GuiHauptmenu {
             lobby.setMinWidth(100);
 
             try {
-                for(String cl : server.getClients()) {
-                    lobby.getChildren().add(new Label(cl));
+                for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
+                    lobby.getChildren().add(new Label(entry.getValue()));
                 }
+
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -263,7 +265,7 @@ public class GuiHauptmenu {
             Main.anzSpieler = (int) playeranzselect.getValue();
 
             try {
-                final RunServer runServer = new RunServer("localhost", "Server", 8001, myName);
+                final RunServer runServer = new RunServer("localhost", "Server", 8001, uniqueID, myName);
                 server = runServer.starting();
                 Timer update = new Timer();
                 update.schedule(new TimerTask() {
@@ -303,6 +305,7 @@ public class GuiHauptmenu {
                 RunClient runClient = new RunClient(ip.getText(),
                         Integer.valueOf(port.getText()),
                         "Server",
+                        uniqueID,
                         Main.myName);
                 server = runClient.client.server;
                 update = new Timer();

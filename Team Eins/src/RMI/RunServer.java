@@ -10,6 +10,7 @@ public class RunServer {
     static String SERVER_NAME;
     static int PORT;
     static String myname;
+    static String uid;
 
     /**
      * Erstellt und startet den Server, mit angegebenen Server namen, IP und Port
@@ -20,11 +21,12 @@ public class RunServer {
      * @throws AlreadyBoundException
      * @throws RemoteException
      */
-    public RunServer(String ip, String server_Name, int port, String name) throws AlreadyBoundException, RemoteException {
+    public RunServer(String ip, String server_Name, int port, String uid, String name) throws AlreadyBoundException, RemoteException {
         this.IP = ip;
         this.SERVER_NAME = server_Name;
         this.PORT = port;
         this.myname = name;
+        this.uid = uid;
     }
 
 
@@ -39,7 +41,7 @@ public class RunServer {
         server server = new ServerImpl();
         Registry registry = LocateRegistry.createRegistry(PORT);
         registry.bind(SERVER_NAME , server);
-        server.addClient(myname);
+        server.addClient(uid, myname);
 
         System.out.println("Server started");
         return server;

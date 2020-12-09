@@ -16,12 +16,12 @@ public class RunClient {
      * @throws RemoteException
      * @throws NotBoundException
      */
-    public RunClient(String IP, int Port, String Server_Name, String Client_Name) throws RemoteException, NotBoundException {
+    public RunClient(String IP, int Port, String Server_Name, String uniqueId, String Client_Name) throws RemoteException, NotBoundException {
         CLIENT_NAME = Client_Name;
         //TODO Policy muss hinzugefügt werden
         System.setProperty("java.security.policy","file:///tmp/test.policy");
 
-        client = new RMIClient(IP, Port, Server_Name, Client_Name);
+        client = new RMIClient(IP, Port, Server_Name, uniqueId, Client_Name);
 
 
         System.out.println("Client Started");

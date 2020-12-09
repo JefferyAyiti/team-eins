@@ -20,11 +20,11 @@ public class RMIClient {
      * @throws RemoteException
      * @throws NotBoundException
      */
-    public RMIClient(String IP, int Port, String Server_Name, String Client_Name) throws RemoteException, NotBoundException {
+    public RMIClient(String IP, int Port, String Server_Name, String UID, String Client_Name) throws RemoteException, NotBoundException {
 
         Registry registry = LocateRegistry.getRegistry(IP, Port);
         server = (server) registry.lookup(Server_Name);
-        server.addClient(Client_Name);
+        server.addClient(UID, Client_Name);
         cname = Client_Name;
     }
 
