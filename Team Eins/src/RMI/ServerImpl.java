@@ -22,11 +22,13 @@ public class ServerImpl implements server {
 
     @Override
     public void addClient(String uid, String name) {
+        aenderung++;
         clients.put(uid, name);
     }
 
     @Override
     public void leaveServer(String client) throws RemoteException {
+        aenderung++;
         clients.remove(client);
     }
 
@@ -54,6 +56,7 @@ public class ServerImpl implements server {
 
     @Override
     public boolean getGameStart() throws RemoteException {
+        aenderung++;
         return gameRunning;
     }
 
@@ -73,8 +76,16 @@ public class ServerImpl implements server {
     }
 
     @Override
+    public void neueRunde() throws RemoteException {
+        spiellogik.initNeueRunde();
+        aenderung++;
+    }
+
+    @Override
     public Map<Spieler, Integer> getRangliste() throws RemoteException {
+        aenderung++;
         return spiellogik.ranglisteErstellen();
+
     }
 
 
@@ -113,12 +124,15 @@ public class ServerImpl implements server {
 
     @Override
     public boolean getRundeBeendet() throws RemoteException {
+        aenderung++;
         return spiellogik.getRundeBeendet();
     }
 
     @Override
     public boolean getSpielBeendet() throws RemoteException {
+        aenderung++;
         return spiellogik.spielBeendet;
+
     }
 
     @Override

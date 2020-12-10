@@ -64,7 +64,7 @@ public class GuiSpieltisch {
         VBox.setMargin(pane, new Insets(0, 0, 5, 0));
 
         Label plr = new Label(tisch.getSpielerList()[playerId].getName());
-        if (playerId > (ich+1)%anzSpieler && playerId < (ich+5)%anzSpieler) {
+        if (playerId-ich > 1 && playerId-ich < 5) {
             plr.setRotate(180);
         }
         plr.setTextFill(Color.WHITE);
@@ -310,7 +310,7 @@ public class GuiSpieltisch {
 
         pane.getChildren().add(bottom);
 
-        switch ((playerId+ich)%anzSpieler) {
+        switch ((playerId-ich)%anzSpieler) {
             case 1:
             case 5:
                 pane.setTranslateY(+30 * zoomfactor);
