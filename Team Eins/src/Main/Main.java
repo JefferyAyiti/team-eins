@@ -11,6 +11,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.rmi.RemoteException;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,6 +41,7 @@ public class Main extends Application {
     public static RMI.server server = null;
     public static String uniqueID = UUID.randomUUID().toString();
     public static boolean gameRunning = false;
+    public static long aenderung;
 
 
 
@@ -181,7 +183,7 @@ public class Main extends Application {
     static class moveCheck extends TimerTask {
         @Override
         public void run() {
-            if (tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
+            if (playMode < 2 && tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
                 if (System.currentTimeMillis() - lastmove < botPlayTime) {
                     try {
                         Thread.sleep(botPlayTime - (System.currentTimeMillis() - lastmove));
@@ -196,6 +198,18 @@ public class Main extends Application {
                 lastmove = System.currentTimeMillis();
 
 
+            } else if(playMode == 1) {
+                try {
+                    if(Main.server.getAenderung() > aenderung)
+                    Platform.runLater(() -> {
+                        try {
+                            aenderung = Main.server.getAenderung();
+                        } catch (RemoteException e) {
+                        }
+                        spieltischGui.buildStage(classPrimaryStage);
+                    });
+                } catch (RemoteException e) {
+                }
             }
         }
     }
@@ -214,7 +228,8 @@ public class Main extends Application {
         resizecheck.schedule(new MyTask1(), 0, 500);
 
         bots = new Timer();
-        bots.schedule(new moveCheck(), botPlayTime * 2, botPlayTime);
+        if(playMode != 2)
+            bots.schedule(new moveCheck(), botPlayTime , 200);
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
         {
