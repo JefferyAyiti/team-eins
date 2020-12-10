@@ -35,6 +35,9 @@ import static Main.Main.ich;
 public class GuiSpieltisch {
 
 
+    private ArrayList<Double> x = new ArrayList<>();
+    private ArrayList<Double> y = new ArrayList<>();
+    private ArrayList<Double> deg =  new ArrayList<>();
 
     private static final String IDLE_BUTTON_STYLE = "-fx-background-color: transparent;";
     private static final String HOVERED_BUTTON_STYLE =
@@ -117,11 +120,11 @@ public class GuiSpieltisch {
                 imgView.setTranslateX(-cardcount / 2 * 10*zoomfactor + 10*zoomfactor * i);
                 imgView.setTranslateY(-10);
                 imgView.setRotate(-cardcount / 2 * 15 + i * 15);
-            } else if(tisch.getAktivSpieler() == tisch.getSpielerList()[playerId]){
+            } else {
                 int finalI = i;
                 imgView.setOnMouseClicked(mouseEvent -> {
                     //Multiplayermodus
-                    boolean legen = false;
+
                     if(Main.playMode == 2){
                         try {
                             server.karteLegen(server.updateTisch().getSpielerList()[playerId],
@@ -135,7 +138,7 @@ public class GuiSpieltisch {
 
                     }
                     else{//lokaler Spielmodus
-                    legen = Main.spiellogik.karteLegen(tisch.getSpielerList()[playerId],
+                    Main.spiellogik.karteLegen(tisch.getSpielerList()[playerId],
                             tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI));}
 
 
@@ -205,7 +208,9 @@ public class GuiSpieltisch {
                         }
 
                     }
-                    if(legen) buildStage(Main.classPrimaryStage);
+                    buildStage(Main.classPrimaryStage);
+
+
                 });
             }
             if (playerId == ich) {
@@ -240,7 +245,6 @@ public class GuiSpieltisch {
 
         if (Main.ich == playerId) {
             chips.setOnMouseClicked(mouseEvent -> {
-                boolean tausche = false;
                 if(Main.playMode == 2){//Multiplaymodus
                     try {
                         server.chipsTauschen(playerId);
@@ -249,8 +253,8 @@ public class GuiSpieltisch {
                     }
                 }
                 else{//lokaler Spielmodus
-                 tausche =   Main.spiellogik.chipsTauschen(playerId);}
-                if(tausche) buildStage(Main.classPrimaryStage);
+                  Main.spiellogik.chipsTauschen(playerId);}
+                  buildStage(Main.classPrimaryStage);
             });
 
 
@@ -415,9 +419,14 @@ public class GuiSpieltisch {
             Pane ablagestapel = new Pane();
             for (int i = 0; i < Main.tisch.getAblageStapelSize(); i++) {
                 ImageView imgView = new ImageView(Main.cardsArray[Main.tisch.ablageStapel.stapel.get(i).getValue()-1]);
-                imgView.setY(Math.random()*3);
-                imgView.setX(15-30*Math.random());
-                imgView.setRotate(15-30*Math.random());
+                if(i >= x.size()) {
+                    y.add(i, Math.random() * 3);
+                    x.add(i, 15-30*Math.random());
+                    deg.add(i, 15-30*Math.random());
+                }
+                imgView.setY(y.get(i));
+                imgView.setX(x.get(i));
+                imgView.setRotate(deg.get(i));
                 imgView.setFitWidth(90 * zoomfactor); //Visuelle Große der Ablagestapel ändern
                 imgView.setPreserveRatio(true);
                 imgView.setSmooth(true);
