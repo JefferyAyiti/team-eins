@@ -1,0 +1,43 @@
+#titel{
+   -fx-font-family: "Script MT Bold";
+    -fx-alignment: center;
+    -fx-text-fill: white;
+}
+#LCenter{
+    -fx-border-width:5 ;
+    -fx-border-color:black;
+    -fx-background-image: url('/GUI/images/oberflaeche.jpg');
+    -fx-text-fill: white;
+    -fx-font-family: "Ink Free";
+    -fx-font-size: 20px;
+    -fx-alignment: center;
+}
+#LUnten{
+    -fx-alignment: center;
+}
+#LTop{
+    -fx-alignment: center;
+}
+
+.button {
+    -fx-text-fill: black;
+    -fx-background-color: rgba(255,255,255,0.4);
+    -fx-fit-to-height: true;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 140px;
+    -fx-font-size: 150%;
+    -fx-alignment: center;
+}
+#LabelCenter{
+    -fx-text-fill: white;
+    -fx-font-family: "Ink Free";
+    -fx-font-size: 20px;
+
+
+}
+#Spieler{
+    -fx-font-family: "Ink Free";
+    -fx-font-size: 20px;
+    -fx-text-fill: lightgreen;
+
+}
