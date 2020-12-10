@@ -100,7 +100,15 @@ public class GuiScoreboard {
                     (Main.server == null &&!Main.spiellogik.spielBeendet )) {
                 nextRound = new Button("Nächste Runde");
                 nextRound.setOnAction(e -> {
-                    Main.spiellogik.initNeueRunde();
+                    if(playMode == 2) {
+                        try {
+                            Main.server.neueRunde();
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    else
+                        Main.spiellogik.initNeueRunde();
                     Main.spieltischGui.buildStage(Main.classPrimaryStage);
                         }
                 );

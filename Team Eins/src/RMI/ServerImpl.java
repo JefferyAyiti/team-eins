@@ -73,6 +73,11 @@ public class ServerImpl implements server {
     }
 
     @Override
+    public void neueRunde() throws RemoteException {
+        spiellogik.initNeueRunde();
+    }
+
+    @Override
     public Map<Spieler, Integer> getRangliste() throws RemoteException {
         return spiellogik.ranglisteErstellen();
     }
