@@ -6,7 +6,6 @@ import java.util.*;
 public class Bot extends Spieler  implements Serializable {
 
     private int schwierigkeit;
-   // private Tisch tisch = Main.tisch;
     private boolean zug = false;
 
     /**
@@ -36,13 +35,6 @@ public class Bot extends Spieler  implements Serializable {
 
         //Main.tisch.naechste();
         return true;
-    }
-
-    /**
-     * @return Gibt den schwierigkeitsgrad des Bots zurück. (1 := Leicht, 2:= Mittel, 3 := Schwer)
-     */
-    public int getSchwierigkeit() {
-        return schwierigkeit;
     }
 
     /**
@@ -220,28 +212,6 @@ public class Bot extends Spieler  implements Serializable {
         } else if (this.getWhiteChips() > 0) {
             Main.spiellogik.chipAbgeben(this, new WhiteChip());
             System.out.println(this.getName()+" gibt weißen Chip ab");
-        }
-    }
-
-    /**
-     * Tauscht 10 weiße Chips gegen 1 schwarzen Chip aus.
-     * <p>
-     * Die Methode ist Public, da falls es zu wenig weiße Chips auf dem Feld gibt, man den Bot forcieren kann, seine Chips
-     * zu tauschen.
-     * <p>
-     * Die Methode ist eine Helper Methode für die playSchwierigkeit() Methoden.
-     * Ähnelt der Methode aus der Spiellogik.
-     */
-    public void chipsTauschen() {
-        Tisch tisch = Main.tisch;
-
-        if (this.getWhiteChips() >= 10 || tisch.getBlackChips() > 0) {
-
-            this.setBlackChips(this.getBlackChips() + 1);
-            this.setWhiteChips(this.getWhiteChips() - 10);
-
-            tisch.takeChips(-10, 1);
-
         }
     }
 

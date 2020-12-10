@@ -5,14 +5,12 @@ import GUI.GuiScoreboard;
 import GUI.GuiSpieltisch;
 import GUI.GuiZoomLoader;
 import GUI.SVG.TestLoadImageUsingClass;
-import RMI.server;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.rmi.RemoteException;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,7 +21,7 @@ public class Main extends Application {
 
 
     public static Hand[] haende;
-    public static Spieler[] spieler;
+    private static Spieler[] spielerM;
     public static TestLoadImageUsingClass loader;
     public static double sceneWidth = 600;
     public static double sceneHeight = 400;
@@ -86,7 +84,7 @@ public class Main extends Application {
 
         //initialisiere Spieler mit handkarten
         haende = new Hand[anzSpieler];
-        spieler = new Spieler[anzSpieler];
+        spielerM = new Spieler[anzSpieler];
 
         //spieler[0]= new Bot("Spieler",2);
 
@@ -96,7 +94,7 @@ public class Main extends Application {
             try {
                 for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
                     i++;
-                    spieler[i] = new Spieler(entry.getValue());
+                    spielerM[i] = new Spieler(entry.getValue());
                     System.out.println(i+" "+entry.getValue()+" erzeugt");
                 }
 
@@ -104,7 +102,7 @@ public class Main extends Application {
             }
         }
         if(i == -1) {
-            spieler[0] = new Spieler(myName);
+            spielerM[0] = new Spieler(myName);
             System.out.println("Main erzeugt");
             i=0;
         }
@@ -112,10 +110,10 @@ public class Main extends Application {
         String[] botname = {"EZ-", "Mid-", "Hard-"};
         for (i++; i < anzSpieler; i++) {
             level = botlevel == 0 ? (int) (Math.random() * 3 + 1) : botlevel;
-            spieler[i] = new Bot(botname[level - 1] + "Bot " + (i + 1), level);
+            spielerM[i] = new Bot(botname[level - 1] + "Bot " + (i + 1), level);
 
         }
-        tisch = new Tisch(spieler);
+        tisch = new Tisch(spielerM);
         spiellogik = new Spiellogik(tisch);
         spiellogik.initNeueRunde();
 

@@ -1,6 +1,10 @@
 package Main;
 
 import java.io.Serializable;
+import java.sql.SQLOutput;
+
+import static Main.Main.ich;
+import static Main.Main.tisch;
 
 public class Spieler  implements Serializable {
     int points = 0;
@@ -8,7 +12,6 @@ public class Spieler  implements Serializable {
     Hand cardHand;
     String playerName;
     int blackChips = 0, whiteChips = 0;
-    boolean folded = false;
     private boolean letzerSpielerDurchgang = false;
     private boolean aussteigen = false;
 
@@ -58,7 +61,9 @@ public class Spieler  implements Serializable {
         aussteigen = false;
     }
     public void aussteigen(){
+        System.out.println(aussteigen);
         aussteigen = true;
+        System.out.println(tisch.getSpielerList()[ich].inGame());
         //Main.tisch.naechste();
     }
     public boolean inGame() {
@@ -141,5 +146,11 @@ public class Spieler  implements Serializable {
      */
     public void setOldScore(int alt) {
         oldScore = alt;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return playerName == ((Spieler)object).getName() &&
+                ((Spieler)object).getCardHand().equals(cardHand);
     }
 }

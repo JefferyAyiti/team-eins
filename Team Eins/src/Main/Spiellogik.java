@@ -10,7 +10,7 @@ import static Main.Main.*;
  * Spiellogik regelt die Runden des Spiels
  */
 public class Spiellogik  implements Serializable {
-    public final Stack<Spieler> letzteSpieler = new Stack();
+
     public final Tisch tisch;
     public boolean rundeBeendet = false;
     public boolean spielBeendet = false;
@@ -79,7 +79,9 @@ public class Spiellogik  implements Serializable {
      * @return boolean der anzeigt, ob der Zug erfolgreich war
      */
     public boolean karteLegen(Spieler spieler, Karte karte) {
-            if (tisch.getAktivSpieler() == spieler && spieler.inGame()) {
+
+            if (spieler.getName().equals(tisch.getAktivSpieler().getName())        //        && spieler.inGame()
+            ) {
                 try {
                     Boolean karteAbgelegt = false;
                     if (tisch.getObereKarteAblagestapel().value == karte.value //gleicher Wert
@@ -89,6 +91,7 @@ public class Spiellogik  implements Serializable {
 
                         spieler.getCardHand().removeKarte((HandKarte) karte);
                         tisch.karteAblegen(karte);
+
                         if (spieler.cardHand.getHandKarte().size() == 0) {   //hat der Spieler noch Handkarten?
                             if (spieler instanceof Bot) {
                                 ((Bot) spieler).chipAbgeben();
@@ -122,7 +125,6 @@ public class Spiellogik  implements Serializable {
 
                 }
             }
-
             return false;
 
         }
@@ -135,7 +137,9 @@ public class Spiellogik  implements Serializable {
      * @return boolean der anzeigt, ob der Zug erfolgreich war
      */
     public boolean karteNachziehen(Spieler spieler){
-        if(!spieler.isLetzerSpielerDurchgang() && tisch.getAktivSpieler() == spieler && spieler.inGame()){
+        if(!spieler.isLetzerSpielerDurchgang() &&
+                tisch.getAktivSpieler().getName().equals(spieler.getName())
+                && spieler.inGame()){
             try {
 
                  spieler.getCardHand().addKarte(tisch.karteZiehen());
@@ -145,6 +149,7 @@ public class Spiellogik  implements Serializable {
                         server.incAenderung();
                     } catch (RemoteException e) {            }
                 }
+                System.out.println(spieler.getName()+ " zieht nach");
                  return true;
 
             } catch (Exception e) {
@@ -152,6 +157,7 @@ public class Spiellogik  implements Serializable {
 
             }}
         else {
+            System.out.println("nachziehen falsch");
             return false;
         }
     }
@@ -256,6 +262,11 @@ public class Spiellogik  implements Serializable {
 
                 }
                 aktion=true;
+                if(Main.server != null) {
+                    try {
+                        server.incAenderung();
+                    } catch (RemoteException e) {            }
+                }
             }
         }
         return aktion;
@@ -269,11 +280,15 @@ public class Spiellogik  implements Serializable {
      */
     public void aussteigen(Spieler spieler)  {
 
-        if(tisch.getAktivSpieler() == spieler && spieler.inGame()){
+        if(tisch.getAktivSpieler().getName().equals(spieler.getName()) && spieler.inGame()){
             spieler.aussteigen();
             spieler.setLetzerSpielerDurchgang(false);
             einSpielerUebrig();  //ueberpruefen wie viele Spieler diese Runde noch spielen
-
+            if(Main.server != null) {
+                try {
+                    server.incAenderung();
+                } catch (RemoteException e) {            }
+            }
 
         }
 
@@ -391,10 +406,10 @@ public class Spiellogik  implements Serializable {
      */
     public void initNeueRunde() {
 
-        for (int i = 0; i < Main.spieler.length; i++) {
+        for (int i = 0; i < anzSpieler; i++) {
             Main.haende[i] = new Hand();
-            Main.spieler[i].setCardHand(Main.haende[i]);
-            Main.spieler[i].setOldScore(Main.spieler[i].getPoints());
+            tisch.spielerList[i].setCardHand(Main.haende[i]);
+            tisch.spielerList[i].setOldScore( tisch.spielerList[i].getPoints());
         }
 
         tisch.initNachziehstapel();
@@ -405,7 +420,7 @@ public class Spiellogik  implements Serializable {
         //gebe jeden Spieler (anzSpieler) 6 Karten in Reihenfolge
         for (int i = 0; i < 6; i++) {
 
-            for (int s = 0; s < Main.spieler.length; s++) {
+            for (int s = 0; s < anzSpieler; s++) {
                 Main.haende[s].addKarte(tisch.karteZiehen());
             }
 

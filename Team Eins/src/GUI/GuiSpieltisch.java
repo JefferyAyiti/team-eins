@@ -123,8 +123,11 @@ public class GuiSpieltisch {
 
                     if(Main.playMode == 2){
                         try {
-                            server.karteLegen(tisch.getSpielerList()[playerId],
-                                    tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI));
+                            server.karteLegen(server.updateTisch().getSpielerList()[playerId],
+                                    server.updateTisch().getSpielerList()[playerId].getCardHand().getKarte(finalI));
+
+                            System.out.println("karte abgelegt");
+
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
@@ -343,11 +346,16 @@ public class GuiSpieltisch {
             if(Main.inMenu) {
                 Main.hauptmenuGui.showSettingsMenu(classPrimaryStage);
                 return;
-            } else
-            if ((Main.server == null && Main.spiellogik.getRundeBeendet()) ||
-                    (Main.server != null && Main.server.getRundeBeendet())) {
-                //Main.scoreboardGui.showRangliste(Main.spiellogik.ranglisteErstellen());
+            } else {
+            if (Main.server == null && Main.spiellogik.getRundeBeendet()) {
+                Main.scoreboardGui.showRangliste(Main.spiellogik.ranglisteErstellen());
                 return;
+            } else if(Main.server != null && Main.server.getRundeBeendet()) {
+                    Main.scoreboardGui.showRangliste(server.getRangliste());
+                    return;
+                }
+
+
             }
             Main.sceneWidth = scene.getWidth();
             Main.sceneHeight = scene.getHeight();
@@ -378,7 +386,7 @@ public class GuiSpieltisch {
                                 e.printStackTrace();
                             }
                             System.out.println("\t Ziehe Karte");
-                        }
+                        } else
                         if (Main.spiellogik.karteNachziehen(tisch.getSpielerList()[ich]))
                             System.out.println("\t Ziehe Karte");
 

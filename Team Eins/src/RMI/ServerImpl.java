@@ -104,7 +104,8 @@ public class ServerImpl implements server {
 
     @Override
     public void aussteigen(Spieler spieler) throws RemoteException {
-
+        spiellogik.aussteigen(spieler);
+        aenderung++;
     }
 
     @Override

@@ -23,10 +23,7 @@ public class Stapel implements Serializable {
      * stapel steht für den Stapel dargestellt als stack
      */
     public Stack<Karte> stapel = new Stack<>();
-    /**
-     * topCard ist die oberste Karte des Stapels
-     */
-    private Karte topCard;
+
 
     /** Der Stapel wird mit dem Typ des Stapels initialisiert
      * @param coverCard True für Ziehstapel. False für Ablagestapel
@@ -63,7 +60,6 @@ public class Stapel implements Serializable {
         if (!coverCard){    //Ablagestapel
             stapel.add(karte);
             cardCount = cardCount + 1;
-            topCard = stapel.peek();
             return true;
         } else
         return false;
@@ -87,12 +83,6 @@ public class Stapel implements Serializable {
         }
     }
 
-    /**
-     * Kartenstapel leeren
-     */
-    public void Reset(){
-         stapel = new Stack<>();
-    }
 
     /** getter-Methode für cardCount
      * @return cardCount
@@ -106,7 +96,7 @@ public class Stapel implements Serializable {
      * @throws Exception
      */
     public Karte getTopCard(){
-            return topCard;
+            return stapel.peek();
     }
 
     /**Füge zu dem Ziehstapel die Karte hinzu.
