@@ -80,7 +80,7 @@ public class Spiellogik  implements Serializable {
      */
     public boolean karteLegen(Spieler spieler, Karte karte) {
 
-            if (spieler.getName().equals(tisch.getAktivSpieler().getName())        //        && spieler.inGame()
+            if (spieler.getName().equals(tisch.getAktivSpieler().getName()) && tisch.getAktivSpieler().inGame()
             ) {
                 try {
                     Boolean karteAbgelegt = false;
@@ -89,21 +89,23 @@ public class Spiellogik  implements Serializable {
                             || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
                             || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)) {
 
-                        spieler.getCardHand().removeKarte((HandKarte) karte);
+                        //spieler.getCardHand().removeKarte((HandKarte) karte);
+                        tisch.getAktivSpieler().getCardHand().removeKarte((HandKarte)karte);
+
                         tisch.karteAblegen(karte);
 
-                        if (spieler.cardHand.getHandKarte().size() == 0) {   //hat der Spieler noch Handkarten?
-                            if (spieler instanceof Bot) {
-                                ((Bot) spieler).chipAbgeben();
+                        if (tisch.getAktivSpieler().cardHand.getHandKarte().size() == 0) {   //hat der Spieler noch Handkarten?
+                            if (tisch.getAktivSpieler() instanceof Bot) {
+                                ((Bot) tisch.getAktivSpieler()).chipAbgeben();
                             }
-                            spieler.setLetzerSpielerDurchgang(false);
+                            tisch.getAktivSpieler().setLetzerSpielerDurchgang(false);
                             karteAbgelegt = true;
-                            spieler.aussteigen();    // Spieler kann keinen Zug mehr machen
+                            tisch.getAktivSpieler().aussteigen();    // Spieler kann keinen Zug mehr machen
                             rundeBeendet = true;
                             rundeBeenden(); //ein Spieler hat keine Karten mehr oder der letzte Spieler ist fertig mit seinem Zug
 
                         }
-                        if (!spieler.isLetzerSpielerDurchgang() && karteAbgelegt == false) {//Spieler darf noch seine Karten ablegen
+                        if (!tisch.getAktivSpieler().isLetzerSpielerDurchgang() && karteAbgelegt == false) {//Spieler darf noch seine Karten ablegen
                             tisch.naechste();
                         }
 
@@ -137,12 +139,12 @@ public class Spiellogik  implements Serializable {
      * @return boolean der anzeigt, ob der Zug erfolgreich war
      */
     public boolean karteNachziehen(Spieler spieler){
-        if(!spieler.isLetzerSpielerDurchgang() &&
+        if(!tisch.getAktivSpieler().isLetzerSpielerDurchgang() &&
                 tisch.getAktivSpieler().getName().equals(spieler.getName())
-                && spieler.inGame()){
+                && tisch.getAktivSpieler().inGame()){
             try {
 
-                 spieler.getCardHand().addKarte(tisch.karteZiehen());
+                 tisch.getAktivSpieler().getCardHand().addKarte(tisch.karteZiehen());
                  tisch.naechste();
                 if(Main.server != null) {
                     try {
@@ -168,16 +170,16 @@ public class Spiellogik  implements Serializable {
      * @param spieler
      */
     public void chipsKassieren(Spieler spieler) {
-       int alt = spieler.getOldScore();
+       int alt = tisch.getAktivSpieler().getOldScore();
         Set<Integer> handkarten = new LinkedHashSet<>();
 
 
-      for(Karte c:spieler.getCardHand().getHandKarte()) {
+      for(Karte c:tisch.getAktivSpieler().getCardHand().getHandKarte()) {
           handkarten.add(c.getValue());
       }
 
         int summe = 0;
-      if(spieler == Main.tisch.getSpielerList()[0])
+      if(tisch.getAktivSpieler() == Main.tisch.getSpielerList()[0])
           System.out.println(handkarten);
         //aufaddieren
         for (Integer c : handkarten) {
@@ -192,16 +194,16 @@ public class Spiellogik  implements Serializable {
 
         while (schwarzeChips > 0 && tisch.getBlackChips() > 0) {
             tisch.takeChips(0, 1);
-            spieler.setBlackChips(spieler.getBlackChips() + 1);
+            tisch.getAktivSpieler().setBlackChips(spieler.getBlackChips() + 1);
             schwarzeChips--;
         }
 
         weisseChips += schwarzeChips * 10;
         tisch.takeChips(weisseChips,0);
-        spieler.setWhiteChips(spieler.getWhiteChips()+weisseChips);
+        tisch.getAktivSpieler().setWhiteChips(tisch.getAktivSpieler().getWhiteChips()+weisseChips);
 
-        int punktzahl = (spieler.getWhiteChips() * -1)+(spieler.getBlackChips()*-10);
-        spieler.setPoints(punktzahl);
+        int punktzahl = (tisch.getAktivSpieler().getWhiteChips() * -1)+(tisch.getAktivSpieler().getBlackChips()*-10);
+        tisch.getAktivSpieler().setPoints(punktzahl);
 
         if(Main.server != null) {
             try {
@@ -222,10 +224,10 @@ public class Spiellogik  implements Serializable {
     public boolean chipsTauschen(Spieler spieler) {
         boolean transaktion = false;
 
-        if(spieler.getWhiteChips() >= 10 && tisch.getBlackChips() > 0){
+        if(tisch.getAktivSpieler().getWhiteChips() >= 10 && tisch.getBlackChips() > 0){
 
-            spieler.setBlackChips(spieler.getBlackChips() + 1);
-            spieler.setWhiteChips(spieler.getWhiteChips() - 10);
+            tisch.getAktivSpieler().setBlackChips(tisch.getAktivSpieler().getBlackChips() + 1);
+            tisch.getAktivSpieler().setWhiteChips(tisch.getAktivSpieler().getWhiteChips() - 10);
 
             tisch.takeChips(-10, 1);
 
@@ -248,17 +250,17 @@ public class Spiellogik  implements Serializable {
      */
     public boolean chipAbgeben(Spieler spieler, Chip chip) {
         boolean aktion=false;
-        if(spieler.getCardCount() == 0){
-            if(spieler.getBlackChips() >0 || spieler.getWhiteChips() >0) {
+        if(tisch.getAktivSpieler().getCardCount() == 0){
+            if(tisch.getAktivSpieler().getBlackChips() >0 || tisch.getAktivSpieler().getWhiteChips() >0) {
                 if (chip.getValue() == -1) {
-                    spieler.setWhiteChips(spieler.getWhiteChips() - 1);
+                    tisch.getAktivSpieler().setWhiteChips(tisch.getAktivSpieler().getWhiteChips() - 1);
                     tisch.takeChips(1, 0);
-                    spieler.setPoints(spieler.getPoints()+1);
+                    tisch.getAktivSpieler().setPoints(tisch.getAktivSpieler().getPoints()+1);
 
                 } else {
-                    spieler.setBlackChips(spieler.getBlackChips() - 1);
+                    tisch.getAktivSpieler().setBlackChips(tisch.getAktivSpieler().getBlackChips() - 1);
                     tisch.takeChips(0, 1);
-                    spieler.setPoints(spieler.getPoints()+10);
+                    tisch.getAktivSpieler().setPoints(tisch.getAktivSpieler().getPoints()+10);
 
                 }
                 aktion=true;
@@ -280,9 +282,9 @@ public class Spiellogik  implements Serializable {
      */
     public void aussteigen(Spieler spieler)  {
 
-        if(tisch.getAktivSpieler().getName().equals(spieler.getName()) && spieler.inGame()){
-            spieler.aussteigen();
-            spieler.setLetzerSpielerDurchgang(false);
+        if(tisch.getAktivSpieler().getName().equals(spieler.getName()) && tisch.getAktivSpieler().inGame()){
+            tisch.getAktivSpieler().aussteigen();
+            tisch.getAktivSpieler().setLetzerSpielerDurchgang(false);
             einSpielerUebrig();  //ueberpruefen wie viele Spieler diese Runde noch spielen
             if(Main.server != null) {
                 try {
@@ -345,9 +347,9 @@ public class Spiellogik  implements Serializable {
                 Integer weißeChips =  (new ArrayList<>(rangliste.values()).get(0));
                 Spieler spieler = (new ArrayList<>(rangliste.keySet()).get(0));
                 if(weißeChips > 10){
-                    spieler.setWhiteChips(spieler.whiteChips - 10);
-                    spieler.setBlackChips(spieler.getBlackChips()+1);
-                    spieler.chipTausch();
+                    tisch.getAktivSpieler().setWhiteChips(tisch.getAktivSpieler().whiteChips - 10);
+                    tisch.getAktivSpieler().setBlackChips(tisch.getAktivSpieler().getBlackChips()+1);
+                    tisch.getAktivSpieler().chipTausch();
                     tisch.takeChips(-10,1);}
 
             }
