@@ -121,7 +121,7 @@ public class GuiSpieltisch {
                 int finalI = i;
                 imgView.setOnMouseClicked(mouseEvent -> {
                     //Multiplayermodus
-
+                    boolean legen = false;
                     if(Main.playMode == 2){
                         try {
                             server.karteLegen(server.updateTisch().getSpielerList()[playerId],
@@ -135,7 +135,7 @@ public class GuiSpieltisch {
 
                     }
                     else{//lokaler Spielmodus
-                    Main.spiellogik.karteLegen(tisch.getSpielerList()[playerId],
+                    legen = Main.spiellogik.karteLegen(tisch.getSpielerList()[playerId],
                             tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI));}
 
 
@@ -205,9 +205,7 @@ public class GuiSpieltisch {
                         }
 
                     }
-                    buildStage(Main.classPrimaryStage);
-
-
+                    if(legen) buildStage(Main.classPrimaryStage);
                 });
             }
             if (playerId == ich) {
