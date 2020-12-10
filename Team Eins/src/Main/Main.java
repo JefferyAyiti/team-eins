@@ -198,7 +198,7 @@ public class Main extends Application {
                 lastmove = System.currentTimeMillis();
 
 
-            } else if(playMode == 1) {
+            } else if(playMode == 1 && tisch.aktiv != ich) {
                 try {
                     if(Main.server.getAenderung() > aenderung)
                     Platform.runLater(() -> {

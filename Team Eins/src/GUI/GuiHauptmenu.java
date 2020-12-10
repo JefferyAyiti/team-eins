@@ -311,7 +311,7 @@ public class GuiHauptmenu {
             Main.anzSpieler = (int) playeranzselect.getValue();
 
             try {
-                runServer = new RunServer("25.73.216.66", "Server", 8001, uniqueID, myName);
+                runServer = new RunServer("25.101.225.129", "Server", 8001, uniqueID, myName);
                 server = runServer.starting();
                 status.setText("Warte auf Spieler");
                 status.setTextFill(Color.LIGHTGREEN);
