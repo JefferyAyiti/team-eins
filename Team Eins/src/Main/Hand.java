@@ -37,9 +37,11 @@ public class Hand  implements Serializable {
      * @param karte
      */
     public void removeKarte (HandKarte karte){
-        System.out.println(handKarten);
-        System.out.println("Karte "+karte.getValue()+" entfernt");
-        handKarten.remove(karte);
-        System.out.println(handKarten);
+        for(HandKarte c:handKarten) {
+            if(karte.getValue() == c.getValue()) {
+                handKarten.remove(c);
+                break;
+            }
+        }
     }
 }
