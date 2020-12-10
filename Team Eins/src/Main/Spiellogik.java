@@ -94,18 +94,18 @@ public class Spiellogik  implements Serializable {
 
                         tisch.karteAblegen(karte);
 
-                        if (spieler.cardHand.getHandKarte().size() == 0) {   //hat der Spieler noch Handkarten?
+                        if (tisch.getAktivSpieler().cardHand.getHandKarte().size() == 0) {   //hat der Spieler noch Handkarten?
                             if (spieler instanceof Bot) {
                                 ((Bot) spieler).chipAbgeben();
                             }
-                            spieler.setLetzerSpielerDurchgang(false);
+                            tisch.getAktivSpieler().setLetzerSpielerDurchgang(false);
                             karteAbgelegt = true;
-                            spieler.aussteigen();    // Spieler kann keinen Zug mehr machen
+                            tisch.getAktivSpieler().aussteigen();    // Spieler kann keinen Zug mehr machen
                             rundeBeendet = true;
                             rundeBeenden(); //ein Spieler hat keine Karten mehr oder der letzte Spieler ist fertig mit seinem Zug
 
                         }
-                        if (!spieler.isLetzerSpielerDurchgang() && karteAbgelegt == false) {//Spieler darf noch seine Karten ablegen
+                        if (!tisch.getAktivSpieler().isLetzerSpielerDurchgang() && karteAbgelegt == false) {//Spieler darf noch seine Karten ablegen
                             tisch.naechste();
                         }
 
