@@ -45,7 +45,7 @@ public class Bot extends Spieler  implements Serializable {
      */
     public void playSchwierigkeitLeicht() {
         Karte card;
-        Main.spiellogik.chipsTauschen(this);
+        Main.spiellogik.chipsTauschen(Main.tisch.aktiv);
 
         //Main.spiellogik.aussteigen(this);
 
@@ -90,7 +90,7 @@ public class Bot extends Spieler  implements Serializable {
             if (zug) {
                 //Chips umtauschen
                 while (this.whiteChips >= 10) {
-                    logik.chipsTauschen(this);
+                    logik.chipsTauschen(Main.tisch.aktiv);
                     System.out.println("\t tausche");
                 }
 
@@ -147,7 +147,7 @@ public class Bot extends Spieler  implements Serializable {
      */
     public void playSchwierigkeitSchwer() {
         Karte card;
-        Main.spiellogik.chipsTauschen(this);
+        Main.spiellogik.chipsTauschen(Main.tisch.aktiv);
 
         //Sortiere nach Kartenwert
         List<Karte> cards = new ArrayList();
