@@ -23,28 +23,6 @@ boolean covered;
         return value;
     }
 
-    /**
-     * @return Gibt zurück, ob die Karte sichtbar oder verdeckt ist
-     */
-    public boolean isCovered() {
-        return covered;
-    }
-
-
-    /**
-     * Verdekct die Karte
-     */
-    public void cover() {
-        covered = true;
-    }
-
-
-    /**
-     * Deckt die KArte auf
-     */
-    public void unCover() {
-        covered = false;
-    }
 
     @Override
     public int compareTo(Object o) {

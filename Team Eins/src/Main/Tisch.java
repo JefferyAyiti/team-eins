@@ -14,8 +14,8 @@ public class Tisch implements Serializable {
     private int durchgangNr = 0;
     private Stapel nachziehStapel = new Stapel(true);
     public Stapel ablageStapel = new Stapel(false);
-    private Spieler[] spielerList;
-    private volatile int aktiv = 0;
+    public Spieler[] spielerList;
+    public volatile int aktiv;
 
 
 
@@ -164,6 +164,7 @@ public class Tisch implements Serializable {
 
         if(!(spielerList[aktiv] instanceof Bot))
             System.out.println(spielerList[aktiv].getName()+" ist dran:");
+        System.out.println("Tischaktiv:"+aktiv);
         return spielerList[aktiv];
     }
 
