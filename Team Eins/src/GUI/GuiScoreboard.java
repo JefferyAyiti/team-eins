@@ -13,6 +13,8 @@ import Main.*;
 import java.rmi.RemoteException;
 import java.util.Map;
 
+import static Main.Main.playMode;
+
 public class GuiScoreboard {
     static Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
         System.out.println("gibt Rangliste aus");
@@ -26,7 +28,17 @@ public class GuiScoreboard {
 
         GridPane center = new GridPane();
 
-        for (Map.Entry<Spieler, Integer> entry : Main.spiellogik.ranglisteErstellen().entrySet()) {
+        Map<Spieler, Integer> rangl = null;
+        if(Main.server != null && playMode == 2) {
+            try {
+                rangl = Main.server.getRangliste();
+            } catch (RemoteException e) {
+
+            }
+        } else
+            rangl = Main.spiellogik.ranglisteErstellen();
+
+        for (Map.Entry<Spieler, Integer> entry : rangl.entrySet()) {
             //Platz
             Label rang = new Label("\t" + p + ". Platz: " + "\t");
             rang.setFont(new Font("Ink Free", 19 * Main.zoomfactor));
