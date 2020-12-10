@@ -89,7 +89,9 @@ public class Spiellogik  implements Serializable {
                             || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
                             || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1)) {
 
-                        spieler.getCardHand().removeKarte((HandKarte) karte);
+                        //spieler.getCardHand().removeKarte((HandKarte) karte);
+                        tisch.getAktivSpieler().getCardHand().removeKarte((HandKarte)karte);
+
                         tisch.karteAblegen(karte);
 
                         if (spieler.cardHand.getHandKarte().size() == 0) {   //hat der Spieler noch Handkarten?
@@ -137,12 +139,12 @@ public class Spiellogik  implements Serializable {
      * @return boolean der anzeigt, ob der Zug erfolgreich war
      */
     public boolean karteNachziehen(Spieler spieler){
-        if(!spieler.isLetzerSpielerDurchgang() &&
+        if(!tisch.getAktivSpieler().isLetzerSpielerDurchgang() &&
                 tisch.getAktivSpieler().getName().equals(spieler.getName())
-                && spieler.inGame()){
+                && tisch.getAktivSpieler().inGame()){
             try {
 
-                 spieler.getCardHand().addKarte(tisch.karteZiehen());
+                 tisch.getAktivSpieler().getCardHand().addKarte(tisch.karteZiehen());
                  tisch.naechste();
                 if(Main.server != null) {
                     try {
@@ -281,8 +283,8 @@ public class Spiellogik  implements Serializable {
     public void aussteigen(Spieler spieler)  {
 
         if(tisch.getAktivSpieler().getName().equals(spieler.getName()) && spieler.inGame()){
-            spieler.aussteigen();
-            spieler.setLetzerSpielerDurchgang(false);
+            tisch.getAktivSpieler().aussteigen();
+            tisch.getAktivSpieler().setLetzerSpielerDurchgang(false);
             einSpielerUebrig();  //ueberpruefen wie viele Spieler diese Runde noch spielen
             if(Main.server != null) {
                 try {
