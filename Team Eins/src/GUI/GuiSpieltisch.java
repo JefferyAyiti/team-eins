@@ -117,7 +117,7 @@ public class GuiSpieltisch {
                 imgView.setTranslateX(-cardcount / 2 * 10*zoomfactor + 10*zoomfactor * i);
                 imgView.setTranslateY(-10);
                 imgView.setRotate(-cardcount / 2 * 15 + i * 15);
-            } else {
+            } else if(tisch.getAktivSpieler() == tisch.getSpielerList()[playerId]){
                 int finalI = i;
                 imgView.setOnMouseClicked(mouseEvent -> {
                     //Multiplayermodus
@@ -242,6 +242,7 @@ public class GuiSpieltisch {
 
         if (Main.ich == playerId) {
             chips.setOnMouseClicked(mouseEvent -> {
+                boolean tausche = false;
                 if(Main.playMode == 2){//Multiplaymodus
                     try {
                         server.chipsTauschen(playerId);
@@ -250,8 +251,8 @@ public class GuiSpieltisch {
                     }
                 }
                 else{//lokaler Spielmodus
-                    Main.spiellogik.chipsTauschen(playerId);}
-                buildStage(Main.classPrimaryStage);
+                 tausche =   Main.spiellogik.chipsTauschen(playerId);}
+                if(tausche) buildStage(Main.classPrimaryStage);
             });
 
 
