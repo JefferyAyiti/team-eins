@@ -91,7 +91,6 @@ public class Spiellogik  implements Serializable {
 
                         //spieler.getCardHand().removeKarte((HandKarte) karte);
                         tisch.getAktivSpieler().getCardHand().removeKarte((HandKarte)karte);
-
                         tisch.karteAblegen(karte);
 
                         if (tisch.getAktivSpieler().cardHand.getHandKarte().size() == 0) {   //hat der Spieler noch Handkarten?
@@ -105,7 +104,7 @@ public class Spiellogik  implements Serializable {
                             rundeBeenden(); //ein Spieler hat keine Karten mehr oder der letzte Spieler ist fertig mit seinem Zug
 
                         }
-                        if (!tisch.getAktivSpieler().isLetzerSpielerDurchgang() && karteAbgelegt == false) {//Spieler darf noch seine Karten ablegen
+                        if (!tisch.getAktivSpieler().isLetzerSpielerDurchgang() && !karteAbgelegt) {//Spieler darf noch seine Karten ablegen
                             tisch.naechste();
                         }
 
@@ -179,7 +178,7 @@ public class Spiellogik  implements Serializable {
       }
 
         int summe = 0;
-      if(spieler == Main.tisch.getSpielerList()[0])
+      if(tisch.getAktivSpieler() == Main.tisch.getSpielerList()[0])
           System.out.println(handkarten);
         //aufaddieren
         for (Integer c : handkarten) {
@@ -216,18 +215,18 @@ public class Spiellogik  implements Serializable {
 
     /**
      * Tauscht 10 weiße Chips gegen 1 schwarzen Chip aus.
-     * @param spieler
+     * @param playerID
      * @return Wenn nicht genügend weiße Chips vorhanden sind und
      * Wenn nicht genügend schwarze Chips auf dem Tisch liegen: transaktion = false
      * sonst: transaktion = true
      */
-    public boolean chipsTauschen(Spieler spieler) {
+    public boolean chipsTauschen(int playerID) {
         boolean transaktion = false;
 
-        if(spieler.getWhiteChips() >= 10 && tisch.getBlackChips() > 0){
+        if(tisch.getSpielerList()[playerID].getWhiteChips() >= 10 && tisch.getBlackChips() > 0){
 
-            spieler.setBlackChips(spieler.getBlackChips() + 1);
-            spieler.setWhiteChips(spieler.getWhiteChips() - 10);
+            tisch.getSpielerList()[playerID].setBlackChips(tisch.getSpielerList()[playerID].getBlackChips() + 1);
+            tisch.getSpielerList()[playerID].setWhiteChips(tisch.getSpielerList()[playerID].getWhiteChips() - 10);
 
             tisch.takeChips(-10, 1);
 

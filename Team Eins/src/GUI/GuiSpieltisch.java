@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import Main.*;
@@ -137,7 +138,16 @@ public class GuiSpieltisch {
                     Main.spiellogik.karteLegen(tisch.getSpielerList()[playerId],
                             tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI));}
 
-                    //Chip tausch
+
+                    if(playMode == 2){
+                        try {
+                            if(server.updateTisch().getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()){
+                                tisch.getSpielerList()[playerId].getCardHand().removeKarte(tisch.getSpielerList()[playerId].getCardHand().getKarte(0));
+                            }
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()) {
                         Chip tausch;
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -234,13 +244,13 @@ public class GuiSpieltisch {
             chips.setOnMouseClicked(mouseEvent -> {
                 if(Main.playMode == 2){//Multiplaymodus
                     try {
-                        server.chipsTauschen(tisch.getSpielerList()[playerId]);
+                        server.chipsTauschen(playerId);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
                 }
                 else{//lokaler Spielmodus
-                    Main.spiellogik.chipsTauschen(tisch.getSpielerList()[playerId]);}
+                    Main.spiellogik.chipsTauschen(playerId);}
                 buildStage(Main.classPrimaryStage);
             });
 

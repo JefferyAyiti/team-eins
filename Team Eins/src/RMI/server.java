@@ -24,7 +24,7 @@ public interface server extends Remote {
     void karteLegen(Spieler spieler, Karte karte) throws RemoteException;
     void karteNachziehen(Spieler spieler) throws RemoteException;
     void chipAbgeben(Spieler spieler, Chip chip) throws RemoteException;
-    void chipsTauschen(Spieler spieler) throws RemoteException;
+    void chipsTauschen(int playerID) throws RemoteException;
     void aussteigen(Spieler spieler) throws RemoteException;
     boolean getRundeBeendet() throws RemoteException;
     boolean getSpielBeendet() throws RemoteException;

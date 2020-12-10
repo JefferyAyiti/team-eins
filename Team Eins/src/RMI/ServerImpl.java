@@ -105,13 +105,14 @@ public class ServerImpl implements server {
 
     @Override
     public void chipAbgeben(Spieler spieler, Chip chip) throws RemoteException {
-        spiellogik.chipAbgeben(spieler, chip);
-        aenderung ++;
+        spiellogik.chipAbgeben(spieler,chip);
+        aenderung++;
+
     }
 
     @Override
-    public void chipsTauschen(Spieler spieler) throws RemoteException {
-        spiellogik.chipsTauschen(spieler);
+    public void chipsTauschen(int playerId) throws RemoteException {
+        spiellogik.chipsTauschen(playerId);
         aenderung++;
     }
 

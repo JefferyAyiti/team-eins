@@ -52,8 +52,9 @@ public class GuiHauptmenu {
                 tisch = server.updateTisch();
                 anzSpieler = server.getAnzahlSpieler();
                 update.cancel();
-                runClient.client.startClientThread();
                 Platform.runLater(() -> spieltischGui.buildStage(classPrimaryStage));
+                getTisch = new Thread(new ClientThread(Main.server, runClient.client));
+                getTisch.start();
                 return;
 
             }
@@ -216,15 +217,23 @@ public class GuiHauptmenu {
 
 
         if (Main.playMode > 0 && Main.joined) {
-            VBox lobby = new VBox(new Label("Lobby:"));
-            lobby.setStyle("-fx-background-color:rgba(255,255,255,0.5);");
-            lobby.setSpacing(10);
-            lobby.setPrefHeight(150);
-            lobby.setMinWidth(100);
+            Label headline = new Label("Lobby:");
+            headline.setStyle("-fx-underline: true");
+            VBox lobby = new VBox(headline);
+            lobby.setStyle("-fx-background-color:rgba(255,255,255,0.1);-fx-font-family: 'Ink Free';-fx-font-size: 18px;-fx-border-radius: 3.5;-fx-border-color: black;-fx-alignment: top-center;-fx-effect: dropshadow( gaussian , black ,10 ,0.7 ,0 ,0 ); -fx-font-weight: bolder");
+            lobby.setSpacing(2);
+            lobby.setPrefHeight(250);
+            lobby.setMinWidth(150);
+
 
             try {
                 for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
-                    lobby.getChildren().add(new Label(entry.getValue()));
+                    Label spieler = new Label(entry.getValue());
+                    lobby.getChildren().add(spieler);
+                      if(uniqueID.equals(entry.getKey())){
+                            spieler.setStyle("-fx-text-fill: lightgreen");
+                      }
+
                 }
 
             } catch (RemoteException e) {
@@ -246,14 +255,18 @@ public class GuiHauptmenu {
                 new BackgroundSize(100, 100, true, true, false, true));
         root.setBackground(new Background(myBI));
 
+        if (playMode>1&&Main.joined){
+            Scene menu = GuiLobby.lobby();
+             PrimaryStage.setScene(menu);
+             PrimaryStage.show();
+        }else {
+            //neue Scene
+            Scene menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
+            menu.getStylesheets().add("Main/MainMenu.css");
 
-        //neue Scene
-        Scene menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
-        menu.getStylesheets().add("Main/MainMenu.css");
-
-        PrimaryStage.setScene(menu);
-        PrimaryStage.show();
-
+            PrimaryStage.setScene(menu);
+            PrimaryStage.show();
+        }
         PrimaryStage.setOnCloseRequest(windowEvent -> {
             try {update.cancel();}
             catch (Exception e) {}
@@ -298,7 +311,7 @@ public class GuiHauptmenu {
             Main.anzSpieler = (int) playeranzselect.getValue();
 
             try {
-                runServer = new RunServer("25.101.225.129", "Server", 8001, uniqueID, myName);
+                runServer = new RunServer("25.73.216.66", "Server", 8001, uniqueID, myName);
                 server = runServer.starting();
                 status.setText("Warte auf Spieler");
                 status.setTextFill(Color.LIGHTGREEN);
