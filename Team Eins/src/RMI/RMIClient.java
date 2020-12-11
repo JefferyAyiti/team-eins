@@ -9,6 +9,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import static Main.Main.*;
+import static Main.Main.myTurnUpdate;
+
 public class RMIClient {
     public final server server;
     String cname;
@@ -36,10 +39,17 @@ public class RMIClient {
     public void update() {
         try {
             Main.tisch = server.updateTisch();
+
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        Platform.runLater(() -> Main.spieltischGui.buildStage(Main.classPrimaryStage));
+        if(tisch.aktiv != ich || tisch.aktiv == ich && myTurnUpdate) {
+            Platform.runLater(() -> Main.spieltischGui.buildStage(Main.classPrimaryStage));
+            if (tisch.aktiv == ich) {
+                myTurnUpdate = false;
+            } else
+                myTurnUpdate = true;
+        }
     }
 
     /**

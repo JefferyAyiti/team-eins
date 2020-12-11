@@ -42,6 +42,7 @@ public class Main extends Application {
     public static String uniqueID = UUID.randomUUID().toString();
     public static boolean gameRunning = false;
     public static long aenderung;
+    public static volatile boolean myTurnUpdate = true;
 
 
 
@@ -183,6 +184,7 @@ public class Main extends Application {
     static class moveCheck extends TimerTask {
         @Override
         public void run() {
+            System.out.println(anzSpieler-1);
             if (playMode < 2 && tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
                 if (System.currentTimeMillis() - lastmove < botPlayTime) {
                     try {
@@ -197,18 +199,25 @@ public class Main extends Application {
                 });
                 lastmove = System.currentTimeMillis();
 
+            } else if(playMode == 1 && (tisch.aktiv != ich || tisch.aktiv == ich && myTurnUpdate)) {
 
-            } else if(playMode == 1 && tisch.aktiv != ich) {
                 try {
-                    if(Main.server.getAenderung() > aenderung)
-                    Platform.runLater(() -> {
-                        try {
-                            aenderung = Main.server.getAenderung();
-                        } catch (RemoteException e) {
-                        }
-                        spieltischGui.buildStage(classPrimaryStage);
-                    });
+                    if(aenderung < server.getAenderung()) {
+
+                        Platform.runLater(() -> {
+                            try {
+                                aenderung = Main.server.getAenderung();
+                            } catch (RemoteException e) {
+                            }
+                            if (tisch.aktiv == ich) {
+                                myTurnUpdate = false;
+                            } else
+                                myTurnUpdate = true;
+                           spieltischGui.buildStage(classPrimaryStage);
+                        });
+                    }
                 } catch (RemoteException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -229,7 +238,7 @@ public class Main extends Application {
 
         bots = new Timer();
         if(playMode != 2)
-            bots.schedule(new moveCheck(), botPlayTime , 200);
+            bots.schedule(new moveCheck(), 300 , 500);
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
         {
