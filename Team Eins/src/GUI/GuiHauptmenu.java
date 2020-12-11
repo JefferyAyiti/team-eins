@@ -262,7 +262,7 @@ public class GuiHauptmenu {
         }else {
             //neue Scene
             Scene menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
-            menu.getStylesheets().add("Main/MainMenu.css");
+            menu.getStylesheets().add("GUI/MainMenu.css");
 
             PrimaryStage.setScene(menu);
             PrimaryStage.show();
@@ -311,7 +311,8 @@ public class GuiHauptmenu {
             Main.anzSpieler = (int) playeranzselect.getValue();
 
             try {
-                runServer = new RunServer("25.101.225.129", "Server", 8001, uniqueID, myName);
+                runServer = new RunServer("0.0.0.0",
+                        "Server", 8001, uniqueID, myName);
                 server = runServer.starting();
                 status.setText("Warte auf Spieler");
                 status.setTextFill(Color.LIGHTGREEN);
@@ -324,7 +325,8 @@ public class GuiHauptmenu {
                         else
                         {
                             update.cancel();
-                            Platform.runLater(() -> Main.spieltischGui.buildStage(Main.classPrimaryStage));
+                            Platform.runLater(() ->
+                                    Main.spieltischGui.buildStage(Main.classPrimaryStage));
                         }
 
 

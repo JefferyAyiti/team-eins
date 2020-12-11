@@ -1,6 +1,5 @@
 package GUI;
 
-import RMI.server;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -181,7 +180,7 @@ public class GuiScoreboard {
 
         //neue Scene
         Scene rangliste = new Scene(root, Main.sceneWidth, Main.sceneHeight);
-        rangliste.getStylesheets().add("Main/Rangliste.css");
+        rangliste.getStylesheets().add("GUI/Rangliste.css");
 
         Main.classPrimaryStage.setScene(rangliste);
 
