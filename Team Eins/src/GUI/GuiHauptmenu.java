@@ -27,7 +27,7 @@ public class GuiHauptmenu {
     TextField namefield;
     TextField ip;
     TextField port;
-    Timer update;
+    public Timer update;
     Label status = new Label();
     RunServer runServer;
     RunClient runClient;
@@ -46,7 +46,6 @@ public class GuiHauptmenu {
                     ich = server.assignId(uniqueID);
                 } catch (RemoteException e) {
                 }
-                System.out.println(myName+" ist "+ich);
                 inMenu = false;
                 assigned = true;
                 tisch = server.updateTisch();
@@ -295,13 +294,26 @@ public class GuiHauptmenu {
 
 
         } else if (action == "close") { //Host
-            Main.joined = false;
-            try {
-                runServer.stop();
-                update.cancel();
-            } catch (Exception e) {}
+            if(Main.playMode == 1){
+                Main.joined = false;
+                try {
+                    runServer.stop();
+                    update.cancel();
+                    server = null;
+                } catch (Exception e) {}
 
-            showSettingsMenu(Main.classPrimaryStage);
+                showSettingsMenu(Main.classPrimaryStage);
+            }else{
+                Main.joined = false;
+                update.cancel();
+                try {
+                    server.leaveServer(uniqueID);
+                    server = null;
+                    System.out.println("Client Disconnected");
+                } catch (RemoteException e) {}
+                showSettingsMenu(Main.classPrimaryStage);
+            }
+
 
         } else if (action == "create") { //Host
             Main.joined = true;
@@ -367,7 +379,7 @@ public class GuiHauptmenu {
 
             try {
                 runClient = new RunClient(ip.getText(),
-                        Integer.valueOf(port.getText()),
+                        Integer.parseInt(port.getText()),
                         "Server",
                         uniqueID,
                         Main.myName);
@@ -394,18 +406,29 @@ public class GuiHauptmenu {
             GuiZoomLoader.getZoomedImages();
             showSettingsMenu(Main.classPrimaryStage);
 
-
-
-
-
         } else if (action == "leave") {
             Main.joined = false;
             update.cancel();
                        try {
                 server.leaveServer(uniqueID);
+                server = null;
+                System.out.println("Client Disconnected");
 
             } catch (RemoteException e) {}
             showSettingsMenu(Main.classPrimaryStage);
         }
+    }
+
+    /**
+     * Wird für das resetten des Clients verwendet, wenn er die verbindung zum Server verliert.
+     * siehe: RMIClient.forceLeaveServer()
+     */
+    public void cleanupServer(){
+        Main.joined = false;
+        update.cancel();
+        try {
+            server.leaveServer(uniqueID);
+        } catch (RemoteException e) {}
+        server = null;
     }
 }
