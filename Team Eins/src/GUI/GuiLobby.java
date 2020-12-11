@@ -29,12 +29,15 @@
         teilnehmer.setSpacing(10);
         teilnehmer.setPrefHeight(150);
 
+
         try {
             for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
-                Label spieler = new Label(entry.getValue()+ " ist beigetreten");
+                Label spieler = new Label(entry.getValue() + " ist beigetreten");
+
                 spieler.setId("LabelCenter");
                 teilnehmer.getChildren().add(spieler);
                 if(uniqueID.equals(entry.getKey())){
+
                     spieler.setId("Spieler");
                 }
             }
@@ -57,10 +60,23 @@
         bottom.setSpacing(15);
         bottom.setAlignment(Pos.CENTER);
         bottom.setMinWidth(sceneHeight / 10);
-        Button close = new Button("Raum verlassen");
-       close.setOnAction(e -> hauptmenuGui.setSettings("close"));
+        Button close;
+        if(playMode==1){
+            Button start = new Button("Spiel starten");
+            start.setOnAction(e -> hauptmenuGui.setSettings("start"));
+            close = new Button("Server schließen");
+            close.setOnAction(e -> hauptmenuGui.setSettings("leave"));
+            start.setTranslateY(-10);
+            bottom.getChildren().addAll(start,close);
+
+        }else {
+            close = new Button("Raum verlassen");
+            close.setOnAction(e -> hauptmenuGui.setSettings("leave"));
+            bottom.getChildren().add(close);
+        }
        close.setTranslateY(-10);
-       bottom.getChildren().add(close);
+
+
 
         Button nextRound = new Button();
 

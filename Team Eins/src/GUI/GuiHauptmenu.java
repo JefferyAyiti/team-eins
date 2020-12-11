@@ -251,11 +251,12 @@ public class GuiHauptmenu {
 
 
         BackgroundImage myBI = new BackgroundImage(Main.table1,
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(100, 100, true, true, false, true));
         root.setBackground(new Background(myBI));
 
-        if (playMode>1&&Main.joined){
+
+        if (playMode>=1&&Main.joined){
             Scene menu = GuiLobby.lobby();
              PrimaryStage.setScene(menu);
              PrimaryStage.show();
