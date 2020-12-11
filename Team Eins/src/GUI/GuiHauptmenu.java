@@ -33,6 +33,8 @@ public class GuiHauptmenu {
     RunClient runClient;
     Thread getTisch;
     boolean assigned = false;
+    String IP = "localhost";
+    String Port = "8001";
 
 
     /**
@@ -68,9 +70,9 @@ public class GuiHauptmenu {
         if(!Main.joined)
             center.addRow(0, new Label("Spielername: "), namefield);
 
-        ip = new TextField("localhost");
+        ip = new TextField(IP);
 
-        port = new TextField("8001");
+        port = new TextField(Port);
         if (Main.playMode == 2 && !Main.joined) {
             //IP:Port
             center.addRow(1, new Label("Server-IP: "), ip);
@@ -92,6 +94,9 @@ public class GuiHauptmenu {
         playeranzselect.getSelectionModel().select(4);
         if (Main.playMode < 2)
             center.addRow(1, new Label("Spieleranzahl: "), playeranzselect);
+            if(Main.playMode == 1){
+                center.addRow(1, new Label("Server-IP: "), ip);
+            }
 
 
         //Boteinstellungen
@@ -107,6 +112,9 @@ public class GuiHauptmenu {
         botselect.getSelectionModel().select(0);
         if (Main.playMode < 2)
             center.addRow(2, new Label("Bot-Schwierigkeit: "), botselect);
+            if(Main.playMode == 1){
+                center.addRow(2, new Label("Server-Port: "), port);
+            }
 
 
         center.setHgap(60 * Main.zoomfactor);
@@ -324,8 +332,12 @@ public class GuiHauptmenu {
             Main.anzSpieler = (int) playeranzselect.getValue();
 
             try {
-                runServer = new RunServer("0.0.0.0",
-                        "Server", 8001, uniqueID, myName);
+                int portn = Integer.parseInt(port.getText());
+                runServer = new RunServer(ip.getText(),
+                        "Server", portn, uniqueID, myName);
+                Port = port.getText();
+                IP = ip.getText();
+
                 server = runServer.starting();
                 status.setText("Warte auf Spieler");
                 status.setTextFill(Color.LIGHTGREEN);
