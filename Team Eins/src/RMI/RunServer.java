@@ -38,7 +38,7 @@ public class RunServer {
 
 
 
-        System.setProperty("java.rmi.server.hostname","0.0.0.0");
+        System.setProperty("java.rmi.server.hostname","25.101.225.129");
         // TODO Policy muss hinzugefügt werden
         System.setProperty("java.security.policy","file:///tmp/test.policy");
 

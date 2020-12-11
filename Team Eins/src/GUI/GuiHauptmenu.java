@@ -316,7 +316,7 @@ public class GuiHauptmenu {
                 server = runServer.starting();
                 status.setText("Warte auf Spieler");
                 status.setTextFill(Color.LIGHTGREEN);
-                Timer update = new Timer();
+                update = new Timer();
                 update.schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -399,10 +399,8 @@ public class GuiHauptmenu {
 
         } else if (action == "leave") {
             Main.joined = false;
-            try {update.cancel();
-            }
-            catch (Exception e) {}
-            try {
+            update.cancel();
+                       try {
                 server.leaveServer(uniqueID);
 
             } catch (RemoteException e) {}
