@@ -27,12 +27,14 @@ public class GuiHauptmenu {
     TextField namefield;
     TextField ip;
     TextField port;
-    Timer update;
+    public Timer update;
     Label status = new Label();
     RunServer runServer;
     RunClient runClient;
     Thread getTisch;
     boolean assigned = false;
+    String IP = "localhost";
+    String Port = "8001";
 
 
     /**
@@ -46,7 +48,6 @@ public class GuiHauptmenu {
                     ich = server.assignId(uniqueID);
                 } catch (RemoteException e) {
                 }
-                System.out.println(myName+" ist "+ich);
                 inMenu = false;
                 assigned = true;
                 tisch = server.updateTisch();
@@ -69,9 +70,9 @@ public class GuiHauptmenu {
         if(!Main.joined)
             center.addRow(0, new Label("Spielername: "), namefield);
 
-        ip = new TextField("localhost");
+        ip = new TextField(IP);
 
-        port = new TextField("8001");
+        port = new TextField(Port);
         if (Main.playMode == 2 && !Main.joined) {
             //IP:Port
             center.addRow(1, new Label("Server-IP: "), ip);
@@ -93,6 +94,9 @@ public class GuiHauptmenu {
         playeranzselect.getSelectionModel().select(4);
         if (Main.playMode < 2)
             center.addRow(1, new Label("Spieleranzahl: "), playeranzselect);
+            if(Main.playMode == 1){
+                center.addRow(1, new Label("Server-IP: "), ip);
+            }
 
 
         //Boteinstellungen
@@ -108,6 +112,9 @@ public class GuiHauptmenu {
         botselect.getSelectionModel().select(0);
         if (Main.playMode < 2)
             center.addRow(2, new Label("Bot-Schwierigkeit: "), botselect);
+            if(Main.playMode == 1){
+                center.addRow(2, new Label("Server-Port: "), port);
+            }
 
 
         center.setHgap(60 * Main.zoomfactor);
@@ -299,13 +306,26 @@ public class GuiHauptmenu {
 
 
         } else if (action == "close") { //Host
-            Main.joined = false;
-            try {
-                runServer.stop();
-                update.cancel();
-            } catch (Exception e) {}
+            if(Main.playMode == 1){
+                Main.joined = false;
+                try {
+                    runServer.stop();
+                    update.cancel();
+                    server = null;
+                } catch (Exception e) {}
 
-            showSettingsMenu(Main.classPrimaryStage);
+                showSettingsMenu(Main.classPrimaryStage);
+            }else{
+                Main.joined = false;
+                update.cancel();
+                try {
+                    server.leaveServer(uniqueID);
+                    server = null;
+                    System.out.println("Client Disconnected");
+                } catch (RemoteException e) {}
+                showSettingsMenu(Main.classPrimaryStage);
+            }
+
 
         } else if (action == "create") { //Host
             Main.joined = true;
@@ -316,8 +336,12 @@ public class GuiHauptmenu {
             Main.anzSpieler = (int) playeranzselect.getValue();
 
             try {
-                runServer = new RunServer("0.0.0.0",
-                        "Server", 8001, uniqueID, myName);
+                int portn = Integer.parseInt(port.getText());
+                runServer = new RunServer(ip.getText(),
+                        "Server", portn, uniqueID, myName);
+                Port = port.getText();
+                IP = ip.getText();
+
                 server = runServer.starting();
                 status.setText("Warte auf Spieler");
                 status.setTextFill(Color.LIGHTGREEN);
@@ -371,7 +395,7 @@ public class GuiHauptmenu {
 
             try {
                 runClient = new RunClient(ip.getText(),
-                        Integer.valueOf(port.getText()),
+                        Integer.parseInt(port.getText()),
                         "Server",
                         uniqueID,
                         Main.myName);
@@ -398,18 +422,29 @@ public class GuiHauptmenu {
             GuiZoomLoader.getZoomedImages();
             showSettingsMenu(Main.classPrimaryStage);
 
-
-
-
-
         } else if (action == "leave") {
             Main.joined = false;
             update.cancel();
                        try {
                 server.leaveServer(uniqueID);
+                server = null;
+                System.out.println("Client Disconnected");
 
             } catch (RemoteException e) {}
             showSettingsMenu(Main.classPrimaryStage);
         }
+    }
+
+    /**
+     * Wird für das resetten des Clients verwendet, wenn er die verbindung zum Server verliert.
+     * siehe: RMIClient.forceLeaveServer()
+     */
+    public void cleanupServer(){
+        Main.joined = false;
+        update.cancel();
+        try {
+            server.leaveServer(uniqueID);
+        } catch (RemoteException e) {}
+        server = null;
     }
 }

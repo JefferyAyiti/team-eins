@@ -11,9 +11,10 @@ import java.rmi.registry.Registry;
 
 import static Main.Main.*;
 import static Main.Main.myTurnUpdate;
+import static Main.Main.server;
 
 public class RMIClient {
-    public final server server;
+    public server server;
     String cname;
 
     /**
@@ -61,5 +62,15 @@ public class RMIClient {
     }
     public Tisch getTisch(){
         return Main.tisch;
+    }
+
+    /**
+     * Zwingt den Client zurück in das Hauptmenü, wenn eine Connection refused exception in ClientThread.run entsteht.
+     */
+    public void forceLeaveServer(){
+        hauptmenuGui.cleanupServer();
+        System.out.println("Forced Client Disconnecting");
+
+        Platform.runLater(() -> hauptmenuGui.showSettingsMenu(Main.classPrimaryStage));
     }
 }

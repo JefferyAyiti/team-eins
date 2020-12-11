@@ -46,7 +46,10 @@ public class ClientThread implements Runnable{
                         client.update();
                     }
                 } catch (RemoteException e) {
+                    System.err.println("Lost connection to Server");
                     e.printStackTrace();
+                    t.cancel();
+                    client.forceLeaveServer();
                 }
 
             }
