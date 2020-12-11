@@ -249,17 +249,17 @@ public class Spiellogik  implements Serializable {
      */
     public boolean chipAbgeben(Spieler spieler, Chip chip) {
         boolean aktion=false;
-        if(spieler.getCardCount() == 0){
-            if(spieler.getBlackChips() >0 || spieler.getWhiteChips() >0) {
+        if(tisch.getAktivSpieler().getCardCount() == 0){
+            if(tisch.getAktivSpieler().getBlackChips() >0 || tisch.getAktivSpieler().getWhiteChips() >0) {
                 if (chip.getValue() == -1) {
-                    spieler.setWhiteChips(spieler.getWhiteChips() - 1);
+                    tisch.getAktivSpieler().setWhiteChips(spieler.getWhiteChips() - 1);
                     tisch.takeChips(1, 0);
-                    spieler.setPoints(spieler.getPoints()+1);
+                    tisch.getAktivSpieler().setPoints(spieler.getPoints()+1);
 
                 } else {
-                    spieler.setBlackChips(spieler.getBlackChips() - 1);
+                    tisch.getAktivSpieler().setBlackChips(spieler.getBlackChips() - 1);
                     tisch.takeChips(0, 1);
-                    spieler.setPoints(spieler.getPoints()+10);
+                    tisch.getAktivSpieler().setPoints(spieler.getPoints()+10);
 
                 }
                 aktion=true;
