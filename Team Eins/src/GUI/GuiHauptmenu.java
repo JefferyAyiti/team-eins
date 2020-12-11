@@ -268,10 +268,10 @@ public class GuiHauptmenu {
             PrimaryStage.show();
         }
         PrimaryStage.setOnCloseRequest(windowEvent -> {
-            try {update.cancel();}
+            try {System.exit(0);
+            }
             catch (Exception e) {}
-            try {getTisch.stop();}
-            catch (Exception e) {}
+
         });
     }
 
@@ -331,7 +331,7 @@ public class GuiHauptmenu {
 
 
                     }
-                }, 200, 200);
+                }, 1000, 1000);
             } catch (Exception e) {
                 status.setTextFill(Color.RED);
                 status.setText("Server konnte nicht gestartet werden");
@@ -399,10 +399,12 @@ public class GuiHauptmenu {
 
         } else if (action == "leave") {
             Main.joined = false;
-            try {update.cancel();}
+            try {update.cancel();
+            }
             catch (Exception e) {}
             try {
                 server.leaveServer(uniqueID);
+
             } catch (RemoteException e) {}
             showSettingsMenu(Main.classPrimaryStage);
         }

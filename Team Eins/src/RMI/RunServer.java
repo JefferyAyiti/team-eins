@@ -5,6 +5,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 public class RunServer {
     static String IP;
@@ -52,6 +53,7 @@ public class RunServer {
 
     public void stop() {
         try {
+            UnicastRemoteObject.unexportObject(registry, true);
             registry.unbind(SERVER_NAME);
             System.out.println("Server beendet");
         } catch (Exception e) {
