@@ -12,7 +12,7 @@ import Main.*;
 import java.rmi.RemoteException;
 import java.util.Map;
 
-import static Main.Main.playMode;
+import static Main.Main.*;
 
 public class GuiScoreboard {
     static Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
@@ -116,8 +116,17 @@ public class GuiScoreboard {
                 Button endGame = new Button("Spiel beenden");
                 endGame.setTranslateY(-15);
                 endGame.setOnAction(e -> {
+                    if(playMode == 2){
+                        try {
+                            server.leaveServer(uniqueID);
+                        } catch (RemoteException remoteException) {
+                            remoteException.printStackTrace();
+                        }
+                    }
                     Main.classPrimaryStage.close();
-                    Main.bots.cancel();
+                    try {
+                        Main.bots.cancel();
+                    }catch (NullPointerException  l){}
                     Main.resizecheck.cancel();
                         }
                 );
@@ -125,9 +134,21 @@ public class GuiScoreboard {
 
                 nextRound = new Button("Hauptmenü");
                 nextRound.setOnAction(e -> {
-                    Main.inMenu = true;
-                    Main.gameRunning = false;
-                    Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
+                    if(playMode == 2){
+                        try { //Client wird von Serverlist genommen und kommt ins Hauptmenu
+                            server.leaveServer(uniqueID);
+                            inMenu = true;
+                            gameRunning = false;
+                            hauptmenuGui.showSettingsMenu(classPrimaryStage);
+                        } catch (RemoteException remoteException) {
+                            remoteException.printStackTrace();
+                        }
+
+                    }else{
+                        Main.inMenu = true;
+                        Main.gameRunning = false;
+                        Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
+                            }
 
                         }
                 );
