@@ -145,7 +145,9 @@ public class GuiSpieltisch {
                     if(playMode == 2){
                         try {
                             if(server.updateTisch().getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()){
+                                if(!tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()){
                                 tisch.getSpielerList()[playerId].getCardHand().removeKarte(tisch.getSpielerList()[playerId].getCardHand().getKarte(0));
+                                }
                             }
                         } catch (RemoteException e) {
                             e.printStackTrace();
@@ -208,6 +210,7 @@ public class GuiSpieltisch {
                         }
 
                     }
+
                     buildStage(Main.classPrimaryStage);
 
 
