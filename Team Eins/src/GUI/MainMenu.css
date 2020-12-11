@@ -7,7 +7,9 @@
     -fx-font-size: 150%;
     -fx-alignment: center;
 }
-
+.button:pressed{
+    -fx-background-color: rgba(97, 97, 98,0.8);
+}
 .HBox{
     -fx-alignment: left;
 }
@@ -26,6 +28,9 @@
 .combo-box, .text-input, .slider .track {
     -fx-background-color: rgba(160, 158, 158, 0.4);
     -fx-control-inner-background: rgba(0,0,0,0.4);
+}
+#Tab{
+    -fx-effect: dropshadow( gaussian , gold ,10 ,0.3 ,0 ,0 );
 }
 
 #MMcenter > .label,

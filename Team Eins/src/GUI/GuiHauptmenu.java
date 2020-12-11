@@ -154,7 +154,8 @@ public class GuiHauptmenu {
             showSettingsMenu(PrimaryStage);
         });
 
-        Pane host = new Pane(new Label("Server erstellen"));
+        Label serverLabel = new Label("Server erstellen");
+        Pane host = new Pane(serverLabel);
         host.setOnMouseClicked(mouseEvent -> {
             Main.playMode = 1;
             Main.joined = false;
@@ -182,11 +183,13 @@ public class GuiHauptmenu {
         Button start = new Button();
         switch (Main.playMode) {
             case 0:
+                single.setId("Tab");
                 start.setText("Spiel starten");
                 start.setOnAction(e -> setSettings("start"));
                 break;
             case 1:
                 if (!Main.joined) {
+                    serverLabel.setId("Tab");
                     start.setText("Raum erstellen");
                     start.setOnAction(e -> setSettings("create"));
                 } else {
@@ -195,6 +198,7 @@ public class GuiHauptmenu {
                 }
                 break;
             case 2:
+                join.setId("Tab");
                 if (Main.joined) {
                     start.setText("Raum verlassen");
                     start.setOnAction(e -> setSettings("leave"));
