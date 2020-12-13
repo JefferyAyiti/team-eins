@@ -2,6 +2,9 @@
 
     import Main.*;
     import Main.Spieler;
+    import RMI.ClientThread;
+    import RMI.RMIClient;
+    import RMI.RunServer;
     import javafx.application.Application;
     import javafx.geometry.Pos;
     import javafx.scene.Scene;
@@ -19,6 +22,7 @@
 
     public class GuiLobby {
     public String action;
+    public static String host;
 
     public static Scene lobby() {
         Label titel = new Label("Lobby");
@@ -32,12 +36,15 @@
 
         try {
             for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
-                Label spieler = new Label(entry.getValue() + " ist beigetreten");
-
+                Label spieler;
+                if(server.getHost().equals(entry.getKey())){
+                    spieler = new Label ("HOST: "+entry.getValue());
+                }else {
+                    spieler = new Label(entry.getValue() + " ist beigetreten");
+                }
                 spieler.setId("LabelCenter");
                 teilnehmer.getChildren().add(spieler);
                 if(uniqueID.equals(entry.getKey())){
-
                     spieler.setId("Spieler");
                 }
             }
@@ -65,7 +72,7 @@
             Button start = new Button("Spiel starten");
             start.setOnAction(e -> hauptmenuGui.setSettings("start"));
             close = new Button("Server schließen");
-            close.setOnAction(e -> hauptmenuGui.setSettings("leave"));
+            close.setOnAction(e -> hauptmenuGui.setSettings("close"));
             start.setTranslateY(-10);
             bottom.getChildren().addAll(start,close);
 

@@ -46,6 +46,7 @@ public class RunServer {
         registry = LocateRegistry.createRegistry(PORT);
         registry.bind(SERVER_NAME , server);
         server.addClient(uid, myname);
+        server.setHost(uid);
 
         System.out.println("Server started");
         return server;
