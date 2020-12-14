@@ -54,24 +54,22 @@
             e.printStackTrace();
         }
         Label difficulty = new Label();
-        String level= (String) hauptmenuGui.botselect.getValue();
         //System.out.println(level);
-        switch(level){
-            case "Zufällig":
+        switch(Main.botlevel){
+            case 0:
                 difficulty = new Label("Schwierigkeit: Zufällig");
                 break;
-            case "Leicht":
+            case 1:
                 difficulty = new Label("Schwierigkeit: Einfach");
                 break;
-            case "Mittel":
+            case 2:
                 difficulty = new Label("Schwierigkeit: Mittel");
                 break;
-            case "Schwer":
+            case 3:
                 difficulty = new Label("Schwierigkeit: Schwer");
                 break;
         }
-        int anzahl = (int) hauptmenuGui.playeranzselect.getValue();
-        Label max = new Label("Spieleranzahl: "+ anzahl);
+        Label max = new Label("Spieleranzahl: "+ Main.anzSpieler);
         Label status =hauptmenuGui.status;
         HBox info = new HBox(status,max,difficulty);
         status.setStyle("-fx-text-fill: white; -fx-font-size: 15");
