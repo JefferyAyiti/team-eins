@@ -9,7 +9,7 @@
     -fx-background-image: url('/GUI/images/oberflaeche.jpg');
     -fx-text-fill: white;
     -fx-font-family: "Ink Free";
-    -fx-font-size: 20px;
+    -fx-font-size: 16px;
     -fx-alignment: center;
 }
 #LUnten{
@@ -34,11 +34,11 @@
 #LabelCenter{
     -fx-text-fill: white;
     -fx-font-family: "Ink Free";
-    -fx-font-size: 20px;
+    -fx-font-size: 16px;
 }
 #Spieler{
     -fx-font-family: "Ink Free";
-    -fx-font-size: 20px;
+    -fx-font-size: 16px;
     -fx-text-fill: lightgreen;
 
 }

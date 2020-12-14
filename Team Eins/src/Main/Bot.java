@@ -44,24 +44,25 @@ public class Bot extends Spieler  implements Serializable {
      * - Wenn ziehen nicht möglich steige aus.
      */
     public void playSchwierigkeitLeicht() {
+        Spieler playing = Main.tisch.getSpielerList()[Main.tisch.aktiv];
         Karte card;
         Main.spiellogik.chipsTauschen(Main.tisch.aktiv);
 
         //Main.spiellogik.aussteigen(this);
 
-        for (int i = 0; i < this.getCardCount(); i++) {
-            card = this.getCardHand().getKarte(i);
-            if (Main.spiellogik.karteLegen(this, card)) {
+        for (int i = 0; i < playing.getCardCount(); i++) {
+            card = playing.getCardHand().getKarte(i);
+            if (Main.spiellogik.karteLegen(playing, card)) {
                 System.out.println("\tLege " + card.getValue());
                 return;
             }
         }
-        if (Main.spiellogik.karteNachziehen(this)) {
+        if (Main.spiellogik.karteNachziehen(playing)) {
             System.out.println("\tZiehe");
             return;
         } else {
             System.out.println("\tSteige aus");
-            Main.spiellogik.aussteigen(this);
+            Main.spiellogik.aussteigen(playing);
         }
 
     }
@@ -79,6 +80,7 @@ public class Bot extends Spieler  implements Serializable {
      * Methode setzt setZug(false) automatisch
      */
     public void playSchwierigkeitMittel(){
+        Spieler playing = Main.tisch.getSpielerList()[Main.tisch.aktiv];
         Tisch tisch = Main.tisch;
         Spiellogik logik = Main.spiellogik;
         int ablage = Main.tisch.getObereKarteAblagestapel().value;
@@ -91,32 +93,32 @@ public class Bot extends Spieler  implements Serializable {
         if (inGame()) {
             if (zug) {
                 //Chips umtauschen
-                while (this.whiteChips >= 10) {
+                while (playing.whiteChips >= 10) {
                     logik.chipsTauschen(Main.tisch.aktiv);
                     System.out.println("\t tausche");
                 }
 
                 //for Schleife für das Karten legen
-                for (int i = 0; i < this.getCardCount(); i++) {
-                    HandKarte karte = this.cardHand.getKarte(i);
+                for (int i = 0; i < playing.getCardCount(); i++) {
+                    HandKarte karte = playing.cardHand.getKarte(i);
 
                     if (gleicheKarte && ablage == karte.value) {//gleicher Wert
                         System.out.println("\t lege gleich " + karte.getValue());
-                        logik.karteLegen(this, karte);
+                        logik.karteLegen(playing, karte);
                         abgelegt = true;
                         noChange = false;
                         break;
                     }
                 }
 
-                for (int i = 0; i < this.getCardCount() && noChange; i++) {
-                    HandKarte karte = this.cardHand.getKarte(i);
+                for (int i = 0; i < playing.getCardCount() && noChange; i++) {
+                    HandKarte karte = playing.cardHand.getKarte(i);
 
                     if ((tisch.getObereKarteAblagestapel().value == karte.value - 1
                             || (tisch.getObereKarteAblagestapel().value == 6 && karte.value == 10) //Lama auf 6
                             || (tisch.getObereKarteAblagestapel().value == 10 && karte.value == 1))) {// Handkarte um eins größer
                         System.out.println("\t lege höher " + karte.getValue());
-                        logik.karteLegen(this, karte);
+                        logik.karteLegen(playing, karte);
                         abgelegt = true;
                         break;
                     }
@@ -125,11 +127,11 @@ public class Bot extends Spieler  implements Serializable {
 
                 //Karten ziehen wenn noch keine Karte abgelegt wurde, wenn man am Zug ist, Wenn man mehr als 3 Karten hat,
                 //und 20% wskeit kommt dazu. Sonst wird ausgestiegen
-                if (!abgelegt && (this.getCardCount() >= 4 && Math.random() <= 0.2)  ){
-                    Main.spiellogik.karteNachziehen(this);
+                if (!abgelegt && (playing.getCardCount() >= 4 && Math.random() <= 0.2)  ){
+                    Main.spiellogik.karteNachziehen(playing);
                     System.out.println("\t Karte nachziehen");
                 }else if(!abgelegt){
-                    Main.spiellogik.aussteigen(this);
+                    Main.spiellogik.aussteigen(playing);
                     System.out.println("\t steige aus");
                 }
             }
@@ -148,8 +150,9 @@ public class Bot extends Spieler  implements Serializable {
      *  Wenn Nachziehstapel leer steige ich ebenfalls aus
      */
     public void playSchwierigkeitSchwer() {
+        Spieler playing = Main.tisch.getSpielerList()[Main.tisch.aktiv];
         Karte card;
-        //Main.spiellogik.chipsTauschen(Main.tisch.aktiv);
+        Main.spiellogik.chipsTauschen(Main.tisch.aktiv);
         int ablage = Main.tisch.getObereKarteAblagestapel().value;
         System.out.println("ablage: "+ ablage);
 
@@ -215,34 +218,34 @@ public class Bot extends Spieler  implements Serializable {
                     if ((merken.value != 0) && (legen.value != 0)) {
                         if (legen.value==10){
                             System.out.println("\tlege " + legen.value);
-                            Main.spiellogik.karteLegen(this, legen);
+                            Main.spiellogik.karteLegen(playing, legen);
                             noChange = false;
                             return;
                         }else if ( merken.value == 10){
                             System.out.println("\tlege " + merken.value);
-                            Main.spiellogik.karteLegen(this, merken);
+                            Main.spiellogik.karteLegen(playing, merken);
                             noChange = false;
                             return;
                         }else if (anzleg < anzmerk) {
-                            Main.spiellogik.karteLegen(this, legen);
+                            Main.spiellogik.karteLegen(playing, legen);
                             System.out.println("\tlege " + legen.value);
                             noChange = false;
                             return;
                         } else if (anzmerk < anzleg) {
-                            Main.spiellogik.karteLegen(this, merken);
+                            Main.spiellogik.karteLegen(playing, merken);
                             System.out.println("\tlege " + merken.value);
                             noChange = false;
                             return;
                         }
                     } else if (legen.value != 0) {
                         System.out.println("\tlege " + legen.value);
-                        Main.spiellogik.karteLegen(this, legen);
+                        Main.spiellogik.karteLegen(playing, legen);
                         noChange = false;
                         gezogen=0;
                         return;
                     } else if (merken.value != 0) {
                         System.out.println("\tlege " + merken.value);
-                        Main.spiellogik.karteLegen(this, merken);
+                        Main.spiellogik.karteLegen(playing, merken);
                         noChange = false;
                         return;
                     }
@@ -254,33 +257,33 @@ public class Bot extends Spieler  implements Serializable {
 
                 if (noChange && playerCardCount()  == 1|| handSumme()<3) {
                     System.out.println("\tSteige sicherheitshalber aus");
-                    Main.spiellogik.aussteigen(this);
+                    Main.spiellogik.aussteigen(playing);
                     return;
                 } else if (noChange && (handSumme() > 8) && playerCardCount() <= 2 && (risiko == 0 || risiko == 1 && Math.random() <= 0.6) ) {
-                    if (Main.spiellogik.karteNachziehen(this)) {
+                    if (Main.spiellogik.karteNachziehen(playing)) {
                         risiko++;
                         System.out.println("Risiko ziehen");
                     }else {
                         System.out.println("\tSteige gezwungenermaßen aus");
-                        Main.spiellogik.aussteigen(this);
+                        Main.spiellogik.aussteigen(playing);
                     }
                     return;
                 } else if (noChange && (handSumme() < 5) && playerCardCount() < 2) {
                     System.out.println("\tSteige sicherheitshalber aus");
-                    Main.spiellogik.aussteigen(this);
+                    Main.spiellogik.aussteigen(playing);
                     return;
                 } else if (noChange) {
-                    if ((gezogen < 3) && Main.spiellogik.karteNachziehen(this)) {
+                    if ((gezogen < 3) && Main.spiellogik.karteNachziehen(playing)) {
                         System.out.println("\tZiehe");
                         gezogen++;
                         return;
-                    }else if (handSumme()>12 && playerCardCount()>2 && Main.spiellogik.karteNachziehen(this)){
+                    }else if (handSumme()>12 && playerCardCount()>2 && Main.spiellogik.karteNachziehen(playing)){
                         System.out.println("\tZiehe");
                         gezogen++;
                         return;
                     } else {//ziehen nicht möglich -> aussteigen
                         System.out.println("\tSteige gezwungenermaßen aus");
-                        Main.spiellogik.aussteigen(this);
+                        Main.spiellogik.aussteigen(playing);
                     }
                 }
 
@@ -377,7 +380,7 @@ public class Bot extends Spieler  implements Serializable {
         for(Map.Entry<HandKarte,Integer> e : dublikate.entrySet()){
             HandKarte k = e.getKey();
 
-            //System.out.println("Karte:"+e.getKey().getValue()+" x"+e.getValue());
+            System.out.println("Karte:"+e.getKey().getValue()+" x"+e.getValue());
         }
         return dublikate;
     }
