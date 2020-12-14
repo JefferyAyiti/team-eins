@@ -99,7 +99,7 @@
         Button close;
         if(playMode==1){
             Button start = new Button("Spiel starten");
-            start.setOnAction(e -> hauptmenuGui.setSettings("start"));
+            start.setOnAction(e -> hauptmenuGui.setSettings("startserver"));
             close = new Button("Server schließen");
             close.setOnAction(e -> hauptmenuGui.setSettings("close"));
             start.setTranslateY(-10);
