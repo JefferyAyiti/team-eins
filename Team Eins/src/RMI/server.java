@@ -20,6 +20,8 @@ public interface server extends Remote {
     int getAnzahlSpieler() throws RemoteException;
     void neueRunde() throws RemoteException;
     Map<Spieler, Integer> getRangliste() throws RemoteException;
+    void setHost(String uid) throws RemoteException;
+    String getHost() throws RemoteException;
 
     void karteLegen(Spieler spieler, Karte karte) throws RemoteException;
     void karteNachziehen(Spieler spieler) throws RemoteException;

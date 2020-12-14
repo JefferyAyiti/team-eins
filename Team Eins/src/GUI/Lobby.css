@@ -28,16 +28,20 @@
     -fx-font-size: 150%;
     -fx-alignment: center;
 }
+.button:pressed{
+    -fx-background-color: rgba(97, 97, 98,0.8);
+}
 #LabelCenter{
     -fx-text-fill: white;
     -fx-font-family: "Ink Free";
     -fx-font-size: 20px;
-
-
 }
 #Spieler{
     -fx-font-family: "Ink Free";
     -fx-font-size: 20px;
     -fx-text-fill: lightgreen;
 
+}
+.VBox{
+    -fx-alignment: center;
 }

@@ -14,6 +14,7 @@ public class ServerImpl implements server {
 
     Map<String, String> clients = new LinkedHashMap<>();
     long aenderung = 0;
+    String host;
 
     public ServerImpl() throws RemoteException {
         UnicastRemoteObject.exportObject(this, 0);
@@ -86,6 +87,14 @@ public class ServerImpl implements server {
         aenderung++;
         return spiellogik.ranglisteErstellen();
 
+    }
+    @Override
+    public void setHost(String uid) throws RemoteException{
+        host = uid;
+    }
+    @Override
+    public String getHost() throws RemoteException{
+        return host;
     }
 
 

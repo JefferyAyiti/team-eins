@@ -81,6 +81,7 @@ public class GuiHauptmenu {
         }
 
 
+
         //Spieleranzahl
         ObservableList<Integer> ploptions =
                 FXCollections.observableArrayList(
@@ -116,8 +117,14 @@ public class GuiHauptmenu {
                 center.addRow(2, new Label("Server-Port: "), port);
             }
 
-
-        center.setHgap(60 * Main.zoomfactor);
+        if(Main.playMode==1 ){
+            center.setHgap(20);
+            namefield.setMaxWidth(100*zoomfactor);
+            ip.setMaxWidth(80*zoomfactor);
+            port.setMaxWidth(40*zoomfactor);
+        }else {
+            center.setHgap(60 * Main.zoomfactor);
+        }
         center.setId("MMcenter");
         center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('/GUI/images/oberflaeche.jpg')");
         center.setMinHeight(250 * Main.zoomfactor);
@@ -136,6 +143,7 @@ public class GuiHauptmenu {
         slider.setMajorTickUnit(1000);
         slider.setBlockIncrement(10);
         slider.setPrefSize(150, 5);
+
         if (Main.playMode < 2)
             center.addRow(3, new Label("Bot-Bedenkzeit: "), slider);
 
@@ -161,7 +169,8 @@ public class GuiHauptmenu {
             showSettingsMenu(PrimaryStage);
         });
 
-        Pane host = new Pane(new Label("Server erstellen"));
+        Label serverLabel = new Label("Server erstellen");
+        Pane host = new Pane(serverLabel);
         host.setOnMouseClicked(mouseEvent -> {
             Main.playMode = 1;
             Main.joined = false;
@@ -189,11 +198,13 @@ public class GuiHauptmenu {
         Button start = new Button();
         switch (Main.playMode) {
             case 0:
+                single.setId("Tab");
                 start.setText("Spiel starten");
                 start.setOnAction(e -> setSettings("start"));
                 break;
             case 1:
                 if (!Main.joined) {
+                    serverLabel.setId("Tab");
                     start.setText("Raum erstellen");
                     start.setOnAction(e -> setSettings("create"));
                 } else {
@@ -202,6 +213,7 @@ public class GuiHauptmenu {
                 }
                 break;
             case 2:
+                join.setId("Tab");
                 if (Main.joined) {
                     start.setText("Raum verlassen");
                     start.setOnAction(e -> setSettings("leave"));
@@ -249,7 +261,7 @@ public class GuiHauptmenu {
 
             center.add(lobby, 2, 0, 1, 3);
         }
-        center.setAlignment(Pos.TOP_LEFT);
+        //center.setAlignment(Pos.TOP_LEFT);
         center.setMaxHeight(center.getHeight());
 
         root.setTop(top);
@@ -288,6 +300,7 @@ public class GuiHauptmenu {
      * @param action welcher Button wurde geklickt
      */
     void setSettings(String action) {
+        status.setTranslateY(30);
         if (action == "start") { //Single-Player-Spiel
             inMenu = false;
             Main.botPlayTime = (long) slider.getValue();

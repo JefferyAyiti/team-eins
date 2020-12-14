@@ -2,6 +2,9 @@
 
     import Main.*;
     import Main.Spieler;
+    import RMI.ClientThread;
+    import RMI.RMIClient;
+    import RMI.RunServer;
     import javafx.application.Application;
     import javafx.geometry.Pos;
     import javafx.scene.Scene;
@@ -19,6 +22,7 @@
 
     public class GuiLobby {
     public String action;
+    public static String host;
 
     public static Scene lobby() {
         Label titel = new Label("Lobby");
@@ -32,12 +36,16 @@
 
         try {
             for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
-                Label spieler = new Label(entry.getValue() + " ist beigetreten");
-
+                Label spieler;
+                if(server.getHost().equals(entry.getKey())){
+                    spieler = new Label ("HOST: "+entry.getValue());
+                }else {
+                    spieler = new Label(entry.getValue() + " ist beigetreten");
+                }
                 spieler.setId("LabelCenter");
+                spieler.setAlignment(Pos.TOP_CENTER);
                 teilnehmer.getChildren().add(spieler);
                 if(uniqueID.equals(entry.getKey())){
-
                     spieler.setId("Spieler");
                 }
             }
@@ -45,14 +53,40 @@
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
+        Label difficulty = new Label();
+        switch(hauptmenuGui.botselect.getSelectionModel().getSelectedIndex()){
+            case 0:
+                difficulty = new Label("Schwierigkeit: Zufall");
+                break;
+            case 1:
+                difficulty = new Label("Schwierigkeit: Einfach");
+                break;
+            case 2:
+                difficulty = new Label("Schwierigkeit: Mittel");
+                break;
+            case 3:
+                difficulty = new Label("Schwierigkeit: Schwer");
+                break;
+        }
+        int anzahl = (int) hauptmenuGui.playeranzselect.getValue();
+        Label max = new Label("Spieleranzahl: "+ anzahl);
+        Label status =hauptmenuGui.status;
+        HBox info = new HBox(status,max,difficulty);
+        status.setStyle("-fx-text-fill: white; -fx-font-size: 15");
+        max.setStyle("-fx-text-fill: white; -fx-font-size: 15");
+        max.setTranslateY(30);
+        difficulty.setStyle("-fx-text-fill: white; -fx-font-size: 15");
+        difficulty.setTranslateY(30);
+        info.setSpacing(50);
 
         GridPane center = new GridPane();
-
+        teilnehmer.setAlignment(Pos.TOP_CENTER);
         center.setId("LCenter");
         center.addRow(0,teilnehmer);
+        center.addRow(1,info);
         center.setHgap(30 * Main.zoomfactor);
         center.setMinHeight(250 * Main.zoomfactor);
+        center.setAlignment(Pos.TOP_CENTER);
 
 
         HBox bottom = new HBox();
@@ -65,7 +99,7 @@
             Button start = new Button("Spiel starten");
             start.setOnAction(e -> hauptmenuGui.setSettings("start"));
             close = new Button("Server schließen");
-            close.setOnAction(e -> hauptmenuGui.setSettings("leave"));
+            close.setOnAction(e -> hauptmenuGui.setSettings("close"));
             start.setTranslateY(-10);
             bottom.getChildren().addAll(start,close);
 
@@ -86,7 +120,6 @@
         //top.setMinHeight(sceneHeight/8);
         top.setAlignment(Pos.CENTER);
 
-        center.setAlignment(Pos.TOP_LEFT);
         center.setMaxHeight(center.getHeight());
         BorderPane root = new BorderPane();
         root.setTop(top);
