@@ -40,7 +40,7 @@ public class GuiHauptmenu {
     /**
      * @param PrimaryStage Erzeugt und zeigt das Hauptmenü zu Beginn des Spiels an
      */
-    public void showSettingsMenu(Stage PrimaryStage) {
+    public void showSettingsMenu(Stage PrimaryStage){
         inMenu = true;
         try {
             if(server != null && server.getGameStart() && playMode == 2 && !assigned) {
@@ -275,17 +275,18 @@ public class GuiHauptmenu {
         root.setBackground(new Background(myBI));
 
 
-        Scene menu;
         if (playMode>=1&&Main.joined){
-            menu = GuiLobby.lobby();
+            Scene menu = GuiLobby.lobby();
+             PrimaryStage.setScene(menu);
+             PrimaryStage.show();
         }else {
             //neue Scene
-            menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
+            Scene menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
             menu.getStylesheets().add("GUI/MainMenu.css");
 
+            PrimaryStage.setScene(menu);
+            PrimaryStage.show();
         }
-        PrimaryStage.setScene(menu);
-        PrimaryStage.show();
         PrimaryStage.setOnCloseRequest(windowEvent -> {
             try {System.exit(0);
             }

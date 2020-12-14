@@ -24,7 +24,7 @@
     public String action;
     public static String host;
 
-    public static Scene lobby() {
+    public static Scene lobby(){
         Label titel = new Label("Lobby");
         titel.setFont(new Font("Script MT Bold", 36 * Main.zoomfactor));
         titel.setId("titel");
@@ -55,7 +55,13 @@
         }
         Label difficulty = new Label();
         //System.out.println(level);
-        switch(Main.botlevel){
+        int level = 0;
+        try {
+            level = server.getBotLevel();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        switch(level){
             case 0:
                 difficulty = new Label("Schwierigkeit: Zufällig");
                 break;
@@ -69,7 +75,14 @@
                 difficulty = new Label("Schwierigkeit: Schwer");
                 break;
         }
-        Label max = new Label("Spieleranzahl: "+ Main.anzSpieler);
+        int anzS=0;
+        try {
+           anzS = server.getAnzahlSpieler();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        Label max = new Label("Spieleranzahl: "+ anzS);
+
         Label status =hauptmenuGui.status;
         HBox info = new HBox(status,max,difficulty);
         status.setStyle("-fx-text-fill: white; -fx-font-size: 15");
