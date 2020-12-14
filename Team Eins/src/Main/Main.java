@@ -43,6 +43,7 @@ public class Main extends Application {
     public static boolean gameRunning = false;
     public static long aenderung;
     public static volatile boolean myTurnUpdate = true;
+    public static int round = 0;
 
 
 
@@ -199,8 +200,11 @@ public class Main extends Application {
                 });
                 lastmove = System.currentTimeMillis();
 
-            } else if(playMode == 1 && (tisch.aktiv != ich || tisch.aktiv == ich && myTurnUpdate)) {
+            } else if(playMode == 1 && ((tisch.aktiv != ich || tisch.aktiv == ich &&
+                    myTurnUpdate) || round < tisch.getDurchgangNr()) ) {
 
+                if(round < tisch.getDurchgangNr())
+                    round = tisch.getDurchgangNr();
                 try {
                     if(aenderung < server.getAenderung()) {
 

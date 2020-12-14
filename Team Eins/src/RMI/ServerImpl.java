@@ -149,6 +149,11 @@ public class ServerImpl implements server {
     }
 
     @Override
+    public int getDurchgangNr() throws RemoteException {
+        return tisch.getDurchgangNr();
+    }
+
+    @Override
     public Tisch updateTisch() throws RemoteException {
         return tisch;
     }

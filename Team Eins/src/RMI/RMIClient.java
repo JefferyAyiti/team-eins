@@ -16,6 +16,7 @@ import static Main.Main.server;
 public class RMIClient {
     public server server;
     String cname;
+    int round = 0;
 
     /**
      * @param IP Server IP
@@ -44,7 +45,12 @@ public class RMIClient {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        if(tisch.aktiv != ich || tisch.aktiv == ich && myTurnUpdate) {
+        if(tisch.aktiv != ich || (tisch.aktiv == ich &&
+                myTurnUpdate) ||
+                round < tisch.getDurchgangNr()) {
+            if(round < tisch.getDurchgangNr())
+                round = tisch.getDurchgangNr();
+
             Platform.runLater(() -> Main.spieltischGui.buildStage(Main.classPrimaryStage));
             if (tisch.aktiv == ich) {
                 myTurnUpdate = false;
@@ -71,6 +77,7 @@ public class RMIClient {
         hauptmenuGui.cleanupServer();
         System.out.println("Forced Client Disconnecting");
 
+        joined = false;
         Platform.runLater(() -> hauptmenuGui.showSettingsMenu(Main.classPrimaryStage));
     }
 }
