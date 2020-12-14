@@ -22,6 +22,7 @@ public interface server extends Remote {
     Map<Spieler, Integer> getRangliste() throws RemoteException;
     void setHost(String uid) throws RemoteException;
     String getHost() throws RemoteException;
+    int getBotLevel()throws RemoteException;
 
     void karteLegen(Spieler spieler, Karte karte) throws RemoteException;
     void karteNachziehen(Spieler spieler) throws RemoteException;

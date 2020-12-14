@@ -96,6 +96,10 @@ public class ServerImpl implements server {
     public String getHost() throws RemoteException{
         return host;
     }
+    @Override
+    public int getBotLevel() throws  RemoteException{
+        return botlevel;
+    }
 
 
     //Spielzüge
