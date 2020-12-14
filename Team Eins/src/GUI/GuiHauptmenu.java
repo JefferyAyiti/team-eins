@@ -275,18 +275,17 @@ public class GuiHauptmenu {
         root.setBackground(new Background(myBI));
 
 
+        Scene menu;
         if (playMode>=1&&Main.joined){
-            Scene menu = GuiLobby.lobby();
-             PrimaryStage.setScene(menu);
-             PrimaryStage.show();
+            menu = GuiLobby.lobby();
         }else {
             //neue Scene
-            Scene menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
+            menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
             menu.getStylesheets().add("GUI/MainMenu.css");
 
-            PrimaryStage.setScene(menu);
-            PrimaryStage.show();
         }
+        PrimaryStage.setScene(menu);
+        PrimaryStage.show();
         PrimaryStage.setOnCloseRequest(windowEvent -> {
             try {System.exit(0);
             }
