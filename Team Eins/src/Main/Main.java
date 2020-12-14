@@ -184,7 +184,7 @@ public class Main extends Application {
     static class moveCheck extends TimerTask {
         @Override
         public void run() {
-            System.out.println(anzSpieler-1);
+            //System.out.println("Anzahl Spieler: " + (anzSpieler-1));
             if (playMode < 2 && tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
                 if (System.currentTimeMillis() - lastmove < botPlayTime) {
                     try {

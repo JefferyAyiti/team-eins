@@ -54,17 +54,19 @@
             e.printStackTrace();
         }
         Label difficulty = new Label();
-        switch(hauptmenuGui.botselect.getSelectionModel().getSelectedIndex()){
-            case 0:
-                difficulty = new Label("Schwierigkeit: Zufall");
+        String level= (String) hauptmenuGui.botselect.getValue();
+        //System.out.println(level);
+        switch(level){
+            case "Zufällig":
+                difficulty = new Label("Schwierigkeit: Zufällig");
                 break;
-            case 1:
+            case "Leicht":
                 difficulty = new Label("Schwierigkeit: Einfach");
                 break;
-            case 2:
+            case "Mittel":
                 difficulty = new Label("Schwierigkeit: Mittel");
                 break;
-            case 3:
+            case "Schwer":
                 difficulty = new Label("Schwierigkeit: Schwer");
                 break;
         }
