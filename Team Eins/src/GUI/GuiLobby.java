@@ -33,7 +33,7 @@
         teilnehmer.setSpacing(10);
         teilnehmer.setPrefHeight(150);
 
-
+        int beigetreten = 0;
         try {
             for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
                 Label spieler;
@@ -48,6 +48,7 @@
                 if(uniqueID.equals(entry.getKey())){
                     spieler.setId("Spieler");
                 }
+                beigetreten ++;
             }
 
         } catch (RemoteException e) {
@@ -85,10 +86,10 @@
 
         Label status =hauptmenuGui.status;
         HBox info = new HBox(status,max,difficulty);
-        status.setStyle("-fx-text-fill: white; -fx-font-size: 15");
-        max.setStyle("-fx-text-fill: white; -fx-font-size: 15");
+        status.setStyle("-fx-text-fill: white; -fx-font-size: 14");
+        max.setStyle("-fx-text-fill: white; -fx-font-size: 14");
         max.setTranslateY(30);
-        difficulty.setStyle("-fx-text-fill: white; -fx-font-size: 15");
+        difficulty.setStyle("-fx-text-fill: white; -fx-font-size: 14");
         difficulty.setTranslateY(30);
         info.setSpacing(50);
 
@@ -97,9 +98,10 @@
         center.setId("LCenter");
         center.addRow(0,teilnehmer);
         center.addRow(1,info);
-        center.setHgap(30 * Main.zoomfactor);
+        center.setHgap(25 * Main.zoomfactor);
         center.setMinHeight(250 * Main.zoomfactor);
         center.setAlignment(Pos.TOP_CENTER);
+
 
 
         HBox bottom = new HBox();
@@ -122,7 +124,12 @@
             bottom.getChildren().add(close);
         }
        close.setTranslateY(-10);
-
+        if(beigetreten>4){
+            teilnehmer.setSpacing(5);
+            if(beigetreten==6){
+                close.setTranslateY(-5);
+            }
+        }
 
 
         Button nextRound = new Button();
