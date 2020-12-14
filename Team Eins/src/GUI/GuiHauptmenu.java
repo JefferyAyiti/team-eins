@@ -384,6 +384,11 @@ public class GuiHauptmenu {
                 update.cancel();
             } catch (Exception e) {}
             inMenu = false;
+            try {
+                server.shuffleSpieler();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
             gameRunning = true;
             try {
                 ich = server.assignId(uniqueID);

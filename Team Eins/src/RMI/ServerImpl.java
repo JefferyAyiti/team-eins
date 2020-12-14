@@ -1,9 +1,12 @@
 package RMI;
 
 import Main.*;
+import javafx.util.Pair;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -156,6 +159,19 @@ public class ServerImpl implements server {
     @Override
     public Tisch updateTisch() throws RemoteException {
         return tisch;
+    }
+
+    @Override
+    public void shuffleSpieler() throws RemoteException {
+        ArrayList<Pair<String, String>> clientsArr = new ArrayList<>();
+        for (Map.Entry<String, String> entry : clients.entrySet()) {
+            clientsArr.add(new Pair<>(entry.getKey(), entry.getValue()));
+        }
+        Collections.shuffle(clientsArr);
+        clients = new LinkedHashMap<>();
+        for(Pair<String, String> c:clientsArr) {
+            clients.put(c.getKey(), c.getValue());
+        }
     }
 
 

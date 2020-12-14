@@ -32,6 +32,6 @@ public interface server extends Remote {
     boolean getRundeBeendet() throws RemoteException;
     boolean getSpielBeendet() throws RemoteException;
     int getDurchgangNr() throws RemoteException;
-
+    public void shuffleSpieler() throws RemoteException;
     Tisch updateTisch() throws RemoteException;
 }
