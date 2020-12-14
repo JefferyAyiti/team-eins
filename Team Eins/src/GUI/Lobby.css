@@ -35,12 +35,13 @@
     -fx-text-fill: white;
     -fx-font-family: "Ink Free";
     -fx-font-size: 20px;
-
-
 }
 #Spieler{
     -fx-font-family: "Ink Free";
     -fx-font-size: 20px;
     -fx-text-fill: lightgreen;
 
+}
+.VBox{
+    -fx-alignment: center;
 }

@@ -300,6 +300,7 @@ public class GuiHauptmenu {
      * @param action welcher Button wurde geklickt
      */
     void setSettings(String action) {
+        status.setTranslateY(30);
         if (action == "start") { //Single-Player-Spiel
             inMenu = false;
             Main.botPlayTime = (long) slider.getValue();
