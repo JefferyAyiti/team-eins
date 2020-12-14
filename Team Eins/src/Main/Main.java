@@ -192,7 +192,7 @@ public class Main extends Application {
                     } catch (InterruptedException e) {
                     }
                 }
-                spieltischGui.printtoLog("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
+                //spieltischGui.printtoLog("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
                 System.out.println("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
                 ((Bot) tisch.getAktivSpieler()).play();
                 Platform.runLater(() -> {

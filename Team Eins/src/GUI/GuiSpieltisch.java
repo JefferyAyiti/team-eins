@@ -461,7 +461,7 @@ public class GuiSpieltisch {
 
             GridPane gridPane = new GridPane();
             gridPane.setBackground(new Background(myBI));
-            gridPane.setGridLinesVisible(true);
+            //gridPane.setGridLinesVisible(true);
             gridPane.setAlignment(Pos.TOP_CENTER);
 
             table.getColumnConstraints().add(new ColumnConstraints()); // column 0 is 100 wide

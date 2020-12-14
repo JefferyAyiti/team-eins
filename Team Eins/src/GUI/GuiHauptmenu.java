@@ -270,7 +270,7 @@ public class GuiHauptmenu {
 
 
         BackgroundImage myBI = new BackgroundImage(Main.table1,
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(100, 100, true, true, false, true));
         root.setBackground(new Background(myBI));
 
