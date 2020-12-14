@@ -16,18 +16,35 @@ public class ServerImpl implements server {
 
 
     Map<String, String> clients = new LinkedHashMap<>();
+    int anzClients = 0;
     long aenderung = 0;
     String host;
+    boolean lock = true;
 
     public ServerImpl() throws RemoteException {
         UnicastRemoteObject.exportObject(this, 0);
     }
 
+    @Override
+    public boolean serverOpen() throws RemoteException {
+        return lock;
+    }
 
     @Override
     public void addClient(String uid, String name) {
-        aenderung++;
-        clients.put(uid, name);
+        anzClients++;
+        int max =0;
+        try {
+            max = getAnzahlSpieler();
+        } catch (RemoteException e) {}
+        if(anzClients <= max){
+            aenderung++;
+            clients.put(uid, name);
+        }else{
+            lock = false;
+            System.out.println("Maximal Anzahl von Spieler erreicht. Keine Zugang");
+        }
+
     }
 
     @Override

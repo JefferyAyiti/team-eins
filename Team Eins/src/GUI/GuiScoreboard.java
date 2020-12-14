@@ -11,6 +11,7 @@ import Main.*;
 
 import java.rmi.RemoteException;
 import java.util.Map;
+import java.util.MissingFormatArgumentException;
 
 import static Main.Main.*;
 
@@ -137,8 +138,8 @@ public class GuiScoreboard {
                     if(playMode == 2){
                         try { //Client wird von Serverlist genommen und kommt ins Hauptmenu
                             server.leaveServer(uniqueID);
-                            inMenu = true;
-                            gameRunning = false;
+                            playMode = 0;
+                            joined = false;
                             hauptmenuGui.showSettingsMenu(classPrimaryStage);
                         } catch (RemoteException remoteException) {
                             remoteException.printStackTrace();

@@ -6,15 +6,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -22,10 +20,8 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 import Main.*;
 
 import static Main.Main.*;
@@ -38,6 +34,7 @@ public class GuiSpieltisch {
     private ArrayList<Double> x = new ArrayList<>();
     private ArrayList<Double> y = new ArrayList<>();
     private ArrayList<Double> deg =  new ArrayList<>();
+    private List<String> log = new ArrayList<>();
 
     private static final String IDLE_BUTTON_STYLE = "-fx-background-color: transparent;";
     private static final String HOVERED_BUTTON_STYLE =
@@ -464,7 +461,7 @@ public class GuiSpieltisch {
 
             GridPane gridPane = new GridPane();
             gridPane.setBackground(new Background(myBI));
-            gridPane.setGridLinesVisible(false);
+            gridPane.setGridLinesVisible(true);
             gridPane.setAlignment(Pos.TOP_CENTER);
 
             table.getColumnConstraints().add(new ColumnConstraints()); // column 0 is 100 wide
@@ -573,9 +570,27 @@ public class GuiSpieltisch {
             score.setAlignment(Pos.CENTER_RIGHT);
             gridPane.add(score, 4, 4, 1, 1);
 
+
+            /*//Gamelog
+            VBox gamelog = new VBox();
+            ScrollPane scroll = new ScrollPane();
+            scroll.setOpacity(0.5f);
+            scroll.setMaxHeight(100);
+
+
+            gamelog.setMaxHeight(50);
+            //gamelog.setBackground(new Background(new BackgroundFill(Paint.valueOf("Grey"),null, null)));
+            gamelog.setAlignment(Pos.BOTTOM_CENTER);
+            for(String event: log){
+                Text lib = new Text(event);
+                gamelog.getChildren().add(lib);
+            }
+            scroll.setContent(gamelog);
+            gridPane.add(scroll, 0,4,1,1);*/
+
+
+
             root.getChildren().add(gridPane);
-
-
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
             primaryStage.setScene(scene);
 
@@ -584,5 +599,11 @@ public class GuiSpieltisch {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
+
+    public void printtoLog(String event){
+           log.add(event);
+    }
+
 }
