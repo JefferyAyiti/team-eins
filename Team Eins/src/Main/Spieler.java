@@ -2,6 +2,7 @@ package Main;
 
 import java.io.Serializable;
 import java.sql.SQLOutput;
+import java.util.UUID;
 
 import static Main.Main.ich;
 import static Main.Main.tisch;
@@ -11,6 +12,7 @@ public class Spieler  implements Serializable {
     int oldScore=0;
     Hand cardHand;
     String playerName;
+    String uid;
     int blackChips = 0, whiteChips = 0;
     private boolean letzerSpielerDurchgang = false;
     private boolean aussteigen = false;
@@ -20,10 +22,14 @@ public class Spieler  implements Serializable {
      * Erstellt Spieler Object mit Spielername
      * @param playerName Spieler Name
      */
-    public Spieler(String playerName) {
+    public Spieler(String playerName, String id) {
+        this.uid = id;
         this.playerName = playerName;
     }
 
+    public String getUid() {
+        return uid;
+    }
 
     /**
      * Weist dem Spieler eine Kartenhand zu
@@ -152,5 +158,10 @@ public class Spieler  implements Serializable {
     public boolean equals(Object object) {
         return playerName == ((Spieler)object).getName() &&
                 ((Spieler)object).getCardHand().equals(cardHand);
+    }
+
+    @Override
+    public String toString() {
+        return "("+getName()+" "+getUid()+")";
     }
 }

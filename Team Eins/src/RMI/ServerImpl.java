@@ -60,12 +60,13 @@ public class ServerImpl implements server {
 
     @Override
     public int assignId(String uid) {
-        int i = 0;
-        for (Map.Entry<String, String> entry : clients.entrySet()) {
-            if(uid.equals(entry.getKey())) {
+        System.out.println("assign id "+uid);
+        System.out.println(Main.tisch.getSpielerList());
+
+        for (int i = 0;i < anzSpieler;i++) {
+            if(Main.tisch.getSpielerList()[i].getUid().equals(uid)) {
                 return i;
             }
-            i++;
         }
         return -1;
     }
@@ -180,15 +181,7 @@ public class ServerImpl implements server {
 
     @Override
     public void shuffleSpieler() throws RemoteException {
-        ArrayList<Pair<String, String>> clientsArr = new ArrayList<>();
-        for (Map.Entry<String, String> entry : clients.entrySet()) {
-            clientsArr.add(new Pair<>(entry.getKey(), entry.getValue()));
-        }
-        Collections.shuffle(clientsArr);
-        clients = new LinkedHashMap<>();
-        for(Pair<String, String> c:clientsArr) {
-            clients.put(c.getKey(), c.getValue());
-        }
+
     }
 
 
