@@ -63,8 +63,10 @@ public class GuiSpieltisch {
         //pane.setStyle("-fx-background-color:#eeeeee;");
         VBox.setMargin(pane, new Insets(0, 0, 5, 0));
 
-        Label plr = new Label(tisch.getSpielerList()[playerId].getName());
-        if (playerId-ich > 1 && playerId-ich < 5) {
+
+        int tablePos = Math.floorMod(playerId-ich, anzSpieler);
+        Label plr = new Label(tisch.getSpielerList()[playerId].getName()); //PlayerID für debug
+        if (tablePos > 1 && tablePos < 5) {
             plr.setRotate(180);
         }
         plr.setTextFill(Color.WHITE);
@@ -73,7 +75,8 @@ public class GuiSpieltisch {
             plr.setTextFill(Color.YELLOW);
             plr.setFont(Font.font("Verdana", FontWeight.BOLD, 14 * zoomfactor));
         }
-        plr.setTranslateY(-15);
+        if(playerId!=ich)
+            plr.setTranslateY(-15);
         pane.getChildren().add(plr);
 
         int cardcount = tisch.getSpielerList()[playerId].getCardCount();
@@ -279,6 +282,9 @@ public class GuiSpieltisch {
         chips.add(text, 1, 1);
         //chips.setY(102);
 
+        if(tablePos > 1 && tablePos < 5) {
+            chips.setRotate(180);
+        }
 
         HBox bottom = new HBox(chips);
         bottom.setAlignment(Pos.CENTER);
@@ -313,10 +319,10 @@ public class GuiSpieltisch {
 
         pane.getChildren().add(bottom);
 
-        switch ((playerId-ich)%anzSpieler) {
+        switch (Math.floorMod(playerId-ich, anzSpieler)) {
             case 1:
             case 5:
-                pane.setTranslateY(+30 * zoomfactor);
+                pane.setTranslateY(+20 * zoomfactor);
                 break;
             case 4:
                 pane.setTranslateX(30 * zoomfactor);
@@ -461,7 +467,7 @@ public class GuiSpieltisch {
 
             GridPane gridPane = new GridPane();
             gridPane.setBackground(new Background(myBI));
-            //gridPane.setGridLinesVisible(true);
+            gridPane.setGridLinesVisible(false);
             gridPane.setAlignment(Pos.TOP_CENTER);
 
             table.getColumnConstraints().add(new ColumnConstraints()); // column 0 is 100 wide
@@ -511,30 +517,30 @@ public class GuiSpieltisch {
 
             gridPane.add(makepanel(ich), 1, 4, 3, 1);
 
-            Node player1 = makepanel((1+ich)%anzSpieler);
+            Node player1 = makepanel(Math.floorMod(1-ich, anzSpieler));
             player1.setRotate(90);
             gridPane.add(player1, 0, 2, 1, 1);
 
             if (Main.anzSpieler > 2) {
-                Node player2 = makepanel((2+ich)%anzSpieler);
+                Node player2 = makepanel(Math.floorMod(2-ich, anzSpieler));
                 gridPane.add(player2, 0, 0, 2, 1);
                 player2.setRotate(155);
             }
 
             if (Main.anzSpieler > 3) {
-                Node player3 = makepanel((3+ich)%anzSpieler);
+                Node player3 = makepanel(Math.floorMod(3-ich, anzSpieler));
                 player3.setRotate(180);
                 gridPane.add(player3, 2, 0, 1, 1);
             }
 
             if (Main.anzSpieler > 4) {
-                Node player4 = makepanel((4+ich)%anzSpieler);
+                Node player4 = makepanel(Math.floorMod(4-ich, anzSpieler));
                 player4.setRotate(205);
                 gridPane.add(player4, 3, 0, 2, 1);
             }
 
             if (Main.anzSpieler > 5) {
-                Node player5 = makepanel((5+ich)%anzSpieler);
+                Node player5 = makepanel(Math.floorMod(5-ich, anzSpieler));
                 player5.setRotate(-90);
                 gridPane.add(player5, 4, 2, 2, 1);
             }

@@ -1,9 +1,12 @@
 package RMI;
 
 import Main.*;
+import javafx.util.Pair;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -57,12 +60,13 @@ public class ServerImpl implements server {
 
     @Override
     public int assignId(String uid) {
-        int i = 0;
-        for (Map.Entry<String, String> entry : clients.entrySet()) {
-            if(uid.equals(entry.getKey())) {
+        System.out.println("assign id "+uid);
+        System.out.println(Main.tisch.getSpielerList());
+
+        for (int i = 0;i < anzSpieler;i++) {
+            if(Main.tisch.getSpielerList()[i].getUid().equals(uid)) {
                 return i;
             }
-            i++;
         }
         return -1;
     }
@@ -166,8 +170,18 @@ public class ServerImpl implements server {
     }
 
     @Override
+    public int getDurchgangNr() throws RemoteException {
+        return tisch.getDurchgangNr();
+    }
+
+    @Override
     public Tisch updateTisch() throws RemoteException {
         return tisch;
+    }
+
+    @Override
+    public void shuffleSpieler() throws RemoteException {
+
     }
 
 

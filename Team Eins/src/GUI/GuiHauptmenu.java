@@ -41,15 +41,20 @@ public class GuiHauptmenu {
      * @param PrimaryStage Erzeugt und zeigt das Hauptmenü zu Beginn des Spiels an
      */
     public void showSettingsMenu(Stage PrimaryStage){
+        if(classPrimaryStage.getScene() != null) {
+            sceneWidth = classPrimaryStage.getScene().getWidth();
+            sceneHeight = classPrimaryStage.getScene().getHeight();
+        }
         inMenu = true;
         try {
             if(server != null && server.getGameStart() && playMode == 2 && !assigned) {
                 try {
                     ich = server.assignId(uniqueID);
+                    assigned = true;
                 } catch (RemoteException e) {
                 }
                 inMenu = false;
-                assigned = true;
+
                 tisch = server.updateTisch();
                 anzSpieler = server.getAnzahlSpieler();
                 update.cancel();
@@ -384,13 +389,23 @@ public class GuiHauptmenu {
                 update.cancel();
             } catch (Exception e) {}
             inMenu = false;
+            try {
+                server.shuffleSpieler();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            Main.initGame();
+            try {
+                ich = server.assignId(uniqueID);
+            } catch (RemoteException e) {
+            }
             gameRunning = true;
             try {
                 ich = server.assignId(uniqueID);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-            Main.initGame();
+
             Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
 

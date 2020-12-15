@@ -14,7 +14,7 @@ public class Bot extends Spieler  implements Serializable {
      * @param playerName Spieler Name
      */
     public Bot(String playerName, int entrySchwierigkeit) {
-        super(playerName);
+        super(playerName, UUID.randomUUID().toString());
 
         schwierigkeit = entrySchwierigkeit;
     }

@@ -12,10 +12,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.rmi.RemoteException;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
+import java.util.*;
 
 
 public class Main extends Application {
@@ -43,6 +40,7 @@ public class Main extends Application {
     public static boolean gameRunning = false;
     public static long aenderung;
     public static volatile boolean myTurnUpdate = true;
+    public static int round = 0;
 
 
 
@@ -92,22 +90,24 @@ public class Main extends Application {
         //spieler[0]= new Bot("Spieler",2);
 
         int i = -1;
-        if(server != null) {
 
-            try {
-                for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
-                    i++;
-                    spielerM[i] = new Spieler(entry.getValue());
-                    System.out.println(i+" "+entry.getValue()+" erzeugt");
-                }
-
-            } catch (Exception e) {
-            }
-        }
-        if(i == -1) {
-            spielerM[0] = new Spieler(myName);
+        if(playMode == 0) {
+            spielerM[0] = new Spieler(myName, uniqueID);
             System.out.println("Main erzeugt");
             i=0;
+        } else {
+            if(server != null) {
+
+                try {
+                    for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
+                        i++;
+                        spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
+                        System.out.println(i+" "+entry.getValue()+" erzeugt");
+                    }
+
+                } catch (Exception e) {
+                }
+            }
         }
         int level;
         String[] botname = {"EZ-", "Mid-", "Hard-"};
@@ -116,6 +116,12 @@ public class Main extends Application {
             spielerM[i] = new Bot(botname[level - 1] + "Bot " + (i + 1), level);
 
         }
+        if(playMode == 1) {
+            List<Spieler> spl = Arrays.asList(spielerM);
+            Collections.shuffle(spl);
+            spielerM = spl.toArray(new Spieler[anzSpieler]);
+        }
+        System.out.println(spielerM);
         tisch = new Tisch(spielerM);
         spiellogik = new Spiellogik(tisch);
         spiellogik.initNeueRunde();
@@ -200,8 +206,11 @@ public class Main extends Application {
                 });
                 lastmove = System.currentTimeMillis();
 
-            } else if(playMode == 1 && (tisch.aktiv != ich || tisch.aktiv == ich && myTurnUpdate)) {
+            } else if(playMode == 1 && ((tisch.aktiv != ich || tisch.aktiv == ich &&
+                    myTurnUpdate) || round < tisch.getDurchgangNr()) ) {
 
+                if(round < tisch.getDurchgangNr())
+                    round = tisch.getDurchgangNr();
                 try {
                     if(aenderung < server.getAenderung()) {
 
@@ -239,7 +248,7 @@ public class Main extends Application {
 
         bots = new Timer();
         if(playMode != 2)
-            bots.schedule(new moveCheck(), 300 , 500);
+            bots.schedule(new moveCheck(), 300 , 200);
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
         {
