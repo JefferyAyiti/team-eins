@@ -319,21 +319,21 @@ public class GuiSpieltisch {
 
         pane.getChildren().add(bottom);
 
-        switch (Math.floorMod(playerId-ich, anzSpieler)) {
+        switch (Math.floorMod(playerId-ich,anzSpieler)) {
             case 1:
             case 5:
                 pane.setTranslateY(+20 * zoomfactor);
                 break;
             case 4:
                 pane.setTranslateX(30 * zoomfactor);
-                pane.setTranslateY(10 + 10 * zoomfactor);
+                pane.setTranslateY( + 10 * zoomfactor);
                 break;
             case 3:
                 pane.setTranslateY(10 * zoomfactor);
                 break;
             case 2:
                 pane.setTranslateX(-30 * zoomfactor);
-                pane.setTranslateY(10 + 10 * zoomfactor);
+                pane.setTranslateY( + 10 * zoomfactor);
                 break;
         }
         return pane;
@@ -517,30 +517,30 @@ public class GuiSpieltisch {
 
             gridPane.add(makepanel(ich), 1, 4, 3, 1);
 
-            Node player1 = makepanel(Math.floorMod(1-ich, anzSpieler));
+            Node player1 = makepanel((1+ich)%anzSpieler);
             player1.setRotate(90);
             gridPane.add(player1, 0, 2, 1, 1);
 
             if (Main.anzSpieler > 2) {
-                Node player2 = makepanel(Math.floorMod(2-ich, anzSpieler));
+                Node player2 = makepanel((2+ich)%anzSpieler);
                 gridPane.add(player2, 0, 0, 2, 1);
                 player2.setRotate(155);
             }
 
             if (Main.anzSpieler > 3) {
-                Node player3 = makepanel(Math.floorMod(3-ich, anzSpieler));
+                Node player3 = makepanel((3+ich)%anzSpieler);
                 player3.setRotate(180);
                 gridPane.add(player3, 2, 0, 1, 1);
             }
 
             if (Main.anzSpieler > 4) {
-                Node player4 = makepanel(Math.floorMod(4-ich, anzSpieler));
+                Node player4 = makepanel((4+ich)%anzSpieler);
                 player4.setRotate(205);
                 gridPane.add(player4, 3, 0, 2, 1);
             }
 
             if (Main.anzSpieler > 5) {
-                Node player5 = makepanel(Math.floorMod(5-ich, anzSpieler));
+                Node player5 = makepanel((5+ich)%anzSpieler);
                 player5.setRotate(-90);
                 gridPane.add(player5, 4, 2, 2, 1);
             }
