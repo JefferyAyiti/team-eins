@@ -41,6 +41,10 @@ public class GuiHauptmenu {
      * @param PrimaryStage Erzeugt und zeigt das Hauptmenü zu Beginn des Spiels an
      */
     public void showSettingsMenu(Stage PrimaryStage){
+        if(classPrimaryStage.getScene() != null) {
+            sceneWidth = classPrimaryStage.getScene().getWidth();
+            sceneHeight = classPrimaryStage.getScene().getHeight();
+        }
         inMenu = true;
         try {
             if(server != null && server.getGameStart() && playMode == 2 && !assigned) {
