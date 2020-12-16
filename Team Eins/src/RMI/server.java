@@ -15,7 +15,7 @@ public interface server extends Remote {
     int assignId(String name) throws RemoteException;
     void changeName(String uid, String name) throws RemoteException;
     boolean getGameStart() throws RemoteException;
-    long getAenderung() throws RemoteException;
+    long getAenderung(String uid) throws RemoteException;
     void incAenderung() throws RemoteException;
     int getAnzahlSpieler() throws RemoteException;
     void neueRunde() throws RemoteException;
@@ -33,6 +33,6 @@ public interface server extends Remote {
     boolean getRundeBeendet() throws RemoteException;
     boolean getSpielBeendet() throws RemoteException;
     int getDurchgangNr() throws RemoteException;
-    public void shuffleSpieler() throws RemoteException;
     Tisch updateTisch() throws RemoteException;
+    void checkTimeout() throws RemoteException;
 }

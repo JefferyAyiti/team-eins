@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import java.rmi.RemoteException;
 import java.util.Timer;
 import java.util.TimerTask;
+import Main.*;
 
 /**
  * Ein Thread der immer wieder überprüft, ob Änderungen auf dem Server gab
@@ -41,8 +42,8 @@ public class ClientThread implements Runnable{
             @Override
             public void run() {
                 try {
-                    if (server.getAenderung() > aenderung){
-                        aenderung = server.getAenderung();
+                    if (server.getAenderung(Main.uniqueID) > aenderung){
+                        aenderung = server.getAenderung(Main.uniqueID);
                         client.update();
                     }
                 } catch (RemoteException e) {

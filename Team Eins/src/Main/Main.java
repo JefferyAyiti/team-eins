@@ -190,6 +190,13 @@ public class Main extends Application {
     static class moveCheck extends TimerTask {
         @Override
         public void run() {
+            if(playMode == 1) {
+                try {
+                    server.checkTimeout();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
             //System.out.println("Anzahl Spieler: " + (anzSpieler-1));
             if (playMode < 2 && tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
                 if (System.currentTimeMillis() - lastmove < botPlayTime) {
@@ -212,11 +219,11 @@ public class Main extends Application {
                 if(round < tisch.getDurchgangNr())
                     round = tisch.getDurchgangNr();
                 try {
-                    if(aenderung < server.getAenderung()) {
+                    if(aenderung < server.getAenderung(Main.uniqueID)) {
 
                         Platform.runLater(() -> {
                             try {
-                                aenderung = Main.server.getAenderung();
+                                aenderung = Main.server.getAenderung(Main.uniqueID);
                             } catch (RemoteException e) {
                             }
                             if (tisch.aktiv == ich) {
