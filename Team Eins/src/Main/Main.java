@@ -41,6 +41,8 @@ public class Main extends Application {
     public static long aenderung;
     public static volatile boolean myTurnUpdate = true;
     public static int round = 0;
+    public static int spielArt = 0;
+    public static int spielArtLimit = 4;
 
 
 
