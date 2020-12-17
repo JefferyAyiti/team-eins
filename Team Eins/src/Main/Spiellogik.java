@@ -377,7 +377,7 @@ public class Spiellogik implements Serializable {
                 }
             }
         } else if(spielArt == 1 &&  //Rundenlimitiertes Spiel
-                spielArtLimit >= tisch.getDurchgangNr()) {
+                spielArtLimit <= tisch.getDurchgangNr()) {
             alleAussteigen();
             spielBeendet = true;
         }
