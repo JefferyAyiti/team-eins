@@ -352,12 +352,13 @@ public class GuiHauptmenu {
 
                 showSettingsMenu(Main.classPrimaryStage);
             }else{
-                Main.joined = false;
+                joined = false;
                 update.cancel();
                 try {
                     server.leaveServer(uniqueID);
                     server = null;
-                    System.out.println("Client Disconnected");
+                    System.out.println("Client Disconnected. action = close");
+                    status.setText("Verbindung wurde getrennt");
                 } catch (RemoteException e) {}
                 showSettingsMenu(Main.classPrimaryStage);
             }
@@ -468,12 +469,13 @@ public class GuiHauptmenu {
             showSettingsMenu(Main.classPrimaryStage);
 
         } else if (action == "leave") {
-            Main.joined = false;
+            joined = false;
             update.cancel();
                        try {
                 server.leaveServer(uniqueID);
                 server = null;
-                System.out.println("Client Disconnected");
+                status.setText("Verbindung wurde getrennt");
+                System.out.println("Client Disconnected. action = leave ");
 
             } catch (RemoteException e) {}
             showSettingsMenu(Main.classPrimaryStage);
@@ -487,9 +489,12 @@ public class GuiHauptmenu {
     public void cleanupServer(){
         Main.joined = false;
         update.cancel();
+        getTisch = null;
+        assigned = false;
         try {
             server.leaveServer(uniqueID);
         } catch (RemoteException e) {}
         server = null;
+        status.setText("Verbindung zu Server verloren");
     }
 }
