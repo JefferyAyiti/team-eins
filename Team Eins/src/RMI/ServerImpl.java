@@ -185,7 +185,6 @@ public class ServerImpl implements server {
 
     @Override
     public void checkTimeout() throws RemoteException {
-        System.out.println("check");
         for(Map.Entry<String, Long> ping : pings.entrySet()) {
             if(!ping.getKey().equals(uniqueID) &&
                     ping.getValue()+5000 < System.currentTimeMillis()) {

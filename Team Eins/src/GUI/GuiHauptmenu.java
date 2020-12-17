@@ -169,7 +169,7 @@ public class GuiHauptmenu {
         spielart.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
                     if(spielart.getSelectionModel().getSelectedIndex() == 1) {
                         if (Main.playMode < 2)
-                            center.addRow(5, new Label("Rundenanzahl: "), spielartLimit);
+                            center.addRow(4, new Label("Rundenanzahl: "), spielartLimit);
                     } else
                         center.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 5);
                 }
@@ -292,7 +292,7 @@ public class GuiHauptmenu {
         center.setMaxHeight(center.getHeight());
 
         root.setTop(top);
-        center.add(status, 0, 3 , center.getColumnCount(), 1);
+        center.add(status, 0, 4 , center.getColumnCount(), 1);
         root.setCenter(center);
 
 
@@ -349,7 +349,7 @@ public class GuiHauptmenu {
                     update.cancel();
                     server = null;
                 } catch (Exception e) {}
-
+                status.setText("Server wurde geschlossen");
                 showSettingsMenu(Main.classPrimaryStage);
             }else{
                 joined = false;
@@ -493,8 +493,23 @@ public class GuiHauptmenu {
         assigned = false;
         try {
             server.leaveServer(uniqueID);
-        } catch (RemoteException e) {}
+        } catch (RemoteException e) {
+        }catch (NullPointerException e){
+            System.err.println("null pointer exception in GuiHauptmenü.cleanupServer");
+        }
         server = null;
         status.setText("Verbindung zu Server verloren");
+    }
+
+    public void closeServer(){
+        Main.joined = false;
+        try {
+            runServer.stop();
+            update.cancel();
+            server = null;
+        } catch (Exception e) {}
+        status.setText("Server wurde geschlossen");
+
+        showSettingsMenu(Main.classPrimaryStage);
     }
 }
