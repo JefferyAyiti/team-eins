@@ -129,6 +129,11 @@ public class ServerImpl implements server {
         return botlevel;
     }
 
+    @Override
+    public void closeServer() throws RemoteException {
+        lock = false;
+    }
+
 
     //Spielzüge
 

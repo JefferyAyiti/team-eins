@@ -255,45 +255,9 @@ public class GuiHauptmenu {
         bottom.setSpacing(10);
         bottom.getChildren().add(start);
 
-        if(Main.playMode == 1 && Main.joined) {
-            Button close = new Button("Raum schließen");
-            close.setOnAction(e -> setSettings("close"));
-            close.setTranslateY(-10);
-            bottom.getChildren().add(close);
-        }
-
-
-        if (Main.playMode > 0 && Main.joined) {
-            Label headline = new Label("Lobby:");
-            headline.setStyle("-fx-underline: true");
-            VBox lobby = new VBox(headline);
-            lobby.setStyle("-fx-background-color:rgba(255,255,255,0.1);-fx-font-family: 'Ink Free';-fx-font-size: 18px;-fx-border-radius: 3.5;-fx-border-color: black;-fx-alignment: top-center;-fx-effect: dropshadow( gaussian , black ,10 ,0.7 ,0 ,0 ); -fx-font-weight: bolder");
-            lobby.setSpacing(2);
-            lobby.setPrefHeight(250);
-            lobby.setMinWidth(150);
-
-
-            try {
-                for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
-                    Label spieler = new Label(entry.getValue());
-                    lobby.getChildren().add(spieler);
-                      if(uniqueID.equals(entry.getKey())){
-                            spieler.setStyle("-fx-text-fill: lightgreen");
-                      }
-
-                }
-
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-
-            center.add(lobby, 2, 0, 1, 3);
-        }
-        //center.setAlignment(Pos.TOP_LEFT);
         center.setMaxHeight(center.getHeight());
 
         root.setTop(top);
-        center.add(status, 0, 4 , center.getColumnCount(), 1);
         root.setCenter(center);
 
 
@@ -301,19 +265,33 @@ public class GuiHauptmenu {
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(100, 100, true, true, false, true));
         root.setBackground(new Background(myBI));
+        try {
+            if (playMode>=1 && Main.joined && server.serverOpen()){
+                Scene menu = GuiLobby.lobby();
+                 PrimaryStage.setScene(menu);
+                 PrimaryStage.show();
+            }else {
+                if(playMode>=1 && Main.joined && !server.serverOpen()){
+                    Main.joined = false;
+                    assigned = false;
+                    try {
+                        server.leaveServer(uniqueID);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    server = null;
+                    status.setText("Verbindung zu Server verloren");
 
+                }
+                //neue Scene
+                Scene menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
+                menu.getStylesheets().add("GUI/MainMenu.css");
 
-        if (playMode>=1&&Main.joined){
-            Scene menu = GuiLobby.lobby();
-             PrimaryStage.setScene(menu);
-             PrimaryStage.show();
-        }else {
-            //neue Scene
-            Scene menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
-            menu.getStylesheets().add("GUI/MainMenu.css");
-
-            PrimaryStage.setScene(menu);
-            PrimaryStage.show();
+                PrimaryStage.setScene(menu);
+                PrimaryStage.show();
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
         PrimaryStage.setOnCloseRequest(windowEvent -> {
             try {System.exit(0);
@@ -344,6 +322,12 @@ public class GuiHauptmenu {
 
         } else if (action == "close") { //Host
             if(Main.playMode == 1){
+                try {
+                    server.closeServer();
+                } catch (RemoteException e) {
+                    System.err.println("Server schließen fehlgeschlagen");
+                    e.printStackTrace();
+                }
                 Main.joined = false;
                 try {
                     runServer.stop();
