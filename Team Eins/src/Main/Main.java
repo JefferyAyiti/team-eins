@@ -276,4 +276,17 @@ public class Main extends Application {
         });
     }
 
+    /** setter-methode für tisch
+     * @param tisch neue Tisch
+     */
+    public void setTisch(Tisch tisch) {
+        Main.tisch = tisch;
+    }
+
+    /** setter-Methode für anzSpieler
+     * @param anzSpieler anzahl an Spielern am Tisch
+     */
+    public void setAnzSpieler(int anzSpieler){
+        Main.anzSpieler = anzSpieler;
+    }
 }
