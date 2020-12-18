@@ -80,4 +80,6 @@ public class RMIClient {
         joined = false;
         Platform.runLater(() -> hauptmenuGui.showSettingsMenu(Main.classPrimaryStage));
     }
+
+
 }

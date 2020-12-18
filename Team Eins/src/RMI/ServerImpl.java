@@ -16,6 +16,7 @@ public class ServerImpl implements server {
 
 
     Map<String, String> clients = new LinkedHashMap<>();
+    static ArrayList<String> chatrecord = new ArrayList<>();
     int anzClients = 0;
     long aenderung = 0;
     String host;
@@ -182,6 +183,16 @@ public class ServerImpl implements server {
     @Override
     public void shuffleSpieler() throws RemoteException {
 
+    }
+
+    @Override
+    public void storeNewMSG(String input) throws RemoteException {
+        chatrecord.add(input);
+    }
+
+    @Override
+    public ArrayList<String> sendChat() throws RemoteException {
+        return chatrecord;
     }
 
 

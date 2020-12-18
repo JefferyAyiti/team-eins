@@ -4,6 +4,7 @@ import Main.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Map;
 
 public interface server extends Remote {
@@ -35,4 +36,6 @@ public interface server extends Remote {
     int getDurchgangNr() throws RemoteException;
     public void shuffleSpieler() throws RemoteException;
     Tisch updateTisch() throws RemoteException;
+    void storeNewMSG(String input) throws RemoteException;
+    ArrayList<String> sendChat() throws RemoteException;
 }
