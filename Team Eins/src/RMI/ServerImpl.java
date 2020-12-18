@@ -187,11 +187,12 @@ public class ServerImpl implements server {
 
     @Override
     public void updateClients(String message) throws RemoteException {
-
+        chatrecord.add(message);
+        shareMessage(message);
     }
 
     @Override
     public void shareMessage(String message) throws RemoteException {
-
+        spieltischGui.chatbox.addText(message);
     }
 }

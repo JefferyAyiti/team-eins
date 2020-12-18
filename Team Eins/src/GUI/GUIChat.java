@@ -14,7 +14,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
+import static Main.Main.*;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 
@@ -55,6 +57,11 @@ public class GUIChat {
                     if(keyEvent.getCode() == KeyCode.ENTER){
                         chatrecord.add(input.getText());
                         messages.appendText(input.getText() + "\n");
+                        try {
+                            server.updateClients(input.getText());
+                        } catch (RemoteException e) {
+
+                        }
                         input.clear();
                     } });
     }
