@@ -186,14 +186,12 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public void storeNewMSG(String input) throws RemoteException {
-        chatrecord.add(input);
+    public void updateClients(String message) throws RemoteException {
+
     }
 
     @Override
-    public ArrayList<String> sendChat() throws RemoteException {
-        return chatrecord;
+    public void shareMessage(String message) throws RemoteException {
+
     }
-
-
 }

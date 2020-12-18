@@ -21,9 +21,9 @@ import java.util.ArrayList;
 public class GUIChat {
     static ArrayList<String> chatrecord = new ArrayList<>();
     Popup chat;
-    private TextField input = new TextField();
+    public TextField input = new TextField();
     private ScrollPane scroll = new ScrollPane();
-    private TextArea messages = new TextArea();
+    public TextArea messages = new TextArea();
     VBox chatlog;
 
 
@@ -57,6 +57,10 @@ public class GUIChat {
                         messages.appendText(input.getText() + "\n");
                         input.clear();
                     } });
+    }
+
+    public void addText(String msg){
+        messages.appendText(msg + "\n");
     }
 
 

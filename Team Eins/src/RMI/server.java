@@ -36,6 +36,8 @@ public interface server extends Remote {
     int getDurchgangNr() throws RemoteException;
     public void shuffleSpieler() throws RemoteException;
     Tisch updateTisch() throws RemoteException;
-    void storeNewMSG(String input) throws RemoteException;
-    ArrayList<String> sendChat() throws RemoteException;
+
+
+    void updateClients(String message) throws RemoteException;
+    void shareMessage(String message)throws RemoteException;
 }
