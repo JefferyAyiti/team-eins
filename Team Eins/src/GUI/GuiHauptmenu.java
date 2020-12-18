@@ -24,6 +24,8 @@ public class GuiHauptmenu {
     Slider slider;
     ComboBox botselect;
     ComboBox playeranzselect;
+    ComboBox spielart;
+    TextField spielartLimit;
     TextField namefield;
     TextField ip;
     TextField port;
@@ -152,6 +154,26 @@ public class GuiHauptmenu {
         if (Main.playMode < 2)
             center.addRow(3, new Label("Bot-Bedenkzeit: "), slider);
 
+        //Spielmodus
+
+        spielart = new ComboBox(FXCollections.observableArrayList(
+                "Normal (bis 40 Punkte)",
+                "Runden-Limit",
+                "Unendlich"
+        ));
+        spielart.getSelectionModel().select(Main.spielArt);
+        spielartLimit = new TextField(Integer.toString(spielArtLimit));
+        if (Main.playMode < 2)
+            center.addRow(4, new Label("Spielart: "), spielart);
+
+        spielart.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
+                    if(spielart.getSelectionModel().getSelectedIndex() == 1) {
+                        if (Main.playMode < 2)
+                            center.addRow(4, new Label("Rundenanzahl: "), spielartLimit);
+                    } else
+                        center.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 5);
+                }
+        );
 
         //Darstellung
         Label titel = new Label("Hauptmenü");
@@ -270,7 +292,7 @@ public class GuiHauptmenu {
         center.setMaxHeight(center.getHeight());
 
         root.setTop(top);
-        center.add(status, 0, 3 , center.getColumnCount(), 1);
+        center.add(status, 0, 4 , center.getColumnCount(), 1);
         root.setCenter(center);
 
 
@@ -327,15 +349,16 @@ public class GuiHauptmenu {
                     update.cancel();
                     server = null;
                 } catch (Exception e) {}
-
+                status.setText("Server wurde geschlossen");
                 showSettingsMenu(Main.classPrimaryStage);
             }else{
-                Main.joined = false;
+                joined = false;
                 update.cancel();
                 try {
                     server.leaveServer(uniqueID);
                     server = null;
-                    System.out.println("Client Disconnected");
+                    System.out.println("Client Disconnected. action = close");
+                    status.setText("Verbindung wurde getrennt");
                 } catch (RemoteException e) {}
                 showSettingsMenu(Main.classPrimaryStage);
             }
@@ -345,6 +368,9 @@ public class GuiHauptmenu {
             Main.joined = true;
             Main.botPlayTime = (long) slider.getValue();
             Main.botlevel = botselect.getSelectionModel().getSelectedIndex();
+            spielArt = spielart.getSelectionModel().getSelectedIndex();
+            if(spielArt == 1)
+                spielArtLimit = Integer.parseInt(spielartLimit.getText());
             Main.myName = namefield.getText();
             if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
             Main.anzSpieler = (int) playeranzselect.getValue();
@@ -389,11 +415,7 @@ public class GuiHauptmenu {
                 update.cancel();
             } catch (Exception e) {}
             inMenu = false;
-            try {
-                server.shuffleSpieler();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+
             Main.initGame();
             try {
                 ich = server.assignId(uniqueID);
@@ -447,12 +469,13 @@ public class GuiHauptmenu {
             showSettingsMenu(Main.classPrimaryStage);
 
         } else if (action == "leave") {
-            Main.joined = false;
+            joined = false;
             update.cancel();
                        try {
                 server.leaveServer(uniqueID);
                 server = null;
-                System.out.println("Client Disconnected");
+                status.setText("Verbindung wurde getrennt");
+                System.out.println("Client Disconnected. action = leave ");
 
             } catch (RemoteException e) {}
             showSettingsMenu(Main.classPrimaryStage);
@@ -466,9 +489,27 @@ public class GuiHauptmenu {
     public void cleanupServer(){
         Main.joined = false;
         update.cancel();
+        getTisch = null;
+        assigned = false;
         try {
             server.leaveServer(uniqueID);
-        } catch (RemoteException e) {}
+        } catch (RemoteException e) {
+        }catch (NullPointerException e){
+            System.err.println("null pointer exception in GuiHauptmenü.cleanupServer");
+        }
         server = null;
+        status.setText("Verbindung zu Server verloren");
+    }
+
+    public void closeServer(){
+        Main.joined = false;
+        try {
+            runServer.stop();
+            update.cancel();
+            server = null;
+        } catch (Exception e) {}
+        status.setText("Server wurde geschlossen");
+
+        showSettingsMenu(Main.classPrimaryStage);
     }
 }

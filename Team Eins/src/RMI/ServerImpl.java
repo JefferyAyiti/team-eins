@@ -16,7 +16,10 @@ public class ServerImpl implements server {
 
 
     Map<String, String> clients = new LinkedHashMap<>();
+
     static ArrayList<String> chatrecord = new ArrayList<>();
+
+    Map<String, Long> pings = new LinkedHashMap<>();
     int anzClients = 0;
     long aenderung = 0;
     String host;
@@ -41,6 +44,7 @@ public class ServerImpl implements server {
         if(anzClients <= max){
             aenderung++;
             clients.put(uid, name);
+            pings.put(uid, System.currentTimeMillis());
         }else{
             lock = false;
             System.out.println("Maximal Anzahl von Spieler erreicht. Keine Zugang");
@@ -51,6 +55,7 @@ public class ServerImpl implements server {
     @Override
     public void leaveServer(String client) throws RemoteException {
         aenderung++;
+        anzClients--;
         clients.remove(client);
     }
 
@@ -84,7 +89,8 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public long getAenderung() throws RemoteException {
+    public long getAenderung(String uid) throws RemoteException {
+        pings.put(uid, System.currentTimeMillis());
         return aenderung;
     }
 
@@ -181,8 +187,36 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public void shuffleSpieler() throws RemoteException {
+    public void checkTimeout() throws RemoteException {
+        for(Map.Entry<String, Long> ping : pings.entrySet()) {
+            if(!ping.getKey().equals(uniqueID) &&
+                    ping.getValue()+5000 < System.currentTimeMillis()) {
+                replaceSpielerDurchBot(ping.getKey());
+            }
+        }
+    }
 
+
+    public void replaceSpielerDurchBot(String uid) throws RemoteException {
+        leaveServer(uid);
+        Spieler s;
+        for(int i = 0;i < anzSpieler;i++) {
+            s = tisch.getSpielerList()[i];
+            if(tisch.getSpielerList()[i].getUid() == uid
+            && !(s instanceof Bot)) {
+                Bot spiel = new Bot("[Bot] "+
+                        tisch.getSpielerList()[i].getName(),
+                        botlevel == 0 ? (int) (Math.random() * 3 + 1) : botlevel);
+                spiel.setBlackChips(s.getBlackChips());
+                spiel.setWhiteChips(s.getWhiteChips());
+                spiel.setCardHand(s.getCardHand());
+                spiel.setOldScore(s.getOldScore());
+                spiel.setPoints(s.getPoints());
+                tisch.spielerList[i] = spiel;
+
+            }
+        }
+        aenderung++;
     }
 
     @Override
@@ -191,8 +225,12 @@ public class ServerImpl implements server {
         shareMessage(message);
     }
 
+
     @Override
     public void shareMessage(String message) throws RemoteException {
         spieltischGui.chatbox.addText(message);
     }
+
+
+
 }

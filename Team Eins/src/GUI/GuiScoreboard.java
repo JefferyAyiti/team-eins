@@ -1,5 +1,6 @@
 package GUI;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -136,19 +137,16 @@ public class GuiScoreboard {
                 nextRound = new Button("Hauptmenü");
                 nextRound.setOnAction(e -> {
                     if(playMode == 2){
-                        try { //Client wird von Serverlist genommen und kommt ins Hauptmenu
-                            server.leaveServer(uniqueID);
-                            playMode = 0;
-                            joined = false;
-                            hauptmenuGui.showSettingsMenu(classPrimaryStage);
-                        } catch (RemoteException remoteException) {
-                            remoteException.printStackTrace();
-                        }
+                        hauptmenuGui.cleanupServer();
+                        Platform.runLater(() -> hauptmenuGui.showSettingsMenu(Main.classPrimaryStage));
 
                     }else{
                         Main.inMenu = true;
                         Main.gameRunning = false;
-                        Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
+                        try {
+                            Main.bots.cancel();
+                        }catch (NullPointerException  l){}
+                        hauptmenuGui.closeServer();
                             }
 
                         }
