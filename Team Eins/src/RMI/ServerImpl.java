@@ -16,6 +16,9 @@ public class ServerImpl implements server {
 
 
     Map<String, String> clients = new LinkedHashMap<>();
+
+    static ArrayList<String> chatrecord = new ArrayList<>();
+
     Map<String, Long> pings = new LinkedHashMap<>();
     int anzClients = 0;
     long aenderung = 0;
@@ -185,7 +188,6 @@ public class ServerImpl implements server {
 
     @Override
     public void checkTimeout() throws RemoteException {
-        System.out.println("check");
         for(Map.Entry<String, Long> ping : pings.entrySet()) {
             if(!ping.getKey().equals(uniqueID) &&
                     ping.getValue()+5000 < System.currentTimeMillis()) {
@@ -217,6 +219,17 @@ public class ServerImpl implements server {
         aenderung++;
     }
 
+    @Override
+    public void updateClients(String message) throws RemoteException {
+        chatrecord.add(message);
+        shareMessage(message);
+    }
+
+
+    @Override
+    public void shareMessage(String message) throws RemoteException {
+        spieltischGui.chatbox.addText(message);
+    }
 
 
 

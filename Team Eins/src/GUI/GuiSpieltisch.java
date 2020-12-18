@@ -13,16 +13,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 import java.rmi.RemoteException;
 import java.util.*;
 
 import Main.*;
+import javafx.stage.Window;
 
 import static Main.Main.*;
 import static Main.Main.ich;
@@ -30,7 +34,7 @@ import static Main.Main.ich;
 
 public class GuiSpieltisch {
 
-
+    public GUIChat chatbox = new GUIChat();
     private ArrayList<Double> x = new ArrayList<>();
     private ArrayList<Double> y = new ArrayList<>();
     private ArrayList<Double> deg =  new ArrayList<>();
@@ -595,6 +599,10 @@ public class GuiSpieltisch {
             gridPane.add(scroll, 0,4,1,1);*/
 
 
+            Button chatButton = new Button("Chat >>");
+            chatButton.setOnMouseClicked( e->chatbox.openChat(classPrimaryStage)
+            );
+            gridPane.add(chatButton, 0,4,1,1);
 
             root.getChildren().add(gridPane);
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
@@ -613,3 +621,5 @@ public class GuiSpieltisch {
     }
 
 }
+
+

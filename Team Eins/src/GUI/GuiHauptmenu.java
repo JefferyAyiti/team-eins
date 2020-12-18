@@ -169,7 +169,7 @@ public class GuiHauptmenu {
         spielart.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
                     if(spielart.getSelectionModel().getSelectedIndex() == 1) {
                         if (Main.playMode < 2)
-                            center.addRow(5, new Label("Rundenanzahl: "), spielartLimit);
+                            center.addRow(4, new Label("Rundenanzahl: "), spielartLimit);
                     } else
                         center.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 5);
                 }
@@ -292,12 +292,12 @@ public class GuiHauptmenu {
         center.setMaxHeight(center.getHeight());
 
         root.setTop(top);
-        center.add(status, 0, 3 , center.getColumnCount(), 1);
+        center.add(status, 0, 4 , center.getColumnCount(), 1);
         root.setCenter(center);
 
 
         BackgroundImage myBI = new BackgroundImage(Main.table1,
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(100, 100, true, true, false, true));
         root.setBackground(new Background(myBI));
 
@@ -354,15 +354,16 @@ public class GuiHauptmenu {
                     update.cancel();
                     server = null;
                 } catch (Exception e) {}
-
+                status.setText("Server wurde geschlossen");
                 showSettingsMenu(Main.classPrimaryStage);
             }else{
-                Main.joined = false;
+                joined = false;
                 update.cancel();
                 try {
                     server.leaveServer(uniqueID);
                     server = null;
-                    System.out.println("Client Disconnected");
+                    System.out.println("Client Disconnected. action = close");
+                    status.setText("Verbindung wurde getrennt");
                 } catch (RemoteException e) {}
                 showSettingsMenu(Main.classPrimaryStage);
             }
@@ -473,12 +474,13 @@ public class GuiHauptmenu {
             showSettingsMenu(Main.classPrimaryStage);
 
         } else if (action == "leave") {
-            Main.joined = false;
+            joined = false;
             update.cancel();
                        try {
                 server.leaveServer(uniqueID);
                 server = null;
-                System.out.println("Client Disconnected");
+                status.setText("Verbindung wurde getrennt");
+                System.out.println("Client Disconnected. action = leave ");
 
             } catch (RemoteException e) {}
             showSettingsMenu(Main.classPrimaryStage);
@@ -492,9 +494,27 @@ public class GuiHauptmenu {
     public void cleanupServer(){
         Main.joined = false;
         update.cancel();
+        getTisch = null;
+        assigned = false;
         try {
             server.leaveServer(uniqueID);
-        } catch (RemoteException e) {}
+        } catch (RemoteException e) {
+        }catch (NullPointerException e){
+            System.err.println("null pointer exception in GuiHauptmenü.cleanupServer");
+        }
         server = null;
+        status.setText("Verbindung zu Server verloren");
+    }
+
+    public void closeServer(){
+        Main.joined = false;
+        try {
+            runServer.stop();
+            update.cancel();
+            server = null;
+        } catch (Exception e) {}
+        status.setText("Server wurde geschlossen");
+
+        showSettingsMenu(Main.classPrimaryStage);
     }
 }

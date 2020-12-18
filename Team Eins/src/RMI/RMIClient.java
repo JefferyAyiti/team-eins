@@ -76,8 +76,12 @@ public class RMIClient {
     public void forceLeaveServer(){
         hauptmenuGui.cleanupServer();
         System.out.println("Forced Client Disconnecting");
-
-        joined = false;
         Platform.runLater(() -> hauptmenuGui.showSettingsMenu(Main.classPrimaryStage));
     }
+
+    public void updateChat(String msg){
+        spieltischGui.chatbox.addText(msg);
+    }
+
+
 }

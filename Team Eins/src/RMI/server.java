@@ -4,6 +4,7 @@ import Main.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Map;
 
 public interface server extends Remote {
@@ -34,5 +35,11 @@ public interface server extends Remote {
     boolean getSpielBeendet() throws RemoteException;
     int getDurchgangNr() throws RemoteException;
     Tisch updateTisch() throws RemoteException;
+
+
+    void updateClients(String message) throws RemoteException;
+    void shareMessage(String message)throws RemoteException;
+
     void checkTimeout() throws RemoteException;
+
 }
