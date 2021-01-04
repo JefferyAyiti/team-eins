@@ -41,8 +41,8 @@ public class GUIChat {
         content.setMaxHeight(300);
         messages.setEditable(false);
         messages.setWrapText(true);
-        messages.setPrefWidth(width);
-        messages.setMaxWidth(400);
+        messages.setPrefWidth(width+50);
+        messages.setMaxWidth(600);
         HBox inputBox = new HBox();
         inputBox.getChildren().addAll(input, sendButton);
         onEnter();
