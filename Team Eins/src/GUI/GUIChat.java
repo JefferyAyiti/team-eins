@@ -31,19 +31,21 @@ public class GUIChat {
 
     public void openChat(Stage owner, double X, double Y, double width){
 
-        chat.setAnchorLocation(PopupWindow.AnchorLocation.WINDOW_BOTTOM_LEFT);
-        chat.setAnchorX(X);
+        chat.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_BOTTOM_LEFT);
+        chat.setAnchorX(X+5);
         chat.setAnchorY(Y);
         chat.setAutoHide(true);
         scroll.setOpacity(0.7);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         VBox content = new VBox();
         content.setMaxHeight(300);
         messages.setEditable(false);
         messages.setWrapText(true);
-        messages.setPrefWidth(width+50);
+        messages.setPrefWidth(width+70);
         messages.setMaxWidth(600);
         HBox inputBox = new HBox();
+        input.setPrefWidth(width+27);
         inputBox.getChildren().addAll(input, sendButton);
         onEnter();
         onPress();
