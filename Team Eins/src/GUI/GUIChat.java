@@ -1,16 +1,10 @@
 package GUI;
 
 
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
@@ -26,7 +20,8 @@ public class GUIChat {
     public TextField input = new TextField();
     private ScrollPane scroll = new ScrollPane();
     public TextArea messages = new TextArea();
-    VBox chatlog;
+    private Button sendButton = new Button("Send");
+
 
 
 
@@ -34,18 +29,26 @@ public class GUIChat {
         chat = new Popup();
     }
 
-    public void openChat(Stage owner){
+    public void openChat(Stage owner, double X, double Y, double width){
 
         chat.setAnchorLocation(PopupWindow.AnchorLocation.WINDOW_BOTTOM_LEFT);
-        chat.setAnchorX(50);
-        chat.setAnchorY(900);
+        chat.setAnchorX(X);
+        chat.setAnchorY(Y);
         chat.setAutoHide(true);
+        scroll.setOpacity(0.7);
+
         VBox content = new VBox();
         content.setMaxHeight(300);
         messages.setEditable(false);
+        messages.setWrapText(true);
+        messages.setPrefWidth(width+50);
+        messages.setMaxWidth(600);
+        HBox inputBox = new HBox();
+        inputBox.getChildren().addAll(input, sendButton);
         onEnter();
+        onPress();
         scroll.setContent(messages);
-        content.getChildren().addAll(scroll,input);
+        content.getChildren().addAll(scroll, inputBox);
         chat.getContent().addAll(content);
         //chat.setAutoHide(true);
         chat.show(owner);
@@ -57,11 +60,11 @@ public class GUIChat {
                     if(keyEvent.getCode() == KeyCode.ENTER){
                         chatrecord.add(input.getText());
                         messages.appendText(input.getText() + "\n");
-                        try {
+                        /*try {
                             server.updateClients(input.getText());
                         } catch (RemoteException e) {
 
-                        }
+                        }*/
                         input.clear();
                     } });
     }
@@ -70,5 +73,17 @@ public class GUIChat {
         messages.appendText(msg + "\n");
     }
 
+    public void onPress(){
+        sendButton.setOnMouseClicked( mouseEvent -> {
+            chatrecord.add(input.getText());
+            messages.appendText(input.getText() + "\n");
+            /*try {
+                server.updateClients(input.getText());
+            } catch (RemoteException e) {
+
+            }*/
+            input.clear();
+        });
+    }
 
 }

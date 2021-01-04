@@ -600,8 +600,13 @@ public class GuiSpieltisch {
 
 
             Button chatButton = new Button("Chat >>");
-            chatButton.setOnMouseClicked( e->chatbox.openChat(classPrimaryStage)
+            chatButton.setTranslateX(30);
+            chatButton.setTranslateY(40);
+            chatButton.setOnMouseClicked( e->chatbox.openChat(classPrimaryStage, classPrimaryStage.getX(),
+
+                    classPrimaryStage.getHeight() +120, 120*zoomfactor)
             );
+
             gridPane.add(chatButton, 0,4,1,1);
 
             root.getChildren().add(gridPane);
