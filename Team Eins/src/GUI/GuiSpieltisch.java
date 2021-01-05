@@ -1,5 +1,7 @@
 package GUI;
 
+import RMI.RMIClient;
+import RMI.RunClient;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -320,8 +322,57 @@ public class GuiSpieltisch {
             });
 
         }
+        //Spiel verlassen
+        if (playerId == Main.ich) {
+            ImageView beenden = new ImageView(Main.loader.getImg("GUI/images/exit.svg", zoomfactor * 0.25));
+            beenden.setTranslateY(-7);
+            chips.setTranslateY(7);
 
-        pane.getChildren().add(bottom);
+
+            beenden.setOnMouseEntered(e -> beenden.setStyle(HOVERED_BUTTON_STYLE));
+            beenden.setOnMouseExited(e -> beenden.setStyle(IDLE_BUTTON_STYLE));
+            bottom.getChildren().add(beenden);
+
+            beenden.setOnMouseClicked(mouseEvent -> {
+                if (Main.playMode==1){
+                    Main.gameRunning = false;
+                    Main.bots.cancel();
+                    Main.joined = false;
+                    try {
+                        server.closeServer();
+                        Main.hauptmenuGui.runServer.stop();
+                        Main.hauptmenuGui.update.cancel();
+                        server = null;
+                        hauptmenuGui.status = new Label("Server geschlossen");
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
+
+                }else if(Main.playMode == 2){//Multiplaymodus
+                    joined = false;
+                    hauptmenuGui.update.cancel();
+                    try {
+                        server.leaveServer(uniqueID);
+                        server.incAenderung();
+                        server = null;
+                        hauptmenuGui.status = new Label("Server verlassen");
+
+                    } catch (RemoteException e) {}
+                    Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
+
+                }else{//lokaler Spielmodus
+                    Main.gameRunning = false;
+                    Main.bots.cancel();
+                    Main.hauptmenuGui.showSettingsMenu(classPrimaryStage);}
+
+            });
+
+        }
+
+
+
+            pane.getChildren().add(bottom);
 
         switch (Math.floorMod(playerId-ich,anzSpieler)) {
             case 1:
