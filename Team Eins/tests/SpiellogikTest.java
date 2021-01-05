@@ -3,6 +3,8 @@ import org.junit.jupiter.api.Test;
 import Main.*;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class  SpiellogikTest {
@@ -159,6 +161,88 @@ public class  SpiellogikTest {
         assertEquals(true,spiellogik.chipAbgeben(spielerListe[1],new BlackChip()));
         assertEquals(1,spielerListe[1].getBlackChips());
         assertEquals(-15,spielerListe[1].getPoints());
+
+    }
+
+    @Test
+    public void ranglisteErstellen1(){
+        spiellogik.chipsKassieren(spielerListe[0]);
+        spiellogik.chipsKassieren(spielerListe[1]);
+        spiellogik.chipsKassieren(spielerListe[2]);
+        Map<Spieler,Integer> rangliste = spiellogik.ranglisteErstellen();
+        for (Map.Entry<Spieler, Integer> entry : rangliste.entrySet()) {
+            if(entry.getKey().getName().equals("test1")){
+                assertEquals(-3,entry.getValue());
+            }
+            else if(entry.getKey().getName().equals("test2")){
+                assertEquals(-3,entry.getValue());
+
+            }
+            else if(entry.getKey().getName().equals("test3")){
+                assertEquals(-9,entry.getValue());
+
+            }
+        }
+
+
+    }
+
+    @Test
+    public void ranglisteErstellenNurWeißeChips(){
+        spiellogik.karteNachziehen(spielerListe[0]);
+        spiellogik.karteNachziehen(spielerListe[1]);
+        spiellogik.karteNachziehen(spielerListe[2]);
+        spiellogik.chipsKassieren(spielerListe[0]);
+        spiellogik.chipsKassieren(spielerListe[1]);
+        spiellogik.chipsKassieren(spielerListe[2]);
+        Map<Spieler,Integer> rangliste = spiellogik.ranglisteErstellenNurWeißeChips();
+        for (Map.Entry<Spieler, Integer> entry : rangliste.entrySet()) {
+            if(entry.getKey().getName().equals("test1")){
+                assertEquals(3,entry.getValue());
+            }
+            else if(entry.getKey().getName().equals("test2")){
+                assertEquals(8,entry.getValue());
+
+            }
+            else if(entry.getKey().getName().equals("test3")){
+                assertEquals(9,entry.getValue());
+
+            }
+        }
+
+    }
+
+    @Test
+    public void alleAussteigen(){
+        spiellogik.alleAussteigen();
+        for(Spieler s:spielerListe){
+            assertEquals(false,s.inGame());
+        }
+    }
+
+    @Test
+    public void initNeueRunde(){
+        Main.haende = new Hand[3];
+        spiellogik.initNeueRunde();
+        assertEquals(37,tisch.getNachziehStapelSize());
+        for(Spieler s: spielerListe){
+            assertEquals(6,s.getCardCount());
+        }
+        assertEquals(2,tisch.getDurchgangNr());  //2 weil oben bereits die erste Runde gestartet wurde
+
+    }
+
+    @Test
+    public void einSpielerUebrig(){
+        spiellogik.aussteigen(spielerListe[0]);
+        spiellogik.aussteigen(spielerListe[1]);
+        ablagestapel.ablegen(new Karte(4,false));
+        assertEquals(true,spiellogik.karteLegen(spielerListe[2],spielerListe[2].getCardHand().getKarte(0)));
+        assertEquals(false, spiellogik.karteNachziehen(spielerListe[2]));
+        assertEquals(true,spiellogik.karteLegen(spielerListe[2],spielerListe[2].getCardHand().getKarte(0)));
+
+
+
 
     }
 
