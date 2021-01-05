@@ -1,6 +1,7 @@
 package GUI;
 
 
+import com.vdurmont.emoji.EmojiParser;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -46,7 +47,8 @@ public class GUIChat {
                 "    -fx-background-color: rgba(255,255,255,0.4);\n" +
                 "    -fx-fit-to-height: true;\n" +
                 "    -fx-font-size: 100%;\n" +
-                "    -fx-alignment: center;");
+                "    -fx-alignment: center;" +
+                "    -fx-font-weight: bold;");
 
         VBox content = new VBox();
         content.setMaxHeight(300);
