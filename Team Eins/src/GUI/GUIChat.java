@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Popup;
@@ -27,7 +28,6 @@ public class GUIChat {
 
 
 
-
     public GUIChat(){
         chat = new Popup();
     }
@@ -40,8 +40,13 @@ public class GUIChat {
         chat.setAutoHide(true);
         scroll.setOpacity(0.9);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
-
+        //sendButton.setOpacity(0.8);
+        //sendButton.setFont(Font.font())
+        sendButton.setStyle("-fx-text-fill: black;\n" +
+                "    -fx-background-color: rgba(255,255,255,0.4);\n" +
+                "    -fx-fit-to-height: true;\n" +
+                "    -fx-font-size: 100%;\n" +
+                "    -fx-alignment: center;");
 
         VBox content = new VBox();
         content.setMaxHeight(300);
