@@ -43,7 +43,7 @@ public class Bot extends Spieler  implements Serializable {
     /**
      * Bot versucht immer Chips zu tauschen, danach spielt er in folgender Reihenfolge:
      * - Versuch in der Reihenfolge der Handkarte eine Karte abzulegen.
-     * - Wenn ablegen nicht möglich ziehe eine Karte vom Stapel
+     * - Wenn ablegen nicht möglich ziehe eine Karte vom Stapel mit 60%iger Wsk.
      * - Wenn ziehen nicht möglich steige aus.
      */
     public void playSchwierigkeitLeicht() {
@@ -54,23 +54,25 @@ public class Bot extends Spieler  implements Serializable {
         System.out.println("ablage: "+ ablage);
 
         //Main.spiellogik.aussteigen(this);
-
-        for (int i = 0; i < playing.getCardCount(); i++) {
-            card = playing.getCardHand().getKarte(i);
-            if (Main.spiellogik.karteLegen(playing, card)) {
-                System.out.println("\tLege " + card.getValue());
-                return;
+        if (inGame()) {
+            if (zug) {
+                for (int i = 0; i < playing.getCardCount(); i++) {
+                    card = playing.getCardHand().getKarte(i);
+                    if (Main.spiellogik.karteLegen(playing, card)) {
+                        System.out.println("\tLege " + card.getValue());
+                        return;
+                    }
+                }
+                //60%ige wahrscheinlichkeit eine Karte zu ziehen sonst aussteigen
+                if (Main.spiellogik.karteNachziehen(playing) && Math.random() >= 0.4) {
+                    System.out.println("\tZiehe");
+                    return;
+                } else {
+                    System.out.println("\tSteige aus");
+                    Main.spiellogik.aussteigen(playing);
+                }
             }
         }
-        //80%ige wahrscheinlichkeit eine Karte zu ziehen sonst aussteigen
-        if (Main.spiellogik.karteNachziehen(playing)  && Math.random() >= 0.2) {
-            System.out.println("\tZiehe");
-            return;
-        } else {
-            System.out.println("\tSteige aus");
-            Main.spiellogik.aussteigen(playing);
-        }
-
     }
 
     /**
@@ -78,8 +80,8 @@ public class Bot extends Spieler  implements Serializable {
      * Bot führt Aktionen in folgender Reihenfolge aus:
      * - Chips umtauschen
      * - Karten legen wenn möglich
-     * - Wenn keine Karten vorhanden größtmöglichen Chip abgeben
-     * - Karte ziehen wenn möglich (mit einer wskeit)
+     * - Wenn keine Karten mehr auf der Hand wird größtmöglicher Chip abgeben
+     * - Karte ziehen wenn möglich wenn mehr als 4 Karten auf der Hand oder das Spiel durch die Handsumme beendet werden würde
      * - sonst Zug beendet
      * <p>
      * Um Methode zu verwenden muss setZug(true) aufgerufen werden.
@@ -128,10 +130,8 @@ public class Bot extends Spieler  implements Serializable {
                 }
                 //Kartenlegen Ende//
 
-                //Karten ziehen wenn noch keine Karte abgelegt wurde, wenn man am Zug ist, Wenn man mehr als 3 Karten hat,
-                //und 20% wskeit kommt dazu. Sonst wird ausgestiegen
-                // && Math.random() <= 0.2
-                if (!abgelegt && (playing.getCardCount() >= 4  || (handSumme()+playing.getPoints()>=40) )){
+                //Karten ziehen wenn noch keine Karte abgelegt wurde, wenn man am Zug ist, Wenn mehr als 4 Karten hat oder die Handsumme das Spiel beenden würde
+                if (!abgelegt && (playing.getCardCount() > 4  || (Main.spielArt==0 && handSumme()+playing.getPoints()>=40) && handSumme() <= 5 )){
                     if (Main.spiellogik.karteNachziehen(playing)) {
                         System.out.println("\t Karte nachziehen");
                         return;
@@ -153,12 +153,12 @@ public class Bot extends Spieler  implements Serializable {
 
     /**
      * Schwerer Bot
-     * Versucht zuerst die höchsten Werte abzulegen
-     * ANsonsten schaue die Summe meiner Handkarten und wieviele Karten
-     *      die Gegner noch haben
-     *      - Wenn ich höchsten 8 Strafpunkte bekommen würde und min einer meiner Gegner
-     *          höchstens noch 2 Karten hat steige ich aus
-     *  Ansonsten ziehe ich
+     * Versucht zuerst die nicht doppelte Karte abzulegen
+     * Außnahme : Lama und 1
+     * Ansonsten:
+     *  - schaut die Summe der Handkarten und wieviele Karten die Gegner noch haben an und zieht oder Steigt demendsprechend aus.
+     *  - zusätzlich Chance auf Risikozug.
+     *  - versucht immer zu ziehen falls Handsumme das Spiel beenden würde
      *  Wenn Nachziehstapel leer steige ich ebenfalls aus
      */
     public void playSchwierigkeitSchwer() {
@@ -225,7 +225,7 @@ public class Bot extends Spieler  implements Serializable {
                             anzmerk = entry.getValue();
                         }
                     }
-
+                    //Kartelegen
                     if (legen.value != 0 || merken.value != 0) {
                         if ((merken.value != 0) && (legen.value != 0)) {
                             if (legen.value == 10) {
@@ -280,7 +280,9 @@ public class Bot extends Spieler  implements Serializable {
                 }
 
                 //wenn legen nicht möglich, ziehen oder aussteigen?
-                if (noChange && (handSumme()+playing.getPoints()>=40)){
+
+                // Immer nach ziehen fals Handsumme das Spielbeenden würde
+                if (noChange && (Main.spielArt==0 && handSumme()+playing.getPoints()>=40)){
 
                     if (Main.spiellogik.karteNachziehen(playing)) {
                         System.out.println("ziehen");
@@ -288,13 +290,13 @@ public class Bot extends Spieler  implements Serializable {
                             System.out.println("\tziehen nicht möglich");
                             Main.spiellogik.aussteigen(playing);
                     }return;
-
+                // wenn ein Spieler hat nur noch eine Karte oder Handsumme ist kleiner als 3 -> aussteigen
                 } else if (noChange && playerCardCount()  == 1|| handSumme()<3) {
 
                     System.out.println("\tSteige sicherheitshalber aus");
                     Main.spiellogik.aussteigen(playing);
                     return;
-
+                // Handsumme ist größer als 8 und kein Spieler hat weniger als 2 Karten, dann 60%ige Wsk. auf Risiko zug. (nur 2 mal in einer Runde möglich)
                 } else if (noChange && (handSumme() > 8) && playerCardCount() <= 2 && (risiko == 0 || risiko == 1 && Math.random() <= 0.6) ) {
 
                     if (Main.spiellogik.karteNachziehen(playing)) {
@@ -305,20 +307,20 @@ public class Bot extends Spieler  implements Serializable {
                         Main.spiellogik.aussteigen(playing);
                     }
                     return;
-
+                //wenn handsumme kleiner als 5 ist und min. ein spieler weniger als 2 Karten hat -> aussteigen
                 } else if (noChange && (handSumme() < 5) && playerCardCount() < 2) {
 
                     System.out.println("\tSteige sicherheitshalber aus");
                     Main.spiellogik.aussteigen(playing);
                     return;
-
+                //falls Handwert zu hoch und kein Mitspieler wenig Karten hat
                 } else if (noChange) {
-
+                    // falls nicht schon 3 mal hintereinander gezogen -> karte Nachziehen
                     if ((gezogen < 3) && Main.spiellogik.karteNachziehen(playing)) {
                         System.out.println("\tZiehe");
                         gezogen++;
                         return;
-
+                    // bereits dreimal Hintereinander gezogen aber die Handsumme größer als 12 ist und kein spieler weniger als 3 Karten hat -> trotzdem ziehen
                     }else if (handSumme()>12 && playerCardCount()>2 && Main.spiellogik.karteNachziehen(playing)){
                         System.out.println("\tZiehe");
                         gezogen++;
@@ -375,6 +377,9 @@ public class Bot extends Spieler  implements Serializable {
         return minHandKartCoundGegner;
     }
 
+    /**
+     * @return Kartenwert den Bot auf der Hand hat
+     */
     private int handSumme(){
         List<Karte> cards = new ArrayList();
         cards.addAll(this.getCardHand().getHandKarte());
@@ -393,6 +398,9 @@ public class Bot extends Spieler  implements Serializable {
     }
 
 
+    /**
+     * @return Map mit gleichen Karten und deren Häufigkeit
+     */
     private Map<HandKarte,Integer> doppelteKarten(){
         List<HandKarte> cards = new ArrayList();
         cards.addAll(this.getCardHand().getHandKarte());
@@ -429,6 +437,11 @@ public class Bot extends Spieler  implements Serializable {
         }
         return dublikate;
     }
+
+    /**
+     * @return true wenn alle anderen Spieler aussgestiegen sind, false wenn noch spieler im Spiel sind
+     *
+     */
     boolean letzterSpieler(){
         int anzahlSpielerNichtFertig = 0;
 
@@ -445,6 +458,9 @@ public class Bot extends Spieler  implements Serializable {
 
     }
 
+    /**
+     * @return Integer der dem Bot level entspricht; 1: Einfach , 2: Mittel, 3: Schwer
+     */
     public int getSchwierigkeit() {
         return schwierigkeit;
     }
