@@ -81,6 +81,7 @@ public class GuiScoreboard {
             p++;
 
             System.out.println(entry.getKey().getName() + ":  -  alt:" + entry.getKey().getOldScore() + "   neu:" + entry.getKey().getPoints() + "   dif:" + dif);
+
         }
 
         center.addRow(0, platz, names, score, differ);
@@ -204,7 +205,7 @@ public class GuiScoreboard {
         rangliste.getStylesheets().add("GUI/Rangliste.css");
 
         Main.classPrimaryStage.setScene(rangliste);
-
+        spiellogik.durchschnitt();
         return rangliste;
     }
 }

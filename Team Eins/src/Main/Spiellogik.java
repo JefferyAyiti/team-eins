@@ -14,6 +14,10 @@ public class Spiellogik implements Serializable {
     public final Tisch tisch;
     public boolean rundeBeendet = false;
     public boolean spielBeendet = false;
+    int win1 =0;
+    int win2 =0;
+    int win3 =0;
+    Map<Integer,Integer> average = new LinkedHashMap<>();
 
     /**
      * Initialisiere Spiellogik mit dem Tisch
@@ -181,7 +185,7 @@ public class Spiellogik implements Serializable {
 
         int summe = 0;
         if (tisch.getAktivSpieler() == Main.tisch.getSpielerList()[0])
-            System.out.println(handkarten);
+            System.out.println("HandKarten: "+ handkarten);
         //aufaddieren
         for (Integer c : handkarten) {
             summe += c;
@@ -459,5 +463,31 @@ public class Spiellogik implements Serializable {
         return rundeBeendet;
     }
 
+    public void durchschnitt() {
+        if (tisch.getDurchgangNr() != 0) {
+
+
+            for (Map.Entry<Spieler, Integer> aa : ranglisteErstellen().entrySet()) {
+                if (aa.getKey().getSchwierigkeit() == 1) {
+                    win1++;
+                    average.put(1, win1);
+                    break;
+                } else if (aa.getKey().getSchwierigkeit() == 2) {
+                    win2++;
+                    average.put(2, win2);
+                    break;
+                } else if (aa.getKey().getSchwierigkeit() == 3) {
+                    win3++;
+                    average.put(3, win3);
+                    break;
+                }
+                break;
+            }
+
+            for (Map.Entry<Integer, Integer> entry : average.entrySet()) {
+                System.out.println("Botschwierigkeit " + entry.getKey() + " hat " + entry.getValue() + "/" + tisch.getDurchgangNr() + " Runden gewonnen");
+            }
+        }
+    }
 }
 
