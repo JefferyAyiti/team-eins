@@ -38,6 +38,8 @@ public class GuiHauptmenu {
     String IP = "localhost";
     String Port = "8001";
 
+    boolean shutdown = false;
+
 
 
     /**
@@ -85,6 +87,7 @@ public class GuiHauptmenu {
             //IP:Port
             center.addRow(1, new Label("Server-IP: "), ip);
             center.addRow(2, new Label("Server-Port: "), port);
+            center.addRow(3, status);
 
         }
 
@@ -123,6 +126,7 @@ public class GuiHauptmenu {
             center.addRow(2, new Label("Bot-Schwierigkeit: "), botselect);
             if(Main.playMode == 1){
                 center.addRow(2, new Label("Server-Port: "), port);
+                center.addRow(5, status);
             }
 
         if(Main.playMode==1 ){
@@ -280,7 +284,7 @@ public class GuiHauptmenu {
                         e.printStackTrace();
                     }
                     server = null;
-                    status.setText("Verbindung zu Server verloren");
+                    shutdown = true;
 
                 }
                 //neue Scene
@@ -441,6 +445,11 @@ public class GuiHauptmenu {
                     @Override
                     public void run() {
                         Platform.runLater(() -> showSettingsMenu(Main.classPrimaryStage));
+                        if(shutdown){
+                            update.cancel();
+                            shutdown = false;
+                            status.setText("Verbindung zu Server verloren");
+                        }
                     }
                 }, 1500, 1500);
                 joined = true;
