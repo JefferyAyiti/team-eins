@@ -463,6 +463,9 @@ public class Spiellogik implements Serializable {
         return rundeBeendet;
     }
 
+    /**
+     * gibt aus welche Botswierigkeit bisher wie oft im Spiel den ersten Platz erreicht hat
+     */
     public void durchschnitt() {
         if (tisch.getDurchgangNr() != 0) {
 
