@@ -315,6 +315,11 @@ public class GuiHauptmenu {
             inMenu = false;
             Main.botPlayTime = (long) slider.getValue();
             Main.botlevel = botselect.getSelectionModel().getSelectedIndex();
+            spielArt = spielart.getSelectionModel().getSelectedIndex();
+            if(spielArt == 1)
+                spielArtLimit = Integer.parseInt(spielartLimit.getText());
+            System.out.println(spielArt);
+            System.out.println(Integer.parseInt(spielartLimit.getText()));
             Main.myName = namefield.getText();
             if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
             Main.anzSpieler = (int) playeranzselect.getValue();

@@ -16,6 +16,7 @@ public class Spieler  implements Serializable {
     int blackChips = 0, whiteChips = 0;
     private boolean letzerSpielerDurchgang = false;
     private boolean aussteigen = false;
+    protected int schwierigkeit = 0;
 
 
     /**
@@ -67,9 +68,9 @@ public class Spieler  implements Serializable {
         aussteigen = false;
     }
     public void aussteigen(){
-        System.out.println(aussteigen);
+        System.out.println("Aussteigen: " + aussteigen);
         aussteigen = true;
-        System.out.println(tisch.getSpielerList()[ich].inGame());
+        System.out.println("in Game: " + tisch.getSpielerList()[ich].inGame());
         //Main.tisch.naechste();
     }
     public boolean inGame() {
@@ -152,6 +153,10 @@ public class Spieler  implements Serializable {
      */
     public void setOldScore(int alt) {
         oldScore = alt;
+    }
+
+    public int getSchwierigkeit() {
+        return schwierigkeit;
     }
 
     @Override
