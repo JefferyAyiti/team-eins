@@ -79,7 +79,7 @@ public class Bot extends Spieler  implements Serializable {
      * Mittelschwere Bot Methode:
      * Bot führt Aktionen in folgender Reihenfolge aus:
      * - Chips umtauschen
-     * - Karten legen wenn möglich
+     * - Karten legen wenn möglich (gleiche zuerst)
      * - Wenn keine Karten mehr auf der Hand wird größtmöglicher Chip abgeben
      * - Karte ziehen wenn möglich wenn mehr als 4 Karten auf der Hand oder das Spiel durch die Handsumme beendet werden würde
      * - sonst Zug beendet
@@ -154,7 +154,7 @@ public class Bot extends Spieler  implements Serializable {
     /**
      * Schwerer Bot
      * Versucht zuerst die nicht doppelte Karte abzulegen
-     * Außnahme : Lama und 1
+     * Außnahme : Lama
      * Ansonsten:
      *  - schaut die Summe der Handkarten und wieviele Karten die Gegner noch haben an und zieht oder Steigt demendsprechend aus.
      *  - zusätzlich Chance auf Risikozug.
@@ -163,14 +163,12 @@ public class Bot extends Spieler  implements Serializable {
      */
     public void playSchwierigkeitSchwer() {
         Spieler playing = Main.tisch.getSpielerList()[Main.tisch.aktiv];
-        Karte card;
         Main.spiellogik.chipsTauschen(Main.tisch.aktiv);
         int ablage = Main.tisch.getObereKarteAblagestapel().value;
         System.out.println("ablage: "+ ablage);
 
         boolean noChange=true;
-        boolean ablegen = false;
-        boolean gleich= false;
+
         Karte legen = new Karte (0,true);
         Karte merken = new Karte (0,true);
         int risiko=0;
@@ -442,7 +440,7 @@ public class Bot extends Spieler  implements Serializable {
      * @return true wenn alle anderen Spieler aussgestiegen sind, false wenn noch spieler im Spiel sind
      *
      */
-    public boolean letzterSpieler(){
+    boolean letzterSpieler(){
         int anzahlSpielerNichtFertig = 0;
 
         for (int i = 0; i < anzSpieler; i++) { //spielerListe durchgehen und gucken wie viele Spieler noch spielen

@@ -1,3 +1,4 @@
+package Main;
 import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -24,18 +25,20 @@ class BotTest {
         botListe[1] = new Bot("test2",2);
         botListe[2] = new Bot("test3",3);
         this.tisch = new Tisch(botListe);
-
+        int a = 1;
         Hand TestHand= new Hand();
         for (int s = 0; s < 6; s++) {
-            TestHand.addKarte(new HandKarte(s + 1, true));
+            TestHand.addKarte(new HandKarte(a, false));
+            a++;
         }
         Hand TestDoppelte = new Hand();
-        TestDoppelte.addKarte(new Karte(1,false));
-        TestDoppelte.addKarte(new Karte(2,false));
-        TestDoppelte.addKarte(new Karte(2,false));
-        for (int s = 3; s < 6; s++) {
-            TestDoppelte.addKarte(new HandKarte(s + 1, true));
-        }
+        TestDoppelte.addKarte(new HandKarte(5,false));
+        TestDoppelte.addKarte(new HandKarte(4,false));
+        TestDoppelte.addKarte(new HandKarte(10, false));
+        TestDoppelte.addKarte(new HandKarte(6, false));
+        TestDoppelte.addKarte(new HandKarte(6, false));
+        TestDoppelte.addKarte(new HandKarte(10, false));
+
 
         botListe[0].setCardHand(TestHand);
         botListe[1].setCardHand(TestHand);
@@ -45,19 +48,21 @@ class BotTest {
         botListe[1].einsteigen();
         botListe[2].einsteigen();
 
+        for(int i= 0; i<3; i++) {
+            botListe[i].setBlackChips(1);
+            botListe[i].setWhiteChips(1);
+            botListe[i].setPoints(-11);
+        }
+
         ablagestapel = new Stapel(false);
         nachziehstapel = new Stapel(true);
 
-        ablagestapel.ablegen(new Karte(1,false));
-        nachziehstapel.addCard(new Karte(4,true));
-        nachziehstapel.addCard(new Karte(5,true));
-        nachziehstapel.addCard(new Karte(10,true));
 
         tisch.nextDurchgang();
         tisch.setAktiv(0);
         tisch.setAblageStapel(ablagestapel);
         tisch.setNachziehstapel(nachziehstapel);
-        spiellogik = new Spiellogik(tisch);
+        Main.spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
         main.setAnzSpieler(3);
 
@@ -65,49 +70,60 @@ class BotTest {
 
     @Test
     void playSchwierigkeitLeicht() {
-        assertEquals(1,botListe[0].getCardHand().getKarte(0));
-        assertEquals(1,ablagestapel.getTopCard().getValue());  //Karte 1 liegt auf dem Ablagestapel
+        ablagestapel.ablegen(new Karte(1,false));
+        botListe[0].play();
+
+        assertEquals(1,ablagestapel.getTopCard().getValue());//Karte 5 liegt auf dem Ablagestapel
         assertEquals(5,botListe[0].getCardCount()); //Bot hat nur noch 5 Karte in der Hand
 
     }
 
     @Test
     void playSchwierigkeitMittel() {
-        assertEquals(1,botListe[1].getCardHand().getKarte(0));
-        assertEquals(2,ablagestapel.getTopCard().getValue());  //Karte 1 liegt auf dem Ablagestapel
+        ablagestapel.ablegen(new Karte(2,false));
+        botListe[1].play();
+
+        assertEquals(2,ablagestapel.getTopCard().getValue());  //Karte 5 liegt auf dem Ablagestapel
         assertEquals(5,botListe[1].getCardCount()); //spieler hat nur noch 5 Karte in der Hand
     }
 
     @Test
     void playSchwierigkeitSchwer() {
-        assertEquals(2,botListe[2].getCardHand().getKarte(0));
-        assertEquals(1,ablagestapel.getTopCard().getValue());  //Karte 1 liegt auf dem Ablagestapel
-        assertEquals(5,botListe[1].getCardCount()); //spieler hat nur noch 5 Karte in der Hand
+        ablagestapel.ablegen(new Karte(5,false));
+        botListe[2].play();
 
-        assertEquals(2,botListe[2].getCardHand().getKarte(0));
-        assertEquals(2,ablagestapel.getTopCard().getValue());  //Karte 1 liegt auf dem Ablagestapel
-        assertEquals(4,botListe[1].getCardCount()); //spieler hat nur noch 4 Karte in der Hand
+        assertEquals(5,ablagestapel.getTopCard().getValue());  //Karte 1 liegt auf dem Ablagestapel
+        //assertEquals(5,botListe[2].getCardCount()); //spieler hat nur noch 5 Karte in der Hand
+    }
+    @Test
+    void playSchwierigkeitSchwer2() {
+
+        ablagestapel.ablegen(new Karte(6,false));
+        botListe[2].play();
+
+        assertEquals(10,ablagestapel.getTopCard().getValue());  //Karte 10 liegt auf dem Ablagestapel
+        //assertEquals(5,botListe[2].getCardCount()); //spieler hat nur noch 5 Karte in der Hand
+
+
     }
 
     @Test
     void chipAbgeben() {
-       Bot test = new Bot ("Tester 1", 1);
-       test.setBlackChips(2);
-       test.chipAbgeben();
-       assertEquals(1,test.getBlackChips());
+        ablagestapel.ablegen(new Karte(1,false));
+        Hand test = new Hand();
+        test.addKarte(new Karte(1,false));
+        botListe[0].setCardHand(test);
+        botListe[0].play();
+
+        //-> darf Chip abgeben
+        assertEquals(0,botListe[0].getBlackChips());
+        assertEquals(-1,botListe[0].getPoints());
+
     }
 
     @Test
     void playerCardCount1() {
         assertEquals(6,botListe[0].playerCardCount());
-    }
-
-    @Test
-    void letzterSpieler() {
-        for(int i = 1; i<6; i++){
-            botListe[i].aussteigen();
-        }
-        assertEquals(true,botListe[0].letzterSpieler());
     }
 
 
@@ -166,14 +182,6 @@ class BotTest {
         Bot test = new Bot ("Tester 1", 1);
         test.setWhiteChips(2);
         assertEquals(2, test.getWhiteChips());
-    }
-
-    @Ignore
-    @Test
-    //@RepeatedTest(100)
-    void play() {
-
-
     }
 
 
