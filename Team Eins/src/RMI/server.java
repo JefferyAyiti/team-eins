@@ -40,7 +40,7 @@ public interface server extends Remote {
     int getDurchgangNr() throws RemoteException;
     Tisch updateTisch() throws RemoteException;
 
-
+    void replaceSpielerDurchBot(String uid) throws RemoteException;
     void updateClients(String message) throws RemoteException;
     void shareMessage(String message)throws RemoteException;
 

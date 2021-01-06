@@ -334,6 +334,11 @@ public class GuiSpieltisch {
             bottom.getChildren().add(beenden);
 
             beenden.setOnMouseClicked(mouseEvent -> {
+                try {
+                    Main.server.replaceSpielerDurchBot(uniqueID);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
                 if (Main.playMode==1){
                     Main.gameRunning = false;
                     Main.bots.cancel();
@@ -351,6 +356,7 @@ public class GuiSpieltisch {
 
                 }else if(Main.playMode == 2){//Multiplaymodus
                     joined = false;
+
                     hauptmenuGui.update.cancel();
                     try {
                         server.leaveServer(uniqueID);

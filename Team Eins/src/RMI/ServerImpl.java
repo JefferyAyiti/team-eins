@@ -207,7 +207,7 @@ public class ServerImpl implements server {
         Spieler s;
         for(int i = 0;i < anzSpieler;i++) {
             s = tisch.getSpielerList()[i];
-            if(tisch.getSpielerList()[i].getUid() == uid
+            if(tisch.getSpielerList()[i].getUid().equals(uid)
             && !(s instanceof Bot)) {
                 Bot spiel = new Bot("[Bot] "+
                         tisch.getSpielerList()[i].getName(),
