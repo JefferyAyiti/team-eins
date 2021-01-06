@@ -442,7 +442,7 @@ public class Bot extends Spieler  implements Serializable {
      * @return true wenn alle anderen Spieler aussgestiegen sind, false wenn noch spieler im Spiel sind
      *
      */
-    boolean letzterSpieler(){
+    public boolean letzterSpieler(){
         int anzahlSpielerNichtFertig = 0;
 
         for (int i = 0; i < anzSpieler; i++) { //spielerListe durchgehen und gucken wie viele Spieler noch spielen
