@@ -334,23 +334,26 @@ public class GuiSpieltisch {
             bottom.getChildren().add(beenden);
 
             beenden.setOnMouseClicked(mouseEvent -> {
-                try {
-                    Main.server.replaceSpielerDurchBot(uniqueID);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-                if (Main.playMode==1){
+
+                if (Main.playMode <= 1){
                     Main.gameRunning = false;
                     Main.bots.cancel();
                     Main.joined = false;
-                    try {
-                        server.closeServer();
-                        Main.hauptmenuGui.runServer.stop();
-                        Main.hauptmenuGui.update.cancel();
-                        server = null;
-                        hauptmenuGui.status = new Label("Server geschlossen");
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
+                    if (Main.playMode == 1) {
+                        try {
+                            Main.server.replaceSpielerDurchBot(uniqueID);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            server.closeServer();
+                            Main.hauptmenuGui.runServer.stop();
+                            Main.hauptmenuGui.update.cancel();
+                            server = null;
+                            hauptmenuGui.status = new Label("Server geschlossen");
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
                     }
                     Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
 
