@@ -99,9 +99,10 @@ public class GUIChat {
 
     public VBox buildChat() {
         VBox cbox = new VBox();
-        cbox.setId("cbox");
         List<List<String>> rec = null;
-        String white = "";
+
+
+
         try {
             rec = server.getChat();
         } catch (RemoteException e) {
@@ -112,23 +113,40 @@ public class GUIChat {
                 if (!mutelist.contains(zeile.get(0))) {
                     if (zeile.size() == 2) { // normale Nachricht
                         TextFlow flow = new TextFlow();
-
                         Text text1 = new Text(zeile.get(0) + ": ");
-                        text1.setStyle("-fx-font-weight: bold; " + white);
+                        text1.setStyle("-fx-font-weight: bold;");
 
                         Text text2 = new Text(zeile.get(1));
-                        text2.setStyle("-fx-font-weight: normal; " + white);
+                        text2.setStyle("-fx-font-weight: normal; ");
 
                         flow.getChildren().addAll(text1, text2);
                         cbox.getChildren().add(flow);
                     } else if (zeile.get(1).equals("/coinflip")) {
-                        cbox.getChildren().add(
-                                new Label("\t " + zeile.get(0) + " wirft eine Münze und es ist " + zeile.get(2))
-                        );
+                        TextFlow flow = new TextFlow();
+                        Text text1 = new Text("\uD83D\uDCB0    "+zeile.get(0) + " ");
+                        text1.setStyle("-fx-font-weight: bold;");
+
+                        Text text2 = new Text("wirft eine Münze und es ist ");
+                        text2.setStyle("-fx-font-weight: normal; ");
+
+                        Text text3 = new Text(zeile.get(2));
+                        text3.setStyle("-fx-font-weight: bold;");
+
+                        flow.getChildren().addAll(text1, text2, text3);
+                        cbox.getChildren().add(flow);
                     } else {
-                        cbox.getChildren().add(
-                                new Label("\t " + zeile.get(0) + " würfelt \uD83D\uDE01 mit einem " + zeile.get(1) + "er-Würfel eine " + zeile.get(2))
-                        );
+                        TextFlow flow = new TextFlow();
+                        Text text1 = new Text("\uD83C\uDFB2    "+zeile.get(0) + " ");
+                        text1.setStyle("-fx-font-weight: bold;");
+
+                        Text text2 = new Text(" würfelt mit einem " + zeile.get(1) + "er-Würfel eine ");
+                        text2.setStyle("-fx-font-weight: normal; ");
+
+                        Text text3 = new Text(zeile.get(2));
+                        text3.setStyle("-fx-font-weight: bold;");
+
+                        flow.getChildren().addAll(text1, text2, text3);
+                        cbox.getChildren().add(flow);
                     }
 
                 }

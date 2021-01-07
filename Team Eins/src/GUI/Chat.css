@@ -1,3 +1,10 @@
-#cbox {
-    -fx-text-fill: white;
+TextFlow > Text {
+    -fx-fill: rgb(255,255,255);
+    -fx-font-size: 10pt;
 }
+
+
+.text-input, .button {
+    -fx-background-color: rgba(160, 158, 158, 0.4);
+    -fx-control-inner-background: rgba(0,0,0,0.4);
+    }

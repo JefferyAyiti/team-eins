@@ -239,7 +239,7 @@ public class ServerImpl implements server {
                     int die = Integer.valueOf(message.substring(6));
 
                     zeile.add(Integer.toString(die));
-                    zeile.add(Integer.toString((int)Math.random() * die + 1));
+                    zeile.add(Integer.toString((int)((Math.random() * die) + 1)));
 
                 } else
                 {
