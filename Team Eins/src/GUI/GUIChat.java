@@ -33,25 +33,24 @@ public class GUIChat {
         chat = new Popup();
     }
 
-    public void openChat(Stage owner, double X, double Y, double width){
+    public void openChat(Stage owner, double X, double Y, double height, double width){
         chat.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_BOTTOM_LEFT);
-        chat.setAnchorX(X+5);
-        chat.setAnchorY(Y);
-        chat.setAutoHide(true);
-        scroll.setOpacity(0.9);
+        chat.setAnchorX(X+8);
+        chat.setAnchorY(Y-30);
+        scroll.setOpacity(0.8);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         //sendButton.setOpacity(0.8);
         //sendButton.setFont(Font.font())
         sendButton.setStyle("-fx-text-fill: black;\n" +
-                "    -fx-background-color: rgba(255,255,255,0.4);\n" +
+                "    -fx-background-color: rgba(255,255,255,0.6);\n" +
                 "    -fx-fit-to-height: true;\n" +
                 "    -fx-font-size: 100%;\n" +
                 "    -fx-alignment: center;" +
                 "    -fx-font-weight: bold;");
 
         VBox content = new VBox();
-        content.setMaxHeight(300);
-        messages.setPrefHeight(width+50);
+        //content.setMaxHeight(300);
+        messages.setPrefHeight(height);
         messages.setPrefWidth(width+70);
         messages.setMaxWidth(600);
         messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
@@ -66,6 +65,7 @@ public class GUIChat {
         content.getChildren().addAll(scroll, inputBox);
         chat.getContent().addAll(content);
         //chat.setAutoHide(true);
+        scroll.vvalueProperty().bind(messages.heightProperty());
         chat.show(owner);
     }
 

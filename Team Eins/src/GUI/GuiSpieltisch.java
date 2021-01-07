@@ -325,8 +325,8 @@ public class GuiSpieltisch {
         //Spiel verlassen
         if (playerId == Main.ich) {
             ImageView beenden = new ImageView(Main.loader.getImg("GUI/images/exit.svg", zoomfactor * 0.25));
-            beenden.setTranslateY(-7);
-            chips.setTranslateY(7);
+            beenden.setTranslateY(-5);
+            beenden.setTranslateX(130);
 
 
             beenden.setOnMouseEntered(e -> beenden.setStyle(HOVERED_BUTTON_STYLE));
@@ -648,7 +648,7 @@ public class GuiSpieltisch {
                 chatButton.setTranslateY(40);
                 chatButton.setOnMouseClicked(e -> chatbox.openChat(classPrimaryStage, classPrimaryStage.getX(),
 
-                        classPrimaryStage.getHeight() + 120, 120 * zoomfactor)
+                        classPrimaryStage.getHeight() + 120,240* zoomfactor, 90 * zoomfactor)
                 );
                 chatButton.setStyle(
                         "-fx-text-fill: black;\n" +
