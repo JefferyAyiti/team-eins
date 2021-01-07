@@ -340,11 +340,7 @@ public class GuiSpieltisch {
                     Main.bots.cancel();
                     Main.joined = false;
                     if (Main.playMode == 1) {
-                        try {
-                            Main.server.replaceSpielerDurchBot(uniqueID);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
+
                         try {
                             server.closeServer();
                             Main.hauptmenuGui.runServer.stop();
@@ -359,11 +355,14 @@ public class GuiSpieltisch {
 
                 }else if(Main.playMode == 2){//Multiplaymodus
                     joined = false;
-
+                    try {
+                        Main.server.replaceSpielerDurchBot(uniqueID);
+                    } catch (RemoteException e) {
+                    }
                     hauptmenuGui.update.cancel();
                     try {
                         server.leaveServer(uniqueID);
-                        server.incAenderung();
+                        //server.incAenderung();
                         server = null;
                         hauptmenuGui.status = new Label("Server verlassen");
 

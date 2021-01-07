@@ -52,9 +52,11 @@ public class GuiHauptmenu {
         }
         inMenu = true;
         try {
-            if(server != null && server.getGameStart() && playMode == 2 && !assigned) {
+            if(server != null && server.getGameStart(uniqueID) && playMode == 2 && !assigned) {
                 try {
-                    ich = server.assignId(uniqueID);
+                    do {
+                        ich = server.assignId(uniqueID);
+                    } while(ich == -1);
                     assigned = true;
                 } catch (RemoteException e) {
                 }
