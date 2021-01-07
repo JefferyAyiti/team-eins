@@ -288,6 +288,39 @@ public class GuiSpieltisch {
         chips.add(text, 1, 1);
         //chips.setY(102);
 
+        //Mute
+        if(playerId != ich && playMode != 0) {
+            Image muteIcon = new Image("GUI/images/mute.png");
+            Image unMuteIcon = new Image("GUI/images/unmute.png");
+            ImageView mute = new ImageView(
+                    mutelist.contains(tisch.getSpielerList()[playerId].getName())?
+                            unMuteIcon:muteIcon
+            );
+            mute.setTranslateX(10);
+            mute.setPreserveRatio(true);
+            mute.setFitWidth(20*zoomfactor);
+            mute.setOnMouseEntered(e -> mute.setStyle(HOVERED_BUTTON_STYLE));
+            mute.setOnMouseExited(e -> mute.setStyle(IDLE_BUTTON_STYLE));
+
+            if(tablePos == 5)
+                mute.setRotate(90);
+            else if(tablePos == 1)
+                mute.setRotate(-90);
+
+            mute.setOnMouseClicked(mouseEvent -> {
+                if(mutelist.contains(tisch.getSpielerList()[playerId].getName())) {
+                    //bereits gemutet -> unmute
+                    mutelist.remove(tisch.getSpielerList()[playerId].getName());
+                    mute.setImage(muteIcon);
+                } else {
+                    mutelist.add(tisch.getSpielerList()[playerId].getName());
+                    mute.setImage(unMuteIcon);
+                }
+            });
+
+            chips.add(mute, 2, 0, 1, 2);
+
+        }
         if(tablePos > 1 && tablePos < 5) {
             chips.setRotate(180);
         }
@@ -653,10 +686,9 @@ public class GuiSpieltisch {
                 chatButton.setStyle(
                         "-fx-text-fill: black;\n" +
                                 "    -fx-background-color: rgba(255,255,255,0.4);\n" +
-                                "    -fx-fit-to-height: true;\n" +
-                                "    -fx-pref-height: 30px;\n" +
-                                "    -fx-pref-width: 140px;\n" +
-                                "    -fx-font-size: 150%;\n" +
+                                "    -fx-pref-height: 15px;\n" +
+                                "    -fx-pref-width: 80px;\n" +
+                                "    -fx-font-size: 100%;\n" +
                                 "    -fx-alignment: center;"
                 );
 

@@ -34,7 +34,6 @@ public class GUIChat {
     }
 
     public void openChat(Stage owner, double X, double Y, double width){
-
         chat.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_BOTTOM_LEFT);
         chat.setAnchorX(X+5);
         chat.setAnchorY(Y);
@@ -102,53 +101,55 @@ public class GUIChat {
         List<List<String>> rec = null;
 
 
+        if(server != null) {
+            try {
+                rec = server.getChat();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
 
-        try {
-            rec = server.getChat();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        if(rec != null) {
-            for(List<String> zeile: rec) {
-                if (!mutelist.contains(zeile.get(0))) {
-                    if (zeile.size() == 2) { // normale Nachricht
-                        TextFlow flow = new TextFlow();
-                        Text text1 = new Text(zeile.get(0) + ": ");
-                        text1.setStyle("-fx-font-weight: bold;");
+            if (rec != null) {
+                for (List<String> zeile : rec) {
+                    if (!mutelist.contains(zeile.get(0))) {
+                        if (zeile.size() == 2) { // normale Nachricht
+                            TextFlow flow = new TextFlow();
+                            Text text1 = new Text(zeile.get(0) + ": ");
+                            text1.setStyle("-fx-font-weight: bold;");
 
-                        Text text2 = new Text(zeile.get(1));
-                        text2.setStyle("-fx-font-weight: normal; ");
+                            Text text2 = new Text(zeile.get(1));
+                            text2.setStyle("-fx-font-weight: normal; ");
 
-                        flow.getChildren().addAll(text1, text2);
-                        cbox.getChildren().add(flow);
-                    } else if (zeile.get(1).equals("/coinflip")) {
-                        TextFlow flow = new TextFlow();
-                        Text text1 = new Text("\uD83D\uDCB0    "+zeile.get(0) + " ");
-                        text1.setStyle("-fx-font-weight: bold;");
+                            flow.getChildren().addAll(text1, text2);
+                            cbox.getChildren().add(flow);
+                        } else if (zeile.get(1).equals("/coinflip")) {
+                            TextFlow flow = new TextFlow();
+                            Text text1 = new Text("\uD83D\uDCB0    " + zeile.get(0) + " ");
+                            text1.setStyle("-fx-font-weight: bold;");
 
-                        Text text2 = new Text("wirft eine Münze und es ist ");
-                        text2.setStyle("-fx-font-weight: normal; ");
+                            Text text2 = new Text("wirft eine Münze und es ist ");
+                            text2.setStyle("-fx-font-weight: normal; ");
 
-                        Text text3 = new Text(zeile.get(2));
-                        text3.setStyle("-fx-font-weight: bold;");
+                            Text text3 = new Text(zeile.get(2));
+                            text3.setStyle("-fx-font-weight: bold;");
 
-                        flow.getChildren().addAll(text1, text2, text3);
-                        cbox.getChildren().add(flow);
-                    } else {
-                        TextFlow flow = new TextFlow();
-                        Text text1 = new Text("\uD83C\uDFB2    "+zeile.get(0) + " ");
-                        text1.setStyle("-fx-font-weight: bold;");
+                            flow.getChildren().addAll(text1, text2, text3);
+                            cbox.getChildren().add(flow);
+                        } else {
+                            TextFlow flow = new TextFlow();
+                            Text text1 = new Text("\uD83C\uDFB2    " + zeile.get(0) + " ");
+                            text1.setStyle("-fx-font-weight: bold;");
 
-                        Text text2 = new Text(" würfelt mit einem " + zeile.get(1) + "er-Würfel eine ");
-                        text2.setStyle("-fx-font-weight: normal; ");
+                            Text text2 = new Text(" würfelt mit einem " + zeile.get(1) + "er-Würfel eine ");
+                            text2.setStyle("-fx-font-weight: normal; ");
 
-                        Text text3 = new Text(zeile.get(2));
-                        text3.setStyle("-fx-font-weight: bold;");
+                            Text text3 = new Text(zeile.get(2));
+                            text3.setStyle("-fx-font-weight: bold;");
 
-                        flow.getChildren().addAll(text1, text2, text3);
-                        cbox.getChildren().add(flow);
+                            flow.getChildren().addAll(text1, text2, text3);
+                            cbox.getChildren().add(flow);
+                        }
+
                     }
-
                 }
             }
         }

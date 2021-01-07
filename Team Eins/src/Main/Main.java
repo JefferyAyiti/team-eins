@@ -49,7 +49,6 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        System.out.println(uniqueID);
         loader = new TestLoadImageUsingClass();
         loader.installSvgLoader();
         launch(args);
@@ -94,7 +93,6 @@ public class Main extends Application {
 
         if(playMode == 0) {
             spielerM[0] = new Spieler(myName, uniqueID);
-            System.out.println("Main erzeugt");
             i=0;
         } else {
             if(server != null) {
@@ -103,7 +101,6 @@ public class Main extends Application {
                     for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
                         i++;
                         spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
-                        System.out.println(i+" "+entry.getValue()+" erzeugt");
                     }
 
                 } catch (Exception e) {
@@ -122,7 +119,6 @@ public class Main extends Application {
             Collections.shuffle(spl);
             spielerM = spl.toArray(new Spieler[anzSpieler]);
         }
-        System.out.println(spielerM);
         tisch = new Tisch(spielerM);
         spiellogik = new Spiellogik(tisch);
         spiellogik.initNeueRunde();
@@ -198,7 +194,6 @@ public class Main extends Application {
                     e.printStackTrace();
                 }
             }
-            //System.out.println("Anzahl Spieler: " + (anzSpieler-1));
             if (playMode < 2 && tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
                 if (System.currentTimeMillis() - lastmove < botPlayTime) {
                     try {
