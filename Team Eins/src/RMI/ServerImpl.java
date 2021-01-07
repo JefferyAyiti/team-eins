@@ -21,6 +21,7 @@ public class ServerImpl implements server {
     long aenderung = 0;
     String host;
     boolean lock = true;
+    int ammountReadyClients = 0;
 
     public ServerImpl() throws RemoteException {
         UnicastRemoteObject.exportObject(this, 0);
@@ -29,6 +30,16 @@ public class ServerImpl implements server {
     @Override
     public boolean serverOpen() throws RemoteException {
         return lock;
+    }
+
+    @Override
+    public int getAnzClients() throws RemoteException {
+        return anzClients;
+    }
+
+    @Override
+    public int getAnzReadyClients() throws RemoteException {
+        return ammountReadyClients;
     }
 
     @Override
@@ -100,7 +111,11 @@ public class ServerImpl implements server {
 
     @Override
     public void neueRunde() throws RemoteException {
-        spiellogik.initNeueRunde();
+        ammountReadyClients++;
+        if(ammountReadyClients == anzClients){
+            spiellogik.initNeueRunde();
+            ammountReadyClients = 0;
+        }
         aenderung++;
     }
 
@@ -189,7 +204,7 @@ public class ServerImpl implements server {
     public void checkTimeout() throws RemoteException {
         for(Map.Entry<String, Long> ping : pings.entrySet()) {
             if(!ping.getKey().equals(uniqueID) &&
-                    ping.getValue()+5000 < System.currentTimeMillis()) {
+                    ping.getValue()+5000 < System.currentTimeMillis() && gameRunning) {
                 replaceSpielerDurchBot(ping.getKey());
             }
         }
