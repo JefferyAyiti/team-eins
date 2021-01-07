@@ -52,7 +52,7 @@ public class GuiHauptmenu {
         }
         inMenu = true;
         try {
-            if(server != null && server.getGameStart() && playMode == 2 && !assigned) {
+            if(server != null && server.getGameStart(uniqueID) && playMode == 2 && !assigned) {
                 try {
                     do {
                         ich = server.assignId(uniqueID);

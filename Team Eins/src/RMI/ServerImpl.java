@@ -44,20 +44,23 @@ public class ServerImpl implements server {
 
     @Override
     public void addClient(String uid, String name) {
-        anzClients++;
-        int max =0;
-        try {
-            max = getAnzahlSpieler();
-        } catch (RemoteException e) {}
-        if(anzClients <= max){
-            aenderung++;
-            clients.put(uid, name);
-            pings.put(uid, System.currentTimeMillis());
-        }else{
-            lock = false;
-            System.out.println("Maximal Anzahl von Spieler erreicht. Keine Zugang");
-        }
+        if(!gameRunning) {
 
+            int max = 0;
+            try {
+                max = getAnzahlSpieler();
+            } catch (RemoteException e) {
+            }
+            if (anzClients < max) {
+                anzClients++;
+                aenderung++;
+                clients.put(uid, name);
+                pings.put(uid, System.currentTimeMillis());
+            } else {
+                lock = false;
+                System.out.println("Maximal Anzahl von Spieler erreicht. Keine Zugang");
+            }
+        }
     }
 
     @Override
@@ -88,8 +91,8 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public boolean getGameStart() throws RemoteException {
-        aenderung++;
+    public boolean getGameStart(String uid) throws RemoteException {
+        pings.put(uid, System.currentTimeMillis());
         return gameRunning;
     }
 
@@ -99,10 +102,6 @@ public class ServerImpl implements server {
         return aenderung;
     }
 
-    @Override
-    public void incAenderung() throws RemoteException {
-        aenderung++;
-    }
 
     @Override
     public int getAnzahlSpieler() throws RemoteException {
@@ -121,7 +120,6 @@ public class ServerImpl implements server {
 
     @Override
     public Map<Spieler, Integer> getRangliste() throws RemoteException {
-        aenderung++;
         return spiellogik.ranglisteErstellen();
 
     }
@@ -179,13 +177,11 @@ public class ServerImpl implements server {
 
     @Override
     public boolean getRundeBeendet() throws RemoteException {
-        aenderung++;
         return spiellogik.getRundeBeendet();
     }
 
     @Override
     public boolean getSpielBeendet() throws RemoteException {
-        aenderung++;
         return spiellogik.spielBeendet;
 
     }
@@ -206,6 +202,7 @@ public class ServerImpl implements server {
             if(!ping.getKey().equals(uniqueID) &&
                     ping.getValue()+5000 < System.currentTimeMillis() && gameRunning) {
                 replaceSpielerDurchBot(ping.getKey());
+                anzClients--;
             }
         }
     }
@@ -262,7 +259,7 @@ public class ServerImpl implements server {
                 }
             chatrecord.add(zeile);
         }
-
+    aenderung++;
     }
 
 

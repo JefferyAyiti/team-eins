@@ -362,7 +362,7 @@ public class GuiSpieltisch {
                     hauptmenuGui.update.cancel();
                     try {
                         server.leaveServer(uniqueID);
-                        server.incAenderung();
+                        //server.incAenderung();
                         server = null;
                         hauptmenuGui.status = new Label("Server verlassen");
 
