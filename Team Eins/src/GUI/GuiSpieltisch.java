@@ -662,7 +662,7 @@ public class GuiSpieltisch {
                             "    -fx-background-color: rgba(255,255,255,0.4);\n" +
                             "    -fx-fit-to-height: true;\n" +
                             "    -fx-pref-height: 30px;\n" +
-                            "    -fx-pref-width: 140px;\n" +
+                            "    -fx-pref-width: 90px;\n" +
                             "    -fx-font-size: 150%;\n" +
                             "    -fx-alignment: center;"
             );

@@ -7,9 +7,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import javafx.scene.text.*;
 import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
@@ -56,7 +54,9 @@ public class GUIChat {
         messages.setPrefWidth(width+70);
         messages.setMaxWidth(600);
         //messages.setStyle("-fx-background-color:black;");
-        messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
+        messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');" +
+                "-fx-font-family: 'Segoe UI Emoji';" +
+                "-fx-font-size: 14px");
         HBox inputBox = new HBox();
         input.setPrefWidth(width+28);
         inputBox.getChildren().addAll(input, sendButton);
@@ -74,11 +74,12 @@ public class GUIChat {
                 keyEvent -> {
                     if(keyEvent.getCode() == KeyCode.ENTER){
                         chatrecord.add(input.getText());
-                        Text newMsg = new Text(input.getText() + "\n");
+                        Text newMsg = new Text(EmojiParser.parseToUnicode(input.getText()) + "\n");
                         newMsg.setFill(Color.WHITE);
                         messages.getChildren().add(newMsg);
-                        //messages.setStyle("-fx-background-color:black;");
-                        messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
+                        messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');" +
+                                            "-fx-font-family: 'Segoe UI Emoji';" +
+                                                "-fx-font-size: 14px");
                         //to change
                         /*try {
                             server.updateClients(input.getText());
@@ -89,17 +90,19 @@ public class GUIChat {
     }
 
     public void addText(String msg){
-        messages.getChildren().add(new Text(msg + "\n"));
+        messages.getChildren().add(new Text(EmojiParser.parseToUnicode(msg) + "\n"));
     } // to change
 
     public void onPress(){
         sendButton.setOnMouseClicked( mouseEvent -> {
             chatrecord.add(input.getText());
             //messages.getChildren().add(new Text(input.getText() + "\n")); //to change
-            Text newMsg = new Text(input.getText() + "\n");
+            Text newMsg = new Text(EmojiParser.parseToUnicode(input.getText()) + "\n");
             newMsg.setFill(Color.WHITE);
             messages.getChildren().add(newMsg);
-            messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
+            messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');" +
+                    "-fx-font-family: 'Segoe UI Emoji';" +
+                    "-fx-font-size: 14px");
             //messages.setStyle("-fx-background-color:black;");
             /*try {
                 server.updateClients(input.getText());
