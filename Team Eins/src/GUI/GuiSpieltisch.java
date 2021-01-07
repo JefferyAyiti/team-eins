@@ -36,7 +36,7 @@ import static Main.Main.ich;
 
 public class GuiSpieltisch {
 
-    public GUIChat chatbox = new GUIChat();
+
     private ArrayList<Double> x = new ArrayList<>();
     private ArrayList<Double> y = new ArrayList<>();
     private ArrayList<Double> deg =  new ArrayList<>();
@@ -334,23 +334,32 @@ public class GuiSpieltisch {
             bottom.getChildren().add(beenden);
 
             beenden.setOnMouseClicked(mouseEvent -> {
-                if (Main.playMode==1){
+
+                if (Main.playMode <= 1){
                     Main.gameRunning = false;
                     Main.bots.cancel();
                     Main.joined = false;
-                    try {
-                        server.closeServer();
-                        Main.hauptmenuGui.runServer.stop();
-                        Main.hauptmenuGui.update.cancel();
-                        server = null;
-                        hauptmenuGui.status = new Label("Server geschlossen");
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
+                    if (Main.playMode == 1) {
+                        try {
+                            Main.server.replaceSpielerDurchBot(uniqueID);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            server.closeServer();
+                            Main.hauptmenuGui.runServer.stop();
+                            Main.hauptmenuGui.update.cancel();
+                            server = null;
+                            hauptmenuGui.status = new Label("Server geschlossen");
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
                     }
                     Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
 
                 }else if(Main.playMode == 2){//Multiplaymodus
                     joined = false;
+
                     hauptmenuGui.update.cancel();
                     try {
                         server.leaveServer(uniqueID);
@@ -632,47 +641,31 @@ public class GuiSpieltisch {
             gridPane.add(score, 4, 4, 1, 1);
 
 
-            /*//Gamelog
-            VBox gamelog = new VBox();
-            ScrollPane scroll = new ScrollPane();
-            scroll.setOpacity(0.5f);
-            scroll.setMaxHeight(100);
+            if(playMode > 0) {
+                Button chatButton = new Button("Chat >>");
+                chatButton.setTranslateX(30);
+                chatButton.setTranslateY(40);
+                chatButton.setOnMouseClicked(e -> chatbox.openChat(classPrimaryStage, classPrimaryStage.getX(),
 
+                        classPrimaryStage.getHeight() + 120, 120 * zoomfactor)
+                );
+                chatButton.setStyle(
+                        "-fx-text-fill: black;\n" +
+                                "    -fx-background-color: rgba(255,255,255,0.4);\n" +
+                                "    -fx-fit-to-height: true;\n" +
+                                "    -fx-pref-height: 30px;\n" +
+                                "    -fx-pref-width: 140px;\n" +
+                                "    -fx-font-size: 150%;\n" +
+                                "    -fx-alignment: center;"
+                );
 
-            gamelog.setMaxHeight(50);
-            //gamelog.setBackground(new Background(new BackgroundFill(Paint.valueOf("Grey"),null, null)));
-            gamelog.setAlignment(Pos.BOTTOM_CENTER);
-            for(String event: log){
-                Text lib = new Text(event);
-                gamelog.getChildren().add(lib);
+                gridPane.add(chatButton, 0, 4, 1, 1);
             }
-            scroll.setContent(gamelog);
-            gridPane.add(scroll, 0,4,1,1);*/
-
-
-            Button chatButton = new Button("Chat >>");
-            chatButton.setTranslateX(30);
-            chatButton.setTranslateY(40);
-            chatButton.setOnMouseClicked( e->chatbox.openChat(classPrimaryStage, classPrimaryStage.getX(),
-
-                    classPrimaryStage.getHeight() +120, 120*zoomfactor)
-            );
-            chatButton.setStyle(
-                    "-fx-text-fill: black;\n" +
-                            "    -fx-background-color: rgba(255,255,255,0.4);\n" +
-                            "    -fx-fit-to-height: true;\n" +
-                            "    -fx-pref-height: 30px;\n" +
-                            "    -fx-pref-width: 90px;\n" +
-                            "    -fx-font-size: 150%;\n" +
-                            "    -fx-alignment: center;"
-            );
-
-            gridPane.add(chatButton, 0,4,1,1);
 
             root.getChildren().add(gridPane);
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
             primaryStage.setScene(scene);
-
+            scene.getStylesheets().add("GUI/Chat.css");
             primaryStage.show();
 
         } catch (Exception e) {

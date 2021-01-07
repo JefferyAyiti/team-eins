@@ -242,12 +242,7 @@ public class  SpiellogikTest {
         assertEquals(true,spiellogik.karteLegen(spielerListe[2],spielerListe[2].getCardHand().getKarte(0)));
 
 
-
-
     }
-
-
-
 
 
 }

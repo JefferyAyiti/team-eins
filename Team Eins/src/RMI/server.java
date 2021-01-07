@@ -5,6 +5,7 @@ import Main.*;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public interface server extends Remote {
@@ -40,9 +41,9 @@ public interface server extends Remote {
     int getDurchgangNr() throws RemoteException;
     Tisch updateTisch() throws RemoteException;
 
-
-    void updateClients(String message) throws RemoteException;
-    void shareMessage(String message)throws RemoteException;
+    void replaceSpielerDurchBot(String uid) throws RemoteException;
+    List<List<String>> getChat() throws RemoteException;
+    void sendMessage(String message, String uid)throws RemoteException;
 
     void checkTimeout() throws RemoteException;
 

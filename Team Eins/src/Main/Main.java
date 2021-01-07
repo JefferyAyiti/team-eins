@@ -1,9 +1,6 @@
 package Main;
 
-import GUI.GuiHauptmenu;
-import GUI.GuiScoreboard;
-import GUI.GuiSpieltisch;
-import GUI.GuiZoomLoader;
+import GUI.*;
 import GUI.SVG.TestLoadImageUsingClass;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -43,6 +40,7 @@ public class Main extends Application {
     public static int round = 0;
     public static int spielArt = 0;
     public static int spielArtLimit = 4;
+    public static List<String> mutelist = new LinkedList<>();
 
 
 
@@ -78,6 +76,7 @@ public class Main extends Application {
     public static GuiHauptmenu hauptmenuGui = new GuiHauptmenu();
     public static GuiScoreboard scoreboardGui = new GuiScoreboard();
     public static GuiSpieltisch spieltischGui = new GuiSpieltisch();
+    public static GUIChat chatbox = new GUIChat();
 
     /**
      * Erstellt Tisch, Nachzieh- und Abalgestapel, Spieler
