@@ -436,7 +436,9 @@ public class GuiSpieltisch {
             } else if(Main.server != null && Main.server.getRundeBeendet()) {
                     Main.scoreboardGui.showRangliste(server.getRangliste());
                     return;
-                }
+            }else if(Main.server != null && !Main.server.getRundeBeendet() && scoreboardGui.getIsReady()){
+                scoreboardGui.setIsReady(false);
+            }
 
 
             }

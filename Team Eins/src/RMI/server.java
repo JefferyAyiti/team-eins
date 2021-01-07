@@ -29,7 +29,8 @@ public interface server extends Remote {
     void closeServer() throws  RemoteException;
     boolean serverOpen() throws RemoteException;
 
-
+    int getAnzClients() throws  RemoteException;
+    int getAnzReadyClients() throws RemoteException;
 
     void karteLegen(Spieler spieler, Karte karte) throws RemoteException;
     void karteNachziehen(Spieler spieler) throws RemoteException;

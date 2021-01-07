@@ -22,7 +22,7 @@ public class Bot extends Spieler  implements Serializable {
         schwierigkeit = entrySchwierigkeit;
     }
 
-    boolean play() {
+    public boolean play() {
         setZug(true);
         switch (schwierigkeit) {
             case 1:

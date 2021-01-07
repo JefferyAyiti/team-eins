@@ -17,8 +17,11 @@ import java.util.MissingFormatArgumentException;
 import static Main.Main.*;
 
 public class GuiScoreboard {
-    static Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException {
-        System.out.println("gibt Rangliste aus");
+
+    public static boolean isReady = false;
+
+    static Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException, RemoteException {
+        //System.out.println("gibt Rangliste aus");
         int p = 1;
 
         //Scoreboard
@@ -80,7 +83,7 @@ public class GuiScoreboard {
 
             p++;
 
-            System.out.println(entry.getKey().getName() + ":  -  alt:" + entry.getKey().getOldScore() + "   neu:" + entry.getKey().getPoints() + "   dif:" + dif);
+            //System.out.println(entry.getKey().getName() + ":  -  alt:" + entry.getKey().getOldScore() + "   neu:" + entry.getKey().getPoints() + "   dif:" + dif);
 
         }
 
@@ -96,24 +99,28 @@ public class GuiScoreboard {
         bottom.setAlignment(Pos.CENTER);
 
         Button nextRound = new Button();
+        Label wait = new Label();
 
         try {
-            if ((Main.server != null && !Main.server.getSpielBeendet()) ||
+            if ((Main.server != null && !Main.server.getSpielBeendet() && !isReady) ||
                     (Main.server == null &&!Main.spiellogik.spielBeendet )) {
                 nextRound = new Button("Nächste Runde");
                 nextRound.setOnAction(e -> {
-                    if(playMode == 2) {
+                    if (playMode >= 1) {
                         try {
                             Main.server.neueRunde();
+                            isReady = true;
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
-                    }
-                    else
+                    } else
                         Main.spiellogik.initNeueRunde();
                     Main.spieltischGui.buildStage(Main.classPrimaryStage);
-                        }
-                );
+                });
+
+            }else if((Main.server != null && !Main.server.getSpielBeendet() && isReady)){
+                //TODO max anzahl aller clients wird ständig verringert wenn Ein Spieler zu Bot wird.
+                wait.setText("Warte auf Mitspieler... [" + server.getAnzReadyClients() +"|"+ server.getAnzClients() +"] sind bereit");
 
             } else {
                 Button endGame = new Button("Spiel beenden");
@@ -156,8 +163,19 @@ public class GuiScoreboard {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        nextRound.setTranslateY(-15);
-        bottom.getChildren().add(nextRound);
+        if((Main.server != null && !Main.server.getSpielBeendet() && isReady)){
+            wait.setFont(new Font("Ink Free", 19 * Main.zoomfactor));
+            wait.setTextFill(Color.WHITE);
+            wait.setTranslateY(-15);
+
+            bottom.getChildren().add(wait);
+
+        }else{
+            nextRound.setTranslateY(-15);
+            bottom.getChildren().add(nextRound);
+        }
+
+
 
         //Darstellung
         Label titel = new Label("Rangliste");
@@ -186,14 +204,6 @@ public class GuiScoreboard {
         root.setBottom(bottom);
         root.setLeft(left);
 
-
-        //Hintergrund
-         /*BackgroundImage myBI2 = new BackgroundImage(score,
-                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-                 new BackgroundSize(100, 100, true, true, false, true));
-         liste.setBackground(new Background(myBI2));
-        */
-
         BackgroundImage myBI = new BackgroundImage(Main.table1,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(100, 100, true, true, false, true));
@@ -205,7 +215,14 @@ public class GuiScoreboard {
         rangliste.getStylesheets().add("GUI/Rangliste.css");
 
         Main.classPrimaryStage.setScene(rangliste);
-        spiellogik.durchschnitt();
+        //spiellogik.durchschnitt();
         return rangliste;
+    }
+
+    public boolean getIsReady(){
+        return isReady;
+    }
+    public void setIsReady(boolean bool){
+        isReady = bool;
     }
 }
