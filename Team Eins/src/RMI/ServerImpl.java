@@ -1,14 +1,11 @@
 package RMI;
 
 import Main.*;
-import javafx.util.Pair;
+import javafx.scene.control.Label;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static Main.Main.*;
 
@@ -17,7 +14,7 @@ public class ServerImpl implements server {
 
     Map<String, String> clients = new LinkedHashMap<>();
 
-    static ArrayList<String> chatrecord = new ArrayList<>();
+    static ArrayList<List<String>> chatrecord = new ArrayList<>();
 
     Map<String, Long> pings = new LinkedHashMap<>();
     int anzClients = 0;
@@ -66,9 +63,6 @@ public class ServerImpl implements server {
 
     @Override
     public int assignId(String uid) {
-        System.out.println("assign id "+uid);
-        System.out.println(Main.tisch.getSpielerList());
-
         for (int i = 0;i < anzSpieler;i++) {
             if(Main.tisch.getSpielerList()[i].getUid().equals(uid)) {
                 return i;
@@ -225,17 +219,36 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public void updateClients(String message) throws RemoteException {
-        chatrecord.add(message);
-        shareMessage(message);
+    public ArrayList<List<String>> getChat() throws RemoteException {
+        return chatrecord;
     }
-
 
     @Override
-    public void shareMessage(String message) throws RemoteException {
-        spieltischGui.chatbox.addText(message);
-    }
+    public void sendMessage(String message, String uid) throws RemoteException {
+        List<String> zeile = new LinkedList<>();
 
+        zeile.add(clients.get(uid));
+
+        if(!message.equals("")) {
+            if(message.equals("/coinflip")) {
+
+                zeile.add(message);
+                zeile.add(Math.random() >= 0.5?"Kopf":"Zahl");
+            } else
+                if(message.length() > 6 && message.substring(0,6).equals("/roll ")) {
+                    int die = Integer.valueOf(message.substring(6));
+
+                    zeile.add(Integer.toString(die));
+                    zeile.add(Integer.toString((int)Math.random() * die + 1));
+
+                } else
+                {
+                    zeile.add(message);
+                }
+            chatrecord.add(zeile);
+        }
+
+    }
 
 
 }

@@ -1,7 +1,7 @@
 package GUI;
 
 
-import com.vdurmont.emoji.EmojiParser;
+//import com.vdurmont.emoji.EmojiParser;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -17,15 +17,15 @@ import static Main.Main.*;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class GUIChat {
-    static ArrayList<String> chatrecord = new ArrayList<>();
     Popup chat;
-    public TextField input = new TextField();
-    private ScrollPane scroll = new ScrollPane();
-    public  TextFlow messages = new TextFlow();
-    private Button sendButton = new Button("Send");
+    TextField input = new TextField();
+    public ScrollPane scroll = new ScrollPane();
+    public VBox messages = new VBox();
+    Button sendButton = new Button("Senden");
 
 
 
@@ -55,13 +55,14 @@ public class GUIChat {
         messages.setPrefHeight(width+50);
         messages.setPrefWidth(width+70);
         messages.setMaxWidth(600);
-        //messages.setStyle("-fx-background-color:black;");
         messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
         HBox inputBox = new HBox();
         input.setPrefWidth(width+28);
         inputBox.getChildren().addAll(input, sendButton);
         onEnter();
         onPress();
+        messages.getChildren().clear();
+        messages.getChildren().addAll(buildChat());
         scroll.setContent(messages);
         content.getChildren().addAll(scroll, inputBox);
         chat.getContent().addAll(content);
@@ -73,41 +74,67 @@ public class GUIChat {
         input.setOnKeyPressed(
                 keyEvent -> {
                     if(keyEvent.getCode() == KeyCode.ENTER){
-                        chatrecord.add(input.getText());
-                        Text newMsg = new Text(input.getText() + "\n");
-                        newMsg.setFill(Color.WHITE);
-                        messages.getChildren().add(newMsg);
-                        //messages.setStyle("-fx-background-color:black;");
-                        messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
-                        //to change
-                        /*try {
-                            server.updateClients(input.getText());
-                        } catch (RemoteException e) {
-                        }*/
-                        input.clear();
+                        send();
                     } });
     }
 
-    public void addText(String msg){
-        messages.getChildren().add(new Text(msg + "\n"));
-    } // to change
+
+    void send() {
+        try {
+            server.sendMessage(input.getText(), uniqueID);
+            messages.getChildren().clear();
+            messages.getChildren().addAll(buildChat());
+            scroll.setContent(messages);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        input.clear();
+    }
 
     public void onPress(){
         sendButton.setOnMouseClicked( mouseEvent -> {
-            chatrecord.add(input.getText());
-            //messages.getChildren().add(new Text(input.getText() + "\n")); //to change
-            Text newMsg = new Text(input.getText() + "\n");
-            newMsg.setFill(Color.WHITE);
-            messages.getChildren().add(newMsg);
-            messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
-            //messages.setStyle("-fx-background-color:black;");
-            /*try {
-                server.updateClients(input.getText());
-            } catch (RemoteException e) {
-
-            }*/
-            input.clear();
+            send();
         });
+    }
+
+    public VBox buildChat() {
+        VBox cbox = new VBox();
+        cbox.setId("cbox");
+        List<List<String>> rec = null;
+        String white = "";
+        try {
+            rec = server.getChat();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        if(rec != null) {
+            for(List<String> zeile: rec) {
+                if (!mutelist.contains(zeile.get(0))) {
+                    if (zeile.size() == 2) { // normale Nachricht
+                        TextFlow flow = new TextFlow();
+
+                        Text text1 = new Text(zeile.get(0) + ": ");
+                        text1.setStyle("-fx-font-weight: bold; " + white);
+
+                        Text text2 = new Text(zeile.get(1));
+                        text2.setStyle("-fx-font-weight: normal; " + white);
+
+                        flow.getChildren().addAll(text1, text2);
+                        cbox.getChildren().add(flow);
+                    } else if (zeile.get(1).equals("/coinflip")) {
+                        cbox.getChildren().add(
+                                new Label("\t " + zeile.get(0) + " wirft eine Münze und es ist " + zeile.get(2))
+                        );
+                    } else {
+                        cbox.getChildren().add(
+                                new Label("\t " + zeile.get(0) + " würfelt \uD83D\uDE01 mit einem " + zeile.get(1) + "er-Würfel eine " + zeile.get(2))
+                        );
+                    }
+
+                }
+            }
+        }
+        return cbox;
     }
 
 }

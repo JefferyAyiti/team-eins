@@ -79,9 +79,6 @@ public class RMIClient {
         Platform.runLater(() -> hauptmenuGui.showSettingsMenu(Main.classPrimaryStage));
     }
 
-    public void updateChat(String msg){
-        spieltischGui.chatbox.addText(msg);
-    }
 
 
 }
