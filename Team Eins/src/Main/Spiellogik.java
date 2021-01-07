@@ -111,12 +111,7 @@ public class Spiellogik implements Serializable {
                         tisch.naechste();
                     }
 
-                    if (Main.server != null) {
-                        try {
-                            server.incAenderung();
-                        } catch (RemoteException e) {
-                        }
-                    }
+
                     return true;
 
 
@@ -149,12 +144,7 @@ public class Spiellogik implements Serializable {
 
                 tisch.getAktivSpieler().getCardHand().addKarte(tisch.karteZiehen());
                 tisch.naechste();
-                if (Main.server != null) {
-                    try {
-                        server.incAenderung();
-                    } catch (RemoteException e) {
-                    }
-                }
+
                 System.out.println(spieler.getName() + " zieht nach");
                 return true;
 
@@ -210,12 +200,7 @@ public class Spiellogik implements Serializable {
         int punktzahl = (spieler.getWhiteChips() * -1) + (spieler.getBlackChips() * -10);
         spieler.setPoints(punktzahl);
 
-        if (Main.server != null) {
-            try {
-                server.incAenderung();
-            } catch (RemoteException e) {
-            }
-        }
+
     }
 
 
@@ -239,12 +224,7 @@ public class Spiellogik implements Serializable {
 
             transaktion = true;
         }
-        if (Main.server != null) {
-            try {
-                server.incAenderung();
-            } catch (RemoteException e) {
-            }
-        }
+
         return transaktion;
     }
 
@@ -272,12 +252,7 @@ public class Spiellogik implements Serializable {
 
                 }
                 aktion = true;
-                if (Main.server != null) {
-                    try {
-                        server.incAenderung();
-                    } catch (RemoteException e) {
-                    }
-                }
+
             }
         }
         return aktion;
@@ -294,12 +269,7 @@ public class Spiellogik implements Serializable {
             tisch.getAktivSpieler().aussteigen();
             tisch.getAktivSpieler().setLetzerSpielerDurchgang(false);
             einSpielerUebrig();  //ueberpruefen wie viele Spieler diese Runde noch spielen
-            if (Main.server != null) {
-                try {
-                    server.incAenderung();
-                } catch (RemoteException e) {
-                }
-            }
+
 
         }
 

@@ -51,7 +51,6 @@ public class ClientThread implements Runnable {
                 try {
                     if (server.getAenderung(Main.uniqueID) > aenderung) {
                         aenderung = server.getAenderung(Main.uniqueID);
-
                         Platform.runLater(() -> {
                                     chatbox.messages.getChildren().clear();
                                     chatbox.messages.getChildren().addAll(chatbox.buildChat());
@@ -63,7 +62,6 @@ public class ClientThread implements Runnable {
 
                     }
                 } catch (RemoteException e) {
-                    e.printStackTrace();
                     System.err.println("Lost connection to Server");
                     t.cancel();
                     client.forceLeaveServer();
