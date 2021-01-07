@@ -51,7 +51,6 @@ public class ClientThread implements Runnable {
                 try {
                     if (server.getAenderung(Main.uniqueID) > aenderung) {
                         aenderung = server.getAenderung(Main.uniqueID);
-                        System.out.println(aenderung);
                         Platform.runLater(() -> {
                                     chatbox.messages.getChildren().clear();
                                     chatbox.messages.getChildren().addAll(chatbox.buildChat());
