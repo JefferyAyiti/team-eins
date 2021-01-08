@@ -83,7 +83,7 @@ public class GUIChat {
         scroll.setContent(messages);
         content.getChildren().addAll(scroll, inputBox);
         chat.getContent().addAll(content);
-        //chat.setAutoHide(true);
+        chat.setAutoHide(true);
         scroll.vvalueProperty().bind(messages.heightProperty());
         chat.show(owner);
     }
