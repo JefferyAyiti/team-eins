@@ -262,12 +262,12 @@ public class Spiellogik implements Serializable {
             if (tisch.getAktivSpieler().getBlackChips() > 0 || tisch.getAktivSpieler().getWhiteChips() > 0) {
                 if (chip.getValue() == -1) {
                     tisch.getAktivSpieler().setWhiteChips(spieler.getWhiteChips() - 1);
-                    tisch.takeChips(1, 0);
+                    tisch.takeChips(-1, 0);
                     tisch.getAktivSpieler().setPoints(spieler.getPoints() + 1);
 
                 } else {
                     tisch.getAktivSpieler().setBlackChips(spieler.getBlackChips() - 1);
-                    tisch.takeChips(0, 1);
+                    tisch.takeChips(0, -1);
                     tisch.getAktivSpieler().setPoints(spieler.getPoints() + 10);
 
                 }

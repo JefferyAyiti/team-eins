@@ -2,8 +2,8 @@ package GUI;
 
 
 
-/*import com.pavlobu.emojitextflow.EmojiTextFlow;
-import com.pavlobu.emojitextflow.EmojiTextFlowParameters;*///emoji chat
+import com.pavlobu.emojitextflow.EmojiTextFlow;
+import com.pavlobu.emojitextflow.EmojiTextFlowParameters;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import static Main.Main.*;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,7 +26,7 @@ public class GUIChat {
     public VBox messages = new VBox();
     Button sendButton = new Button("Senden");
 
-   /* final static double EMOJI_SCALE_FACTOR = 1D; // used to adjust emoji size and position in relation to other text
+    final static double EMOJI_SCALE_FACTOR = 1D; // used to adjust emoji size and position in relation to other text
     final static int textSize = 15;
 
     EmojiTextFlowParameters emojiTextFlowParameters;
@@ -46,7 +45,7 @@ public class GUIChat {
         dialogContainer.parseAndAppend(message);
         return dialogContainer;
     }
-*///emoji chat
+//emoji chat
 
 
     public GUIChat(){
@@ -138,10 +137,9 @@ public class GUIChat {
 
                             Text text2 = new Text(zeile.get(1));
                             text2.setStyle("-fx-font-weight: normal; ");
-                            flow.getChildren().addAll(text1, text2); //Delete text2 for emoji chat
                             cbox.getChildren().add(flow);
-                            /*TextFlow emoteText = emojiTextParser(zeile.get(1));  //emoji chat
-                            cbox.getChildren().add(emoteText);*/
+                            TextFlow emoteText = emojiTextParser(zeile.get(1));  //emoji chat
+                            cbox.getChildren().add(emoteText);
                         } else if (zeile.get(1).equals("/coinflip")) {
                             TextFlow flow = new TextFlow();
                             Text text1 = new Text("\uD83D\uDCB0    " + zeile.get(0) + " ");
