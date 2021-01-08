@@ -1,15 +1,15 @@
 package GUI;
 
 
-//import com.vdurmont.emoji.EmojiParser;
+
+/*import com.pavlobu.emojitextflow.EmojiTextFlow;
+import com.pavlobu.emojitextflow.EmojiTextFlowParameters;*///emoji chat
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import javafx.scene.text.*;
 import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
@@ -27,6 +27,26 @@ public class GUIChat {
     public VBox messages = new VBox();
     Button sendButton = new Button("Senden");
 
+   /* final static double EMOJI_SCALE_FACTOR = 1D; // used to adjust emoji size and position in relation to other text
+    final static int textSize = 15;
+
+    EmojiTextFlowParameters emojiTextFlowParameters;
+    {
+        emojiTextFlowParameters = new EmojiTextFlowParameters();
+        emojiTextFlowParameters.setEmojiScaleFactor(EMOJI_SCALE_FACTOR);
+        emojiTextFlowParameters.setTextAlignment(TextAlignment.CENTER);
+        emojiTextFlowParameters.setFont(Font.font("Verdana",
+                FontWeight.BOLD,
+                textSize));
+        emojiTextFlowParameters.setTextColor(Color.WHITE);
+    }
+
+    private TextFlow emojiTextParser( String message){
+        EmojiTextFlow dialogContainer = new EmojiTextFlow(emojiTextFlowParameters);
+        dialogContainer.parseAndAppend(message);
+        return dialogContainer;
+    }
+*///emoji chat
 
 
     public GUIChat(){
@@ -118,9 +138,10 @@ public class GUIChat {
 
                             Text text2 = new Text(zeile.get(1));
                             text2.setStyle("-fx-font-weight: normal; ");
-
-                            flow.getChildren().addAll(text1, text2);
+                            flow.getChildren().addAll(text1, text2); //Delete text2 for emoji chat
                             cbox.getChildren().add(flow);
+                            /*TextFlow emoteText = emojiTextParser(zeile.get(1));  //emoji chat
+                            cbox.getChildren().add(emoteText);*/
                         } else if (zeile.get(1).equals("/coinflip")) {
                             TextFlow flow = new TextFlow();
                             Text text1 = new Text("\uD83D\uDCB0    " + zeile.get(0) + " ");
