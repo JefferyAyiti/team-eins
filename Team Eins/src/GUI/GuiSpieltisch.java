@@ -2,6 +2,8 @@ package GUI;
 
 import RMI.RMIClient;
 import RMI.RunClient;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -359,15 +361,14 @@ public class GuiSpieltisch {
         if (playerId == Main.ich) {
             ImageView beenden = new ImageView(Main.loader.getImg("GUI/images/exit.svg", zoomfactor * 0.25));
             beenden.setTranslateY(-5);
-            beenden.setTranslateX(130);
-
+            beenden.setTranslateX(125* zoomfactor);
+            bottom.setViewOrder(0.0);
 
             beenden.setOnMouseEntered(e -> beenden.setStyle(HOVERED_BUTTON_STYLE));
             beenden.setOnMouseExited(e -> beenden.setStyle(IDLE_BUTTON_STYLE));
             bottom.getChildren().add(beenden);
 
             beenden.setOnMouseClicked(mouseEvent -> {
-
                 if (Main.playMode <= 1){
                     Main.gameRunning = false;
                     Main.bots.cancel();
@@ -643,7 +644,8 @@ public class GuiSpieltisch {
             //Scoreboard
             GridPane score = new GridPane();
             score.setTranslateY(10);
-            score.setTranslateX(-10);
+            score.setTranslateX(-5*zoomfactor);
+            score.setMaxWidth(90*zoomfactor);
             VBox names = new VBox();
             VBox sc = new VBox();
             names.setAlignment(Pos.TOP_LEFT);
