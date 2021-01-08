@@ -313,6 +313,7 @@ public class GuiHauptmenu {
      */
     void setSettings(String action) {
         status.setTranslateY(30);
+        Main.runTimers(Main.classPrimaryStage);
         if (action == "start") { //Single-Player-Spiel
             inMenu = false;
             Main.botPlayTime = (long) slider.getValue();
@@ -327,7 +328,6 @@ public class GuiHauptmenu {
             Main.anzSpieler = (int) playeranzselect.getValue();
             Main.initGame();
 
-            Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
 
 
@@ -424,7 +424,6 @@ public class GuiHauptmenu {
                 e.printStackTrace();
             }
 
-            Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
 
 
