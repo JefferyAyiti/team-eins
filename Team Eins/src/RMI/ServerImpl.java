@@ -226,7 +226,6 @@ public class ServerImpl implements server {
                 spiel.setOldScore(s.getOldScore());
                 spiel.setPoints(s.getPoints());
                 tisch.spielerList[i] = spiel;
-                anzClients--;
                 aenderung++;
 
             }

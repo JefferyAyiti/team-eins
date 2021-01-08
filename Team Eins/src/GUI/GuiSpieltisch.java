@@ -393,13 +393,9 @@ public class GuiSpieltisch {
                     } catch (RemoteException e) {
                     }
                     hauptmenuGui.update.cancel();
-                    try {
-                        server.leaveServer(uniqueID);
-                        //server.incAenderung();
-                        server = null;
-                        hauptmenuGui.status = new Label("Server verlassen");
+                    server = null;
+                    hauptmenuGui.status = new Label("Server verlassen");
 
-                    } catch (RemoteException e) {}
                     Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
 
                 }else{//lokaler Spielmodus
