@@ -18,6 +18,7 @@ public interface server extends Remote {
     void changeName(String uid, String name) throws RemoteException;
     boolean getGameStart(String uid) throws RemoteException;
     long getAenderung(String uid) throws RemoteException;
+    void incAenderung() throws RemoteException;
     int getAnzahlSpieler() throws RemoteException;
     void neueRunde() throws RemoteException;
     Map<Spieler, Integer> getRangliste() throws RemoteException;

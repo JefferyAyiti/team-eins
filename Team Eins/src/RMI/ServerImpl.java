@@ -45,7 +45,6 @@ public class ServerImpl implements server {
     @Override
     public void addClient(String uid, String name) {
         if(!gameRunning) {
-
             int max = 0;
             try {
                 max = getAnzahlSpieler();
@@ -102,6 +101,10 @@ public class ServerImpl implements server {
         return aenderung;
     }
 
+    @Override
+    public void incAenderung() throws RemoteException {
+        aenderung++;
+    }
 
     @Override
     public int getAnzahlSpieler() throws RemoteException {
@@ -202,7 +205,6 @@ public class ServerImpl implements server {
             if(!ping.getKey().equals(uniqueID) &&
                     ping.getValue()+5000 < System.currentTimeMillis() && gameRunning) {
                 replaceSpielerDurchBot(ping.getKey());
-                anzClients--;
             }
         }
     }
@@ -224,10 +226,11 @@ public class ServerImpl implements server {
                 spiel.setOldScore(s.getOldScore());
                 spiel.setPoints(s.getPoints());
                 tisch.spielerList[i] = spiel;
+                anzClients--;
+                aenderung++;
 
             }
         }
-        aenderung++;
     }
 
     @Override
