@@ -3,7 +3,7 @@ package GUI;
 
 
 /*import com.pavlobu.emojitextflow.EmojiTextFlow;
-import com.pavlobu.emojitextflow.EmojiTextFlowParameters;*///Activate for emoji chat
+import com.pavlobu.emojitextflow.EmojiTextFlowParameters;*///emoji chat
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -46,7 +46,7 @@ public class GUIChat {
         dialogContainer.parseAndAppend(message);
         return dialogContainer;
     }
-*///Activate for emoji chat
+*///emoji chat
 
 
     public GUIChat(){
@@ -140,8 +140,8 @@ public class GUIChat {
                             text2.setStyle("-fx-font-weight: normal; ");
                             flow.getChildren().addAll(text1, text2); //Delete text2 for emoji chat
                             cbox.getChildren().add(flow);
-                            //TextFlow emoteText = emojiTextParser(zeile.get(1)); activate for emoji chat
-                            //cbox.getChildren().add(emoteText);
+                            /*TextFlow emoteText = emojiTextParser(zeile.get(1));  //emoji chat
+                            cbox.getChildren().add(emoteText);*/
                         } else if (zeile.get(1).equals("/coinflip")) {
                             TextFlow flow = new TextFlow();
                             Text text1 = new Text("\uD83D\uDCB0    " + zeile.get(0) + " ");
