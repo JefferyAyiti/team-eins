@@ -54,9 +54,12 @@ public class GuiHauptmenu {
         try {
             if(server != null && server.getGameStart(uniqueID) && playMode == 2 && !assigned) {
                 try {
-                    do {
                         ich = server.assignId(uniqueID);
-                    } while(ich == -1);
+                    if(ich == -1) {//join fehlerhaft
+                        server.leaveServer(uniqueID);
+                        return;
+                    }
+
                     assigned = true;
                 } catch (RemoteException e) {
                 }
@@ -66,6 +69,7 @@ public class GuiHauptmenu {
                 anzSpieler = server.getAnzahlSpieler();
                 update.cancel();
                 Platform.runLater(() -> spieltischGui.buildStage(classPrimaryStage));
+                Main.runTimers(Main.classPrimaryStage);
                 getTisch = new Thread(new ClientThread(Main.server, runClient.client));
                 getTisch.start();
                 return;
@@ -313,7 +317,7 @@ public class GuiHauptmenu {
      */
     void setSettings(String action) {
         status.setTranslateY(30);
-        Main.runTimers(Main.classPrimaryStage);
+
         if (action == "start") { //Single-Player-Spiel
             inMenu = false;
             Main.botPlayTime = (long) slider.getValue();
@@ -328,6 +332,7 @@ public class GuiHauptmenu {
             Main.anzSpieler = (int) playeranzselect.getValue();
             Main.initGame();
 
+            Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
 
 
@@ -424,6 +429,7 @@ public class GuiHauptmenu {
                 e.printStackTrace();
             }
 
+            Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
 
 
@@ -441,6 +447,8 @@ public class GuiHauptmenu {
                         uniqueID,
                         Main.myName);
                 server = runClient.client.server;
+                if(server.getAnzClients() >= server.getAnzahlSpieler())
+                    System.out.println(server.getAnzClients()+" max: "+server.getAnzahlSpieler());
                 update = new Timer();
                 update.schedule(new TimerTask() {
                     @Override
