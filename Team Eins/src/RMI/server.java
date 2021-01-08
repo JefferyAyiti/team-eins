@@ -20,7 +20,7 @@ public interface server extends Remote {
     long getAenderung(String uid) throws RemoteException;
     void incAenderung() throws RemoteException;
     int getAnzahlSpieler() throws RemoteException;
-    void neueRunde() throws RemoteException;
+    void neueRunde(boolean countUp) throws RemoteException;
     Map<Spieler, Integer> getRangliste() throws RemoteException;
     void setHost(String uid) throws RemoteException;
     String getHost() throws RemoteException;
@@ -48,4 +48,5 @@ public interface server extends Remote {
 
     void checkTimeout() throws RemoteException;
 
+    void checkForNewRound() throws RemoteException;
 }

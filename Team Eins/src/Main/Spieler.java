@@ -16,6 +16,7 @@ public class Spieler  implements Serializable {
     int blackChips = 0, whiteChips = 0;
     private boolean letzerSpielerDurchgang = false;
     private boolean aussteigen = false;
+    private boolean leftServer = false;
     protected int schwierigkeit = 0;
 
 
@@ -157,6 +158,18 @@ public class Spieler  implements Serializable {
 
     public int getSchwierigkeit() {
         return schwierigkeit;
+    }
+
+    /**Checked ob der Spieler das Spiel verlassen hat.
+     * @return true wenn der Spieler das Spiel verlassen hat,
+     * false wenn der Spieler noch im Spiel ist.
+     */
+    public boolean getLeftServer(){
+        return leftServer;
+    }
+
+    public void setLeftServer(boolean bool){
+        leftServer = bool;
     }
 
     @Override

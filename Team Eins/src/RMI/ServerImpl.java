@@ -112,13 +112,22 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public void neueRunde() throws RemoteException {
-        ammountReadyClients++;
-        if(ammountReadyClients == anzClients){
+    public void neueRunde(boolean countUp) throws RemoteException {
+        if(countUp){
+            ammountReadyClients++;
+        }
+        if(ammountReadyClients >= anzClients){
             spiellogik.initNeueRunde();
             ammountReadyClients = 0;
         }
         aenderung++;
+    }
+
+    @Override
+    public void checkForNewRound() throws RemoteException {
+        if(ammountReadyClients >= anzClients){
+            neueRunde(false);
+        }
     }
 
     @Override
@@ -211,12 +220,13 @@ public class ServerImpl implements server {
 
 
     public void replaceSpielerDurchBot(String uid) throws RemoteException {
-        leaveServer(uid);
         Spieler s;
         for(int i = 0;i < anzSpieler;i++) {
             s = tisch.getSpielerList()[i];
-            if(tisch.getSpielerList()[i].getUid().equals(uid)
-            && !(s instanceof Bot)) {
+            if(s.getUid().equals(uid) && !(s instanceof Bot) && !s.getLeftServer()) {
+                System.out.println("Spieler " + s.getName() + " wird durch Bot ersetzt");
+                leaveServer(uid);
+                s.setLeftServer(true);
                 Bot spiel = new Bot("[Bot] "+
                         tisch.getSpielerList()[i].getName(),
                         botlevel == 0 ? (int) (Math.random() * 3 + 1) : botlevel);

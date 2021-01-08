@@ -108,7 +108,7 @@ public class GuiScoreboard {
                 nextRound.setOnAction(e -> {
                     if (playMode >= 1) {
                         try {
-                            Main.server.neueRunde();
+                            Main.server.neueRunde(true);
                             isReady = true;
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
@@ -119,8 +119,8 @@ public class GuiScoreboard {
                 });
 
             }else if((Main.server != null && !Main.server.getSpielBeendet() && isReady)){
-                //TODO max anzahl aller clients wird ständig verringert wenn Ein Spieler zu Bot wird.
                 wait.setText("Warte auf Mitspieler... [" + server.getAnzReadyClients() +"|"+ server.getAnzClients() +"] sind bereit");
+                server.checkForNewRound();
 
             } else {
                 Button endGame = new Button("Spiel beenden");
