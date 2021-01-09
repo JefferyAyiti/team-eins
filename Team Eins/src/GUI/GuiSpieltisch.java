@@ -166,6 +166,8 @@ public class GuiSpieltisch {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Glückwunsch");
                         alert.setHeaderText("Willst du einen Chip abgeben?");
+                        DialogPane dialogPane = alert.getDialogPane();
+                        dialogPane.getStylesheets().add("GUI/alert.css");
 
                         ButtonType buttonTypeWhite = new ButtonType("weiß");
                         ButtonType buttonTypeBlack = new ButtonType("schwarz");
