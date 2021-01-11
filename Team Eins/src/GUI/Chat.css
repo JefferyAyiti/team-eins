@@ -1,11 +1,26 @@
 TextFlow > Text {
     -fx-fill: rgb(255,255,255);
-    -fx-font-size: 10pt;
+    -fx-font-size: 14px;
+    -fx-opacity: 1;
+}
+.text-input{
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-opacity: 1;
 }
 
-.TextField{
+#eingabe{
     -fx-border-color: black;
+    -fx-background-color: black;
+    -fx-opacity: 0.8;
+    -fx-font-size: 12px;
 }
+#emoji{
+    -fx-text-fill: white;
+    -fx-text-alignment: left;
+    -fx-opacity: 1;
+}
+
 .text-input, .button {
     -fx-background-color: rgba(160, 158, 158, 0.4);
     -fx-control-inner-background: rgba(0,0,0,0.4);

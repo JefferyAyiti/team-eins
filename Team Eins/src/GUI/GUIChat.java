@@ -26,14 +26,14 @@ public class GUIChat {
     public VBox messages = new VBox();
     Button sendButton = new Button("Senden");
 
-    final static double EMOJI_SCALE_FACTOR = 1D; // used to adjust emoji size and position in relation to other text
-    final static int textSize = 15;
+    final static double EMOJI_SCALE_FACTOR = 1.5D; // used to adjust emoji size and position in relation to other text
+    final static int textSize = 13;
 
     EmojiTextFlowParameters emojiTextFlowParameters;
     {
         emojiTextFlowParameters = new EmojiTextFlowParameters();
         emojiTextFlowParameters.setEmojiScaleFactor(EMOJI_SCALE_FACTOR);
-        emojiTextFlowParameters.setTextAlignment(TextAlignment.CENTER);
+        emojiTextFlowParameters.setTextAlignment(TextAlignment.LEFT);
         emojiTextFlowParameters.setFont(Font.font("Verdana",
                 FontWeight.BOLD,
                 textSize));
@@ -74,6 +74,8 @@ public class GUIChat {
         messages.setMaxWidth(600);
         messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
         HBox inputBox = new HBox();
+        input.setId("eingabe");
+        //input.setStyle("-fx-opacity: 0.9");
         input.setPrefWidth(width+28);
         inputBox.getChildren().addAll(input, sendButton);
         onEnter();
@@ -131,15 +133,22 @@ public class GUIChat {
                 for (List<String> zeile : rec) {
                     if (!mutelist.contains(zeile.get(0))) {
                         if (zeile.size() == 2) { // normale Nachricht
+                            /*
                             TextFlow flow = new TextFlow();
                             Text text1 = new Text(zeile.get(0) + ": ");
                             text1.setStyle("-fx-font-weight: bold;");
 
                             Text text2 = new Text(zeile.get(1));
                             text2.setStyle("-fx-font-weight: normal; ");
-                            cbox.getChildren().add(flow);
-                            TextFlow emoteText = emojiTextParser(zeile.get(1));  //emoji chat
+                             */
+                            String name = zeile.get(0);
+                            String message = zeile.get(1);
+                            String text= (name+": "+ message);
+                            TextFlow emoteText = emojiTextParser(text); //emoji chat
+                            emoteText.setLineSpacing(10);
+                            emoteText.setId("emoji");
                             cbox.getChildren().add(emoteText);
+
                         } else if (zeile.get(1).equals("/coinflip")) {
                             TextFlow flow = new TextFlow();
                             Text text1 = new Text("\uD83D\uDCB0    " + zeile.get(0) + " ");
