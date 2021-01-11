@@ -53,6 +53,10 @@ public class GUIChat {
         chat = new Popup();
     }
 
+    public void hideChat() {
+        chat.hide();
+    }
+
     public void openChat(Stage owner, double X, double Y, double height, double width){
         chat.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_BOTTOM_LEFT);
         chat.setAnchorX(X+8);

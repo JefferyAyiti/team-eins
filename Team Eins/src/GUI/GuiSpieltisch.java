@@ -43,6 +43,7 @@ public class GuiSpieltisch {
     private ArrayList<Double> y = new ArrayList<>();
     private ArrayList<Double> deg =  new ArrayList<>();
     private List<String> log = new ArrayList<>();
+    boolean chatOpened = false;
 
     private static final String IDLE_BUTTON_STYLE = "-fx-background-color: transparent;";
     private static final String HOVERED_BUTTON_STYLE =
@@ -676,12 +677,21 @@ public class GuiSpieltisch {
 
 
             if(playMode > 0) {
-                Button chatButton = new Button("Chat >>");
+                Button chatButton = new Button(chatOpened? "Chat <<": "Chat >>");
                 chatButton.setTranslateX(30);
                 chatButton.setTranslateY(40);
-                chatButton.setOnMouseClicked(e -> chatbox.openChat(classPrimaryStage, classPrimaryStage.getX(),
-
-                        classPrimaryStage.getHeight() + 120 /  Main.zoomfactor ,240* zoomfactor, 90 * zoomfactor)
+                chatButton.setOnMouseClicked(e -> {
+                            if (!chatOpened) {
+                                chatbox.openChat(classPrimaryStage, classPrimaryStage.getX(),
+                                        classPrimaryStage.getHeight() + 120 / Main.zoomfactor, 240 * zoomfactor, 90 * zoomfactor);
+                                chatButton.setText("Chat <<");
+                                chatOpened = true;
+                            } else { //chat bereits offen
+                                chatButton.setText("Chat >>");
+                                chatOpened = false;
+                                chatbox.hideChat();
+                            }
+                        }
                 );
                 chatButton.setStyle(
                         "-fx-text-fill: black;\n" +
