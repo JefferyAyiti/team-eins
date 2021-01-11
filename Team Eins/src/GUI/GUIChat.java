@@ -14,7 +14,7 @@ import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import static Main.Main.*;
-import Main.Main;
+import Main.Spieler;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -134,6 +134,9 @@ public class GUIChat {
                 for (List<String> zeile : rec) {
                     if (!mutelist.contains(zeile.get(0))) {
                         if (zeile.size() == 2) { // normale Nachricht
+                            int sichtbarkeit = sichtbarFuerMich(zeile);
+
+                            if(sichtbarkeit > 0) {
                             /*
                             TextFlow flow = new TextFlow();
                             Text text1 = new Text(zeile.get(0) + ": ");
@@ -142,13 +145,22 @@ public class GUIChat {
                             Text text2 = new Text(zeile.get(1));
                             text2.setStyle("-fx-font-weight: normal; ");
                              */
-                            String name = zeile.get(0);
-                            String message = zeile.get(1);
-                            String text= (name+": "+ message);
-                            TextFlow emoteText = emojiTextParser(text); //emoji chat
-                            emoteText.setLineSpacing(10);
-                            emoteText.setId("emoji");
-                            cbox.getChildren().add(emoteText);
+                                String name = zeile.get(0);
+                                String message = zeile.get(1);
+                                if(sichtbarkeit == 2) {
+                                    message = message.substring(myName.length()+2);
+                                }
+                                String text = (name + ": " + message);
+                                TextFlow emoteText = emojiTextParser(text); //emoji chat
+                                emoteText.setLineSpacing(10);
+                                emoteText.setId("emoji");
+
+                                if(sichtbarkeit == 2) {
+                                    //TODO private message optisch hervorheben?
+                                }
+
+                                cbox.getChildren().add(emoteText);
+                            }
 
                         } else if (zeile.get(1).equals("/coinflip")) {
                             TextFlow flow = new TextFlow();
@@ -187,4 +199,21 @@ public class GUIChat {
         return cbox;
     }
 
+
+    /**
+     * @param msg Prüft ob eine Chatnachricht privat ist und falls ja,
+     *            ob sie für mich ist
+     * @return int das die sichtbarkeit anzeigt, siehe Code
+     */
+    int sichtbarFuerMich(List<String> msg) {
+        String content = msg.get(1);
+        if(content.charAt(0) == '@') { //private nachricht
+            if(content.length()+2 >= myName.length() &&
+                    content.substring(0, myName.length()+2).equals("@"+myName+" ")) {
+                return 2; //sichtbar nur für mich
+            } else
+                return 0; //nicht sichtbar für mich
+        }
+        return 1; //sichtbar für jeden
+    }
 }
