@@ -209,7 +209,8 @@ public class GUIChat {
         String content = msg.get(1);
         if(content.charAt(0) == '@') { //private nachricht
             if(content.length()+2 >= myName.length() &&
-                    content.substring(0, myName.length()+2).equals("@"+myName+" ")) {
+                    content.substring(0, myName.length()+2).equals("@"+myName+" ") ||
+            msg.get(0).equals(myName)) {
                 return 2; //sichtbar nur für mich
             } else
                 return 0; //nicht sichtbar für mich
