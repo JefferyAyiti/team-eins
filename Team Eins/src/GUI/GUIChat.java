@@ -178,7 +178,8 @@ public class GUIChat {
                             cbox.getChildren().add(flow);
                         } else {
                             TextFlow flow = new TextFlow();
-                            flow.setId("würfeln");
+                            flow.setId("roll");
+
                             Text text1 = new Text("\uD83C\uDFB2    " + zeile.get(0) + " ");
                             text1.setStyle("-fx-font-weight: bold;");
 
