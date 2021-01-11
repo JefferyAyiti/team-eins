@@ -14,6 +14,7 @@ import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import static Main.Main.*;
+import Main.Main;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -55,7 +56,7 @@ public class GUIChat {
     public void openChat(Stage owner, double X, double Y, double height, double width){
         chat.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_BOTTOM_LEFT);
         chat.setAnchorX(X+8);
-        chat.setAnchorY(Y-30);
+        chat.setAnchorY(Y-32);
         scroll.setOpacity(0.8);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         //sendButton.setOpacity(0.8);

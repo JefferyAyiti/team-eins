@@ -681,7 +681,7 @@ public class GuiSpieltisch {
                 chatButton.setTranslateY(40);
                 chatButton.setOnMouseClicked(e -> chatbox.openChat(classPrimaryStage, classPrimaryStage.getX(),
 
-                        classPrimaryStage.getHeight() + 120,240* zoomfactor, 90 * zoomfactor)
+                        classPrimaryStage.getHeight() + 120 /  Main.zoomfactor ,240* zoomfactor, 90 * zoomfactor)
                 );
                 chatButton.setStyle(
                         "-fx-text-fill: black;\n" +
