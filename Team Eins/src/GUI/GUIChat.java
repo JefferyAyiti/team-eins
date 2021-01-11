@@ -152,6 +152,7 @@ public class GUIChat {
 
                         } else if (zeile.get(1).equals("/coinflip")) {
                             TextFlow flow = new TextFlow();
+                            flow.setId("coinflip");
                             Text text1 = new Text("\uD83D\uDCB0    " + zeile.get(0) + " ");
                             text1.setStyle("-fx-font-weight: bold;");
 
@@ -165,6 +166,7 @@ public class GUIChat {
                             cbox.getChildren().add(flow);
                         } else {
                             TextFlow flow = new TextFlow();
+                            flow.setId("würfeln");
                             Text text1 = new Text("\uD83C\uDFB2    " + zeile.get(0) + " ");
                             text1.setStyle("-fx-font-weight: bold;");
 

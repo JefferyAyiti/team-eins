@@ -1,5 +1,4 @@
 TextFlow > Text {
-    -fx-fill: rgb(255,255,255);
     -fx-font-size: 14px;
     -fx-opacity: 1;
 }
@@ -8,22 +7,33 @@ TextFlow > Text {
     -fx-font-size: 12px;
     -fx-opacity: 1;
 }
+#verlauf{
+    -fx-text-fill: rgba(255,255,255,1);
+}
+#coinflip >Text {
+    -fx-fill: rgba(143, 217, 134,1)
+}
+
+#würfeln >Text{
+    -fx-fill: rgba(143, 217, 134,1)
+}
 
 #eingabe{
     -fx-border-color: black;
     -fx-background-color: black;
     -fx-opacity: 0.8;
     -fx-font-size: 12px;
+    -fx-text-fill: rgba(255,255,255,1);
 }
 #emoji{
     -fx-text-fill: white;
     -fx-text-alignment: left;
-    -fx-opacity: 1;
+    -fx-text-fill: rgba(255,255,255,1);
 }
 
 .text-input, .button {
-    -fx-background-color: rgba(160, 158, 158, 0.4);
-    -fx-control-inner-background: rgba(0,0,0,0.4);
+    -fx-background-color: rgba(160, 158, 158, 0.9);
+    -fx-control-inner-background: rgba(0,0,0,0.9);
     }
 
 
