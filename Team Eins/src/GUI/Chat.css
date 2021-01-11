@@ -31,6 +31,9 @@ TextFlow > Text {
     -fx-text-alignment: left;
     -fx-text-fill: rgba(255,255,255,1);
 }
+#privat{
+    -fx-text-fill: rgba(245, 96, 66,1);
+}
 
 .text-input, .button {
     -fx-background-color: rgba(160, 158, 158, 0.9);
