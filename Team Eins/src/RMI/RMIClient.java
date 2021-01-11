@@ -79,6 +79,10 @@ public class RMIClient {
         Platform.runLater(() -> hauptmenuGui.showSettingsMenu(Main.classPrimaryStage));
     }
 
-
-
+    /** getter-Methode für server
+     * @return
+     */
+    public RMI.server getServer() {
+        return server;
+    }
 }

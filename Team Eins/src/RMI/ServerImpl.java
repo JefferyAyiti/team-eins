@@ -274,5 +274,13 @@ public class ServerImpl implements server {
     aenderung++;
     }
 
+    /** getter-Methode für main
+     * @return main
+     */
+    public Main getMain(){
+        return getMain();
+    }
+
+
 
 }

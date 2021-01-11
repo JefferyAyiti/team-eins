@@ -24,4 +24,11 @@ public class RunClient {
 
         System.out.println("Client Started");
     }
+
+    /** getter-Methode für server
+     * @return server
+     */
+    public RMI.server getServer() {
+        return client.getServer();
+    }
 }
