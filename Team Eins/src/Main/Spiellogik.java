@@ -360,7 +360,6 @@ public class Spiellogik implements Serializable {
                 if (weißeChips > 10) {
                     spieler.setWhiteChips(spieler.whiteChips - 10);
                     spieler.setBlackChips(spieler.getBlackChips() + 1);
-                    spieler.chipTausch();
                     tisch.takeChips(-10, 1);
                 }
 

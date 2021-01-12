@@ -84,10 +84,6 @@ public class ServerImpl implements server {
         return -1;
     }
 
-    @Override
-    public void changeName(String uid, String name) throws RemoteException {
-        clients.replace(uid, name);
-    }
 
     @Override
     public boolean getGameStart(String uid) throws RemoteException {
@@ -198,10 +194,6 @@ public class ServerImpl implements server {
 
     }
 
-    @Override
-    public int getDurchgangNr() throws RemoteException {
-        return tisch.getDurchgangNr();
-    }
 
     @Override
     public Tisch updateTisch() throws RemoteException {

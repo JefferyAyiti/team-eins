@@ -52,9 +52,13 @@ public class GUIChat {
         chat = new Popup();
     }
 
+    /**
+     * Minimiert den geöffneten Chat
+     */
     public void hideChat() {
         chat.hide();
     }
+
 
     public void openChat(Stage owner, double X, double Y, double height, double width){
         chat.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_BOTTOM_LEFT);
@@ -103,6 +107,9 @@ public class GUIChat {
     }
 
 
+    /**
+     * Sendet den Inhalt des Textfeldes an den Server und updatet direkt die eigene Chatbox
+     */
     void send() {
         try {
             server.sendMessage(input.getText(), uniqueID);
@@ -121,6 +128,9 @@ public class GUIChat {
         });
     }
 
+    /**
+     * @return formatierte Chatnachrichten
+     */
     public VBox buildChat() {
         VBox cbox = new VBox();
         List<List<String>> rec = null;
@@ -212,7 +222,7 @@ public class GUIChat {
 
     /**
      * @param msg Prüft ob eine Chatnachricht privat ist und falls ja,
-     *            ob sie für mich ist
+     *            ob sie für mich oder von mir is
      * @return int das die sichtbarkeit anzeigt, siehe Code
      */
     int sichtbarFuerMich(List<String> msg) {

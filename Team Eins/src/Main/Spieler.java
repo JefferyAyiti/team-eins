@@ -119,13 +119,6 @@ public class Spieler  implements Serializable {
         return cardHand.getHandKarte().size();
     }
 
-    /**
-     * tauscht 10 weiße Chips gegen einen schwarzen Chip
-     */
-    void chipTausch() {
-
-    }
-
 
     /**
      * @return letzerSpielerDurchgang.Gibt an ab der Spieler noch am Ende ablegen darf(ohne nachziehen).
