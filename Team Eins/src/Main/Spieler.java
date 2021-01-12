@@ -161,6 +161,9 @@ public class Spieler  implements Serializable {
         return leftServer;
     }
 
+    /**Setzt den Flag leftServer auf bool. Der Flag gibt an, ob der Spieler noch eine Verbindung zum Server hat, oder nicht.
+     * @param bool
+     */
     public void setLeftServer(boolean bool){
         leftServer = bool;
     }

@@ -509,6 +509,9 @@ public class GuiHauptmenu {
         status.setText("Verbindung zu Server verloren");
     }
 
+    /**
+     * Schließt den Server. Host Seite.
+     */
     public void closeServer(){
         Main.joined = false;
         try {

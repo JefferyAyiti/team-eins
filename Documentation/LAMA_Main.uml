@@ -3,199 +3,42 @@
   <ID>JAVA</ID>
   <OriginalElement>Main</OriginalElement>
   <nodes>
-    <node x="1936.0" y="2609.5">Main.Tisch</node>
-    <node x="1657.0" y="1004.0">Main.Hand</node>
-    <node x="110.5" y="2961.5">Main.Chip</node>
-    <node x="1195.0" y="2197.0">Main.Karte</node>
-    <node x="300.0" y="2841.5">Main.BlackChip</node>
-    <node x="253.5" y="84.0">Main.Bot</node>
-    <node x="1659.5" y="377.5">Main.Spieler</node>
-    <node x="1156.0" y="1477.0">Main.HandKarte</node>
-    <node x="100.0" y="3201.5">Main.WhiteChip</node>
-    <node x="1674.0" y="1832.5">Main.Stapel</node>
-    <node x="625.0" y="904.5">Main.Spiellogik</node>
+    <node x="196.0" y="385.0">Main.Tisch</node>
+    <node x="360.0" y="385.0">Main.Hand</node>
+    <node x="0.0" y="-15.0">Main.Chip</node>
+    <node x="-4.0" y="185.0">Main.Karte</node>
+    <node x="140.0" y="-15.0">Main.BlackChip</node>
+    <node x="188.0" y="185.0">Main.Spieler</node>
+    <node x="204.0" y="305.0">Main.Bot</node>
+    <node x="-20.0" y="305.0">Main.HandKarte</node>
+    <node x="-20.0" y="105.0">Main.WhiteChip</node>
+    <node x="-24.0" y="385.0">Main.Spiellogik</node>
+    <node x="-8.0" y="465.0">Main.Stapel</node>
   </nodes>
   <notes />
   <edges>
-    <edge source="Main.Bot" target="Main.HandKarte">
-      <point x="53.333333333333314" y="116.0" />
-      <point x="413.3333333333333" y="1560.0" />
-      <point x="-124.0" y="0.0" />
-    </edge>
-    <edge source="Main.Hand" target="Main.Tisch">
-      <point x="0.0" y="116.0" />
-      <point x="1760.0" y="1280.0" />
-      <point x="2011.4285714285713" y="1280.0" />
-      <point x="-28.57142857142867" y="-270.5" />
-    </edge>
-    <edge source="Main.Hand" target="Main.Spieler">
-      <point x="103.0" y="-80.0" />
-      <point x="1920.0" y="1040.0" />
-      <point x="1920.0" y="680.0" />
-      <point x="100.5" y="120.0" />
-    </edge>
-    <edge source="Main.Bot" target="Main.Karte">
-      <point x="40.0" y="116.0" />
-      <point x="400.0" y="2280.0" />
-      <point x="-85.0" y="0.0" />
-    </edge>
-    <edge source="Main.Tisch" target="Main.WhiteChip">
-      <point x="104.0" y="0.0" />
-      <point x="2200.0" y="2880.0" />
-      <point x="2200.0" y="3320.0" />
-      <point x="160.0" y="3320.0" />
-      <point x="0.0" y="38.5" />
-    </edge>
-    <edge source="Main.HandKarte" target="Main.Hand">
-      <point x="0.0" y="-83.0" />
-      <point x="1280.0" y="1146.6666666666667" />
-      <point x="-103.0" y="26.666666666666742" />
-    </edge>
-    <edge source="Main.Tisch" target="Main.BlackChip">
-      <point x="-80.0" y="-270.5" />
-      <point x="1960.0" y="2560.0" />
-      <point x="400.0" y="2560.0" />
-      <point x="40.0" y="-38.5" />
-    </edge>
-    <edge source="Main.Tisch" target="Main.Spieler">
-      <point x="-17.14285714285711" y="-270.5" />
-      <point x="2022.857142857143" y="560.0" />
-      <point x="100.5" y="0.0" />
-    </edge>
     <edge source="Main.WhiteChip" target="Main.Chip">
-      <point x="-60.0" y="-33.333333333333485" />
-      <point x="40.0" y="3206.6666666666665" />
-      <point x="40.0" y="3000.0" />
-      <point x="-49.5" y="0.0" />
-    </edge>
-    <edge source="Main.Bot" target="Main.BlackChip">
-      <point x="0.0" y="116.0" />
-      <point x="0.0" y="-38.5" />
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
     </edge>
     <edge source="Main.HandKarte" target="Main.Karte">
-      <point x="0.0" y="83.0" />
-      <point x="0.0" y="-83.0" />
-    </edge>
-    <edge source="Main.Spiellogik" target="Main.Chip">
-      <point x="0.0" y="-215.5" />
-      <point x="800.0" y="0.0" />
-      <point x="160.0" y="0.0" />
-      <point x="0.0" y="-38.5" />
-    </edge>
-    <edge source="Main.Hand" target="Main.Karte">
-      <point x="-103.0" y="13.333333333333258" />
-      <point x="1040.0" y="1133.3333333333333" />
-      <point x="1040.0" y="2253.3333333333335" />
-      <point x="-85.0" y="-26.666666666666515" />
-    </edge>
-    <edge source="Main.HandKarte" target="Main.Tisch">
-      <point x="40.0" y="83.0" />
-      <point x="1320.0" y="1720.0" />
-      <point x="2000.0" y="1720.0" />
-      <point x="-40.0" y="-270.5" />
-    </edge>
-    <edge source="Main.Tisch" target="Main.Stapel">
-      <point x="-51.42857142857133" y="-270.5" />
-      <point x="1988.5714285714287" y="1960.0" />
-      <point x="86.0" y="0.0" />
-    </edge>
-    <edge source="Main.Stapel" target="Main.Karte">
-      <point x="0.0" y="127.5" />
-      <point x="1760.0" y="2240.0" />
-      <point x="85.0" y="-40.0" />
-    </edge>
-    <edge source="Main.Spiellogik" target="Main.HandKarte">
-      <point x="40.0" y="215.5" />
-      <point x="840.0" y="1400.0" />
-      <point x="1240.0" y="1400.0" />
-      <point x="-40.0" y="-83.0" />
-    </edge>
-    <edge source="Main.Bot" target="Main.WhiteChip">
-      <point x="-106.5" y="0.0" />
-      <point x="0.0" y="200.0" />
-      <point x="0.0" y="3240.0" />
-      <point x="-60.0" y="0.0" />
-    </edge>
-    <edge source="Main.Spieler" target="Main.Hand">
-      <point x="100.5" y="40.0" />
-      <point x="2000.0" y="600.0" />
-      <point x="2000.0" y="1120.0" />
-      <point x="103.0" y="0.0" />
-    </edge>
-    <edge source="Main.Spiellogik" target="Main.Karte">
-      <point x="0.0" y="215.5" />
-      <point x="800.0" y="2266.6666666666665" />
-      <point x="-85.0" y="-13.333333333333485" />
-    </edge>
-    <edge source="Main.Spiellogik" target="Main.Spieler">
-      <point x="120.0" y="-215.5" />
-      <point x="920.0" y="840.0" />
-      <point x="1720.0" y="840.0" />
-      <point x="-40.0" y="182.5" />
-    </edge>
-    <edge source="Main.Spiellogik" target="Main.Bot">
-      <point x="-175.0" y="0.0" />
-      <point x="440.0" y="1120.0" />
-      <point x="80.0" y="116.0" />
-    </edge>
-    <edge source="Main.Bot" target="Main.Tisch">
-      <point x="26.666666666666686" y="116.0" />
-      <point x="386.6666666666667" y="2480.0" />
-      <point x="1971.4285714285713" y="2480.0" />
-      <point x="-68.57142857142867" y="-270.5" />
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
     </edge>
     <edge source="Main.BlackChip" target="Main.Chip">
-      <point x="0.0" y="38.5" />
-      <point x="360.0" y="3000.0" />
-      <point x="49.5" y="0.0" />
-    </edge>
-    <edge source="Main.Spiellogik" target="Main.Hand">
-      <point x="175.0" y="0.0" />
-      <point x="-103.0" y="0.0" />
-    </edge>
-    <edge source="Main.Tisch" target="Main.Bot">
-      <point x="-74.28571428571422" y="-270.5" />
-      <point x="1965.7142857142858" y="2520.0" />
-      <point x="373.3333333333333" y="2520.0" />
-      <point x="13.333333333333314" y="116.0" />
-    </edge>
-    <edge source="Main.Tisch" target="Main.Karte">
-      <point x="-57.14285714285711" y="-270.5" />
-      <point x="1982.857142857143" y="2280.0" />
-      <point x="85.0" y="0.0" />
-    </edge>
-    <edge source="Main.Hand" target="Main.HandKarte">
-      <point x="-40.0" y="116.0" />
-      <point x="1720.0" y="1560.0" />
-      <point x="124.0" y="0.0" />
+      <point x="-60.0" y="0.0" />
+      <point x="40.0" y="0.0" />
     </edge>
     <edge source="Main.Bot" target="Main.Spieler">
-      <point x="0.0" y="-116.0" />
-      <point x="360.0" y="40.0" />
-      <point x="1760.0" y="40.0" />
-      <point x="0.0" y="-182.5" />
-    </edge>
-    <edge source="Main.Bot" target="Main.Spiellogik">
-      <point x="66.66666666666669" y="116.0" />
-      <point x="426.6666666666667" y="1400.0" />
-      <point x="760.0" y="1400.0" />
-      <point x="-40.0" y="215.5" />
-    </edge>
-    <edge source="Main.Spiellogik" target="Main.Tisch">
-      <point x="40.0" y="-215.5" />
-      <point x="840.0" y="280.0" />
-      <point x="2034.2857142857142" y="280.0" />
-      <point x="-5.714285714285779" y="-270.5" />
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
     </edge>
   </edges>
-  <settings layout="Orthogonal" zoom="0.8728555917481" x="1262.492885670408" y="1954.212087173172" />
-  <SelectedNodes />
-  <Categories>
-    <Category>Fields</Category>
-    <Category>Constructors</Category>
-    <Category>Methods</Category>
-    <Category>Properties</Category>
-  </Categories>
+  <settings layout="Orthogonal" zoom="1.1" x="466.7034018850326" y="244.90909090909088" />
+  <SelectedNodes>
+    <node>Main.Tisch</node>
+  </SelectedNodes>
+  <Categories />
   <SCOPE>Project Files</SCOPE>
   <VISIBILITY>private</VISIBILITY>
 </Diagram>

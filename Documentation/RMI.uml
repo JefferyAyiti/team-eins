@@ -3,31 +3,22 @@
   <ID>JAVA</ID>
   <OriginalElement>RMI</OriginalElement>
   <nodes>
-    <node x="217.79166666666666" y="0.0">RMI.server</node>
-    <node x="313.16666666666663" y="217.0">RMI.RunServer</node>
-    <node x="312.41666666666663" y="91.5">RMI.ServerImpl</node>
-    <node x="32.16666666666663" y="239.5">RMI.RunClient</node>
-    <node x="20.0" y="80.0">RMI.RMIClient</node>
+    <node x="16.0" y="0.0">RMI.server</node>
+    <node x="0.0" y="155.0">RMI.RunServer</node>
+    <node x="0.0" y="80.0">RMI.ServerImpl</node>
+    <node x="165.0" y="155.0">RMI.RunClient</node>
+    <node x="0.0" y="230.0">RMI.RMIClient</node>
   </nodes>
   <notes />
   <edges>
     <edge source="RMI.ServerImpl" target="RMI.server">
-      <point x="0.0" y="-27.0" />
-      <point x="376.41666666666663" y="60.0" />
-      <point x="277.79166666666663" y="60.0" />
-      <point x="12.0" y="15.0" />
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="1.0" x="267.5" y="180.5" />
-  <SelectedNodes>
-    <node>RMI.server</node>
-  </SelectedNodes>
-  <Categories>
-    <Category>Fields</Category>
-    <Category>Constructors</Category>
-    <Category>Methods</Category>
-    <Category>Properties</Category>
-  </Categories>
+  <settings layout="Hierarchic Group" zoom="1.9000000000000008" x="142.5000000000001" y="130.0" />
+  <SelectedNodes />
+  <Categories />
   <SCOPE>Project Files</SCOPE>
   <VISIBILITY>private</VISIBILITY>
 </Diagram>
