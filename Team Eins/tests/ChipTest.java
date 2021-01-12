@@ -12,7 +12,9 @@ public class ChipTest {
     BlackChip blackChip;
 
 
-
+    /**
+     * setup für die Tests
+     */
     @BeforeEach
     void setUp() {
         chip = new Chip(3);
@@ -31,6 +33,9 @@ public class ChipTest {
 
     }
 
+    /**
+     * Test für getMaxChips
+     */
     @Test
     void getMaxChips(){
         assertEquals(20,blackChip.getMaxChips());

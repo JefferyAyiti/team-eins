@@ -15,6 +15,9 @@ public class  SpiellogikTest {
     Stapel nachziehstapel;
     Stapel ablagestapel;
 
+    /**
+     * setup für die Tests
+     */
     @BeforeEach
     void setUp() {
         this.main = new Main();
@@ -52,6 +55,10 @@ public class  SpiellogikTest {
         main.setAnzSpieler(3);
 
     }
+
+    /**
+     * Test für karteLegen
+     */
     @Test
     public void karteLegenTest(){
         assertEquals(true,spiellogik.karteLegen(spielerListe[0],spielerListe[0].getCardHand().getKarte(0)));
@@ -63,6 +70,10 @@ public class  SpiellogikTest {
 
 
     }
+
+    /**
+     * Weiterer Test für karteLegen
+     */
     @Test
     public void kartelegeTest2(){
         //Spieler2 versucht zu legen
@@ -75,6 +86,9 @@ public class  SpiellogikTest {
 
     }
 
+    /**
+     * Test für karteZiehen
+     */
     @Test
     public void karteZiehenTest1(){
         assertEquals(10,nachziehstapel.getTopCard().getValue()); //Karte 10 liegt auf den Nachziehstapel
@@ -84,12 +98,18 @@ public class  SpiellogikTest {
         assertEquals(1,tisch.aktiv); //nächster Spieler ist dran
     }
 
+    /**
+     * weiterer Test für karteZiehen
+     */
     @Test
     public void karteZiehenTest2(){
         //Spieler2 versucht zu ziehen, obwohl dieser noch nicht dran ist
         assertFalse(spiellogik.karteNachziehen(spielerListe[1]));
     }
 
+    /**
+     * Test für aussteigen
+     */
     @Test
     public void aussteigenTest1(){
         spiellogik.aussteigen(spielerListe[0]); //Spieler1 steigt aus
@@ -102,6 +122,9 @@ public class  SpiellogikTest {
 
     }
 
+    /**
+     * Test für chipsKassieren
+     */
     @Test
     public void chipsKassierenTest1(){
         //Chipskassieren für Spieler1
@@ -109,6 +132,9 @@ public class  SpiellogikTest {
         assertEquals(-3,spielerListe[0].getPoints());
     }
 
+    /**
+     * Test für chipsKassieren
+     */
     @Test
     public void chipsKassierenTest2(){
         spiellogik.karteNachziehen(spielerListe[0]);
@@ -117,6 +143,9 @@ public class  SpiellogikTest {
         assertEquals(0,spielerListe[0].getPoints());
     }
 
+    /**
+     * Test für chipsTauschen
+     */
     @Test
     public void chipsTauschenTest(){
         //spieler hat 12 weiße chips und 0 schwarze chips
@@ -128,6 +157,9 @@ public class  SpiellogikTest {
         assertEquals(2,spielerListe[0].getWhiteChips()); //10 weiße Chips abgezogen
     }
 
+    /**
+     * Test für chipsTauschen
+     */
     @Test
     public void chipsTauschenTest2(){
        spielerListe[0].setWhiteChips(5); //Spieler hat nur 5 weiße Chips
@@ -137,6 +169,9 @@ public class  SpiellogikTest {
 
     }
 
+    /**
+     * Test für chipAbgeben
+     */
     @Test
     public void chipAbgeben1(){
         spielerListe[1].setWhiteChips(5);  //spieler2 hat 5 weiße Chips
@@ -151,24 +186,34 @@ public class  SpiellogikTest {
 
     }
 
+    /**
+     * weiterer Test für chipAbgeben
+     */
     @Test
     public void chipAbgeben2(){
         spielerListe[1].setWhiteChips(5);  //spieler2 hat 5 weiße Chips
         spielerListe[1].setBlackChips(2);  //zwei schwarze Chips
         spielerListe[1].setPoints(-25);
+        //spieler legt Karte
         spiellogik.karteLegen(spielerListe[0],spielerListe[0].getCardHand().getKarte(1));
         spiellogik.karteLegen(spielerListe[1],spielerListe[1].getCardHand().getKarte(0));
+        //spieler darf Karte ablegen
         assertEquals(true,spiellogik.chipAbgeben(spielerListe[1],new BlackChip()));
         assertEquals(1,spielerListe[1].getBlackChips());
         assertEquals(-15,spielerListe[1].getPoints());
 
     }
 
+    /**
+     * Test für ranglisteErstellen
+     */
     @Test
     public void ranglisteErstellen1(){
+        //chips kassieren
         spiellogik.chipsKassieren(spielerListe[0]);
         spiellogik.chipsKassieren(spielerListe[1]);
         spiellogik.chipsKassieren(spielerListe[2]);
+        //rangliste erstellen
         Map<Spieler,Integer> rangliste = spiellogik.ranglisteErstellen();
         for (Map.Entry<Spieler, Integer> entry : rangliste.entrySet()) {
             if(entry.getKey().getName().equals("test1")){
@@ -187,14 +232,19 @@ public class  SpiellogikTest {
 
     }
 
+    /**
+     * Test für ranglisteErstellenNurWeißeChips
+     */
     @Test
     public void ranglisteErstellenNurWeißeChips(){
         spiellogik.karteNachziehen(spielerListe[0]);
         spiellogik.karteNachziehen(spielerListe[1]);
         spiellogik.karteNachziehen(spielerListe[2]);
+        //alle Spieler kassieren Chips
         spiellogik.chipsKassieren(spielerListe[0]);
         spiellogik.chipsKassieren(spielerListe[1]);
         spiellogik.chipsKassieren(spielerListe[2]);
+        //rangliste nur für weiße Chips erstellen
         Map<Spieler,Integer> rangliste = spiellogik.ranglisteErstellenNurWeißeChips();
         for (Map.Entry<Spieler, Integer> entry : rangliste.entrySet()) {
             if(entry.getKey().getName().equals("test1")){
@@ -212,30 +262,43 @@ public class  SpiellogikTest {
 
     }
 
+    /**
+     * Test für alleAussteigen
+     */
     @Test
     public void alleAussteigen(){
         spiellogik.alleAussteigen();
         for(Spieler s:spielerListe){
+            //alle Spieler sind ausgestiegen
             assertEquals(false,s.inGame());
         }
     }
 
+    /**
+     * Test für initNeueRunde
+     */
     @Test
     public void initNeueRunde(){
         Main.haende = new Hand[3];
         spiellogik.initNeueRunde();
         assertEquals(37,tisch.getNachziehStapelSize());
         for(Spieler s: spielerListe){
+            //haben alle Spieler 6 Karten auf der Hand
             assertEquals(6,s.getCardCount());
         }
         assertEquals(2,tisch.getDurchgangNr());  //2 weil oben bereits die erste Runde gestartet wurde
 
     }
 
+    /**
+     * Test für einSpielerUebrig
+     */
     @Test
     public void einSpielerUebrig(){
+        //zwei Spieler steigen aus
         spiellogik.aussteigen(spielerListe[0]);
         spiellogik.aussteigen(spielerListe[1]);
+        //gucken ob der letzte Spieler noch legen kann, aber nicht ziehen darf
         ablagestapel.ablegen(new Karte(4,false));
         assertEquals(true,spiellogik.karteLegen(spielerListe[2],spielerListe[2].getCardHand().getKarte(0)));
         assertEquals(false, spiellogik.karteNachziehen(spielerListe[2]));

@@ -10,6 +10,9 @@ public class HandTest {
     Hand hand;
 
 
+    /**
+     * setup für die Tests
+     */
     @BeforeEach
     void setUp() {
         hand = new Hand();

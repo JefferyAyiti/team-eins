@@ -9,6 +9,9 @@ public class KarteTest {
     Karte karte2;
 
 
+    /**
+     * setup für die Tests
+     */
     @BeforeEach
     void setUp() {
         karte1 = new Karte(2,true);
