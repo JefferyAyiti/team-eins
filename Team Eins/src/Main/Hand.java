@@ -20,6 +20,8 @@ public class Hand  implements Serializable {
      * @return Gibt die handKarte an der Stelle nr zurück
      */
     public HandKarte getKarte(int nr) {
+        System.out.println("Anzahl Handkarten"+handKarten.size());
+        System.out.println("get Handkarte nr:"+nr);
         return handKarten.get(nr);
     }
 
