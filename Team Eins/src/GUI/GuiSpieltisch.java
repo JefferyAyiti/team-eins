@@ -22,15 +22,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import javafx.stage.Popup;
-import javafx.stage.PopupWindow;
-import javafx.stage.Stage;
+import javafx.stage.*;
 
 import java.rmi.RemoteException;
 import java.util.*;
 
 import Main.*;
-import javafx.stage.Window;
 
 import static Main.Main.*;
 import static Main.Main.ich;
@@ -164,8 +161,8 @@ public class GuiSpieltisch {
                     if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()) {
                         Chip tausch;
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setTitle("Glückwunsch");
-                        alert.setHeaderText("Willst du einen Chip abgeben?");
+                        alert.setHeaderText("     ");
+                        alert.initStyle(StageStyle.TRANSPARENT);
                         DialogPane dialogPane = alert.getDialogPane();
                         dialogPane.getStylesheets().add("GUI/alert.css");
 
