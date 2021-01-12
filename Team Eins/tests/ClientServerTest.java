@@ -4,6 +4,8 @@ import Main.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.mockito.Mockito.*;
+
 
 import RMI.*;
 
@@ -26,13 +28,21 @@ public class ClientServerTest {
     Tisch tisch;
     Spiellogik spiellogik;
     Spieler[] spielerM;
+    GUIChat guiChat;
 
+    /** setup für die Tests
+     * @throws RemoteException
+     * @throws NotBoundException
+     * @throws AlreadyBoundException
+     */
     @BeforeEach
     void setUp() throws RemoteException, NotBoundException, AlreadyBoundException {
+
         main = new Main();
         main.setAnzSpieler(3);
         server = new ServerImpl();
         spielerM = new Spieler[3];
+
 
 
     }
@@ -60,7 +70,8 @@ public class ClientServerTest {
 
         client2.getServer().leaveServer("2");
         assertEquals(false,client1.getServer().getClients().containsKey("2"));
-        assertEquals(2,client1.getServer().getAnzahlSpieler());  //FEHLER? Anzahl an Spielern bleibt gleich
+        assertEquals(2,client1.getServer().getAnzClients());
+        runServer.stop();
 
 
 
@@ -85,6 +96,7 @@ public class ClientServerTest {
 
         client1.getServer().changeName("1","c");
         assertEquals("c",client1.getServer().getClients().get("1"));
+        runServer.stop();
     }
 
 
@@ -118,6 +130,7 @@ public class ClientServerTest {
         assertEquals(1,server.assignId("1"));
         assertEquals(2,server.assignId("2"));
         assertEquals(-1,server.assignId("4"));
+        runServer.stop();
 
     }
 
@@ -157,6 +170,8 @@ public class ClientServerTest {
         //gucken ob für beide Spieler der Nachziehstapel eine Karte weniger hat
         assertEquals(size-1, client1.getServer().updateTisch().getNachziehStapelSize());
         assertEquals(size-1,client2.getServer().updateTisch().getNachziehStapelSize());
+
+        runServer.stop();
     }
 
     /** Test für karteLegen
@@ -196,6 +211,7 @@ public class ClientServerTest {
         int val =  tisch.getSpielerList()[1].getCardHand().getKarte(0).getValue();
         client1.getServer().karteLegen(tisch.getSpielerList()[1],new Karte(tisch.getSpielerList()[1].getCardHand().getKarte(0).getValue(),false));
         assertEquals(val,client2.getServer().updateTisch().getObereKarteAblagestapel().getValue());
+        runServer.stop();
 
     }
 
@@ -252,6 +268,7 @@ public class ClientServerTest {
         assertEquals(tisch.getSpielerList()[1].getPoints(),-1*handkartenSum);
 
         tisch.setAktiv(1);
+        runServer.stop();
 
     }
 
@@ -306,6 +323,7 @@ public class ClientServerTest {
 
         assertEquals(0,tisch.getSpielerList()[1].getBlackChips());
         assertEquals(0,tisch.getSpielerList()[1].getWhiteChips());
+        runServer.stop();
 
     }
 
@@ -341,6 +359,7 @@ public class ClientServerTest {
         server.replaceSpielerDurchBot("1");
         Bot bot = new Bot("bot",1);
         assertEquals(bot.getClass(),tisch.getSpielerList()[1].getClass());
+        runServer.stop();
     }
 
     @Test
@@ -364,6 +383,7 @@ public class ClientServerTest {
         assertTrue("Zahl" == server.getChat().get(1).get(2) || "Kopf" == server.getChat().get(1).get(2));
         int test = Integer.parseInt(server.getChat().get(2).get(2));
         assertTrue(test > 0 && test <= 6);
+        runServer.stop();
     }
 
 

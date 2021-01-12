@@ -43,7 +43,7 @@ public class Bot extends Spieler  implements Serializable {
     /**
      * Bot versucht immer Chips zu tauschen, danach spielt er in folgender Reihenfolge:
      * - Versuch in der Reihenfolge der Handkarte eine Karte abzulegen.
-     * - Wenn ablegen nicht möglich ziehe eine Karte vom Stapel mit 60%iger Wsk.
+     * - Wenn ablegen nicht möglich ziehe eine Karte vom Stapel mit 50%iger Wsk.
      * - Wenn ziehen nicht möglich steige aus.
      */
     public void playSchwierigkeitLeicht() {
@@ -63,8 +63,8 @@ public class Bot extends Spieler  implements Serializable {
                         return;
                     }
                 }
-                //60%ige wahrscheinlichkeit eine Karte zu ziehen sonst aussteigen
-                if (Main.spiellogik.karteNachziehen(playing) && Math.random() >= 0.4) {
+                //50%ige wahrscheinlichkeit eine Karte zu ziehen sonst aussteigen
+                if (Math.random() >= 0.5 && Main.spiellogik.karteNachziehen(playing)) {
                     System.out.println("\tZiehe");
                     return;
                 } else {
@@ -131,7 +131,7 @@ public class Bot extends Spieler  implements Serializable {
                 //Kartenlegen Ende//
 
                 //Karten ziehen wenn noch keine Karte abgelegt wurde, wenn man am Zug ist, Wenn mehr als 4 Karten hat oder die Handsumme das Spiel beenden würde
-                if (!abgelegt && (playing.getCardCount() > 4  || (Main.spielArt==0 && handSumme()+playing.getPoints()>=40) && handSumme() <= 5 )){
+                if (!abgelegt && (playing.getCardCount()<3 && handSumme()>8) || (playing.getCardCount() > 4 && handSumme() > 4 ) || (Main.spielArt==0 && handSumme()+playing.getPoints()>=40)){
                     if (Main.spiellogik.karteNachziehen(playing)) {
                         System.out.println("\t Karte nachziehen");
                         return;

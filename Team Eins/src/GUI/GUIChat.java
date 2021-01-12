@@ -38,7 +38,6 @@ public class GUIChat {
         emojiTextFlowParameters.setFont(Font.font("Verdana",
                 FontWeight.BOLD,
                 textSize));
-        emojiTextFlowParameters.setTextColor(Color.WHITE);
     }
 
     private TextFlow emojiTextParser( String message){
@@ -51,6 +50,10 @@ public class GUIChat {
 
     public GUIChat(){
         chat = new Popup();
+    }
+
+    public void hideChat() {
+        chat.hide();
     }
 
     public void openChat(Stage owner, double X, double Y, double height, double width){
@@ -145,10 +148,15 @@ public class GUIChat {
                             Text text2 = new Text(zeile.get(1));
                             text2.setStyle("-fx-font-weight: normal; ");
                              */
+
                                 String name = zeile.get(0);
                                 String message = zeile.get(1);
                                 if(sichtbarkeit == 2) {
+                                    name = name+" (privat)";
+                                    emojiTextFlowParameters.setTextColor(Color.rgb(245, 96, 66,1));
                                     message = message.substring(myName.length()+2);
+                                }else{
+                                    emojiTextFlowParameters.setTextColor(Color.WHITE);
                                 }
                                 String text = (name + ": " + message);
                                 TextFlow emoteText = emojiTextParser(text); //emoji chat
@@ -156,7 +164,8 @@ public class GUIChat {
                                 emoteText.setId("emoji");
 
                                 if(sichtbarkeit == 2) {
-                                    //TODO private message optisch hervorheben?
+                                    //private message optisch hervorheben
+
                                 }
 
                                 cbox.getChildren().add(emoteText);
@@ -178,7 +187,8 @@ public class GUIChat {
                             cbox.getChildren().add(flow);
                         } else {
                             TextFlow flow = new TextFlow();
-                            flow.setId("würfeln");
+                            flow.setId("roll");
+
                             Text text1 = new Text("\uD83C\uDFB2    " + zeile.get(0) + " ");
                             text1.setStyle("-fx-font-weight: bold;");
 

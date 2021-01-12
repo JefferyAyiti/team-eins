@@ -11,6 +11,9 @@ public class StapelTest {
     Stapel ziehstapel;
 
 
+    /**
+     * Test für setup
+     */
     @BeforeEach
     void setUp() {
         this.ablagestapel = new Stapel(false);

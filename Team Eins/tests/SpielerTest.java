@@ -15,6 +15,9 @@ public class SpielerTest {
     Tisch tisch;
 
 
+    /**
+     * setup für die Tests
+     */
     @BeforeEach
     void setUp() {
         this.main = new Main();

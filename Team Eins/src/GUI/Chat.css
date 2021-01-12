@@ -1,4 +1,5 @@
 TextFlow > Text {
+    -fx-fill: rgba(255,255,255,1);
     -fx-font-size: 14px;
     -fx-opacity: 1;
 }
@@ -11,11 +12,11 @@ TextFlow > Text {
     -fx-text-fill: rgba(255,255,255,1);
 }
 #coinflip >Text {
-    -fx-fill: rgba(143, 217, 134,1)
+    -fx-fill: rgba(143, 217, 134,1);
 }
 
-#würfeln >Text{
-    -fx-fill: rgba(143, 217, 134,1)
+#roll >Text{
+    -fx-fill: rgba(91, 199, 245,1);
 }
 
 #eingabe{
@@ -29,6 +30,9 @@ TextFlow > Text {
     -fx-text-fill: white;
     -fx-text-alignment: left;
     -fx-text-fill: rgba(255,255,255,1);
+}
+#privat{
+    -fx-text-fill: rgba(245, 96, 66,1);
 }
 
 .text-input, .button {
