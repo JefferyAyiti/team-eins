@@ -178,4 +178,9 @@ public interface server extends Remote {
      * @throws RemoteException
      */
     void checkForNewRound() throws RemoteException;
+
+    void changeName(String uid, String name) throws RemoteException;
+
+    int getDurchgangNr() throws RemoteException;
+
 }

@@ -291,6 +291,26 @@ public class Main extends Application {
         return this;
     }
 
+    /** setter-Methode für spiellogik
+     * @param spiellogik
+     */
+    public void setSpiellogik(Spiellogik spiellogik) {
+        this.spiellogik = spiellogik;
+    }
+
+    /** setter-Methode für haende
+     * @param haende
+     */
+    public void setHaende(Hand[] haende) {
+        Main.haende = haende;
+    }
+
+    /** getter-Methode für haende
+     * @return
+     */
+    public Hand[] getHaende(){
+        return Main.haende;
+    }
 }
 
 

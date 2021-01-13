@@ -177,6 +177,27 @@ public class Tisch implements Serializable {
     }
 
 
+    /** setter-Methode für den Ablagestapel
+     * @param stapel Der neue Ablagestapel
+     */
+    public void setAblageStapel(Stapel stapel){
+        this.ablageStapel = stapel;
+    }
+
+    /** setter-Methode für den Nachziehstapel
+     * @param stapel Der neue Nachziehstapel
+     */
+    public void setNachziehstapel(Stapel stapel){
+        this.nachziehStapel = stapel;
+    }
+
+    /** setter-Methode für aktiv
+     * @param aktiverSpieler neuer aktiver Spieler
+     */
+    public void setAktiv(int aktiverSpieler){
+        this.aktiv = aktiverSpieler;
+
+    }
 
 
 }

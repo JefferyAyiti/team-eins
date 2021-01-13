@@ -273,6 +273,15 @@ public class ServerImpl implements server {
         return getMain();
     }
 
+    @Override
+    public void changeName(String uid, String name) throws RemoteException {
+        clients.replace(uid, name);
+    }
 
+
+    @Override
+    public int getDurchgangNr() throws RemoteException {
+        return tisch.getDurchgangNr();
+    }
 
 }
