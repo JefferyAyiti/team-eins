@@ -284,4 +284,15 @@ public class ServerImpl implements server {
         return tisch.getDurchgangNr();
     }
 
+    @Override
+    public Spieler getSpieler(String name) throws RemoteException {
+        Spieler sol = null;
+        for (int i = 0;i < anzSpieler;i++) {
+            if(Main.tisch.getSpielerList()[i].getName().equals(name)) {
+                sol =  tisch.getSpielerList()[i];
+            }
+        }
+        return sol;
+    }
+
 }

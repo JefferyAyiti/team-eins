@@ -503,7 +503,7 @@ public class GuiHauptmenu {
             server.leaveServer(uniqueID);
         } catch (RemoteException e) {
         }catch (NullPointerException e){
-            System.err.println("null pointer exception in GuiHauptmenü.cleanupServer");
+            System.err.println(e.toString());
         }
         server = null;
         status.setText("Verbindung zu Server verloren");

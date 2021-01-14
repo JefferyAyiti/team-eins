@@ -49,6 +49,10 @@ public class ClientThread implements Runnable {
             @Override
             public void run() {
                 try {
+
+                    if(!server.serverOpen() || server.getSpieler(client.cname).getLeftServer()){
+                        server = null;
+                    }
                     if (server.getAenderung(Main.uniqueID) > aenderung) {
                         aenderung = server.getAenderung(Main.uniqueID);
                         Platform.runLater(() -> {
@@ -58,15 +62,13 @@ public class ClientThread implements Runnable {
                                 }
                         );
                         client.update();
-
-
                     }
-                } catch (RemoteException e) {
+                } catch (RemoteException | NullPointerException e) {
+                    System.err.println(e.toString());
                     System.err.println("Lost connection to Server");
                     t.cancel();
                     client.forceLeaveServer();
                 }
-
             }
         }, 100, 500);
     }

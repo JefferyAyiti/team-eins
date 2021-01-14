@@ -183,4 +183,11 @@ public interface server extends Remote {
 
     int getDurchgangNr() throws RemoteException;
 
+    /**
+     * @param name
+     * @return Spieler mit dem zugehörigen Namen auf dem Server
+     * @throws RemoteException
+     */
+    Spieler getSpieler(String name) throws RemoteException;
+
 }
