@@ -87,7 +87,7 @@ public class GUIChat {
         content.setPrefWidth(170 *zoomfactor);
         messages.setPrefHeight(240*zoomfactor);
         messages.setMinWidth(160 *zoomfactor);
-        //messages.setMaxWidth(600*zoomfactor);
+        messages.setMaxWidth(160*zoomfactor);
         messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
         HBox inputBox = new HBox();
 
