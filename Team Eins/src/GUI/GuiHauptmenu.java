@@ -4,9 +4,11 @@ import RMI.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -83,6 +85,8 @@ public class GuiHauptmenu {
 
         //Spielername
         namefield = new TextField(Main.myName);
+        namefield.addEventFilter(KeyEvent.KEY_TYPED, maxLength(13));
+
         if(!Main.joined)
             center.addRow(0, new Label("Spielername: "), namefield);
 
@@ -522,5 +526,27 @@ public class GuiHauptmenu {
         status.setText("Server wurde geschlossen");
 
         showSettingsMenu(Main.classPrimaryStage);
+    }
+
+    /**
+     * Methode zur begrenzung der Text Eingabe
+     * @param i erlaube Anzahl an Zeichen
+     * @return EventHandler
+     */
+    public EventHandler<KeyEvent> maxLength(final Integer i) {
+        return new EventHandler<KeyEvent>() {
+
+            @Override
+            public void handle(KeyEvent arg0) {
+                if(namefield.getText() != null) {
+                    TextField tx = (TextField) arg0.getSource();
+                    if (tx.getText().length() >= i) {
+                        arg0.consume();
+                    }
+                }
+            }
+
+        };
+
     }
 }

@@ -86,15 +86,18 @@ public class GUIChat {
         VBox content = new VBox();
         content.setPrefWidth(170 *zoomfactor);
         messages.setPrefHeight(240*zoomfactor);
-        messages.setPrefWidth(160 *zoomfactor);
-        messages.setMaxWidth(600*zoomfactor);
+        messages.setMinWidth(160 *zoomfactor);
+        //messages.setMaxWidth(600*zoomfactor);
         messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
         HBox inputBox = new HBox();
-        input.setId("eingabe");
+
         //input.setStyle("-fx-opacity: 0.9");
-        inputBox.setPrefWidth(170*zoomfactor);
-        input.setPrefWidth(115*zoomfactor);
-        //sendButton.setPrefWidth(100);
+        sendButton.setPrefWidth(60);
+        input.setPrefWidth(170*zoomfactor-60);
+        //inputBox.minWidth(width);
+        //inputBox.maxWidth(600*zoomfactor);
+        input.setId("eingabe");
+        //inputBox.prefWidthProperty().bind(content.prefWidthProperty().multiply(zoomfactor));
         inputBox.getChildren().addAll(input, sendButton);
         onEnter();
         onPress();

@@ -50,7 +50,7 @@ public class GuiScoreboard {
             platz.getChildren().add(rang);
             //platz.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.4 ,0 ,0 )");
             //Spieler
-            Label name = new Label(entry.getKey().getName() + "    \t");
+            Label name = new Label(entry.getKey().getName() + "  \t");
             name.setTextFill(Color.WHITE);
             name.setFont(new Font("Ink Free", 19 * Main.zoomfactor));
             names.getChildren().add(name);
