@@ -367,6 +367,15 @@ public class Spiellogik implements Serializable {
 
         }
 
+        if(spielArt > 0){
+            if(tisch.getWhiteChips() <= 0){
+                tisch.takeChips(-50,0);
+            }
+            if(tisch.getBlackChips() <= 0){
+                tisch.takeChips(0,-20);
+            }
+        }
+
         if (spielArt == 0) { //normales Spiel
             for (int i = 0; i < anzSpieler; i++) { //spielerListe durchgehen
 
@@ -385,14 +394,6 @@ public class Spiellogik implements Serializable {
             spielBeendet = true;
         }
 
-        if(spielArt > 0){
-            if(tisch.getWhiteChips() <= 0){
-                tisch.takeChips(-50,0);
-            }
-            if(tisch.getBlackChips() <= 0){
-                tisch.takeChips(0,-20);
-            }
-        }
 
         System.out.println("Runde beendet");
         rundeBeendet = true;
