@@ -4,10 +4,7 @@ import RMI.RMIClient;
 import RMI.RunClient;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
@@ -563,7 +560,7 @@ public class GuiSpieltisch {
 
             GridPane gridPane = new GridPane();
             gridPane.setBackground(new Background(myBI));
-            gridPane.setGridLinesVisible(false);
+            gridPane.setGridLinesVisible(true);
             gridPane.setAlignment(Pos.TOP_CENTER);
 
             table.getColumnConstraints().add(new ColumnConstraints()); // column 0 is 100 wide
@@ -701,6 +698,28 @@ public class GuiSpieltisch {
                 );
 
                 gridPane.add(chatButton, 0, 4, 1, 1);
+
+                //Einstellungen
+                Image hinweis = new Image("GUI/images/tip_plain.png");
+                Image filter = new Image("GUI/Images/filter.png");
+                Image sort = new Image("GUI/images/sort.png");
+                VBox steuerung = new VBox();
+                steuerung.setSpacing(10);
+                ImageView schimpf = new ImageView(filter);
+                ImageView tipp = new ImageView(hinweis);
+                ImageView sortieren = new ImageView(sort); ;
+                steuerung.getChildren().add(schimpf);
+                steuerung.getChildren().add(tipp);
+                steuerung.getChildren().add(sortieren);
+
+                TitledPane settings = new TitledPane("Einstellungen", steuerung);
+                settings.setExpanded(false);
+                steuerung.setMaxWidth(20);
+                settings.setMaxWidth(20);
+                settings.getStylesheets().add("GUI/einstellung.css");
+                gridPane.add(settings, 4,0,1,1);
+                gridPane.setValignment(settings, VPos.TOP);
+                gridPane.setHalignment(settings, HPos.RIGHT);
             }
 
             root.getChildren().add(gridPane);
