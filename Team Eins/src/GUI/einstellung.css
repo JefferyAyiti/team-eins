@@ -1,11 +1,11 @@
 .titled-pane {
-    -fx-background-color: rgba(255,255,255,0.4);
+    -fx-color: rgba(255,255,255,0.4);
 
 }
 
 .titled-pane:focused {
 
-    -fx-color: -fx-base;
+    -fx-color:  rgba(255,255,255,0.4);
 
 }
 
@@ -68,12 +68,10 @@
 /* alternative content using a border and a grad to transparent background - why should TitledPane content have a colour? */
 
 .titled-pane > *.content {
-
-    -fx-border-color: -fx-box-border;
-
-    -fx-border-insets: -1 0 0 0;
-
-    -fx-background-color: linear-gradient(from 0px 0px to 0px 5px, derive(-fx-background, -6%), -fx-background);
-
+    -fx-background-color: rgba(255,255,255,0.4);
 }
 
+
+.vbox > .imageview:hover{
+    -fx-background-color:rgba(255,255,255,0.7);
+}

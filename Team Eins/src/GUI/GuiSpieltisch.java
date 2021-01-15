@@ -560,7 +560,7 @@ public class GuiSpieltisch {
 
             GridPane gridPane = new GridPane();
             gridPane.setBackground(new Background(myBI));
-            gridPane.setGridLinesVisible(true);
+            gridPane.setGridLinesVisible(false);
             gridPane.setAlignment(Pos.TOP_CENTER);
 
             table.getColumnConstraints().add(new ColumnConstraints()); // column 0 is 100 wide
@@ -708,9 +708,8 @@ public class GuiSpieltisch {
                 ImageView schimpf = new ImageView(filter);
                 ImageView tipp = new ImageView(hinweis);
                 ImageView sortieren = new ImageView(sort); ;
-                steuerung.getChildren().add(schimpf);
-                steuerung.getChildren().add(tipp);
-                steuerung.getChildren().add(sortieren);
+                steuerung.getChildren().addAll(schimpf,tipp, sortieren);
+                steuerung.getStylesheets().add("GUI/einstellung.css");
 
                 TitledPane settings = new TitledPane("Einstellungen", steuerung);
                 settings.setExpanded(false);
