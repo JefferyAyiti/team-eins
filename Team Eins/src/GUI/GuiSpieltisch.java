@@ -4,6 +4,7 @@ import RMI.RMIClient;
 import RMI.RunClient;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -678,9 +679,9 @@ public class GuiSpieltisch {
                 chatButton.setTranslateX(30);
                 chatButton.setTranslateY(40);
                 chatButton.setOnMouseClicked(e -> {
+
                             if (!chatOpened) {
-                                chatbox.openChat(classPrimaryStage, classPrimaryStage.getX(),
-                                        classPrimaryStage.getHeight() + 120 / Main.zoomfactor, 240 * zoomfactor, 90 * zoomfactor);
+                                chatbox.openChat(classPrimaryStage, 240 * zoomfactor, 90 * zoomfactor);
                                 chatButton.setText("Chat <<");
                                 chatOpened = true;
                             } else { //chat bereits offen

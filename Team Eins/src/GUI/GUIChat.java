@@ -4,17 +4,22 @@ package GUI;
 
 import com.pavlobu.emojitextflow.EmojiTextFlow;
 import com.pavlobu.emojitextflow.EmojiTextFlowParameters;
+import javafx.event.ActionEvent;
+import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
+import javafx.scene.transform.Translate;
 import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import static Main.Main.*;
-import Main.Spieler;
+import Main.Main;
+import javafx.stage.Window;
+
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -26,6 +31,7 @@ public class GUIChat {
     public ScrollPane scroll = new ScrollPane();
     public VBox messages = new VBox();
     Button sendButton = new Button("Senden");
+
 
     final static double EMOJI_SCALE_FACTOR = 1.5D; // used to adjust emoji size and position in relation to other text
     final static int textSize = 13;
@@ -60,10 +66,12 @@ public class GUIChat {
     }
 
 
-    public void openChat(Stage owner, double X, double Y, double height, double width){
-        chat.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_BOTTOM_LEFT);
-        chat.setAnchorX(X+8);
-        chat.setAnchorY(Y-32);
+    public void openChat(Stage owner, double height, double width){
+        //chat.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_BOTTOM_LEFT);
+
+        chat.setX(owner.getScene().getWindow().getX() + 5);
+        chat.setY(owner.getScene().getWindow().getY() + 35);
+        //chat.setAutoFix(true);
         scroll.setOpacity(0.8);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         //sendButton.setOpacity(0.8);
@@ -71,20 +79,22 @@ public class GUIChat {
         sendButton.setStyle("-fx-text-fill: black;\n" +
                 "    -fx-background-color: rgba(255,255,255,0.6);\n" +
                 "    -fx-fit-to-height: true;\n" +
-                "    -fx-font-size: 100%;\n" +
+                "    -fx-font-size: 90%;\n" +
                 "    -fx-alignment: center;" +
                 "    -fx-font-weight: bold;");
 
         VBox content = new VBox();
-        //content.setMaxHeight(300);
-        messages.setPrefHeight(height);
-        messages.setPrefWidth(width+70);
-        messages.setMaxWidth(600);
+        content.setPrefWidth(170 *zoomfactor);
+        messages.setPrefHeight(240*zoomfactor);
+        messages.setPrefWidth(160 *zoomfactor);
+        messages.setMaxWidth(600*zoomfactor);
         messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
         HBox inputBox = new HBox();
         input.setId("eingabe");
         //input.setStyle("-fx-opacity: 0.9");
-        input.setPrefWidth(width+28);
+        inputBox.setPrefWidth(170*zoomfactor);
+        input.setPrefWidth(115*zoomfactor);
+        //sendButton.setPrefWidth(100);
         inputBox.getChildren().addAll(input, sendButton);
         onEnter();
         onPress();
