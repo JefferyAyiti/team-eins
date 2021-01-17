@@ -44,6 +44,7 @@ public class Main extends Application {
 
 
 
+
     //Wird später im Menü festgelegt
     public static int anzSpieler;
 
@@ -161,6 +162,7 @@ public class Main extends Application {
 
 
         hauptmenuGui.showSettingsMenu(classPrimaryStage);
+        primaryStage.show();
 
 
     }
@@ -173,12 +175,13 @@ public class Main extends Application {
     static class MyTask1 extends TimerTask {
         @Override
         public void run() {
-            sceneWidth = classPrimaryStage.getScene().getWidth();
-            sceneHeight = classPrimaryStage.getScene().getHeight();
-            Platform.runLater(() -> {
-                resize(false);
-            });
-
+            if(timerRunning) {
+                sceneWidth = classPrimaryStage.getScene().getWidth();
+                sceneHeight = classPrimaryStage.getScene().getHeight();
+                Platform.runLater(() -> {
+                    resize(false);
+                });
+            }
         }
     }
 
@@ -187,50 +190,52 @@ public class Main extends Application {
     static class moveCheck extends TimerTask {
         @Override
         public void run() {
-            if(playMode == 1) {
-                try {
-                    server.checkTimeout();
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (playMode < 2 && tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
-                if (System.currentTimeMillis() - lastmove < botPlayTime) {
+            if (timerRunning) {
+                if (playMode == 1) {
                     try {
-                        Thread.sleep(botPlayTime - (System.currentTimeMillis() - lastmove));
-                    } catch (InterruptedException e) {
+                        server.checkTimeout();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
                     }
                 }
-                //spieltischGui.printtoLog("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
-                System.out.println("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
-                ((Bot) tisch.getAktivSpieler()).play();
-                Platform.runLater(() -> {
-                    spieltischGui.buildStage(classPrimaryStage);
-                });
-                lastmove = System.currentTimeMillis();
-
-            } else if(playMode == 1 && ((tisch.aktiv != ich || tisch.aktiv == ich &&
-                    myTurnUpdate) || round < tisch.getDurchgangNr()) ) {
-
-                if(round < tisch.getDurchgangNr())
-                    round = tisch.getDurchgangNr();
-                try {
-                    if(aenderung < server.getAenderung(Main.uniqueID)) {
-
-                        Platform.runLater(() -> {
-                            try {
-                                aenderung = Main.server.getAenderung(Main.uniqueID);
-                            } catch (RemoteException e) {
-                            }
-                            if (tisch.aktiv == ich) {
-                                myTurnUpdate = false;
-                            } else
-                                myTurnUpdate = true;
-                           spieltischGui.buildStage(classPrimaryStage);
-                        });
+                if (playMode < 2 && tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
+                    if (System.currentTimeMillis() - lastmove < botPlayTime) {
+                        try {
+                            Thread.sleep(botPlayTime - (System.currentTimeMillis() - lastmove));
+                        } catch (InterruptedException e) {
+                        }
                     }
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+                    //spieltischGui.printtoLog("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
+                    System.out.println("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
+                    ((Bot) tisch.getAktivSpieler()).play();
+                    Platform.runLater(() -> {
+                        spieltischGui.buildStage(classPrimaryStage);
+                    });
+                    lastmove = System.currentTimeMillis();
+
+                } else if (playMode == 1 && ((tisch.aktiv != ich || tisch.aktiv == ich &&
+                        myTurnUpdate) || round < tisch.getDurchgangNr())) {
+
+                    if (round < tisch.getDurchgangNr())
+                        round = tisch.getDurchgangNr();
+                    try {
+                        if (aenderung < server.getAenderung(Main.uniqueID)) {
+
+                            Platform.runLater(() -> {
+                                try {
+                                    aenderung = Main.server.getAenderung(Main.uniqueID);
+                                } catch (RemoteException e) {
+                                }
+                                if (tisch.aktiv == ich) {
+                                    myTurnUpdate = false;
+                                } else
+                                    myTurnUpdate = true;
+                                spieltischGui.buildStage(classPrimaryStage);
+                            });
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -243,13 +248,15 @@ public class Main extends Application {
      */
     public static Timer bots;
     public static Timer resizecheck;
+    public static boolean timerRunning = true;
 
     public static void runTimers(Stage ps) {
         resize(true);
+        bots = new Timer();
         resizecheck = new Timer();
         resizecheck.schedule(new MyTask1(), 0, 500);
 
-        bots = new Timer();
+
         if(playMode != 2)
             bots.schedule(new moveCheck(), 300 , 200);
 
