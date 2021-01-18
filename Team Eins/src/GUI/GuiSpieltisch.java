@@ -318,6 +318,8 @@ public class GuiSpieltisch {
                     Main.gameRunning = false;
                     Main.bots.cancel();
                     Main.joined = false;
+                    Main.myTurnUpdate = true;
+                    spiellogik = null;
                     if (Main.playMode == 1) {
 
                         try {

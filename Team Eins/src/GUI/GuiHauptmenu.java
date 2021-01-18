@@ -503,6 +503,7 @@ public class GuiHauptmenu {
         update.cancel();
         getTisch = null;
         assigned = false;
+        Main.myTurnUpdate = true;
         try {
             server.leaveServer(uniqueID);
         } catch (RemoteException e) {
@@ -510,7 +511,7 @@ public class GuiHauptmenu {
             System.err.println(e.toString());
         }
         server = null;
-        status.setText("Verbindung zu Server verloren");
+        Platform.runLater(() ->status.setText("Verbindung zu Server verloren"));
     }
 
     /**

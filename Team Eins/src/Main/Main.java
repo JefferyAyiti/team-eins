@@ -168,11 +168,6 @@ public class Main extends Application {
 
     }
 
-
-
-
-
-
     static class MyTask1 extends TimerTask {
         @Override
         public void run() {
@@ -207,7 +202,6 @@ public class Main extends Application {
                         }
                     }
                     //spieltischGui.printtoLog("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
-                    System.out.println("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
                     ((Bot) tisch.getAktivSpieler()).play();
                     Platform.runLater(() -> {
                         spieltischGui.buildStage(classPrimaryStage);
@@ -216,27 +210,21 @@ public class Main extends Application {
 
                 } else if (playMode == 1 && ((tisch.aktiv != ich || tisch.aktiv == ich &&
                         myTurnUpdate) || round < tisch.getDurchgangNr())) {
-
                     if (round < tisch.getDurchgangNr())
                         round = tisch.getDurchgangNr();
-                    try {
-                        if (aenderung < server.getAenderung(Main.uniqueID)) {
-
-                            Platform.runLater(() -> {
-                                try {
-                                    aenderung = Main.server.getAenderung(Main.uniqueID);
-                                } catch (RemoteException e) {
-                                }
-                                if (tisch.aktiv == ich) {
-                                    myTurnUpdate = false;
-                                } else
-                                    myTurnUpdate = true;
-                                spieltischGui.buildStage(classPrimaryStage);
-                            });
+                    //if (aenderung <= server.getAenderung(Main.uniqueID)) {
+                    Platform.runLater(() -> {
+                        try {
+                            aenderung = Main.server.getAenderung(Main.uniqueID);
+                        } catch (RemoteException e) {
                         }
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
+                        if (tisch.aktiv == ich) {
+                            myTurnUpdate = false;
+                        } else
+                            myTurnUpdate = true;
+                        spieltischGui.buildStage(classPrimaryStage);
+                    });
+                    //}
                 }
             }
         }
