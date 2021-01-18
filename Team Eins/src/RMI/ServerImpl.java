@@ -2,6 +2,7 @@ package RMI;
 
 import Main.*;
 import javafx.scene.control.Label;
+import org.apache.xpath.operations.Bool;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -22,8 +23,10 @@ public class ServerImpl implements server {
     String host;
     boolean lock = true;
     int ammountReadyClients = 0;
+    Map<String,Boolean> readyClients = new HashMap<>();
 
     public ServerImpl() throws RemoteException {
+
         UnicastRemoteObject.exportObject(this, 0);
     }
 
@@ -39,7 +42,14 @@ public class ServerImpl implements server {
 
     @Override
     public int getAnzReadyClients() throws RemoteException {
-        return ammountReadyClients;
+        int readyClientsInt = 0;
+        for(Boolean ready: readyClients.values()){
+            if(ready){
+                readyClientsInt++;
+            }
+        }
+
+        return readyClientsInt;
     }
 
     @Override
@@ -54,6 +64,7 @@ public class ServerImpl implements server {
                 anzClients++;
                 aenderung++;
                 clients.put(uid, name);
+                readyClients.put(uid,false);
                 pings.put(uid, System.currentTimeMillis());
             } else {
                 lock = false;
@@ -67,6 +78,7 @@ public class ServerImpl implements server {
         aenderung++;
         anzClients--;
         clients.remove(client);
+        readyClients.remove(client);
     }
 
     @Override
@@ -108,21 +120,28 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public void neueRunde(boolean countUp) throws RemoteException {
+    public void neueRunde(boolean countUp,String uid) throws RemoteException {
         if(countUp){
             ammountReadyClients++;
+            readyClients.remove(uid);
+            readyClients.put(uid,true);
         }
-        if(ammountReadyClients >= anzClients){
+        if(getAnzReadyClients() >= anzClients){
             spiellogik.initNeueRunde();
             ammountReadyClients = 0;
+            for(String id: server.getClients().keySet()){
+                readyClients.put(uid,false);
+            }
+            System.out.println(readyClients.size());
+
         }
         aenderung++;
     }
 
     @Override
     public void checkForNewRound() throws RemoteException {
-        if(ammountReadyClients >= anzClients){
-            neueRunde(false);
+        if(getAnzReadyClients() >= anzClients){
+            neueRunde(false,uniqueID);
         }
     }
 

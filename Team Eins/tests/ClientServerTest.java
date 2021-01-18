@@ -159,9 +159,9 @@ public class ClientServerTest {
         main.setTisch(tisch);
         main.setSpiellogik(spiellogik);
         main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
-        client1.getServer().neueRunde(true);
-        client2.getServer().neueRunde(true);
-        client2.getServer().neueRunde(true);
+        client1.getServer().neueRunde(true,client1.getuId());
+        client2.getServer().neueRunde(true,client2.getuId());
+        server.neueRunde(true,server.getHost());
         tisch.setAktiv(1);
         int size = tisch.getNachziehStapelSize();
         client1.getServer().karteNachziehen(tisch.getSpielerList()[1]);
@@ -199,9 +199,9 @@ public class ClientServerTest {
         main.setTisch(tisch);
         main.setSpiellogik(spiellogik);
         main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
-        client1.getServer().neueRunde(true);
-        client2.getServer().neueRunde(true);
-        client2.getServer().neueRunde(true);
+        client1.getServer().neueRunde(true,client1.getuId());
+        client2.getServer().neueRunde(true,client2.getuId());
+        server.neueRunde(true,server.getHost());
         tisch.setAktiv(1);
         client1.getServer().karteNachziehen(tisch.getSpielerList()[1]);
 
@@ -240,9 +240,9 @@ public class ClientServerTest {
         main.setTisch(tisch);
         main.setSpiellogik(spiellogik);
         main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
-        client1.getServer().neueRunde(true);
-        client2.getServer().neueRunde(true);
-        client2.getServer().neueRunde(true);
+        client1.getServer().neueRunde(true,client1.getuId());
+        client2.getServer().neueRunde(true,client2.getuId());
+        server.neueRunde(true,server.getHost());
 
         tisch.setAktiv(1);
         int handkartenSum = 0;
@@ -297,10 +297,9 @@ public class ClientServerTest {
         main.setTisch(tisch);
         main.setSpiellogik(spiellogik);
         main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
-        client1.getServer().neueRunde(true);
-        client2.getServer().neueRunde(true);
-        client2.getServer().neueRunde(true);
-
+        client1.getServer().neueRunde(true,client1.getuId());
+        client2.getServer().neueRunde(true,client2.getuId());
+        server.neueRunde(true,server.getHost());
         tisch.setAktiv(1);
         int handkartenSum = 0;
 

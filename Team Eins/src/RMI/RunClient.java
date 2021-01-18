@@ -7,6 +7,7 @@ public class RunClient {
 
     public static RMIClient client;
     private String CLIENT_NAME;
+    private String uId;
 
     /**
      * @param IP Server IP
@@ -21,6 +22,7 @@ public class RunClient {
         System.setProperty("java.security.policy","file:///tmp/test.policy");
 
         client = new RMIClient(IP, Port, Server_Name, uniqueId, Client_Name);
+        uId = uniqueId;
 
         System.out.println("Client Started");
     }
@@ -30,5 +32,12 @@ public class RunClient {
      */
     public RMI.server getServer() {
         return client.getServer();
+    }
+
+    /** getter-Methode für uId
+     * @return uid des Clients
+     */
+    public String getuId() {
+        return uId;
     }
 }

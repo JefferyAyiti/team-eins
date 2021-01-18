@@ -108,7 +108,7 @@ public class GuiScoreboard {
                 nextRound.setOnAction(e -> {
                     if (playMode >= 1) {
                         try {
-                            Main.server.neueRunde(true);
+                            Main.server.neueRunde(true,uniqueID);
                             isReady = true;
                         } catch (RemoteException ex) {
                             ex.printStackTrace();

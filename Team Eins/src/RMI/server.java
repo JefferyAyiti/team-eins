@@ -41,9 +41,10 @@ public interface server extends Remote {
     /**
      * Wenn alle Spieler ready sind, wird eine neue Runde gestartet.
      * @param countUp Flag um ammountReadyClients hochzuzählen. Wird für den Wartebildcshirm verwendet
+     * @param uid Id des Clients/Server der ready ist
      * @throws RemoteException
      */
-    void neueRunde(boolean countUp) throws RemoteException;
+    void neueRunde(boolean countUp,String uid) throws RemoteException;
 
     /**
      * @return Spieler Rangliste die vom Server ausgewertet wird
