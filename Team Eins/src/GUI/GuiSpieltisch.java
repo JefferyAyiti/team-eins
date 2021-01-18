@@ -43,6 +43,7 @@ public class GuiSpieltisch {
     private ArrayList<Double> deg =  new ArrayList<>();
     private List<String> log = new ArrayList<>();
     boolean chatOpened = false;
+    boolean settingsOpen = false;
     int[] cardId;
 
     double dragX;
@@ -666,31 +667,38 @@ public class GuiSpieltisch {
                 gridPane.add(chatButton, 0, 4, 1, 1);
 
                 //Einstellungen
-                Image hinweis = new Image("GUI/images/tip_plain.png");
-                Image filter = new Image("GUI/Images/filter.png");
-                Image sort = new Image("GUI/images/sort.png");
-                VBox steuerung = new VBox();
-                steuerung.setSpacing(10);
-                ImageView schimpf = new ImageView(filter);
-                ImageView tipp = new ImageView(hinweis);
-                ImageView sortieren = new ImageView(sort); ;
-                steuerung.getChildren().addAll(schimpf,tipp, sortieren);
-                steuerung.getStylesheets().add("GUI/einstellung.css");
-
-                TitledPane settings = new TitledPane("Einstellungen", steuerung);
-                settings.setExpanded(false);
-                steuerung.setMaxWidth(20);
-                settings.setMaxWidth(20);
-                settings.getStylesheets().add("GUI/einstellung.css");
+                Button settings = new Button("⚙ Einstellungen");
+                settings.setMaxWidth(200);
                 gridPane.add(settings, 4,0,1,1);
                 gridPane.setValignment(settings, VPos.TOP);
                 gridPane.setHalignment(settings, HPos.RIGHT);
+                settings.setOnMouseClicked(s->{
+
+                    if (!settingsOpen) {
+                        einstellung.openSettings(classPrimaryStage);
+                        chatOpened = true;
+                    } else { //chat bereits offen
+                        einstellung.hideSettings();
+                        chatOpened = false;
+                    }
+
+                });
+                settings.setStyle(
+                        "-fx-text-fill: black;\n" +
+                                "    -fx-background-color: rgba(255,255,255,0.4);\n" +
+                                "    -fx-pref-height: 15px;\n" +
+                                "    -fx-pref-width: 100px;\n" +
+                                "    -fx-font-size: 100%;\n" +
+                                "    -fx-alignment: center;"
+                );
             }
+
 
             root.getChildren().add(gridPane);
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
             primaryStage.setScene(scene);
             scene.getStylesheets().add("GUI/Chat.css");
+            //scene.getStylesheets().add("GUI/einstellung.css");
 
 
         } catch (Exception e) {

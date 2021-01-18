@@ -77,6 +77,7 @@ public class Main extends Application {
     public static GuiScoreboard scoreboardGui = new GuiScoreboard();
     public static GuiSpieltisch spieltischGui = new GuiSpieltisch();
     public static GUIChat chatbox = new GUIChat();
+    public static GUISettings einstellung = new GUISettings();
 
     /**
      * Erstellt Tisch, Nachzieh- und Abalgestapel, Spieler
