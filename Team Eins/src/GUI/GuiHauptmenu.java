@@ -176,17 +176,22 @@ public class GuiHauptmenu {
                 "Runden-Limit",
                 "Unendlich"
         ));
-        spielart.getSelectionModel().select(Main.spielArt);
+        spielart.getSelectionModel().select(spielArt);
         spielartLimit = new TextField(Integer.toString(spielArtLimit));
         if (Main.playMode < 2)
             center.addRow(4, new Label("Spielart: "), spielart);
 
         spielart.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
                     if(spielart.getSelectionModel().getSelectedIndex() == 1) {
-                        if (Main.playMode < 2)
-                            center.addRow(4, new Label("Rundenanzahl: "), spielartLimit);
-                    } else
-                        center.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 5);
+                        if (Main.playMode < 2) {
+                            center.add( new Label("Rundenanzahl: "),2,4);
+                            center.add( spielartLimit,3,4);
+                        }
+
+                    } else {
+                        center.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 2);
+                        center.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 3);
+                    }
                 }
         );
 
