@@ -103,6 +103,23 @@ public class GuiSpieltisch {
         }
 
 
+        if(playerId == ich) {
+            System.out.println(autoSort);
+            if (autoSort != null && (autoSort == false && !sortedOnce || autoSort)) {
+                //sortieren
+                ArrayList<HandKarte> sortedHand =
+                        tisch.getSpielerList()[ich].getCardHand().getHandKarte();
+                Collections.sort(sortedHand, new Comparator<>() {
+                    @Override
+                    public int compare(HandKarte handKarte, HandKarte t1) {
+                        return handKarte.getValue()>=t1.getValue() ? 1:-1;
+                    }
+                });
+                sortedOnce = true;
+                tisch.getSpielerList()[ich].getCardHand().setHandKarten(sortedHand);
+            }
+        }
+
         ColorAdjust desaturate = new ColorAdjust();
         desaturate.setSaturation(-1);
 
@@ -161,6 +178,15 @@ public class GuiSpieltisch {
                         ImageView myCard = imgView;
                         myCardImages[i] = imgView;
                         int finalI = i;
+
+                        //Spielbare Karten
+                        if(Main.tooltip) {
+                            if(!tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable()) {
+                                ColorAdjust colorAdjust = new ColorAdjust();
+                                colorAdjust.setBrightness(-0.6);
+                                myCard.setEffect(colorAdjust);
+                            }
+                        }
 
                         final double[] myCardsX = new double[2];
                         final double[] myCardsY = new double[2];

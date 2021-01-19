@@ -115,6 +115,7 @@ public class GuiScoreboard {
                         }
                     } else
                         Main.spiellogik.initNeueRunde();
+                    sortedOnce = false;
                     Main.spieltischGui.buildStage(Main.classPrimaryStage);
                 });
 

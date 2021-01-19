@@ -18,7 +18,7 @@ public class Hand  implements Serializable {
     /**
      * @return Gibt alle aktuellen Karten der hand aus
      */
-    public List<HandKarte> getHandKarte() {
+    public ArrayList<HandKarte> getHandKarte() {
         return handKarten;
     }
 

@@ -41,6 +41,9 @@ public class Main extends Application {
     public static int spielArt = 0;
     public static int spielArtLimit = 4;
     public static List<String> mutelist = new LinkedList<>();
+    public static boolean tooltip = false;
+    public static boolean sortedOnce = true;
+    public static Boolean autoSort = null; //null = aus, false = einmalig, true = immer
 
 
 
