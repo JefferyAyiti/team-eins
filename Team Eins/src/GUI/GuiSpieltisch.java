@@ -158,11 +158,11 @@ public class GuiSpieltisch {
                                     e.getSceneX() < ablageX[1] &&
                                     e.getSceneY() > ablageY[0] &&
                                     e.getSceneY() < ablageY[1]) {
-                                if(tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable())
-                                ablagestapel.setStyle("-fx-background-insets: 20; " +
-                                        "-fx-background-radius: 20; " +
-                                        "-fx-cursor:hand;" +
-                                        "-fx-effect: dropshadow(three-pass-box, green, 20, 0, 0, 0);");
+                                if (tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable())
+                                    ablagestapel.setStyle("-fx-background-insets: 20; " +
+                                            "-fx-background-radius: 20; " +
+                                            "-fx-cursor:hand;" +
+                                            "-fx-effect: dropshadow(three-pass-box, green, 20, 0, 0, 0);");
                                 else
                                     ablagestapel.setStyle("-fx-background-insets: 20; " +
                                             "-fx-background-radius: 20; " +
@@ -698,33 +698,35 @@ public class GuiSpieltisch {
                 );
 
                 gridPane.add(chatButton, 0, 4, 1, 1);
-
-                //Einstellungen
-                Button settings = new Button("⚙ Einstellungen");
-                settings.setMaxWidth(200);
-                gridPane.add(settings, 4, 0, 1, 1);
-                gridPane.setValignment(settings, VPos.TOP);
-                gridPane.setHalignment(settings, HPos.RIGHT);
-                settings.setOnMouseClicked(s -> {
-
-                    if (!settingsOpen) {
-                        einstellung.openSettings(classPrimaryStage);
-                        chatOpened = true;
-                    } else { //chat bereits offen
-                        einstellung.hideSettings();
-                        chatOpened = false;
-                    }
-
-                });
-                settings.setStyle(
-                        "-fx-text-fill: black;\n" +
-                                "    -fx-background-color: rgba(255,255,255,0.4);\n" +
-                                "    -fx-pref-height: 15px;\n" +
-                                "    -fx-pref-width: 100px;\n" +
-                                "    -fx-font-size: 100%;\n" +
-                                "    -fx-alignment: center;"
-                );
             }
+
+
+
+            //Einstellungen
+            Button settings = new Button("⚙ Einstellungen");
+            settings.setMaxWidth(200);
+            gridPane.add(settings, 4, 0, 1, 1);
+            gridPane.setValignment(settings, VPos.TOP);
+            gridPane.setHalignment(settings, HPos.RIGHT);
+            settings.setOnMouseClicked(s -> {
+
+                if (!settingsOpen) {
+                    einstellung.openSettings(classPrimaryStage);
+                    settingsOpen = true;
+                } else { //chat bereits offen
+                    einstellung.hideSettings();
+                    settingsOpen = false;
+                }
+
+            });
+            settings.setStyle(
+                    "-fx-text-fill: black;\n" +
+                            "    -fx-background-color: rgba(255,255,255,0.4);\n" +
+                            "    -fx-pref-height: 15px;\n" +
+                            "    -fx-pref-width: 100px;\n" +
+                            "    -fx-font-size: 100%;\n" +
+                            "    -fx-alignment: center;"
+            );
 
 
             root.getChildren().add(gridPane);
@@ -838,7 +840,6 @@ public class GuiSpieltisch {
         buildStage(Main.classPrimaryStage);
 
     }
-
 
 
     public void printtoLog(String event) {

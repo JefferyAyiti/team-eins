@@ -1,5 +1,6 @@
 package GUI;
 
+import Main.Main;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -56,11 +57,12 @@ public class GUISettings {
         Label kartesort = new Label("Karte sortieren:");
 
         header.getChildren().add(label);
+        if(Main.playMode > 0)
         schimpf.getChildren().addAll(wort, filterAn, filterAus);
         tipp.getChildren().addAll(hinweis, tippAn, tippAus);
         sortieren.getChildren().addAll(kartesort, sortAn, sortBeginn, sortAus);
 
-        schliessen.setOnMouseClicked(c->{settings.hide();});
+        schliessen.setOnMouseClicked(c-> settings.hide());
 
         steuerung.setPrefWidth(400);
         steuerung.setPrefHeight(190);
