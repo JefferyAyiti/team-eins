@@ -163,7 +163,7 @@ public class Main extends Application {
 
 
         hauptmenuGui.showSettingsMenu(classPrimaryStage);
-        primaryStage.show();
+
 
 
     }

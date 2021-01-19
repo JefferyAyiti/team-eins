@@ -2,6 +2,8 @@ package Main;
 
 import java.io.Serializable;
 
+import static Main.Main.tisch;
+
 public class Karte implements Comparable, Serializable {
 final int value;
 boolean covered;
@@ -32,6 +34,13 @@ boolean covered;
         else if(this.getValue() > comp.getValue())
             return 1;
         else return -1;
+    }
+
+    public boolean isPlayable() {
+        return tisch.getObereKarteAblagestapel().value == this.value //gleicher Wert
+                || tisch.getObereKarteAblagestapel().value == this.value - 1   //Handkarte ist um eins größer als die oberste Ablagekarte
+                || (tisch.getObereKarteAblagestapel().value == 6 && this.value == 10) //Lama auf 6
+                || (tisch.getObereKarteAblagestapel().value == 10 && this.value == 1);
     }
 }
 
