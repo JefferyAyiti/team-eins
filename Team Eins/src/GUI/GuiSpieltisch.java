@@ -269,7 +269,15 @@ public class GuiSpieltisch {
 
                                     Collection<HandKarte> values = newHand.values();
                                     ArrayList<HandKarte> newHandCards = new ArrayList<HandKarte>( values );
-                                    tisch.getSpielerList()[playerId].getCardHand().setHandKarten(newHandCards);
+                                    if(playMode == 0) {
+                                        tisch.getSpielerList()[playerId].getCardHand().setHandKarten(newHandCards);
+                                    } else { //multiplayer
+                                        try {
+                                            server.setCardHand(playerId, newHandCards);
+                                        } catch (RemoteException ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
                                     buildStage(classPrimaryStage);
 
                                 } else {

@@ -39,6 +39,12 @@ public interface server extends Remote {
     int getAnzahlSpieler() throws RemoteException;
 
     /**
+     * Speichert die neue Hand nach Umsortierung per Drag&Drop
+     * @throws RemoteException
+     */
+    void setCardHand(int spielerId, ArrayList<HandKarte> hand) throws RemoteException;
+
+    /**
      * Wenn alle Spieler ready sind, wird eine neue Runde gestartet.
      * @param countUp Flag um ammountReadyClients hochzuzählen. Wird für den Wartebildcshirm verwendet
      * @param uid Id des Clients/Server der ready ist
