@@ -40,7 +40,7 @@ public class GuiSpieltisch {
 
     private ArrayList<Double> x = new ArrayList<>();
     private ArrayList<Double> y = new ArrayList<>();
-    private ArrayList<Double> deg =  new ArrayList<>();
+    private ArrayList<Double> deg = new ArrayList<>();
     private List<String> log = new ArrayList<>();
     boolean chatOpened = false;
     boolean settingsOpen = false;
@@ -61,6 +61,9 @@ public class GuiSpieltisch {
 
     }
 
+    StackPane myCards;
+
+
     /**
      * Erstellt die Fläche auf dem Tisch für einen einzelnen Spieler,
      * d.h. Karten, Chips, Name etc
@@ -78,7 +81,7 @@ public class GuiSpieltisch {
         VBox.setMargin(pane, new Insets(0, 0, 5, 0));
 
 
-        int tablePos = Math.floorMod(playerId-ich, anzSpieler);
+        int tablePos = Math.floorMod(playerId - ich, anzSpieler);
         Label plr = new Label(tisch.getSpielerList()[playerId].getName()); //PlayerID für debug
         if (tablePos > 1 && tablePos < 5) {
             plr.setRotate(180);
@@ -89,7 +92,7 @@ public class GuiSpieltisch {
             plr.setTextFill(Color.YELLOW);
             plr.setFont(Font.font("Verdana", FontWeight.BOLD, 14 * zoomfactor));
         }
-        if(playerId!=ich)
+        if (playerId != ich)
             plr.setTranslateY(-15);
         pane.getChildren().add(plr);
 
@@ -100,26 +103,50 @@ public class GuiSpieltisch {
         }
 
 
+        if(playerId == ich) {
+            System.out.println(autoSort);
+            if (autoSort != null && (autoSort == false && !sortedOnce || autoSort)) {
+                //sortieren
+                ArrayList<HandKarte> sortedHand =
+                        tisch.getSpielerList()[ich].getCardHand().getHandKarte();
+                Collections.sort(sortedHand, new Comparator<>() {
+                    @Override
+                    public int compare(HandKarte handKarte, HandKarte t1) {
+                        return handKarte.getValue()>=t1.getValue() ? 1:-1;
+                    }
+                });
+                sortedOnce = true;
+                tisch.getSpielerList()[ich].getCardHand().setHandKarten(sortedHand);
+            }
+        }
+
         ColorAdjust desaturate = new ColorAdjust();
         desaturate.setSaturation(-1);
 
-
+        double[] cardPos = new double[cardcount];
         StackPane cards = new StackPane();
+        if (playerId == ich) {
+            myCards = cards;
+        }
         pane.getChildren().add(cards);
         cards.setAlignment(Pos.BASELINE_CENTER);
         //cards.setStyle("-fx-background-color:#cccccc;");
 
         //verdeckte Karten
 
+        ImageView[] myCardImages = new ImageView[cardcount];
 
         for (int i = 0; i < cardcount; i++) {
             ImageView imgView = new ImageView(Main.image);
 
             if (playerId == ich) {
+
                 imgView = new ImageView(
                         Main.cardsArray[tisch.getSpielerList()[playerId].getCardHand().getKarte(i).getValue() - 1]);
                 ImageView finalImgView = imgView;
-                if(tisch.getAktivSpieler().getUid() == uniqueID) {
+                myCardImages[i] = imgView;
+                if (tisch.aktiv == ich) {
+
                     imgView.setOnMouseEntered(e -> finalImgView.setStyle(HOVERED_BUTTON_STYLE));
                     ImageView finalImgView1 = imgView;
                     imgView.setOnMouseExited(e -> finalImgView1.setStyle(IDLE_BUTTON_STYLE));
@@ -133,9 +160,8 @@ public class GuiSpieltisch {
             imgView.setFitWidth(playerId == ich ? 80 * zoomfactor : 40 * zoomfactor);
 
 
-            double[] cardPos = new double[cardcount];
             if (playerId != ich) {
-                imgView.setTranslateX(-cardcount / 2 * 10*zoomfactor + 10*zoomfactor * i);
+                imgView.setTranslateX(-cardcount / 2 * 10 * zoomfactor + 10 * zoomfactor * i);
                 imgView.setTranslateY(-10);
                 imgView.setRotate(-cardcount / 2 * 15 + i * 15);
             } else {
@@ -148,33 +174,149 @@ public class GuiSpieltisch {
                         imgView.setTranslateX(cardPos[i]);
                     }
 
-                    if (tisch.getAktivSpieler().getUid() == uniqueID) {
+                    if (tisch.aktiv == ich) {
+                        ImageView myCard = imgView;
+                        myCardImages[i] = imgView;
                         int finalI = i;
-                        imgView.setOnMouseClicked(mouseEvent -> kartelegen(playerId, finalI));
-                        ImageView finalImgView2 = imgView;
 
+                        //Spielbare Karten
+                        if(Main.tooltip) {
+                            if(!tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable()) {
+                                ColorAdjust colorAdjust = new ColorAdjust();
+                                colorAdjust.setBrightness(-0.6);
+                                myCard.setEffect(colorAdjust);
+                            }
+                        }
+
+                        final double[] myCardsX = new double[2];
+                        final double[] myCardsY = new double[2];
+                        final int[] shifted = new int[cardcount];
 
                         imgView.setOnMouseDragged(e -> {
-                            finalImgView2.setTranslateX(e.getSceneX() - pane.getLayoutX() - finalImgView2.getLayoutX() - 40);
-                            finalImgView2.setTranslateY(-dragY + e.getSceneY());
+                            if (e.getSceneX() > ablageX[0] &&
+                                    e.getSceneX() < ablageX[1] &&
+                                    e.getSceneY() > ablageY[0] &&
+                                    e.getSceneY() < ablageY[1]) {
+                                if (tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable())
+                                    ablagestapel.setStyle("-fx-background-insets: 20; " +
+                                            "-fx-background-radius: 20; " +
+                                            "-fx-cursor:hand;" +
+                                            "-fx-effect: dropshadow(three-pass-box, green, 20, 0, 0, 0);");
+                                else
+                                    ablagestapel.setStyle("-fx-background-insets: 20; " +
+                                            "-fx-background-radius: 20; " +
+                                            "-fx-cursor:hand;" +
+                                            "-fx-effect: dropshadow(three-pass-box, red, 20, 0, 0, 0);");
+                            } else {
+                                ablagestapel.setStyle(IDLE_BUTTON_STYLE);
+                            }
+
+
+                            //hovern über dem kartenstapel
+                            if (e.getSceneX() > myCardsX[0] - 40 &&
+                                    e.getSceneX() < myCardsX[1] + 40 &&
+                                    e.getSceneY() > myCardsY[0] &&
+                                    e.getSceneY() < myCardsY[1]) {
+                                for (int c = 0; c < tisch.getSpielerList()[playerId].getCardCount(); c++) {
+                                    //für jede karte prüfen ob beim hovern links oder rechts von der gezogenen karte
+                                    if (!myCardImages[c].equals(myCard)) {
+                                        if (myCard.getTranslateX()
+                                                > myCardImages[c].getTranslateX()) {
+                                            if (shifted[c] >= 0 && cardPos[c] > cardPos[finalI]) {
+                                                myCardImages[c].setTranslateX(cardPos[c] - 60);
+                                                shifted[c] = -1;
+                                            }
+                                        } else if (!myCardImages[c].equals(myCard)) {
+                                            if (myCard.getTranslateX()
+                                                    < myCardImages[c].getTranslateX()) {
+                                                if (shifted[c] <= 0 && cardPos[c] < cardPos[finalI]) {
+                                                    myCardImages[c].setTranslateX(cardPos[c] + 60
+                                                    );
+                                                    shifted[c] = 1;
+                                                    break;
+
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+
+                            myCard.setTranslateX(e.getSceneX() - pane.getLayoutX() - myCard.getLayoutX() - 40);
+                            myCard.setTranslateY(e.getSceneY() - pane.getLayoutY() - 60);
+
                         });
+
 
                         imgView.setOnMousePressed(event -> {
 
+                            Bounds nodeBounds = myCards.localToScene(myCards.getBoundsInLocal());
+                            myCardsX[0] = nodeBounds.getMinX();
+                            myCardsX[1] = nodeBounds.getMaxX();
+
+                            myCardsY[0] = nodeBounds.getMinY();
+                            myCardsY[1] = nodeBounds.getMaxY();
+
                             timerRunning = false;
                             cardId = new int[]{playerId, finalI};
-                            dragX = finalImgView2.getTranslateX();
-                            dragY = finalImgView2.getTranslateY();
 
                         });
 
+                        imgView.setOnMouseClicked(e -> {
+                            if (e.isStillSincePress()) {
+                                kartelegen(playerId, finalI);
+                            }
+                        });
+
+
+                        int finalCardcount = cardcount;
                         imgView.setOnMouseReleased(e -> {
-                            finalImgView2.setTranslateX(cardPos[finalI]);
-                            finalImgView2.setTranslateY(0);
+
+                            if (e.getSceneX() > ablageX[0] &&
+                                    e.getSceneX() < ablageX[1] &&
+                                    e.getSceneY() > ablageY[0] &&
+                                    e.getSceneY() < ablageY[1] &&
+                                    tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable()) {
+
+                                kartelegen(cardId[0], cardId[1]);
+                            } else //karten sortieren
+                                if (e.getSceneX() > myCardsX[0] - 40 &&
+                                        e.getSceneX() < myCardsX[1] + 40 &&
+                                        e.getSceneY() > myCardsY[0] &&
+                                        e.getSceneY() < myCardsY[1]) {
+                                    TreeMap<Double, HandKarte> newHand = new TreeMap<>();
+                                    for (int c = 0; c < finalCardcount; c++) {
+                                        newHand.put(myCardImages[c].getTranslateX(),
+                                                tisch.getSpielerList()[playerId].getCardHand().getKarte(c));
+                                    }
+
+
+                                    Collection<HandKarte> values = newHand.values();
+                                    ArrayList<HandKarte> newHandCards = new ArrayList<HandKarte>( values );
+                                    if(playMode == 0) {
+                                        tisch.getSpielerList()[playerId].getCardHand().setHandKarten(newHandCards);
+                                    } else { //multiplayer
+                                        try {
+                                            server.setCardHand(playerId, newHandCards);
+                                        } catch (RemoteException ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+                                    buildStage(classPrimaryStage);
+
+                                } else {
+                                    myCard.setTranslateX(cardPos[finalI]);
+                                    myCard.setTranslateY(0);
+                                    cardId = null;
+                                    myCard.setMouseTransparent(false);
+                                }
                             timerRunning = true;
-                            cardId = null;
                         });
                     }
+
+                    //imgView.setTranslateZ(imgView.getTranslateZ()-1);
                 }
             }
             if (!tisch.getSpielerList()[playerId].inGame())
@@ -201,16 +343,16 @@ public class GuiSpieltisch {
 
         if (Main.ich == playerId) {
             chips.setOnMouseClicked(mouseEvent -> {
-                if(Main.playMode == 2){//Multiplaymodus
+                if (Main.playMode == 2) {//Multiplaymodus
                     try {
                         server.chipsTauschen(playerId);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
+                } else {//lokaler Spielmodus
+                    Main.spiellogik.chipsTauschen(playerId);
                 }
-                else{//lokaler Spielmodus
-                  Main.spiellogik.chipsTauschen(playerId);}
-                  buildStage(Main.classPrimaryStage);
+                buildStage(Main.classPrimaryStage);
             });
 
 
@@ -236,26 +378,26 @@ public class GuiSpieltisch {
         //chips.setY(102);
 
         //Mute
-        if(playerId != ich && playMode != 0) {
+        if (playerId != ich && playMode != 0) {
             Image muteIcon = new Image("GUI/images/mute.png");
             Image unMuteIcon = new Image("GUI/images/unmute.png");
             ImageView mute = new ImageView(
-                    mutelist.contains(tisch.getSpielerList()[playerId].getName())?
-                            unMuteIcon:muteIcon
+                    mutelist.contains(tisch.getSpielerList()[playerId].getName()) ?
+                            unMuteIcon : muteIcon
             );
             mute.setTranslateX(10);
             mute.setPreserveRatio(true);
-            mute.setFitWidth(20*zoomfactor);
+            mute.setFitWidth(20 * zoomfactor);
             mute.setOnMouseEntered(e -> mute.setStyle(HOVERED_BUTTON_STYLE));
             mute.setOnMouseExited(e -> mute.setStyle(IDLE_BUTTON_STYLE));
 
-            if(tablePos == 5)
+            if (tablePos == 5)
                 mute.setRotate(90);
-            else if(tablePos == 1)
+            else if (tablePos == 1)
                 mute.setRotate(-90);
 
             mute.setOnMouseClicked(mouseEvent -> {
-                if(mutelist.contains(tisch.getSpielerList()[playerId].getName())) {
+                if (mutelist.contains(tisch.getSpielerList()[playerId].getName())) {
                     //bereits gemutet -> unmute
                     mutelist.remove(tisch.getSpielerList()[playerId].getName());
                     mute.setImage(muteIcon);
@@ -268,7 +410,7 @@ public class GuiSpieltisch {
             chips.add(mute, 2, 0, 1, 2);
 
         }
-        if(tablePos > 1 && tablePos < 5) {
+        if (tablePos > 1 && tablePos < 5) {
             chips.setRotate(180);
         }
 
@@ -289,15 +431,15 @@ public class GuiSpieltisch {
             bottom.getChildren().add(exit);
 
             exit.setOnMouseClicked(mouseEvent -> {
-                if(Main.playMode == 2){//Multiplaymodus
+                if (Main.playMode == 2) {//Multiplaymodus
                     try {
                         server.aussteigen(tisch.getSpielerList()[playerId]);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
+                } else {//lokaler Spielmodus
+                    Main.spiellogik.aussteigen(tisch.getSpielerList()[playerId]);
                 }
-                else{//lokaler Spielmodus
-                    Main.spiellogik.aussteigen(tisch.getSpielerList()[playerId]);}
                 buildStage(Main.classPrimaryStage);
             });
 
@@ -306,7 +448,7 @@ public class GuiSpieltisch {
         if (playerId == Main.ich) {
             ImageView beenden = new ImageView(Main.loader.getImg("GUI/images/exit.svg", zoomfactor * 0.25));
             beenden.setTranslateY(-5);
-            beenden.setTranslateX(125* zoomfactor);
+            beenden.setTranslateX(125 * zoomfactor);
             bottom.setViewOrder(0.0);
 
             beenden.setOnMouseEntered(e -> beenden.setStyle(HOVERED_BUTTON_STYLE));
@@ -314,10 +456,12 @@ public class GuiSpieltisch {
             bottom.getChildren().add(beenden);
 
             beenden.setOnMouseClicked(mouseEvent -> {
-                if (Main.playMode <= 1){
+                if (Main.playMode <= 1) {
                     Main.gameRunning = false;
                     Main.bots.cancel();
                     Main.joined = false;
+                    Main.myTurnUpdate = true;
+                    spiellogik = null;
                     if (Main.playMode == 1) {
 
                         try {
@@ -332,7 +476,7 @@ public class GuiSpieltisch {
                     }
                     Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
 
-                }else if(Main.playMode == 2){//Multiplaymodus
+                } else if (Main.playMode == 2) {//Multiplaymodus
                     joined = false;
                     try {
                         Main.server.replaceSpielerDurchBot(uniqueID);
@@ -344,34 +488,34 @@ public class GuiSpieltisch {
 
                     Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
 
-                }else{//lokaler Spielmodus
+                } else {//lokaler Spielmodus
                     Main.gameRunning = false;
                     Main.bots.cancel();
-                    Main.hauptmenuGui.showSettingsMenu(classPrimaryStage);}
+                    Main.hauptmenuGui.showSettingsMenu(classPrimaryStage);
+                }
 
             });
 
         }
 
 
+        pane.getChildren().add(bottom);
 
-            pane.getChildren().add(bottom);
-
-        switch (Math.floorMod(playerId-ich,anzSpieler)) {
+        switch (Math.floorMod(playerId - ich, anzSpieler)) {
             case 1:
             case 5:
                 pane.setTranslateY(+20 * zoomfactor);
                 break;
             case 4:
                 pane.setTranslateX(30 * zoomfactor);
-                pane.setTranslateY( + 10 * zoomfactor);
+                pane.setTranslateY(+10 * zoomfactor);
                 break;
             case 3:
                 pane.setTranslateY(10 * zoomfactor);
                 break;
             case 2:
                 pane.setTranslateX(-30 * zoomfactor);
-                pane.setTranslateY( + 10 * zoomfactor);
+                pane.setTranslateY(+10 * zoomfactor);
                 break;
         }
         return pane;
@@ -380,17 +524,24 @@ public class GuiSpieltisch {
 
     StackPane root = new StackPane();
     Scene scene = new Scene(root, Main.sceneWidth, Main.sceneHeight, true, SceneAntialiasing.BALANCED);
+    Pane ablagestapel;
+
+    double[] ablageX, ablageY;
 
     /**
      * Bildet die Stage (neu), sodass Änderungen im Spiel dargestellt werden
      *
      * @param primaryStage
      */
-       public void buildStage(Stage primaryStage) {
-           root.setOnMousePressed(event -> {
-               dragX = event.getX();
-           dragY = event.getY();
-               System.out.println("sceneX: "+dragX);});
+    public void buildStage(Stage primaryStage) {
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        root.setOnMousePressed(event -> {
+            Bounds nodeBounds = ablagestapel.localToScene(ablagestapel.getBoundsInLocal());
+            ablageX = new double[]{nodeBounds.getMinX(), nodeBounds.getMaxX()};
+            ablageY = new double[]{nodeBounds.getMinY(), nodeBounds.getMaxY()};
+
+        });
         try {
 
             Main.classPrimaryStage = primaryStage;
@@ -405,27 +556,25 @@ public class GuiSpieltisch {
                 Main.sceneHeight = Main.classPrimaryStage.getScene().getHeight();
 
 
-
-            if(Main.inMenu) {
+            if (Main.inMenu) {
                 Main.hauptmenuGui.showSettingsMenu(classPrimaryStage);
                 return;
             } else {
-            if (Main.server == null && Main.spiellogik.getRundeBeendet()) {
-                Main.scoreboardGui.showRangliste(Main.spiellogik.ranglisteErstellen());
-                return;
-            } else if(Main.server != null && Main.server.getRundeBeendet()) {
+                if (Main.server == null && Main.spiellogik.getRundeBeendet()) {
+                    Main.scoreboardGui.showRangliste(Main.spiellogik.ranglisteErstellen());
+                    return;
+                } else if (Main.server != null && Main.server.getRundeBeendet()) {
                     Main.scoreboardGui.showRangliste(server.getRangliste());
                     return;
-            }else if(Main.server != null && !Main.server.getRundeBeendet() && scoreboardGui.getIsReady()){
-                scoreboardGui.setIsReady(false);
-            }
+                } else if (Main.server != null && !Main.server.getRundeBeendet() && scoreboardGui.getIsReady()) {
+                    scoreboardGui.setIsReady(false);
+                }
 
 
             }
             Main.sceneWidth = scene.getWidth();
             Main.sceneHeight = scene.getHeight();
             Main.lastmove = System.currentTimeMillis();
-
 
 
             BackgroundImage myBI = new BackgroundImage(Main.table1,
@@ -435,7 +584,7 @@ public class GuiSpieltisch {
 
             GridPane table = new GridPane();
             //Nachziehstapel
-            Image imageback = Main.loader.getImg("GUI/images/SVG/Back.svg", zoomfactor*2);
+            Image imageback = Main.loader.getImg("GUI/images/SVG/Back.svg", zoomfactor * 2);
             Pane nachziehstapel = new Pane();
             for (int i = 0; i < Main.tisch.getNachziehStapelSize(); i++) {
                 ImageView imgView = new ImageView(imageback);
@@ -444,15 +593,14 @@ public class GuiSpieltisch {
 
                 if (i == Main.tisch.getNachziehStapelSize() - 1) {
                     imgView.setOnMouseClicked(mouseEvent -> {
-                        if(Main.playMode == 2){
+                        if (Main.playMode == 2) {
                             try {
                                 server.karteNachziehen(tisch.getSpielerList()[ich]);
                             } catch (RemoteException e) {
                                 e.printStackTrace();
                             }
                             System.out.println("\t Ziehe Karte");
-                        } else
-                        if (Main.spiellogik.karteNachziehen(tisch.getSpielerList()[ich]))
+                        } else if (Main.spiellogik.karteNachziehen(tisch.getSpielerList()[ich]))
                             System.out.println("\t Ziehe Karte");
 
                         buildStage(Main.classPrimaryStage);
@@ -468,27 +616,14 @@ public class GuiSpieltisch {
             table.add(nachziehstapel, 0, 0, 1, 1);
 
             //Ablagestapel
-            Pane ablagestapel = new Pane();
-            ablagestapel.setOnDragEntered(event -> {
+            ablagestapel = new Pane();
 
-                if (cardId != null)
-                    ablagestapel.setStyle(HOVERED_BUTTON_STYLE);
-            });
-            ablagestapel.setOnDragExited(event -> {
-                    ablagestapel.setStyle(IDLE_BUTTON_STYLE);
-            });
-            ablagestapel.setOnMouseDragReleased(event -> {
-                if(cardId != null)
-                timerRunning = true;
-                kartelegen(cardId[0], cardId[1]);
-                cardId = null;
-            });
             for (int i = 0; i < Main.tisch.getAblageStapelSize(); i++) {
-                ImageView imgView = new ImageView(Main.cardsArray[Main.tisch.ablageStapel.stapel.get(i).getValue()-1]);
-                if(i >= x.size()) {
+                ImageView imgView = new ImageView(Main.cardsArray[Main.tisch.ablageStapel.stapel.get(i).getValue() - 1]);
+                if (i >= x.size()) {
                     y.add(i, Math.random() * 3);
-                    x.add(i, 15-30*Math.random());
-                    deg.add(i, 15-30*Math.random());
+                    x.add(i, 15 - 30 * Math.random());
+                    deg.add(i, 15 - 30 * Math.random());
                 }
                 imgView.setY(y.get(i));
                 imgView.setX(x.get(i));
@@ -577,30 +712,30 @@ public class GuiSpieltisch {
 
             gridPane.add(makepanel(ich), 1, 4, 3, 1);
 
-            Node player1 = makepanel((1+ich)%anzSpieler);
+            Node player1 = makepanel((1 + ich) % anzSpieler);
             player1.setRotate(90);
             gridPane.add(player1, 0, 2, 1, 1);
 
             if (Main.anzSpieler > 2) {
-                Node player2 = makepanel((2+ich)%anzSpieler);
+                Node player2 = makepanel((2 + ich) % anzSpieler);
                 gridPane.add(player2, 0, 0, 2, 1);
                 player2.setRotate(155);
             }
 
             if (Main.anzSpieler > 3) {
-                Node player3 = makepanel((3+ich)%anzSpieler);
+                Node player3 = makepanel((3 + ich) % anzSpieler);
                 player3.setRotate(180);
                 gridPane.add(player3, 2, 0, 1, 1);
             }
 
             if (Main.anzSpieler > 4) {
-                Node player4 = makepanel((4+ich)%anzSpieler);
+                Node player4 = makepanel((4 + ich) % anzSpieler);
                 player4.setRotate(205);
                 gridPane.add(player4, 3, 0, 2, 1);
             }
 
             if (Main.anzSpieler > 5) {
-                Node player5 = makepanel((5+ich)%anzSpieler);
+                Node player5 = makepanel((5 + ich) % anzSpieler);
                 player5.setRotate(-90);
                 gridPane.add(player5, 4, 2, 2, 1);
             }
@@ -609,19 +744,18 @@ public class GuiSpieltisch {
             //Scoreboard
             GridPane score = new GridPane();
             score.setTranslateY(10);
-            score.setTranslateX(-5*zoomfactor);
-            score.setMaxWidth(90*zoomfactor);
+            score.setTranslateX(-5 * zoomfactor);
+            score.setMaxWidth(90 * zoomfactor);
             VBox names = new VBox();
             VBox sc = new VBox();
             names.setAlignment(Pos.TOP_LEFT);
             sc.setAlignment(Pos.TOP_RIGHT);
             Map<Spieler, Integer> rangliste;
-            if(Main.server == null) {
-                rangliste =  Main.spiellogik.ranglisteErstellen();
+            if (Main.server == null) {
+                rangliste = Main.spiellogik.ranglisteErstellen();
             } else rangliste = server.getRangliste();
 
-           for (Map.Entry<Spieler, Integer> entry : rangliste.entrySet()) {
-                //System.out.println(entry.getKey().getName() + ":" + entry.getValue());
+            for (Map.Entry<Spieler, Integer> entry : rangliste.entrySet()) {
                 Label name = new Label(entry.getKey().getName());
                 name.setTextFill(Color.WHITE);
                 name.setFont(new Font(10 * zoomfactor));
@@ -638,10 +772,10 @@ public class GuiSpieltisch {
             gridPane.add(score, 4, 4, 1, 1);
 
 
-            if(playMode > 0) {
-                Button chatButton = new Button(chatOpened? "Chat <<": "Chat >>");
-                chatButton.setTranslateX(30);
-                chatButton.setTranslateY(40);
+            if (playMode > 0) {
+                Button chatButton = new Button(chatOpened ? "Chat <<" : "Chat >>");
+                chatButton.setTranslateX(30 * zoomfactor);
+                chatButton.setTranslateY(40 * zoomfactor);
                 chatButton.setOnMouseClicked(e -> {
 
                             if (!chatOpened) {
@@ -655,16 +789,19 @@ public class GuiSpieltisch {
                             }
                         }
                 );
+                chatButton.setPrefHeight(15*zoomfactor);
+                chatButton.setPrefWidth(80* zoomfactor);
                 chatButton.setStyle(
                         "-fx-text-fill: black;\n" +
                                 "    -fx-background-color: rgba(255,255,255,0.4);\n" +
-                                "    -fx-pref-height: 15px;\n" +
-                                "    -fx-pref-width: 80px;\n" +
                                 "    -fx-font-size: 100%;\n" +
                                 "    -fx-alignment: center;"
                 );
 
+
                 gridPane.add(chatButton, 0, 4, 1, 1);
+            }
+
 
                 //Einstellungen
                 ImageView settings = new ImageView(new Image("GUI/images/gear_icon.png"));
@@ -676,13 +813,13 @@ public class GuiSpieltisch {
                 gridPane.setHalignment(settings, HPos.RIGHT);
                 settings.setOnMouseClicked(s->{
 
-                    if (!settingsOpen) {
-                        einstellung.openSettings(classPrimaryStage);
-                        chatOpened = true;
-                    } else { //chat bereits offen
-                        einstellung.hideSettings();
-                        chatOpened = false;
-                    }
+                if (!settingsOpen) {
+                    einstellung.openSettings(classPrimaryStage);
+                    settingsOpen = true;
+                } else { //chat bereits offen
+                    einstellung.hideSettings();
+                    settingsOpen = false;
+                }
 
                 });
                 settings.setOnMouseEntered(e -> settings.setStyle(HOVERED_BUTTON_STYLE));
@@ -692,7 +829,7 @@ public class GuiSpieltisch {
 
             root.getChildren().add(gridPane);
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
-            primaryStage.setScene(scene);
+
             scene.getStylesheets().add("GUI/Chat.css");
             //scene.getStylesheets().add("GUI/einstellung.css");
 
@@ -705,15 +842,14 @@ public class GuiSpieltisch {
 
     /**
      * @param playerId Index der Spielerliste am Tisch
-     * @param karte
-     * Wird ausgeführt wenn ein Spieler auf einer seiner Karten klickt bzw
-     * diese auf dem Ablagestapel droppt.
+     * @param karte    Wird ausgeführt wenn ein Spieler auf einer seiner Karten klickt bzw
+     *                 diese auf dem Ablagestapel droppt.
      */
 
     void kartelegen(int playerId, int karte) {
         //Multiplayermodus
 
-        if(Main.playMode == 2){
+        if (Main.playMode == 2) {
             try {
                 server.karteLegen(server.updateTisch().getSpielerList()[playerId],
                         server.updateTisch().getSpielerList()[playerId].getCardHand().getKarte(karte));
@@ -724,16 +860,16 @@ public class GuiSpieltisch {
                 e.printStackTrace();
             }
 
-        }
-        else{//lokaler Spielmodus
+        } else {//lokaler Spielmodus
             Main.spiellogik.karteLegen(tisch.getSpielerList()[playerId],
-                    tisch.getSpielerList()[playerId].getCardHand().getKarte(karte));}
+                    tisch.getSpielerList()[playerId].getCardHand().getKarte(karte));
+        }
 
 
-        if(playMode == 2){
+        if (playMode == 2) {
             try {
-                if(server.updateTisch().getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()){
-                    if(!tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()){
+                if (server.updateTisch().getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()) {
+                    if (!tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()) {
                         tisch.getSpielerList()[playerId].getCardHand().removeKarte(tisch.getSpielerList()[playerId].getCardHand().getKarte(0));
                     }
                 }
@@ -741,7 +877,7 @@ public class GuiSpieltisch {
                 e.printStackTrace();
             }
         }
-        if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()) {
+        if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty() && (tisch.getSpielerList()[playerId].getBlackChips()>0 || tisch.getSpielerList()[playerId].getWhiteChips()>0 )) {
             Chip tausch;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("     ");
@@ -763,7 +899,7 @@ public class GuiSpieltisch {
             } else if (tisch.getSpielerList()[playerId].getBlackChips() >= 1) {
                 alert.getButtonTypes().setAll(buttonTypeBlack, buttonTypeCancel);
             } else {
-                alert.setHeaderText("Du hast keine Chips zum abgeben");
+                //alert.setHeaderText("Du hast keine Chips zum abgeben");
                 alert.getButtonTypes().setAll(buttonTypeCancel);
             }
 
@@ -771,27 +907,25 @@ public class GuiSpieltisch {
             if (result.get() == buttonTypeWhite) {
                 // ... user chose "weiß"
                 tausch = new WhiteChip();
-                if(Main.playMode == 2){ //Multiplayermodus
+                if (Main.playMode == 2) { //Multiplayermodus
                     try {
-                        server.chipAbgeben(tisch.getSpielerList()[playerId],tausch);
+                        server.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                }
-                else{//lokaler Spielmodus
+                } else {//lokaler Spielmodus
                     Main.spiellogik.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
                 }
             } else if (result.get() == buttonTypeBlack) {
                 // ... user chose "schwarz"
                 tausch = new BlackChip();
-                if(Main.playMode == 2){  //Multiplayermodus
+                if (Main.playMode == 2) {  //Multiplayermodus
                     try {
-                        server.chipAbgeben(tisch.getSpielerList()[playerId],tausch);
+                        server.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                }
-                else { //lokaler Spielmodus
+                } else { //lokaler Spielmodus
                     Main.spiellogik.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
                 }
 
@@ -805,8 +939,9 @@ public class GuiSpieltisch {
 
     }
 
-    public void printtoLog(String event){
-           log.add(event);
+
+    public void printtoLog(String event) {
+        log.add(event);
     }
 
 }

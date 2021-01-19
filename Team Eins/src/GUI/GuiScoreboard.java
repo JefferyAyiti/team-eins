@@ -20,7 +20,7 @@ public class GuiScoreboard {
 
     public static boolean isReady = false;
 
-    static Scene showRangliste(Map<Spieler, Integer> ranking) throws InterruptedException, RemoteException {
+    static Scene showRangliste(Map<Spieler, Integer> ranking) throws  RemoteException {
         //System.out.println("gibt Rangliste aus");
         int p = 1;
 
@@ -37,7 +37,7 @@ public class GuiScoreboard {
             try {
                 rangl = Main.server.getRangliste();
             } catch (RemoteException e) {
-
+                e.printStackTrace();
             }
         } else
             rangl = Main.spiellogik.ranglisteErstellen();
@@ -115,6 +115,7 @@ public class GuiScoreboard {
                         }
                     } else
                         Main.spiellogik.initNeueRunde();
+                    sortedOnce = false;
                     Main.spieltischGui.buildStage(Main.classPrimaryStage);
                 });
 
@@ -151,6 +152,8 @@ public class GuiScoreboard {
                     }else{
                         Main.inMenu = true;
                         Main.gameRunning = false;
+                        Main.myTurnUpdate = true;
+                        spiellogik = null;
                         try {
                             Main.bots.cancel();
                         }catch (NullPointerException  l){}

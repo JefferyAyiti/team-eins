@@ -2,6 +2,7 @@ package Main;
 
 import GUI.*;
 import GUI.SVG.TestLoadImageUsingClass;
+import RMI.server;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -41,6 +42,9 @@ public class Main extends Application {
     public static int spielArt = 0;
     public static int spielArtLimit = 4;
     public static List<String> mutelist = new LinkedList<>();
+    public static boolean tooltip = false;
+    public static boolean sortedOnce = true;
+    public static Boolean autoSort = null; //null = aus, false = einmalig, true = immer
 
 
 
@@ -163,15 +167,10 @@ public class Main extends Application {
 
 
         hauptmenuGui.showSettingsMenu(classPrimaryStage);
-        primaryStage.show();
+
 
 
     }
-
-
-
-
-
 
     static class MyTask1 extends TimerTask {
         @Override
@@ -207,7 +206,6 @@ public class Main extends Application {
                         }
                     }
                     //spieltischGui.printtoLog("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
-                    System.out.println("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
                     ((Bot) tisch.getAktivSpieler()).play();
                     Platform.runLater(() -> {
                         spieltischGui.buildStage(classPrimaryStage);
@@ -216,27 +214,21 @@ public class Main extends Application {
 
                 } else if (playMode == 1 && ((tisch.aktiv != ich || tisch.aktiv == ich &&
                         myTurnUpdate) || round < tisch.getDurchgangNr())) {
-
                     if (round < tisch.getDurchgangNr())
                         round = tisch.getDurchgangNr();
-                    try {
-                        if (aenderung < server.getAenderung(Main.uniqueID)) {
-
-                            Platform.runLater(() -> {
-                                try {
-                                    aenderung = Main.server.getAenderung(Main.uniqueID);
-                                } catch (RemoteException e) {
-                                }
-                                if (tisch.aktiv == ich) {
-                                    myTurnUpdate = false;
-                                } else
-                                    myTurnUpdate = true;
-                                spieltischGui.buildStage(classPrimaryStage);
-                            });
+                    //if (aenderung <= server.getAenderung(Main.uniqueID)) {
+                    Platform.runLater(() -> {
+                        try {
+                            aenderung = Main.server.getAenderung(Main.uniqueID);
+                        } catch (RemoteException e) {
                         }
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
+                        if (tisch.aktiv == ich) {
+                            myTurnUpdate = false;
+                        } else
+                            myTurnUpdate = true;
+                        spieltischGui.buildStage(classPrimaryStage);
+                    });
+                    //}
                 }
             }
         }
@@ -318,6 +310,13 @@ public class Main extends Application {
      */
     public Hand[] getHaende(){
         return Main.haende;
+    }
+
+    /** setter-Methode für server
+     * @param server
+     */
+    public void setServer(RMI.server server) {
+        Main.server = server;
     }
 }
 

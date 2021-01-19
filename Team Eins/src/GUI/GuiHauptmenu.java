@@ -176,17 +176,36 @@ public class GuiHauptmenu {
                 "Runden-Limit",
                 "Unendlich"
         ));
-        spielart.getSelectionModel().select(Main.spielArt);
+
+
+        spielart.getSelectionModel().select(spielArt);
+
+
         spielartLimit = new TextField(Integer.toString(spielArtLimit));
+
+
         if (Main.playMode < 2)
             center.addRow(4, new Label("Spielart: "), spielart);
 
+        if(spielart.getSelectionModel().getSelectedIndex() == 1){
+            center.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 4);
+            center.addRow(4, new Label("Spielart: "), spielart);
+            center.add( new Label("Rundenanzahl: "),2,4);
+            center.add( spielartLimit,3,4);
+
+        }
+
         spielart.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
                     if(spielart.getSelectionModel().getSelectedIndex() == 1) {
-                        if (Main.playMode < 2)
-                            center.addRow(4, new Label("Rundenanzahl: "), spielartLimit);
-                    } else
-                        center.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 5);
+                        if (Main.playMode < 2) {
+                            center.add( new Label("Rundenanzahl: "),2,4);
+                            center.add( spielartLimit,3,4);
+                        }
+
+                    } else {
+                        center.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 2);
+                        center.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 3);
+                    }
                 }
         );
 
@@ -503,6 +522,7 @@ public class GuiHauptmenu {
         update.cancel();
         getTisch = null;
         assigned = false;
+        Main.myTurnUpdate = true;
         try {
             server.leaveServer(uniqueID);
         } catch (RemoteException e) {
@@ -510,7 +530,7 @@ public class GuiHauptmenu {
             System.err.println(e.toString());
         }
         server = null;
-        status.setText("Verbindung zu Server verloren");
+        Platform.runLater(() ->status.setText("Verbindung zu Server verloren"));
     }
 
     /**

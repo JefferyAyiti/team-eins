@@ -1,5 +1,6 @@
 package GUI;
 
+import Main.Main;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,18 +37,36 @@ public class GUISettings {
 
 
         RadioButton tippAn = new RadioButton("An");
+        tippAn.setOnMouseClicked(e -> {Main.tooltip = true;
+            Main.spieltischGui.buildStage(Main.classPrimaryStage);
+        });
         tippAn.setToggleGroup(hinweis);
-        tippAn.setSelected(true);
         RadioButton tippAus = new RadioButton("Aus");
         tippAus.setToggleGroup(hinweis);
+        tippAus.setSelected(true);
+        tippAus.setOnMouseClicked(e -> {Main.tooltip = false;
+        Main.spieltischGui.buildStage(Main.classPrimaryStage);
+        });
 
 
         RadioButton sortAn = new RadioButton("Immer");
         sortAn.setToggleGroup(sort);
+        sortAn.setOnMouseClicked(e -> {Main.autoSort = true;
+            Main.spieltischGui.buildStage(Main.classPrimaryStage);
+        });
+
+
         RadioButton sortBeginn = new RadioButton("zu Beginn");
         sortBeginn.setToggleGroup(sort);
+        sortBeginn.setOnMouseClicked(e -> {Main.autoSort = false;
+        });
+
+
         RadioButton sortAus = new RadioButton("Aus");
         sortAus.setToggleGroup(sort);
+        sortAus.setOnMouseClicked(e -> {Main.autoSort = null;
+            Main.spieltischGui.buildStage(Main.classPrimaryStage);
+        });
         sortAus.setSelected(true);
 
         Label label = new Label("Einstellungen");
@@ -56,11 +75,12 @@ public class GUISettings {
         Label kartesort = new Label("Karte sortieren:");
 
         header.getChildren().add(label);
+        if(Main.playMode > 0)
         schimpf.getChildren().addAll(wort, filterAn, filterAus);
         tipp.getChildren().addAll(hinweis, tippAn, tippAus);
         sortieren.getChildren().addAll(kartesort, sortAn, sortBeginn, sortAus);
 
-        schliessen.setOnMouseClicked(c->{settings.hide();});
+        schliessen.setOnMouseClicked(c-> settings.hide());
 
         steuerung.setPrefWidth(400);
         steuerung.setPrefHeight(190);

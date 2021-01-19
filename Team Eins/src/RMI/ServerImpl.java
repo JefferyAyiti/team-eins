@@ -120,6 +120,12 @@ public class ServerImpl implements server {
     }
 
     @Override
+    public void setCardHand(int spielerId, ArrayList<HandKarte> hand) throws RemoteException {
+        tisch.getSpielerList()[spielerId].getCardHand().setHandKarten(hand);
+        aenderung++;
+    }
+
+    @Override
     public void neueRunde(boolean countUp,String uid) throws RemoteException {
         if(countUp){
             ammountReadyClients++;
