@@ -61,6 +61,9 @@ public class GuiSpieltisch {
 
     }
 
+    StackPane myCards;
+
+
     /**
      * Erstellt die Fläche auf dem Tisch für einen einzelnen Spieler,
      * d.h. Karten, Chips, Name etc
@@ -103,23 +106,30 @@ public class GuiSpieltisch {
         ColorAdjust desaturate = new ColorAdjust();
         desaturate.setSaturation(-1);
 
-
+        double[] cardPos = new double[cardcount];
         StackPane cards = new StackPane();
+        if (playerId == ich) {
+            myCards = cards;
+        }
         pane.getChildren().add(cards);
         cards.setAlignment(Pos.BASELINE_CENTER);
         //cards.setStyle("-fx-background-color:#cccccc;");
 
         //verdeckte Karten
 
+        ImageView[] myCardImages = new ImageView[cardcount];
 
         for (int i = 0; i < cardcount; i++) {
             ImageView imgView = new ImageView(Main.image);
 
             if (playerId == ich) {
+
                 imgView = new ImageView(
                         Main.cardsArray[tisch.getSpielerList()[playerId].getCardHand().getKarte(i).getValue() - 1]);
                 ImageView finalImgView = imgView;
+                myCardImages[i] = imgView;
                 if (tisch.aktiv == ich) {
+
                     imgView.setOnMouseEntered(e -> finalImgView.setStyle(HOVERED_BUTTON_STYLE));
                     ImageView finalImgView1 = imgView;
                     imgView.setOnMouseExited(e -> finalImgView1.setStyle(IDLE_BUTTON_STYLE));
@@ -133,7 +143,6 @@ public class GuiSpieltisch {
             imgView.setFitWidth(playerId == ich ? 80 * zoomfactor : 40 * zoomfactor);
 
 
-            double[] cardPos = new double[cardcount];
             if (playerId != ich) {
                 imgView.setTranslateX(-cardcount / 2 * 10 * zoomfactor + 10 * zoomfactor * i);
                 imgView.setTranslateY(-10);
@@ -150,8 +159,12 @@ public class GuiSpieltisch {
 
                     if (tisch.aktiv == ich) {
                         ImageView myCard = imgView;
+                        myCardImages[i] = imgView;
                         int finalI = i;
 
+                        final double[] myCardsX = new double[2];
+                        final double[] myCardsY = new double[2];
+                        final int[] shifted = new int[cardcount];
 
                         imgView.setOnMouseDragged(e -> {
                             if (e.getSceneX() > ablageX[0] &&
@@ -171,6 +184,40 @@ public class GuiSpieltisch {
                             } else {
                                 ablagestapel.setStyle(IDLE_BUTTON_STYLE);
                             }
+
+
+                            //hovern über dem kartenstapel
+                            if (e.getSceneX() > myCardsX[0] - 40 &&
+                                    e.getSceneX() < myCardsX[1] + 40 &&
+                                    e.getSceneY() > myCardsY[0] &&
+                                    e.getSceneY() < myCardsY[1]) {
+                                for (int c = 0; c < tisch.getSpielerList()[playerId].getCardCount(); c++) {
+                                    //für jede karte prüfen ob beim hovern links oder rechts von der gezogenen karte
+                                    if (!myCardImages[c].equals(myCard)) {
+                                        if (myCard.getTranslateX()
+                                                > myCardImages[c].getTranslateX()) {
+                                            if (shifted[c] >= 0 && cardPos[c] > cardPos[finalI]) {
+                                                myCardImages[c].setTranslateX(cardPos[c] - 60);
+                                                shifted[c] = -1;
+                                            }
+                                        } else if (!myCardImages[c].equals(myCard)) {
+                                            if (myCard.getTranslateX()
+                                                    < myCardImages[c].getTranslateX()) {
+                                                if (shifted[c] <= 0 && cardPos[c] < cardPos[finalI]) {
+                                                    myCardImages[c].setTranslateX(cardPos[c] + 60
+                                                    );
+                                                    shifted[c] = 1;
+                                                    break;
+
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+
                             myCard.setTranslateX(e.getSceneX() - pane.getLayoutX() - myCard.getLayoutX() - 40);
                             myCard.setTranslateY(e.getSceneY() - pane.getLayoutY() - 60);
 
@@ -179,11 +226,15 @@ public class GuiSpieltisch {
 
                         imgView.setOnMousePressed(event -> {
 
+                            Bounds nodeBounds = myCards.localToScene(myCards.getBoundsInLocal());
+                            myCardsX[0] = nodeBounds.getMinX();
+                            myCardsX[1] = nodeBounds.getMaxX();
+
+                            myCardsY[0] = nodeBounds.getMinY();
+                            myCardsY[1] = nodeBounds.getMaxY();
 
                             timerRunning = false;
                             cardId = new int[]{playerId, finalI};
-                            dragX = myCard.getTranslateX();
-                            dragY = myCard.getTranslateY();
 
                         });
 
@@ -193,6 +244,8 @@ public class GuiSpieltisch {
                             }
                         });
 
+
+                        int finalCardcount = cardcount;
                         imgView.setOnMouseReleased(e -> {
 
                             if (e.getSceneX() > ablageX[0] &&
@@ -202,12 +255,29 @@ public class GuiSpieltisch {
                                     tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable()) {
 
                                 kartelegen(cardId[0], cardId[1]);
-                            } else {
-                                myCard.setTranslateX(cardPos[finalI]);
-                                myCard.setTranslateY(0);
-                                cardId = null;
-                                myCard.setMouseTransparent(false);
-                            }
+                            } else //karten sortieren
+                                if (e.getSceneX() > myCardsX[0] - 40 &&
+                                        e.getSceneX() < myCardsX[1] + 40 &&
+                                        e.getSceneY() > myCardsY[0] &&
+                                        e.getSceneY() < myCardsY[1]) {
+                                    TreeMap<Double, HandKarte> newHand = new TreeMap<>();
+                                    for (int c = 0; c < finalCardcount; c++) {
+                                        newHand.put(myCardImages[c].getTranslateX(),
+                                                tisch.getSpielerList()[playerId].getCardHand().getKarte(c));
+                                    }
+
+
+                                    Collection<HandKarte> values = newHand.values();
+                                    ArrayList<HandKarte> newHandCards = new ArrayList<HandKarte>( values );
+                                    tisch.getSpielerList()[playerId].getCardHand().setHandKarten(newHandCards);
+                                    buildStage(classPrimaryStage);
+
+                                } else {
+                                    myCard.setTranslateX(cardPos[finalI]);
+                                    myCard.setTranslateY(0);
+                                    cardId = null;
+                                    myCard.setMouseTransparent(false);
+                                }
                             timerRunning = true;
                         });
                     }
@@ -437,8 +507,6 @@ public class GuiSpieltisch {
             ablageX = new double[]{nodeBounds.getMinX(), nodeBounds.getMaxX()};
             ablageY = new double[]{nodeBounds.getMinY(), nodeBounds.getMaxY()};
 
-            dragX = event.getX();
-            dragY = event.getY();
         });
         try {
 
@@ -654,7 +722,6 @@ public class GuiSpieltisch {
             } else rangliste = server.getRangliste();
 
             for (Map.Entry<Spieler, Integer> entry : rangliste.entrySet()) {
-                //System.out.println(entry.getKey().getName() + ":" + entry.getValue());
                 Label name = new Label(entry.getKey().getName());
                 name.setTextFill(Color.WHITE);
                 name.setFont(new Font(10 * zoomfactor));
@@ -699,7 +766,6 @@ public class GuiSpieltisch {
 
                 gridPane.add(chatButton, 0, 4, 1, 1);
             }
-
 
 
             //Einstellungen

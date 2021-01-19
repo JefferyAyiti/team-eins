@@ -7,6 +7,13 @@ import java.util.*;
 public class Hand  implements Serializable {
     private ArrayList<HandKarte> handKarten = new ArrayList<HandKarte>();
 
+    /**
+     * Seter für das Umsortieren der Karten per Drag&Drop
+     * @param handKarten
+     */
+    public void setHandKarten(ArrayList<HandKarte> handKarten) {
+        this.handKarten = handKarten;
+    }
 
     /**
      * @return Gibt alle aktuellen Karten der hand aus
