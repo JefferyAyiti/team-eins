@@ -774,8 +774,8 @@ public class GuiSpieltisch {
 
             if (playMode > 0) {
                 Button chatButton = new Button(chatOpened ? "Chat <<" : "Chat >>");
-                chatButton.setTranslateX(30);
-                chatButton.setTranslateY(40);
+                chatButton.setTranslateX(30 * zoomfactor);
+                chatButton.setTranslateY(40 * zoomfactor);
                 chatButton.setOnMouseClicked(e -> {
 
                             if (!chatOpened) {
@@ -789,14 +789,15 @@ public class GuiSpieltisch {
                             }
                         }
                 );
+                chatButton.setPrefHeight(15*zoomfactor);
+                chatButton.setPrefWidth(80* zoomfactor);
                 chatButton.setStyle(
                         "-fx-text-fill: black;\n" +
                                 "    -fx-background-color: rgba(255,255,255,0.4);\n" +
-                                "    -fx-pref-height: 15px;\n" +
-                                "    -fx-pref-width: 80px;\n" +
                                 "    -fx-font-size: 100%;\n" +
                                 "    -fx-alignment: center;"
                 );
+
 
                 gridPane.add(chatButton, 0, 4, 1, 1);
             }
@@ -879,7 +880,7 @@ public class GuiSpieltisch {
                 e.printStackTrace();
             }
         }
-        if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()) {
+        if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty() && (tisch.getSpielerList()[playerId].getBlackChips()>0 || tisch.getSpielerList()[playerId].getWhiteChips()>0 )) {
             Chip tausch;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("     ");
