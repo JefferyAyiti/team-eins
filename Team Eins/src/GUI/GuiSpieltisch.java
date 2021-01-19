@@ -853,7 +853,7 @@ public class GuiSpieltisch {
                 e.printStackTrace();
             }
         }
-        if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty()) {
+        if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty() && (tisch.getSpielerList()[playerId].getBlackChips()>0 || tisch.getSpielerList()[playerId].getWhiteChips()>0 )) {
             Chip tausch;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("     ");
