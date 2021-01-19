@@ -158,6 +158,7 @@ public class ClientServerTest {
         spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
         main.setSpiellogik(spiellogik);
+        main.setServer(server);
         main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
         client1.getServer().neueRunde(true,client1.getuId());
         client2.getServer().neueRunde(true,client2.getuId());
@@ -197,6 +198,7 @@ public class ClientServerTest {
         tisch = new Tisch(spielerM);
         spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
+        main.setServer(server);
         main.setSpiellogik(spiellogik);
         main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
         client1.getServer().neueRunde(true,client1.getuId());
@@ -238,6 +240,7 @@ public class ClientServerTest {
         tisch = new Tisch(spielerM);
         spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
+        main.setServer(server);
         main.setSpiellogik(spiellogik);
         main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
         client1.getServer().neueRunde(true,client1.getuId());
@@ -295,6 +298,7 @@ public class ClientServerTest {
         tisch = new Tisch(spielerM);
         spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
+        main.setServer(server);
         main.setSpiellogik(spiellogik);
         main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
         client1.getServer().neueRunde(true,client1.getuId());
@@ -350,6 +354,7 @@ public class ClientServerTest {
         tisch = new Tisch(spielerM);
         spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
+        main.setServer(server);
         main.setSpiellogik(spiellogik);
         main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
 

@@ -2,6 +2,7 @@ package Main;
 
 import GUI.*;
 import GUI.SVG.TestLoadImageUsingClass;
+import RMI.server;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -309,6 +310,13 @@ public class Main extends Application {
      */
     public Hand[] getHaende(){
         return Main.haende;
+    }
+
+    /** setter-Methode für server
+     * @param server
+     */
+    public void setServer(RMI.server server) {
+        Main.server = server;
     }
 }
 
