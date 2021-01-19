@@ -74,8 +74,6 @@ public class GUIChat {
         //chat.setAutoFix(true);
         scroll.setOpacity(0.8);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        //sendButton.setOpacity(0.8);
-        //sendButton.setFont(Font.font())
         sendButton.setStyle("-fx-text-fill: black;\n" +
                 "    -fx-background-color: rgba(255,255,255,0.6);\n" +
                 "    -fx-fit-to-height: true;\n" +

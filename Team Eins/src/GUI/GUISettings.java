@@ -25,7 +25,7 @@ public class GUISettings {
     public GUISettings(){
         settings = new Popup();
         settings.setHideOnEscape(true);
-        settings.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_TOP_RIGHT);
+
 
 
         RadioButton filterAn = new RadioButton("An");
@@ -52,7 +52,7 @@ public class GUISettings {
 
         Label label = new Label("Einstellungen");
         Label wort = new Label("Schimpfwortfilter:");
-        Label hinweis = new Label("Spielbare Karte anzeigen:");
+        Label hinweis = new Label("Tipps:");
         Label kartesort = new Label("Karte sortieren:");
 
         header.getChildren().add(label);
@@ -70,6 +70,8 @@ public class GUISettings {
     }
 
     public void openSettings(Stage owner){
+        settings.setY(owner.getScene().getWindow().getX() + 5);
+        settings.setX(owner.getScene().getWindow().getY() + 35);
         header.getStyleClass().add("header");
         schimpf.getStyleClass().add("hbox");
         tipp.getStyleClass().add("hbox");
@@ -84,4 +86,6 @@ public class GUISettings {
     public void hideSettings(){
         settings.hide();
     }
+
+
 }

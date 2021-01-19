@@ -667,8 +667,10 @@ public class GuiSpieltisch {
                 gridPane.add(chatButton, 0, 4, 1, 1);
 
                 //Einstellungen
-                Button settings = new Button("⚙ Einstellungen");
-                settings.setMaxWidth(200);
+                ImageView settings = new ImageView(new Image("GUI/images/gear_icon.png"));
+
+                settings.setFitWidth(20*zoomfactor);
+                settings.setPreserveRatio(true);
                 gridPane.add(settings, 4,0,1,1);
                 gridPane.setValignment(settings, VPos.TOP);
                 gridPane.setHalignment(settings, HPos.RIGHT);
@@ -683,14 +685,8 @@ public class GuiSpieltisch {
                     }
 
                 });
-                settings.setStyle(
-                        "-fx-text-fill: black;\n" +
-                                "    -fx-background-color: rgba(255,255,255,0.4);\n" +
-                                "    -fx-pref-height: 15px;\n" +
-                                "    -fx-pref-width: 100px;\n" +
-                                "    -fx-font-size: 100%;\n" +
-                                "    -fx-alignment: center;"
-                );
+                settings.setOnMouseEntered(e -> settings.setStyle(HOVERED_BUTTON_STYLE));
+                settings.setOnMouseExited(e -> settings.setStyle(IDLE_BUTTON_STYLE));
             }
 
 
