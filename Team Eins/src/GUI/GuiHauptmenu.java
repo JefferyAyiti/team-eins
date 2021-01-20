@@ -39,6 +39,7 @@ public class GuiHauptmenu {
     boolean assigned = false;
     String IP = "localhost";
     String Port = "8001";
+    boolean hasLeftServer = false;
 
     boolean shutdown = false;
 
@@ -54,8 +55,16 @@ public class GuiHauptmenu {
         }
         inMenu = true;
         try {
+            if(server != null){
+                System.out.println(server.getGameStart(uniqueID) +" "+ (playMode == 2) +" "+ !assigned);
+            }
+
             if(server != null && server.getGameStart(uniqueID) && playMode == 2 && !assigned) {
                 try {
+                    if(hasLeftServer){
+                        assigned = true;
+                        hasLeftServer = false;
+                    }
                         ich = server.assignId(uniqueID);
                     if(ich == -1) {//join fehlerhaft
                         server.leaveServer(uniqueID);
@@ -73,6 +82,7 @@ public class GuiHauptmenu {
                 Platform.runLater(() -> spieltischGui.buildStage(classPrimaryStage));
                 Main.runTimers(Main.classPrimaryStage);
                 getTisch = new Thread(new ClientThread(Main.server, runClient.client));
+                System.out.println("new Server assigned");
                 getTisch.start();
                 return;
 
@@ -460,9 +470,9 @@ public class GuiHauptmenu {
 
         } else if (action == "join") {
             Main.myName = namefield.getText();
-            if (Main.myName == null || Main.myName.equals(""))
+            if (Main.myName == null || Main.myName.equals("")) {
                 Main.myName = "Spieler";
-
+            }
             try {
                 runClient = new RunClient(ip.getText(),
                         Integer.parseInt(port.getText()),
@@ -470,8 +480,22 @@ public class GuiHauptmenu {
                         uniqueID,
                         Main.myName);
                 server = runClient.client.server;
-                if(server.getAnzClients() >= server.getAnzahlSpieler())
-                    System.out.println(server.getAnzClients()+" max: "+server.getAnzahlSpieler());
+                try{
+                    //System.out.println(!server.getSpielBeendet() +" "+ server.isInGame(uniqueID) +" "+ server.serverOpen());
+                    if(!server.getSpielBeendet() && server.isInGame(uniqueID) && server.serverOpen()){
+                        server.reconnect(uniqueID, myName);
+                        hasLeftServer = true;
+                        assigned = false;
+                        inMenu = false;
+
+                    }
+
+                }catch (RemoteException | NullPointerException e2){
+                    //System.err.println(e2.toString());
+                }
+                if(server.getAnzClients() >= server.getAnzahlSpieler()) {
+                    System.out.println(server.getAnzClients() + " max: " + server.getAnzahlSpieler());
+                }
                 update = new Timer();
                 update.schedule(new TimerTask() {
                     @Override
@@ -520,7 +544,7 @@ public class GuiHauptmenu {
     public void cleanupServer(){
         Main.joined = false;
         update.cancel();
-        getTisch = null;
+        getTisch.stop();
         assigned = false;
         Main.myTurnUpdate = true;
         try {

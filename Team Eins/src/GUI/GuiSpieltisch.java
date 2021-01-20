@@ -104,7 +104,6 @@ public class GuiSpieltisch {
 
 
         if(playerId == ich) {
-            System.out.println(autoSort);
             if (autoSort != null && (autoSort == false && !sortedOnce || autoSort)) {
                 //sortieren
                 ArrayList<HandKarte> sortedHand =
