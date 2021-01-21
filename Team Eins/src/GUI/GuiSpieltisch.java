@@ -47,7 +47,7 @@ public class GuiSpieltisch {
     boolean chatOpened = false;
     boolean settingsOpen = false;
     int[] cardId;
-    boolean myTurnNotice = true;
+    Boolean myTurnNotice = null;
 
     double dragX;
     double dragY;
@@ -487,7 +487,8 @@ public class GuiSpieltisch {
      * @param primaryStage
      */
     public void buildStage(Stage primaryStage) {
-        if(tisch.aktiv != ich) {
+
+        if(myTurnNotice == null || tisch.aktiv != ich) {
             myTurnNotice = true;
         }
         primaryStage.setScene(scene);
@@ -860,8 +861,9 @@ public class GuiSpieltisch {
                 turnLabel.setTextFill(Color.LIGHTGREEN);
                 turnLabel.setFont(Font.font("Ink Free", FontWeight.BOLD, 25 * zoomfactor));
                 turnNotice.getChildren().add(turnLabel);
-
+                System.out.println("myturn");
                 FadeTransition ft = new FadeTransition(Duration.millis(6000), turnNotice);
+                ft.setFromValue(1.0);
                 ft.setToValue(0);
                 ft.play();
                 table.add(turnNotice, 0, 0, 3, 1);
