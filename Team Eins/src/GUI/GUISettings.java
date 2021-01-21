@@ -108,7 +108,6 @@ public class GUISettings {
         if (playMode == 0)
             schimpf.setVisible(false);
 
-
         settings.show(owner);
     }
 

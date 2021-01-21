@@ -31,7 +31,6 @@ import java.util.*;
 import java.util.function.DoubleToIntFunction;
 
 import Main.*;
-import javafx.util.Duration;
 
 import static Main.Main.*;
 import static Main.Main.ich;
@@ -47,7 +46,6 @@ public class GuiSpieltisch {
     boolean chatOpened = false;
     boolean settingsOpen = false;
     int[] cardId;
-    boolean myTurnNotice = true;
 
     double dragX;
     double dragY;
@@ -812,26 +810,25 @@ public class GuiSpieltisch {
 
 
                 gridPane.add(chatButton, 0, 4, 1, 1);
-            }
 
 
                 //Einstellungen
                 ImageView settings = new ImageView(new Image("GUI/images/gear_icon.png"));
 
-                settings.setFitWidth(20*zoomfactor);
+                settings.setFitWidth(20 * zoomfactor);
                 settings.setPreserveRatio(true);
                 gridPane.add(settings, 4,0,1,1);
                 gridPane.setValignment(settings, VPos.TOP);
                 gridPane.setHalignment(settings, HPos.RIGHT);
                 settings.setOnMouseClicked(s->{
 
-                if (!settingsOpen) {
-                    einstellung.openSettings(classPrimaryStage);
-                    settingsOpen = true;
-                } else { //chat bereits offen
-                    einstellung.hideSettings();
-                    settingsOpen = false;
-                }
+                    if (!settingsOpen) {
+                        einstellung.openSettings(classPrimaryStage);
+                        settingsOpen = true;
+                    } else { //chat bereits offen
+                        einstellung.hideSettings();
+                        settingsOpen = false;
+                    }
 
                 });
                 settings.setOnMouseEntered(e -> settings.setStyle(HOVERED_BUTTON_STYLE));
@@ -839,39 +836,8 @@ public class GuiSpieltisch {
             }
 
 
-
             root.getChildren().add(gridPane);
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
-
-
-
-
-            //Notice wenn man am Zug ist
-            if(myTurnNotice  && tisch.aktiv == ich) {
-
-
-                turnNotice = new VBox();
-                turnNotice.setMouseTransparent(true);
-                turnNotice.setAlignment(Pos.CENTER);
-                turnNotice.setStyle("-fx-background-image:url('/GUI/images/oberflaeche.jpg'); -fx-background-insets: 20; " +
-                        "-fx-background-radius: 50; " +
-                        "-fx-cursor:hand;" +
-                        "-fx-effect: dropshadow(three-pass-box, black, 50, 0, 0, 0);");
-                Label turnLabel = new Label("- Du bist dran -");
-                turnLabel.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.7 ,0 ,0 ); -fx-font-weight: bolder");
-                turnLabel.setTextFill(Color.LIGHTGREEN);
-                turnLabel.setFont(Font.font("Ink Free", FontWeight.BOLD, 25 * zoomfactor));
-                turnNotice.getChildren().add(turnLabel);
-
-                FadeTransition ft = new FadeTransition(Duration.millis(60000), turnNotice);
-                ft.setToValue(0);
-                ft.play();
-                table.add(turnNotice, 0, 0, 3, 1);
-                myTurnNotice = false;
-            }
-
-
-
 
             scene.getStylesheets().add("GUI/Chat.css");
             //scene.getStylesheets().add("GUI/einstellung.css");
