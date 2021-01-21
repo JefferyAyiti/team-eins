@@ -197,4 +197,7 @@ public interface server extends Remote {
      */
     Spieler getSpieler(String name) throws RemoteException;
 
+    void reconnect(String UID, String name) throws RemoteException;
+
+    boolean isInGame(String UID)  throws RemoteException;
 }

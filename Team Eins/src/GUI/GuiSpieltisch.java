@@ -2,6 +2,7 @@ package GUI;
 
 import RMI.RMIClient;
 import RMI.RunClient;
+import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -30,6 +31,7 @@ import java.util.*;
 import java.util.function.DoubleToIntFunction;
 
 import Main.*;
+import javafx.util.Duration;
 
 import static Main.Main.*;
 import static Main.Main.ich;
@@ -45,6 +47,7 @@ public class GuiSpieltisch {
     boolean chatOpened = false;
     boolean settingsOpen = false;
     int[] cardId;
+    boolean myTurnNotice = true;
 
     double dragX;
     double dragY;
@@ -103,8 +106,7 @@ public class GuiSpieltisch {
         }
 
 
-        if(playerId == ich) {
-            System.out.println(autoSort);
+        if (playerId == ich) {
             if (autoSort != null && (autoSort == false && !sortedOnce || autoSort)) {
                 //sortieren
                 ArrayList<HandKarte> sortedHand =
@@ -112,7 +114,7 @@ public class GuiSpieltisch {
                 Collections.sort(sortedHand, new Comparator<>() {
                     @Override
                     public int compare(HandKarte handKarte, HandKarte t1) {
-                        return handKarte.getValue()>=t1.getValue() ? 1:-1;
+                        return handKarte.getValue() >= t1.getValue() ? 1 : -1;
                     }
                 });
                 sortedOnce = true;
@@ -145,7 +147,7 @@ public class GuiSpieltisch {
                         Main.cardsArray[tisch.getSpielerList()[playerId].getCardHand().getKarte(i).getValue() - 1]);
                 ImageView finalImgView = imgView;
                 myCardImages[i] = imgView;
-                if (tisch.aktiv == ich) {
+                if (tisch.aktiv == ich || true) {
 
                     imgView.setOnMouseEntered(e -> finalImgView.setStyle(HOVERED_BUTTON_STYLE));
                     ImageView finalImgView1 = imgView;
@@ -174,14 +176,14 @@ public class GuiSpieltisch {
                         imgView.setTranslateX(cardPos[i]);
                     }
 
-                    if (tisch.aktiv == ich) {
+                    if (tisch.aktiv == ich || true) {
                         ImageView myCard = imgView;
                         myCardImages[i] = imgView;
                         int finalI = i;
 
                         //Spielbare Karten
-                        if(Main.tooltip) {
-                            if(!tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable()) {
+                        if (Main.tooltip && tisch.aktiv == ich) {
+                            if (!tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable()) {
                                 ColorAdjust colorAdjust = new ColorAdjust();
                                 colorAdjust.setBrightness(-0.6);
                                 myCard.setEffect(colorAdjust);
@@ -193,11 +195,13 @@ public class GuiSpieltisch {
                         final int[] shifted = new int[cardcount];
 
                         imgView.setOnMouseDragged(e -> {
+                            timerRunning = false;
                             if (e.getSceneX() > ablageX[0] &&
                                     e.getSceneX() < ablageX[1] &&
                                     e.getSceneY() > ablageY[0] &&
                                     e.getSceneY() < ablageY[1]) {
-                                if (tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable())
+                                if (tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable() &&
+                                tisch.aktiv == ich)
                                     ablagestapel.setStyle("-fx-background-insets: 20; " +
                                             "-fx-background-radius: 20; " +
                                             "-fx-cursor:hand;" +
@@ -252,6 +256,7 @@ public class GuiSpieltisch {
 
                         imgView.setOnMousePressed(event -> {
 
+                            timerRunning = false;
                             Bounds nodeBounds = myCards.localToScene(myCards.getBoundsInLocal());
                             myCardsX[0] = nodeBounds.getMinX();
                             myCardsX[1] = nodeBounds.getMaxX();
@@ -259,7 +264,7 @@ public class GuiSpieltisch {
                             myCardsY[0] = nodeBounds.getMinY();
                             myCardsY[1] = nodeBounds.getMaxY();
 
-                            timerRunning = false;
+
                             cardId = new int[]{playerId, finalI};
 
                         });
@@ -294,8 +299,8 @@ public class GuiSpieltisch {
 
 
                                     Collection<HandKarte> values = newHand.values();
-                                    ArrayList<HandKarte> newHandCards = new ArrayList<HandKarte>( values );
-                                    if(playMode == 0) {
+                                    ArrayList<HandKarte> newHandCards = new ArrayList<HandKarte>(values);
+                                    if (playMode == 0) {
                                         tisch.getSpielerList()[playerId].getCardHand().setHandKarten(newHandCards);
                                     } else { //multiplayer
                                         try {
@@ -525,6 +530,7 @@ public class GuiSpieltisch {
     StackPane root = new StackPane();
     Scene scene = new Scene(root, Main.sceneWidth, Main.sceneHeight, true, SceneAntialiasing.BALANCED);
     Pane ablagestapel;
+    VBox turnNotice = new VBox();
 
     double[] ablageX, ablageY;
 
@@ -534,12 +540,16 @@ public class GuiSpieltisch {
      * @param primaryStage
      */
     public void buildStage(Stage primaryStage) {
+        if(tisch.aktiv != ich) {
+            myTurnNotice = true;
+        }
         primaryStage.setScene(scene);
         primaryStage.show();
         root.setOnMousePressed(event -> {
             Bounds nodeBounds = ablagestapel.localToScene(ablagestapel.getBoundsInLocal());
             ablageX = new double[]{nodeBounds.getMinX(), nodeBounds.getMaxX()};
             ablageY = new double[]{nodeBounds.getMinY(), nodeBounds.getMaxY()};
+            turnNotice.setVisible(false);
 
         });
         try {
@@ -580,6 +590,8 @@ public class GuiSpieltisch {
             BackgroundImage myBI = new BackgroundImage(Main.table1,
                     BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                     new BackgroundSize(100, 100, true, true, false, true));
+
+
 
 
             GridPane table = new GridPane();
@@ -789,8 +801,8 @@ public class GuiSpieltisch {
                             }
                         }
                 );
-                chatButton.setPrefHeight(15*zoomfactor);
-                chatButton.setPrefWidth(80* zoomfactor);
+                chatButton.setPrefHeight(15 * zoomfactor);
+                chatButton.setPrefWidth(80 * zoomfactor);
                 chatButton.setStyle(
                         "-fx-text-fill: black;\n" +
                                 "    -fx-background-color: rgba(255,255,255,0.4);\n" +
@@ -827,8 +839,39 @@ public class GuiSpieltisch {
             }
 
 
+
             root.getChildren().add(gridPane);
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
+
+
+
+
+            //Notice wenn man am Zug ist
+            if(myTurnNotice  && tisch.aktiv == ich) {
+
+
+                turnNotice = new VBox();
+                turnNotice.setMouseTransparent(true);
+                turnNotice.setAlignment(Pos.CENTER);
+                turnNotice.setStyle("-fx-background-image:url('/GUI/images/oberflaeche.jpg'); -fx-background-insets: 20; " +
+                        "-fx-background-radius: 50; " +
+                        "-fx-cursor:hand;" +
+                        "-fx-effect: dropshadow(three-pass-box, black, 50, 0, 0, 0);");
+                Label turnLabel = new Label("- Du bist dran -");
+                turnLabel.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.7 ,0 ,0 ); -fx-font-weight: bolder");
+                turnLabel.setTextFill(Color.LIGHTGREEN);
+                turnLabel.setFont(Font.font("Ink Free", FontWeight.BOLD, 25 * zoomfactor));
+                turnNotice.getChildren().add(turnLabel);
+
+                FadeTransition ft = new FadeTransition(Duration.millis(60000), turnNotice);
+                ft.setToValue(0);
+                ft.play();
+                table.add(turnNotice, 0, 0, 3, 1);
+                myTurnNotice = false;
+            }
+
+
+
 
             scene.getStylesheets().add("GUI/Chat.css");
             //scene.getStylesheets().add("GUI/einstellung.css");
@@ -877,7 +920,7 @@ public class GuiSpieltisch {
                 e.printStackTrace();
             }
         }
-        if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty() && (tisch.getSpielerList()[playerId].getBlackChips()>0 || tisch.getSpielerList()[playerId].getWhiteChips()>0 )) {
+        if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty() && (tisch.getSpielerList()[playerId].getBlackChips() > 0 || tisch.getSpielerList()[playerId].getWhiteChips() > 0)) {
             Chip tausch;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("     ");
@@ -944,6 +987,6 @@ public class GuiSpieltisch {
         log.add(event);
     }
 
+
+
 }
-
-

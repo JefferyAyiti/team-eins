@@ -462,6 +462,10 @@ public class Bot extends Spieler  implements Serializable {
     public int getSchwierigkeit() {
         return schwierigkeit;
     }
+
+    public void setUID(String UID) {
+        uid = UID;
+    }
 }
 
 

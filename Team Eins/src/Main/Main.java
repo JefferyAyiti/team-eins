@@ -54,6 +54,11 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        hauptmenuGui = new GuiHauptmenu();
+        scoreboardGui = new GuiScoreboard();
+        spieltischGui = new GuiSpieltisch();
+        chatbox = new GUIChat();
+        einstellung = new GUISettings();
         loader = new TestLoadImageUsingClass();
         loader.installSvgLoader();
         launch(args);
@@ -77,11 +82,11 @@ public class Main extends Application {
 
 
 
-    public static GuiHauptmenu hauptmenuGui = new GuiHauptmenu();
-    public static GuiScoreboard scoreboardGui = new GuiScoreboard();
-    public static GuiSpieltisch spieltischGui = new GuiSpieltisch();
-    public static GUIChat chatbox = new GUIChat();
-    public static GUISettings einstellung = new GUISettings();
+    public static GuiHauptmenu hauptmenuGui; //= new GuiHauptmenu();
+    public static GuiScoreboard scoreboardGui ;//= new GuiScoreboard();
+    public static GuiSpieltisch spieltischGui ;//= new GuiSpieltisch();
+    public static GUIChat chatbox ;//= new GUIChat();
+    public static GUISettings einstellung ;//= new GUISettings();
 
     /**
      * Erstellt Tisch, Nachzieh- und Abalgestapel, Spieler
@@ -140,6 +145,7 @@ public class Main extends Application {
 
         if (System.currentTimeMillis() < resize + 500 || init) {
             GuiZoomLoader.getZoomedImages();
+            System.out.println("resize");
             spieltischGui.buildStage(classPrimaryStage);
         }
     }
@@ -190,7 +196,9 @@ public class Main extends Application {
     static class moveCheck extends TimerTask {
         @Override
         public void run() {
-            if (timerRunning) {
+            if (!timerRunning)
+            return;
+            else {
                 if (playMode == 1) {
                     try {
                         server.checkTimeout();
@@ -207,6 +215,7 @@ public class Main extends Application {
                     }
                     //spieltischGui.printtoLog("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
                     ((Bot) tisch.getAktivSpieler()).play();
+                    if(timerRunning)
                     Platform.runLater(() -> {
                         spieltischGui.buildStage(classPrimaryStage);
                     });
@@ -217,6 +226,8 @@ public class Main extends Application {
                     if (round < tisch.getDurchgangNr())
                         round = tisch.getDurchgangNr();
                     //if (aenderung <= server.getAenderung(Main.uniqueID)) {
+
+
                     Platform.runLater(() -> {
                         try {
                             aenderung = Main.server.getAenderung(Main.uniqueID);
@@ -241,7 +252,8 @@ public class Main extends Application {
      */
     public static Timer bots;
     public static Timer resizecheck;
-    public static boolean timerRunning = true;
+    public static volatile boolean timerRunning = true;
+
 
     public static void runTimers(Stage ps) {
         resize(true);
@@ -269,6 +281,8 @@ public class Main extends Application {
             System.exit(2);
         });
     }
+
+
 
     /** setter-methode für tisch
      * @param tisch neue Tisch

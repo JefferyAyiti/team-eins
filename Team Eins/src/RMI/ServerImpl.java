@@ -1,6 +1,7 @@
 package RMI;
 
 import Main.*;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import org.apache.xpath.operations.Bool;
 
@@ -112,6 +113,22 @@ public class ServerImpl implements server {
     @Override
     public void incAenderung() throws RemoteException {
         aenderung++;
+    }
+
+    /**
+     * chat hat sich verändert. Serverchat muss geupated werden
+     */
+    public void chatAenderung(){
+        aenderung++;
+        if(chatbox != null){
+            Platform.runLater(() -> {
+                        chatbox.messages.getChildren().clear();
+                        chatbox.messages.getChildren().addAll(chatbox.buildChat());
+                        chatbox.scroll.setContent(chatbox.messages);
+                    }
+            );
+        }
+
     }
 
     @Override
@@ -247,11 +264,15 @@ public class ServerImpl implements server {
                 Bot spiel = new Bot("[Bot] "+
                         tisch.getSpielerList()[i].getName(),
                         botlevel == 0 ? (int) (Math.random() * 3 + 1) : botlevel);
+                spiel.setUID(uid);
                 spiel.setBlackChips(s.getBlackChips());
                 spiel.setWhiteChips(s.getWhiteChips());
                 spiel.setCardHand(s.getCardHand());
                 spiel.setOldScore(s.getOldScore());
                 spiel.setPoints(s.getPoints());
+                if(!s.inGame()){
+                    spiel.aussteigen();
+                }
                 tisch.spielerList[i] = spiel;
                 aenderung++;
 
@@ -288,7 +309,7 @@ public class ServerImpl implements server {
                 }
             chatrecord.add(zeile);
         }
-    aenderung++;
+        chatAenderung();
     }
 
     /** getter-Methode für main
@@ -319,5 +340,51 @@ public class ServerImpl implements server {
         }
         return sol;
     }
+    @Override
+    public void reconnect(String UID, String name) throws RemoteException {
+        Spieler s;
+        Spieler newPlayer;
+        for(int i = 0; i< anzSpieler; i++){
+            s = tisch.getSpielerList()[i];
+            if(s.getUid().equals(UID) && (s instanceof Bot) && s.getLeftServer()){
+                System.out.println(name + " ist wieder im Spiel");
+                changeName(UID, name);
+                s.setLeftServer(false);
+
+                newPlayer = new Spieler(name,UID);
+                newPlayer.setBlackChips(s.getBlackChips());
+                newPlayer.setWhiteChips(s.getWhiteChips());
+                newPlayer.setCardHand(s.getCardHand());
+                newPlayer.setOldScore(s.getOldScore());
+                newPlayer.setPoints(s.getPoints());
+
+                if(!s.inGame()){
+                    newPlayer.aussteigen();
+                }
+
+                clients.put(UID, name);
+                readyClients.put(UID,false);
+                anzClients++;
+
+                tisch.spielerList[i] = newPlayer;
+                aenderung++;
+
+            }
+        }
+    }
+
+    @Override
+    public boolean isInGame(String UID)  throws RemoteException{
+        Spieler s;
+        boolean out = false;
+        for(int i = 0; i< anzSpieler; i++) {
+            s = tisch.getSpielerList()[i];
+            if (s.getUid().equals(UID)) {
+                out = true;
+            }
+        }
+        return out;
+    }
+
 
 }
