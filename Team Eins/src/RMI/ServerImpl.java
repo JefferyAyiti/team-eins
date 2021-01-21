@@ -54,8 +54,8 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public void addClient(String uid, String name) {
-        if(!gameRunning) {
+    public void addClient(String uid, String name) throws RemoteException {
+        if(!gameRunning && !isInGame(uid) ) {
             int max = 0;
             try {
                 max = getAnzahlSpieler();
@@ -346,7 +346,7 @@ public class ServerImpl implements server {
         Spieler newPlayer;
         for(int i = 0; i< anzSpieler; i++){
             s = tisch.getSpielerList()[i];
-            if(s.getUid().equals(UID) && (s instanceof Bot) && s.getLeftServer()){
+            if(s.getUid().equals(UID) && (s instanceof Bot)){
                 System.out.println(name + " ist wieder im Spiel");
                 changeName(UID, name);
                 s.setLeftServer(false);
@@ -362,12 +362,15 @@ public class ServerImpl implements server {
                     newPlayer.aussteigen();
                 }
 
+                getGameStart(UID);
                 clients.put(UID, name);
                 readyClients.put(UID,false);
                 anzClients++;
 
                 tisch.spielerList[i] = newPlayer;
                 aenderung++;
+
+                System.out.println(newPlayer instanceof Bot);
 
             }
         }
@@ -377,12 +380,15 @@ public class ServerImpl implements server {
     public boolean isInGame(String UID)  throws RemoteException{
         Spieler s;
         boolean out = false;
-        for(int i = 0; i< anzSpieler; i++) {
-            s = tisch.getSpielerList()[i];
-            if (s.getUid().equals(UID)) {
-                out = true;
+        if(tisch != null){
+            for(int i = 0; i< anzSpieler; i++) {
+                s = tisch.getSpielerList()[i];
+                if (s.getUid().equals(UID)) {
+                    out = true;
+                }
             }
         }
+
         return out;
     }
 

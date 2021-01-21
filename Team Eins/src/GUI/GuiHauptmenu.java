@@ -56,22 +56,19 @@ public class GuiHauptmenu {
         inMenu = true;
         try {
             if(server != null){
-                System.out.println(server.getGameStart(uniqueID) +" "+ (playMode == 2) +" "+ !assigned);
             }
 
-            if(server != null && server.getGameStart(uniqueID) && playMode == 2 && !assigned) {
+            if(server != null && server.getGameStart(uniqueID) && playMode == 2) {
                 try {
-                    if(hasLeftServer){
-                        assigned = true;
-                        hasLeftServer = false;
-                    }
+                    if(!assigned){
                         ich = server.assignId(uniqueID);
-                    if(ich == -1) {//join fehlerhaft
-                        server.leaveServer(uniqueID);
-                        return;
+                        if(ich == -1) {//join fehlerhaft
+                            server.leaveServer(uniqueID);
+                            return;
+                        }
+                        assigned = true;
                     }
 
-                    assigned = true;
                 } catch (RemoteException e) {
                 }
                 inMenu = false;
@@ -82,7 +79,6 @@ public class GuiHauptmenu {
                 Platform.runLater(() -> spieltischGui.buildStage(classPrimaryStage));
                 Main.runTimers(Main.classPrimaryStage);
                 getTisch = new Thread(new ClientThread(Main.server, runClient.client));
-                System.out.println("new Server assigned");
                 getTisch.start();
                 return;
 
@@ -481,12 +477,21 @@ public class GuiHauptmenu {
                         Main.myName);
                 server = runClient.client.server;
                 try{
-                    //System.out.println(!server.getSpielBeendet() +" "+ server.isInGame(uniqueID) +" "+ server.serverOpen());
                     if(!server.getSpielBeendet() && server.isInGame(uniqueID) && server.serverOpen()){
                         server.reconnect(uniqueID, myName);
                         hasLeftServer = true;
-                        assigned = false;
+
                         inMenu = false;
+                        assigned = true;
+
+                        tisch = server.updateTisch();
+                        anzSpieler = server.getAnzahlSpieler();
+                        update.cancel();
+
+                        Platform.runLater(() -> spieltischGui.buildStage(classPrimaryStage));
+                        Main.runTimers(Main.classPrimaryStage);
+                        getTisch = new Thread(new ClientThread(Main.server, runClient.client));
+                        getTisch.start();
 
                     }
 
@@ -544,7 +549,6 @@ public class GuiHauptmenu {
     public void cleanupServer(){
         Main.joined = false;
         update.cancel();
-        getTisch.stop();
         assigned = false;
         Main.myTurnUpdate = true;
         try {
