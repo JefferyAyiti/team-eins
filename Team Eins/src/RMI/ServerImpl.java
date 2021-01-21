@@ -1,6 +1,7 @@
 package RMI;
 
 import Main.*;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import org.apache.xpath.operations.Bool;
 
@@ -112,6 +113,22 @@ public class ServerImpl implements server {
     @Override
     public void incAenderung() throws RemoteException {
         aenderung++;
+    }
+
+    /**
+     * chat hat sich verändert. Serverchat muss geupated werden
+     */
+    public void chatAenderung(){
+        aenderung++;
+        if(chatbox != null){
+            Platform.runLater(() -> {
+                        chatbox.messages.getChildren().clear();
+                        chatbox.messages.getChildren().addAll(chatbox.buildChat());
+                        chatbox.scroll.setContent(chatbox.messages);
+                    }
+            );
+        }
+
     }
 
     @Override
@@ -292,7 +309,7 @@ public class ServerImpl implements server {
                 }
             chatrecord.add(zeile);
         }
-    aenderung++;
+        chatAenderung();
     }
 
     /** getter-Methode für main
