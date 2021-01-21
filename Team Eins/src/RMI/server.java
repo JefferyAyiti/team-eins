@@ -168,7 +168,7 @@ public interface server extends Remote {
      * @return Liste der Chatnachrichten und deren Absender
      * @throws RemoteException
      */
-    List<List<String>> getChat() throws RemoteException;
+    List<List<String>> getChat(boolean censored) throws RemoteException;
 
 
     /**

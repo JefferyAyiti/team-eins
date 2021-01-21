@@ -1,10 +1,14 @@
 package RMI;
 
 import Main.*;
+import com.sun.jdi.connect.spi.TransportService;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import org.apache.xpath.operations.Bool;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
@@ -17,6 +21,7 @@ public class ServerImpl implements server {
     Map<String, String> clients = new LinkedHashMap<>();
 
     static ArrayList<List<String>> chatrecord = new ArrayList<>();
+    static ArrayList<List<String>> censoredChatrecord = new ArrayList<>();
 
     Map<String, Long> pings = new LinkedHashMap<>();
     int anzClients = 0;
@@ -281,35 +286,71 @@ public class ServerImpl implements server {
     }
 
     @Override
-    public ArrayList<List<String>> getChat() throws RemoteException {
-        return chatrecord;
+    public ArrayList<List<String>> getChat(boolean censored) throws RemoteException {
+        return censored? censoredChatrecord: chatrecord;
     }
 
     @Override
     public void sendMessage(String message, String uid) throws RemoteException {
         List<String> zeile = new LinkedList<>();
+        List<String> censoredZeile = new LinkedList<>();
 
         zeile.add(clients.get(uid));
+        censoredZeile.add(clients.get(uid));
+
 
         if(!message.equals("")) {
             if(message.equals("/coinflip")) {
 
+                String kopfzahl = Math.random() >= 0.5?"Kopf":"Zahl";
                 zeile.add(message);
-                zeile.add(Math.random() >= 0.5?"Kopf":"Zahl");
+                zeile.add(kopfzahl);
+                censoredZeile.add(message);
+                censoredZeile.add(kopfzahl);
+
+
             } else
                 if(message.length() > 6 && message.substring(0,6).equals("/roll ")) {
                     int die = Integer.valueOf(message.substring(6));
+                    int erg = (int)((Math.random() * die) + 1);
 
                     zeile.add(Integer.toString(die));
-                    zeile.add(Integer.toString((int)((Math.random() * die) + 1)));
+                    censoredZeile.add(Integer.toString(die));
+                    zeile.add(Integer.toString(erg));
+                    censoredZeile.add(Integer.toString(erg));
 
                 } else
                 {
                     zeile.add(message);
+                    censoredZeile.add(schimpfwortFilter(message));
                 }
             chatrecord.add(zeile);
+                censoredChatrecord.add(censoredZeile);
         }
         chatAenderung();
+    }
+
+    String schimpfwortFilter(String msg) {
+        String[] msgwords = msg.split(" ");
+        List<String> filterwords = new LinkedList<>();
+        try {
+            System.out.println(System.getProperty("user.dir"));
+            filterwords = Files.readAllLines(Paths.get("src/GUI/schimpfworte.txt"));
+        } catch (IOException e) {
+            System.out.println("Schimpfwortliste nicht gefunden");
+        }
+
+        for(int n = 0;n < msgwords.length;n++) {
+            if(filterwords.contains(msgwords[n])) {
+                String newword = "";
+            for(int i = 0; i < msgwords[n].length(); i++) {
+                newword += "*";
+            }
+                msgwords[n]  = newword;
+            }
+        }
+
+        return String.join(" ", msgwords);
     }
 
     /** getter-Methode für main

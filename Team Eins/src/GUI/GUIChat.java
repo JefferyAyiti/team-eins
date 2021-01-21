@@ -149,7 +149,7 @@ public class GUIChat {
 
         if(server != null) {
             try {
-                rec = server.getChat();
+                rec = server.getChat(schimpfFilter);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

@@ -33,9 +33,16 @@ public class GUISettings {
 
         RadioButton filterAn = new RadioButton("An");
         filterAn.setToggleGroup(filter);
-        filterAn.setSelected(true);
+        filterAn.setOnMouseClicked(e -> {
+            Main.schimpfFilter = true;
+        });
+
         RadioButton filterAus = new RadioButton("Aus");
         filterAus.setToggleGroup(filter);
+        filterAus.setOnMouseClicked(e -> {
+            Main.schimpfFilter = false;
+        });
+        filterAus.setSelected(true);
 
 
         RadioButton tippAn = new RadioButton("An");

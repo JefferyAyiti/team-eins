@@ -382,9 +382,9 @@ public class ClientServerTest {
         server.sendMessage("/coinflip","2");
         //roll
         server.sendMessage("/roll 6","2");
-        assertEquals("test",server.getChat().get(0).get(1));
-        assertTrue("Zahl" == server.getChat().get(1).get(2) || "Kopf" == server.getChat().get(1).get(2));
-        int test = Integer.parseInt(server.getChat().get(2).get(2));
+        assertEquals("test",server.getChat(false).get(0).get(1));
+        assertTrue("Zahl" == server.getChat(false).get(1).get(2) || "Kopf" == server.getChat(false).get(1).get(2));
+        int test = Integer.parseInt(server.getChat(false).get(2).get(2));
         assertTrue(test > 0 && test <= 6);
         runServer.stop();
     }
