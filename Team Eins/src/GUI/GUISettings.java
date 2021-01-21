@@ -11,6 +11,8 @@ import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
+import static Main.Main.playMode;
+
 public class GUISettings {
     private Popup settings;
     private static HBox schimpf = new HBox();
@@ -23,7 +25,7 @@ public class GUISettings {
     ToggleGroup hinweis = new ToggleGroup();
     ToggleGroup sort = new ToggleGroup();
 
-    public GUISettings(){
+    public GUISettings() {
         settings = new Popup();
         settings.setHideOnEscape(true);
         settings.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_TOP_RIGHT);
@@ -37,34 +39,39 @@ public class GUISettings {
 
 
         RadioButton tippAn = new RadioButton("An");
-        tippAn.setOnMouseClicked(e -> {Main.tooltip = true;
+        tippAn.setOnMouseClicked(e -> {
+            Main.tooltip = true;
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
         });
         tippAn.setToggleGroup(hinweis);
         RadioButton tippAus = new RadioButton("Aus");
         tippAus.setToggleGroup(hinweis);
         tippAus.setSelected(true);
-        tippAus.setOnMouseClicked(e -> {Main.tooltip = false;
-        Main.spieltischGui.buildStage(Main.classPrimaryStage);
+        tippAus.setOnMouseClicked(e -> {
+            Main.tooltip = false;
+            Main.spieltischGui.buildStage(Main.classPrimaryStage);
         });
 
 
         RadioButton sortAn = new RadioButton("Immer");
         sortAn.setToggleGroup(sort);
-        sortAn.setOnMouseClicked(e -> {Main.autoSort = true;
+        sortAn.setOnMouseClicked(e -> {
+            Main.autoSort = true;
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
         });
 
 
         RadioButton sortBeginn = new RadioButton("zu Beginn");
         sortBeginn.setToggleGroup(sort);
-        sortBeginn.setOnMouseClicked(e -> {Main.autoSort = false;
+        sortBeginn.setOnMouseClicked(e -> {
+            Main.autoSort = false;
         });
 
 
         RadioButton sortAus = new RadioButton("Aus");
         sortAus.setToggleGroup(sort);
-        sortAus.setOnMouseClicked(e -> {Main.autoSort = null;
+        sortAus.setOnMouseClicked(e -> {
+            Main.autoSort = null;
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
         });
         sortAus.setSelected(true);
@@ -75,33 +82,37 @@ public class GUISettings {
         Label kartesort = new Label("Karte sortieren:");
 
         header.getChildren().add(label);
-        if(Main.playMode > 0)
+
         schimpf.getChildren().addAll(wort, filterAn, filterAus);
         tipp.getChildren().addAll(hinweis, tippAn, tippAus);
         sortieren.getChildren().addAll(kartesort, sortAn, sortBeginn, sortAus);
 
-        schliessen.setOnMouseClicked(c-> settings.hide());
+        schliessen.setOnMouseClicked(c -> settings.hide());
 
         steuerung.setPrefWidth(400);
         steuerung.setPrefHeight(190);
-        steuerung.getChildren().addAll(header, schimpf,tipp, sortieren, schliessen);
+        steuerung.getChildren().addAll(header);
+            steuerung.getChildren().add(schimpf);
+        steuerung.getChildren().addAll(tipp, sortieren, schliessen);
         steuerung.setSpacing(5);
         settings.getContent().add(steuerung);
     }
 
-    public void openSettings(Stage owner){
+    public void openSettings(Stage owner) {
         header.getStyleClass().add("header");
         schimpf.getStyleClass().add("hbox");
         tipp.getStyleClass().add("hbox");
         sortieren.getStyleClass().add("hbox");
         steuerung.getStyleClass().add("vbox");
         steuerung.getStylesheets().add("GUI/einstellung.css");
+        if (playMode == 0)
+            schimpf.setVisible(false);
 
 
         settings.show(owner);
     }
 
-    public void hideSettings(){
+    public void hideSettings() {
         settings.hide();
     }
 }

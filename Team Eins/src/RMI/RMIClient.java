@@ -51,6 +51,7 @@ public class RMIClient {
             if(round < tisch.getDurchgangNr())
                 round = tisch.getDurchgangNr();
 
+            if(timerRunning)
             Platform.runLater(() -> Main.spieltischGui.buildStage(Main.classPrimaryStage));
             if (tisch.aktiv == ich) {
                 myTurnUpdate = false;
