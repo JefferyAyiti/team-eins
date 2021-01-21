@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.function.DoubleToIntFunction;
 
 import Main.*;
+import javafx.util.Duration;
 
 import static Main.Main.*;
 import static Main.Main.ich;
@@ -841,6 +842,32 @@ public class GuiSpieltisch {
             gridPane.add(options, 4, 0, 1, 1);
             gridPane.setValignment(options, VPos.TOP);
             gridPane.setHalignment(options, HPos.RIGHT);
+
+
+            //Notice wenn man am Zug ist
+            if(myTurnNotice  && tisch.aktiv == ich) {
+
+
+                turnNotice = new VBox();
+                turnNotice.setMouseTransparent(true);
+                turnNotice.setAlignment(Pos.CENTER);
+                turnNotice.setStyle("-fx-background-image:url('/GUI/images/oberflaeche.jpg'); -fx-background-insets: 20; " +
+                        "-fx-background-radius: 50; " +
+                        "-fx-cursor:hand;" +
+                        "-fx-effect: dropshadow(three-pass-box, black, 50, 0, 0, 0);");
+                Label turnLabel = new Label("- Du bist dran -");
+                turnLabel.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.7 ,0 ,0 ); -fx-font-weight: bolder");
+                turnLabel.setTextFill(Color.LIGHTGREEN);
+                turnLabel.setFont(Font.font("Ink Free", FontWeight.BOLD, 25 * zoomfactor));
+                turnNotice.getChildren().add(turnLabel);
+
+                FadeTransition ft = new FadeTransition(Duration.millis(6000), turnNotice);
+                ft.setToValue(0);
+                ft.play();
+                table.add(turnNotice, 0, 0, 3, 1);
+                myTurnNotice = false;
+            }
+
 
 
 
