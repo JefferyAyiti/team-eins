@@ -46,6 +46,7 @@ public class GuiSpieltisch {
     boolean chatOpened = false;
     boolean settingsOpen = false;
     int[] cardId;
+    boolean myTurnNotice = true;
 
     double dragX;
     double dragY;
@@ -447,59 +448,6 @@ public class GuiSpieltisch {
             });
 
         }
-        //Spiel verlassen
-        if (playerId == Main.ich) {
-            ImageView beenden = new ImageView(Main.loader.getImg("GUI/images/exit.svg", zoomfactor * 0.25));
-            beenden.setTranslateY(-5);
-            beenden.setTranslateX(125 * zoomfactor);
-            bottom.setViewOrder(0.0);
-
-            beenden.setOnMouseEntered(e -> beenden.setStyle(HOVERED_BUTTON_STYLE));
-            beenden.setOnMouseExited(e -> beenden.setStyle(IDLE_BUTTON_STYLE));
-            bottom.getChildren().add(beenden);
-
-            beenden.setOnMouseClicked(mouseEvent -> {
-                if (Main.playMode <= 1) {
-                    Main.gameRunning = false;
-                    Main.bots.cancel();
-                    Main.joined = false;
-                    Main.myTurnUpdate = true;
-                    spiellogik = null;
-                    if (Main.playMode == 1) {
-
-                        try {
-                            server.closeServer();
-                            Main.hauptmenuGui.runServer.stop();
-                            Main.hauptmenuGui.update.cancel();
-                            server = null;
-                            hauptmenuGui.status = new Label("Server geschlossen");
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
-
-                } else if (Main.playMode == 2) {//Multiplaymodus
-                    joined = false;
-                    try {
-                        Main.server.replaceSpielerDurchBot(uniqueID);
-                    } catch (RemoteException e) {
-                    }
-                    hauptmenuGui.update.cancel();
-                    server = null;
-                    hauptmenuGui.status = new Label("Server verlassen");
-
-                    Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
-
-                } else {//lokaler Spielmodus
-                    Main.gameRunning = false;
-                    Main.bots.cancel();
-                    Main.hauptmenuGui.showSettingsMenu(classPrimaryStage);
-                }
-
-            });
-
-        }
 
 
         pane.getChildren().add(bottom);
@@ -811,29 +759,91 @@ public class GuiSpieltisch {
 
                 gridPane.add(chatButton, 0, 4, 1, 1);
 
-
-                //Einstellungen
-                ImageView settings = new ImageView(new Image("GUI/images/gear_icon.png"));
-
-                settings.setFitWidth(20 * zoomfactor);
-                settings.setPreserveRatio(true);
-                gridPane.add(settings, 4,0,1,1);
-                gridPane.setValignment(settings, VPos.TOP);
-                gridPane.setHalignment(settings, HPos.RIGHT);
-                settings.setOnMouseClicked(s->{
-
-                    if (!settingsOpen) {
-                        einstellung.openSettings(classPrimaryStage);
-                        settingsOpen = true;
-                    } else { //chat bereits offen
-                        einstellung.hideSettings();
-                        settingsOpen = false;
-                    }
-
-                });
-                settings.setOnMouseEntered(e -> settings.setStyle(HOVERED_BUTTON_STYLE));
-                settings.setOnMouseExited(e -> settings.setStyle(IDLE_BUTTON_STYLE));
             }
+
+            HBox options = new HBox();
+                //Einstellungen
+            ImageView settings = new ImageView(new Image("GUI/images/gear_icon.png"));
+
+            settings.setFitWidth(20 * zoomfactor);
+            settings.setPreserveRatio(true);
+
+            settings.setOnMouseClicked(s -> {
+                if (!settingsOpen) {
+                    einstellung.openSettings(classPrimaryStage);
+                    settingsOpen = true;
+                } else { //chat bereits offen
+                    einstellung.hideSettings();
+                    settingsOpen = false;
+                }
+
+            });
+            settings.setOnMouseEntered(e -> settings.setStyle(HOVERED_BUTTON_STYLE));
+            settings.setOnMouseExited(e -> settings.setStyle(IDLE_BUTTON_STYLE));
+
+            //Spiel verlassen
+            //if (playerId == Main.ich) {
+            ImageView beenden = new ImageView(Main.loader.getImg("GUI/images/exit.svg", zoomfactor * 0.25));
+            //beenden.setTranslateY(-5);
+            //beenden.setTranslateX(125 * zoomfactor);
+            //bottom.setViewOrder(0.0);
+
+            beenden.setOnMouseEntered(e -> beenden.setStyle(HOVERED_BUTTON_STYLE));
+            beenden.setOnMouseExited(e -> beenden.setStyle(IDLE_BUTTON_STYLE));
+            //bottom.getChildren().add(beenden);
+
+
+            beenden.setOnMouseClicked(mouseEvent -> {
+                if (Main.playMode <= 1) {
+                    Main.gameRunning = false;
+                    Main.bots.cancel();
+                    Main.joined = false;
+                    Main.myTurnUpdate = true;
+                    spiellogik = null;
+                    if (Main.playMode == 1) {
+
+                        try {
+                            server.closeServer();
+                            Main.hauptmenuGui.runServer.stop();
+                            Main.hauptmenuGui.update.cancel();
+                            server = null;
+                            hauptmenuGui.status = new Label("Server geschlossen");
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
+
+                } else if (Main.playMode == 2) {//Multiplaymodus
+                    joined = false;
+                    try {
+                        Main.server.replaceSpielerDurchBot(uniqueID);
+                    } catch (RemoteException e) {
+                    }
+                    hauptmenuGui.update.cancel();
+                    server = null;
+                    hauptmenuGui.status = new Label("Server verlassen");
+
+                    Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
+
+                } else {//lokaler Spielmodus
+                    Main.gameRunning = false;
+                    Main.bots.cancel();
+                    Main.hauptmenuGui.showSettingsMenu(classPrimaryStage);
+                }
+
+            });
+            options.getChildren().addAll(settings,beenden);
+            options.setAlignment(Pos.TOP_RIGHT);
+            options.setSpacing(20);
+            options.setPadding(new Insets(10));
+            //}
+            gridPane.add(options, 4, 0, 1, 1);
+            gridPane.setValignment(options, VPos.TOP);
+            gridPane.setHalignment(options, HPos.RIGHT);
+
+
+
 
 
             root.getChildren().add(gridPane);
