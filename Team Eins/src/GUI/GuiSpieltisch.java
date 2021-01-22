@@ -758,7 +758,7 @@ public class GuiSpieltisch {
                                 "    -fx-alignment: center;"
                 );
 
-
+                chatbox.reposition(classPrimaryStage);
                 gridPane.add(chatButton, 0, 4, 1, 1);
 
             }
@@ -782,6 +782,7 @@ public class GuiSpieltisch {
             });
             settings.setOnMouseEntered(e -> settings.setStyle(HOVERED_BUTTON_STYLE));
             settings.setOnMouseExited(e -> settings.setStyle(IDLE_BUTTON_STYLE));
+            einstellung.reposition(classPrimaryStage);
 
             //Spiel verlassen
             //if (playerId == Main.ich) {

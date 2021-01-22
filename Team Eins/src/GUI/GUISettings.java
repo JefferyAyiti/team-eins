@@ -1,6 +1,7 @@
 package GUI;
 
 import Main.Main;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,6 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import static Main.Main.playMode;
 
@@ -106,7 +108,11 @@ public class GUISettings {
     }
 
     public void openSettings(Stage owner) {
-       settings.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_TOP_RIGHT);
+        settings.setY(owner.getY()+100);
+        settings.setX(owner.getX()+200);
+        if(owner.isFullScreen()){
+            settings.centerOnScreen();
+        }
         settings.setAutoFix(true);
         header.getStyleClass().add("header");
         schimpf.getStyleClass().add("hbox");
@@ -122,5 +128,10 @@ public class GUISettings {
 
     public void hideSettings() {
         settings.hide();
+    }
+
+    public void reposition(Stage owner){
+        settings.setX(owner.getX()+200);
+        settings.setY(owner.getY()+100);
     }
 }

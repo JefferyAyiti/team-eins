@@ -248,4 +248,9 @@ public class GUIChat {
         }
         return 1; //sichtbar für jeden
     }
+
+    public void reposition(Stage owner){
+        chat.setX(owner.getScene().getWindow().getX() + 5);
+        chat.setY(owner.getScene().getWindow().getY() + 35);
+    }
 }
