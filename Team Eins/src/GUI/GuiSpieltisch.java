@@ -763,7 +763,7 @@ public class GuiSpieltisch {
 
             }
 
-            HBox options = new HBox();
+            VBox options = new VBox();
                 //Einstellungen
             ImageView settings = new ImageView(new Image("GUI/images/gear_icon.png"));
 
@@ -835,7 +835,7 @@ public class GuiSpieltisch {
                 }
 
             });
-            options.getChildren().addAll(settings,beenden);
+            options.getChildren().addAll(beenden,settings);
             options.setAlignment(Pos.TOP_RIGHT);
             options.setSpacing(20);
             options.setPadding(new Insets(10));

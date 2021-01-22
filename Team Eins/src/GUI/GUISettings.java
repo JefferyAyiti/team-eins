@@ -106,7 +106,7 @@ public class GUISettings {
     }
 
     public void openSettings(Stage owner) {
-        settings.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_TOP_RIGHT);
+       settings.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_TOP_RIGHT);
         settings.setAutoFix(true);
         header.getStyleClass().add("header");
         schimpf.getStyleClass().add("hbox");
