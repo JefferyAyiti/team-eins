@@ -209,8 +209,8 @@ public class GuiHauptmenu {
                         }
 
                     } else {
-                        center.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 2);
-                        center.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 3);
+                        center.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 2 && GridPane.getRowIndex(node) == 4);
+                        center.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == 3 && GridPane.getRowIndex(node) == 4);
                     }
                 }
         );
