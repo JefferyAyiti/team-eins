@@ -174,7 +174,12 @@ public class GUIChat {
                                 if(sichtbarkeit == 2) {
                                     name = name+" (privat)";
                                     emojiTextFlowParameters.setTextColor(Color.rgb(245, 96, 66,1));
-                                    message = message.substring(myName.length()+2);
+                                    try {
+                                        message = message.substring(myName.length()+2);
+                                    } catch (Exception e) {
+                                        message = "";
+                                    }
+
                                 }else{
                                     emojiTextFlowParameters.setTextColor(Color.WHITE);
                                 }
@@ -186,7 +191,7 @@ public class GUIChat {
                                 Text nametext = new Text(name+ ": ");
                                 nametext.setStyle("-fx-font-weight: bold;");
                                 if(sichtbarkeit == 2) {
-                                    nametext.setFill(Color.web("rgb(245, 96, 66)"));
+                                    nametext.setFill(Color.rgb(245, 96, 66,1));
                                 }
                                 TextFlow msg = new TextFlow(nametext, emoteText);
                                 cbox.getChildren().add(msg);
@@ -239,7 +244,7 @@ public class GUIChat {
     int sichtbarFuerMich(List<String> msg) {
         String content = msg.get(1);
         if(content.charAt(0) == '@') { //private nachricht
-            if(content.length()+2 >= myName.length() &&
+            if(content.length() >= myName.length()+2 &&
                     content.substring(0, myName.length()+2).equals("@"+myName+" ") ||
             msg.get(0).equals(myName)) {
                 return 2; //sichtbar nur für mich
