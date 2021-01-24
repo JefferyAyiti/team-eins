@@ -163,8 +163,7 @@ public class GUIChat {
                             if(sichtbarkeit > 0) {
                             /*
                             TextFlow flow = new TextFlow();
-                            Text text1 = new Text(zeile.get(0) + ": ");
-                            text1.setStyle("-fx-font-weight: bold;");
+
 
                             Text text2 = new Text(zeile.get(1));
                             text2.setStyle("-fx-font-weight: normal; ");
@@ -179,17 +178,18 @@ public class GUIChat {
                                 }else{
                                     emojiTextFlowParameters.setTextColor(Color.WHITE);
                                 }
-                                String text = (name + ": " + message);
+                                String text = (message);
                                 TextFlow emoteText = emojiTextParser(text); //emoji chat
                                 emoteText.setLineSpacing(10);
                                 emoteText.setId("emoji");
 
+                                Text nametext = new Text(name+ ": ");
+                                nametext.setStyle("-fx-font-weight: bold;");
                                 if(sichtbarkeit == 2) {
-                                    //private message optisch hervorheben
-
+                                    nametext.setFill(Color.web("rgb(245, 96, 66)"));
                                 }
-
-                                cbox.getChildren().add(emoteText);
+                                TextFlow msg = new TextFlow(nametext, emoteText);
+                                cbox.getChildren().add(msg);
                             }
 
                         } else if (zeile.get(1).equals("/coinflip")) {

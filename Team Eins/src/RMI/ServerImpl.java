@@ -334,14 +334,14 @@ public class ServerImpl implements server {
         String[] msgwords = msg.split(" ");
         List<String> filterwords = new LinkedList<>();
         try {
-            System.out.println(System.getProperty("user.dir"));
-            filterwords = Files.readAllLines(Paths.get("src/GUI/schimpfworte.txt"));
+            filterwords = Files.readAllLines(Paths.get(
+                    System.getProperty("user.dir")+"/src/GUI/schimpfworte.txt"));
         } catch (IOException e) {
             System.out.println("Schimpfwortliste nicht gefunden");
         }
 
         for(int n = 0;n < msgwords.length;n++) {
-            if(filterwords.contains(msgwords[n])) {
+            if(filterwords.contains(capitalize(msgwords[n]))) {
                 String newword = "";
             for(int i = 0; i < msgwords[n].length(); i++) {
                 newword += "*";
@@ -351,6 +351,27 @@ public class ServerImpl implements server {
         }
 
         return String.join(" ", msgwords);
+    }
+
+    /**
+     * Großer erster Buchstaben bei einem Wort, sodass der Schimpfwortfilter anschlägt
+     * @param input
+     * @return
+     */
+    public static String capitalize(String input) {
+        if (input == null || input.length() <= 0) {
+            return input;
+        }
+        char[] chars = new char[1];
+        input.getChars(0, 1, chars, 0);
+        if (Character.isUpperCase(chars[0])) {
+            return input;
+        } else {
+            StringBuilder buffer = new StringBuilder(input.length());
+            buffer.append(Character.toUpperCase(chars[0]));
+            buffer.append(input.toCharArray(), 1, input.length()-1);
+            return buffer.toString();
+        }
     }
 
     /** getter-Methode für main
