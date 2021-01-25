@@ -134,4 +134,11 @@ public class GUISettings {
         settings.setX(owner.getX()+200);
         settings.setY(owner.getY()+100);
     }
+
+    /** getter-Methode für settings
+     * @return settings
+     */
+    public Popup getSettings() {
+        return settings;
+    }
 }

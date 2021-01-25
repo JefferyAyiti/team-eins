@@ -487,6 +487,8 @@ public class GuiSpieltisch {
      * @param primaryStage
      */
     public void buildStage(Stage primaryStage) {
+        primaryStage.xProperty().addListener((obs, oldVal, newVal) -> reposition(primaryStage));
+        primaryStage.yProperty().addListener((obs, oldVal, newVal) -> reposition(primaryStage));
 
         if(myTurnNotice == null || tisch.aktiv != ich) {
             myTurnNotice = true;
@@ -991,6 +993,21 @@ public class GuiSpieltisch {
 
     public void printtoLog(String event) {
         log.add(event);
+    }
+
+    /** positioniert den Chat und die Einstellung relativ zum Window
+     * @param primaryStage
+     */
+    public void reposition(Stage primaryStage){
+        if(chatbox != null && chatbox.chat != null){
+            chatbox.reposition(primaryStage);
+        }
+
+        if(einstellung != null && einstellung.getSettings() != null){
+            einstellung.reposition(primaryStage);
+        }
+
+
     }
 
 
