@@ -102,7 +102,7 @@ public class GuiHauptmenu {
         }
         GridPane center = new GridPane();
         center.setVgap(10);
-        center.setGridLinesVisible(true);
+        center.setGridLinesVisible(false);
 
 
         ImageView settings = new ImageView(new Image("GUI/images/gear_icon.png"));
