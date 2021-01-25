@@ -398,6 +398,7 @@ public class GuiHauptmenu {
 
         if (action == "start") { //Single-Player-Spiel
             inMenu = false;
+            playMode = 0;
             Main.botPlayTime = (long) slider.getValue();
             Main.botlevel = botselect.getSelectionModel().getSelectedIndex();
             spielArt = spielart.getSelectionModel().getSelectedIndex();
@@ -455,6 +456,7 @@ public class GuiHauptmenu {
             Main.anzSpieler = (int) playeranzselect.getValue();
 
             try {
+                tisch = null;
                 int portn = Integer.parseInt(port.getText());
                 runServer = new RunServer(ip.getText(),
                         "Server", portn, uniqueID, myName);
