@@ -8,6 +8,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -41,7 +43,14 @@ public class GuiHauptmenu {
     boolean hasLeftServer = false;
 
     boolean shutdown = false;
+    boolean settingsOpen = false;
 
+    private static final String IDLE_BUTTON_STYLE = "-fx-background-color: transparent;";
+    private static final String HOVERED_BUTTON_STYLE =
+            "-fx-background-insets: 10; " +
+                    "-fx-background-radius: 10; " +
+                    "-fx-cursor:hand;" +
+                    "-fx-effect: dropshadow(three-pass-box, yellow, 10, 0, 0, 0);";
 
 
     /**
@@ -51,6 +60,8 @@ public class GuiHauptmenu {
         Double fontsize= 12*zoomfactor;
         status.setId("status");
         status.setFont(new Font(fontsize));
+
+
 
         if(classPrimaryStage.getScene() != null) {
             sceneWidth = classPrimaryStage.getScene().getWidth();
@@ -91,6 +102,29 @@ public class GuiHauptmenu {
         }
         GridPane center = new GridPane();
         center.setVgap(10);
+        center.setGridLinesVisible(true);
+
+
+        ImageView settings = new ImageView(new Image("GUI/images/gear_icon.png"));
+
+        settings.setFitWidth(20 * zoomfactor);
+        settings.setPreserveRatio(true);
+
+        settings.setOnMouseClicked(s -> {
+            if (!settingsOpen) {
+                einstellung.openSettings(classPrimaryStage);
+                settingsOpen = true;
+            } else { //chat bereits offen
+                einstellung.hideSettings();
+                settingsOpen = false;
+            }
+
+        });
+        settings.setOnMouseEntered(e -> settings.setStyle(HOVERED_BUTTON_STYLE));
+        settings.setOnMouseExited(e -> settings.setStyle(IDLE_BUTTON_STYLE));
+        einstellung.reposition(classPrimaryStage);
+        center.addRow(6, settings);
+
 
         //Spielername
         namefield = new TextField(Main.myName);

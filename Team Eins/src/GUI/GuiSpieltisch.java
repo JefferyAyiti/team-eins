@@ -766,7 +766,7 @@ public class GuiSpieltisch {
             }
 
             VBox options = new VBox();
-                //Einstellungen
+            //Einstellungen
             ImageView settings = new ImageView(new Image("GUI/images/gear_icon.png"));
 
             settings.setFitWidth(20 * zoomfactor);

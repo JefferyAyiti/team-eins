@@ -87,8 +87,8 @@ public class GUISettings {
 
         Label label = new Label("Einstellungen");
         Label wort = new Label("Schimpfwortfilter:");
-        Label hinweis = new Label("Spielbare Karte anzeigen:");
-        Label kartesort = new Label("Karte sortieren:");
+        Label hinweis = new Label("Spielbare Karten anzeigen:");
+        Label kartesort = new Label("Karten sortieren:");
 
         header.getChildren().add(label);
 
