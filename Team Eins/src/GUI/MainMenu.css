@@ -28,9 +28,16 @@
 .combo-box, .text-input, .slider .track {
     -fx-background-color: rgba(160, 158, 158, 0.4);
     -fx-control-inner-background: rgba(0,0,0,0.4);
+    -fx-font-size: 100%;
+    -fx-font-weight: bold;
 }
 #Tab{
     -fx-effect: dropshadow( gaussian , gold ,10 ,0.3 ,0 ,0 );
+}
+#status{
+
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
 }
 
 #MMcenter > .label,

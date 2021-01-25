@@ -89,7 +89,7 @@ public class GuiScoreboard {
 
         center.addRow(0, platz, names, score, differ);
         center.setHgap(30 * Main.zoomfactor);
-        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('/GUI/images/oberflaeche.jpg')");
+        center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('/GUI/images/oberflaeche.jpg');-fx-background-size: cover");
         center.setMinHeight(250 * Main.zoomfactor);
         center.setMinWidth(300 * Main.zoomfactor);
 
