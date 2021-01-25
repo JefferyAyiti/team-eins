@@ -215,7 +215,13 @@ public class Main extends Application {
                         }
                     }
                     //spieltischGui.printtoLog("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
-                    ((Bot) tisch.getAktivSpieler()).play();
+                    try {
+                        ((Bot) tisch.getAktivSpieler()).play();
+                    }catch (ClassCastException e2){
+                        //e2.printStackTrace();
+                        System.err.println(e2.toString());
+                    }
+
                     if(timerRunning)
                     Platform.runLater(() -> {
                         spieltischGui.buildStage(classPrimaryStage);
