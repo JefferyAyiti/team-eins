@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Label;
 //import org.apache.xpath.operations.Bool;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -334,8 +335,9 @@ public class ServerImpl implements server {
         String[] msgwords = msg.split(" ");
         List<String> filterwords = new LinkedList<>();
         try {
-            filterwords = Files.readAllLines(Paths.get(
-                    System.getProperty("user.dir")+"/src/GUI/schimpfworte.txt"));
+            File file =
+                    new File("src/GUI/schimpfworte.txt");
+            filterwords = Files.readAllLines(Paths.get(file.getAbsolutePath()));
         } catch (IOException e) {
             System.out.println("Schimpfwortliste nicht gefunden");
         }
