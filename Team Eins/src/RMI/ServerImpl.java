@@ -335,8 +335,10 @@ public class ServerImpl implements server {
         String[] msgwords = msg.split(" ");
         List<String> filterwords = new LinkedList<>();
         try {
+            File filePath = new File("Team Eins\\src\\GUI\\schimpfworte.txt");
+            String path = filePath.getAbsolutePath();
             File file =
-                    new File("src/GUI/schimpfworte.txt");
+                    new File(path);
             filterwords = Files.readAllLines(Paths.get(file.getAbsolutePath()));
         } catch (IOException e) {
             System.out.println("Schimpfwortliste nicht gefunden");
