@@ -336,6 +336,9 @@ public class ServerImpl implements server {
         List<String> filterwords = new LinkedList<>();
         try {
             File filePath = new File("Team Eins\\src\\GUI\\schimpfworte.txt");
+            if(!filePath.exists()) {
+                filePath = new File("src\\GUI\\schimpfworte.txt");
+            }
             String path = filePath.getAbsolutePath();
             File file =
                     new File(path);
