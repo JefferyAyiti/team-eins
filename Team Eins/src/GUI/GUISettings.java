@@ -120,9 +120,7 @@ public class GUISettings {
         sortieren.getStyleClass().add("hbox");
         steuerung.getStyleClass().add("vbox");
         steuerung.getStylesheets().add("GUI/einstellung.css");
-        if (playMode == 0)
             schimpf.setVisible(false);
-
         settings.show(owner);
     }
 
