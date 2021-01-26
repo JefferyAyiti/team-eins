@@ -441,6 +441,7 @@ public class GuiHauptmenu {
         if (action == "start") { //Single-Player-Spiel
             inMenu = false;
             playMode = 0;
+            ich = 0;
             Main.botPlayTime = (long) slider.getValue();
             Main.botlevel = botselect.getSelectionModel().getSelectedIndex();
             spielArt = spielart.getSelectionModel().getSelectedIndex();
