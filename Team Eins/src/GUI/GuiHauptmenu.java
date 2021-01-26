@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -60,6 +61,9 @@ public class GuiHauptmenu {
         Double fontsize= 12*zoomfactor;
         status.setId("status");
         status.setFont(new Font(fontsize));
+
+        PrimaryStage.xProperty().addListener((obs, oldVal, newVal) -> reposition(PrimaryStage));
+        PrimaryStage.yProperty().addListener((obs, oldVal, newVal) -> reposition(PrimaryStage));
 
 
 
@@ -123,7 +127,7 @@ public class GuiHauptmenu {
         settings.setOnMouseEntered(e -> settings.setStyle(HOVERED_BUTTON_STYLE));
         settings.setOnMouseExited(e -> settings.setStyle(IDLE_BUTTON_STYLE));
         einstellung.reposition(classPrimaryStage);
-        center.addRow(6, settings);
+
 
 
         //Spielername
@@ -292,6 +296,9 @@ public class GuiHauptmenu {
         titel.setTextFill(Color.WHITE);
         titel.setFont(new Font("Script MT Bold", 36 * Main.zoomfactor));
 
+        BorderPane header = new BorderPane();
+        header.setRight(settings);
+        header.setAlignment(settings, Pos.TOP_LEFT);
         VBox top = new VBox(titel);
         top.setAlignment(Pos.CENTER);
 
@@ -335,6 +342,7 @@ public class GuiHauptmenu {
         BorderPane root = new BorderPane();
 
         top.getChildren().add(multiplayer);
+        header.setCenter(top);
         HBox bottom = new HBox();
         bottom.setAlignment(Pos.CENTER);
         root.setBottom(bottom);
@@ -377,7 +385,7 @@ public class GuiHauptmenu {
         bottom.setMinHeight((400*zoomfactor)/6);
 
 
-        root.setTop(top);
+        root.setTop(header);
         root.setCenter(center);
 
 
@@ -680,6 +688,18 @@ public class GuiHauptmenu {
             }
 
         };
+
+    }
+
+    public void reposition(Stage primaryStage){
+        if(chatbox != null && chatbox.chat != null){
+            chatbox.reposition(primaryStage);
+        }
+
+        if(einstellung != null && einstellung.getSettings() != null){
+            einstellung.reposition(primaryStage);
+        }
+
 
     }
 }

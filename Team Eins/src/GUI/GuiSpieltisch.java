@@ -42,8 +42,7 @@ public class GuiSpieltisch {
 
     private ArrayList<Double> x = new ArrayList<>();
     private ArrayList<Double> y = new ArrayList<>();
-    private ArrayList<Double> deg = new ArrayList<>();
-    private List<String> log = new ArrayList<>();
+    private ArrayList<Double> deg = new ArrayList<>();;
     boolean chatOpened = false;
     boolean settingsOpen = false;
     int[] cardId;
@@ -990,10 +989,6 @@ public class GuiSpieltisch {
 
     }
 
-
-    public void printtoLog(String event) {
-        log.add(event);
-    }
 
     /** positioniert den Chat und die Einstellung relativ zum Window
      * @param primaryStage
