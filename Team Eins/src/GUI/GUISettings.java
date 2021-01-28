@@ -1,10 +1,13 @@
 package GUI;
 
 import Main.Main;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -17,9 +20,9 @@ import static Main.Main.playMode;
 
 public class GUISettings {
     private Popup settings;
-    private static HBox schimpf = new HBox();
-    private static HBox tipp = new HBox();
-    private static HBox sortieren = new HBox();
+    private static VBox schimpf = new VBox();
+    private static VBox tipp = new VBox();
+    private static VBox sortieren = new VBox();
     private static VBox steuerung = new VBox();
     private static HBox header = new HBox();
     private static Button schliessen = new Button("Schliessen");
@@ -27,6 +30,9 @@ public class GUISettings {
     ToggleGroup hinweis = new ToggleGroup();
     ToggleGroup sort = new ToggleGroup();
 
+    /**
+     * Die Komponente der Einstellungen werden in Constructor erzeugt
+     */
     public GUISettings() {
         settings = new Popup();
         settings.setHideOnEscape(true);
@@ -78,6 +84,7 @@ public class GUISettings {
 
 
         RadioButton sortAus = new RadioButton("Aus");
+
         sortAus.setToggleGroup(sort);
         sortAus.setOnMouseClicked(e -> {
             Main.autoSort = null;
@@ -86,27 +93,46 @@ public class GUISettings {
         sortAus.setSelected(true);
 
         Label label = new Label("Einstellungen");
+
         Label wort = new Label("Schimpfwortfilter:");
-        Label hinweis = new Label("Spielbare Karten anzeigen:");
+        schimpf.setAlignment(Pos.CENTER);
+        HBox wortOptionen = new HBox(filterAn, filterAus);
+        wortOptionen.setAlignment(Pos.TOP_CENTER);
+        wortOptionen.setSpacing(20);
+
+        Label hinweis = new Label("Tipps:");
+        tipp.setAlignment(Pos.CENTER);
+        HBox hinweisOptionen = new HBox(tippAn, tippAus);
+        hinweisOptionen.setAlignment(Pos.TOP_CENTER);
+        hinweisOptionen.setSpacing(20);
+
         Label kartesort = new Label("Karten sortieren:");
+        sortieren.setAlignment(Pos.CENTER);
+        HBox kartesortOpt = new HBox(sortAn, sortBeginn, sortAus);
+        kartesortOpt.setAlignment(Pos.TOP_CENTER);
+        kartesortOpt.setSpacing(5);
+
 
         header.getChildren().add(label);
 
-        schimpf.getChildren().addAll(wort, filterAn, filterAus);
-        tipp.getChildren().addAll(hinweis, tippAn, tippAus);
-        sortieren.getChildren().addAll(kartesort, sortAn, sortBeginn, sortAus);
+        schimpf.getChildren().addAll(wort,wortOptionen );
+        tipp.getChildren().addAll(hinweis, hinweisOptionen);
+        sortieren.getChildren().addAll(kartesort, kartesortOpt );
 
         schliessen.setOnMouseClicked(c -> settings.hide());
 
-        steuerung.setPrefWidth(400);
-        steuerung.setPrefHeight(190);
-        steuerung.getChildren().addAll(header);
-            steuerung.getChildren().add(schimpf);
-        steuerung.getChildren().addAll(tipp, sortieren, schliessen);
+
+        steuerung.setPrefWidth(220);
+        steuerung.setPrefHeight(300);
+        steuerung.setAlignment(Pos.CENTER);
+        steuerung.getChildren().addAll(header, schimpf, tipp, sortieren, schliessen);
         steuerung.setSpacing(5);
         settings.getContent().add(steuerung);
     }
 
+    /**
+     * @param owner Style in Settings
+     */
     public void openSettings(Stage owner) {
         settings.setY(owner.getY()+100);
         settings.setX(owner.getX()+200);
@@ -127,6 +153,10 @@ public class GUISettings {
         settings.hide();
     }
 
+    /**
+     * @param owner Popup Position wird aktualisiert mit
+     *              der Bewegung der Spielfenster
+     */
     public void reposition(Stage owner){
         settings.setX(owner.getX()+200);
         settings.setY(owner.getY()+100);
