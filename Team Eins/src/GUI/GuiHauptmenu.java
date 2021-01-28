@@ -304,7 +304,7 @@ public class GuiHauptmenu {
 
         //Singlepalyer / Host / Join
         HBox multiplayer = new HBox();
-        multiplayer.setMinWidth(600*zoomfactor);
+        multiplayer.setMinWidth(580*zoomfactor);
         multiplayer.setPrefHeight(20*zoomfactor);
         multiplayer.setSpacing(50*zoomfactor);
         multiplayer.setTranslateY(15);
