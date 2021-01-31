@@ -142,6 +142,12 @@ public class ServerImpl implements server {
         return anzSpieler;
     }
 
+    /**
+     * Für Sortierung per Drag&Drop
+     * @param spielerId
+     * @param hand
+     * @throws RemoteException
+     */
     @Override
     public void setCardHand(int spielerId, ArrayList<HandKarte> hand) throws RemoteException {
         tisch.getSpielerList()[spielerId].getCardHand().setHandKarten(hand);

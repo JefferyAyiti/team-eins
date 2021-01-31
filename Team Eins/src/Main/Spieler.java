@@ -2,6 +2,7 @@ package Main;
 
 import java.io.Serializable;
 import java.sql.SQLOutput;
+import java.util.Objects;
 import java.util.UUID;
 
 import static Main.Main.ich;
@@ -177,5 +178,10 @@ public class Spieler  implements Serializable {
     @Override
     public String toString() {
         return "("+getName()+" "+getUid()+")";
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid);
     }
 }

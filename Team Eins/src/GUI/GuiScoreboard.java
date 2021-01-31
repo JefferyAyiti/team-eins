@@ -134,11 +134,12 @@ public class GuiScoreboard {
                             remoteException.printStackTrace();
                         }
                     }
-                    Main.classPrimaryStage.close();
+
                     try {
                         Main.bots.cancel();
                     }catch (NullPointerException  l){}
                     Main.resizecheck.cancel();
+                    System.exit(0);
                         }
                 );
                 bottom.getChildren().add(endGame);

@@ -17,4 +17,6 @@ public class HandKarte extends Karte  implements Serializable {
     public String toString() {
         return String.valueOf(this.getValue());
     }
+
+
 }

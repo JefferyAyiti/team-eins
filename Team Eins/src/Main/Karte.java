@@ -36,6 +36,17 @@ boolean covered;
         else return -1;
     }
 
+    @Override
+    public int hashCode() {
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Karte ob = (Karte)obj;
+        return value == ob.getValue();
+    }
+
     public boolean isPlayable() {
         return tisch.getObereKarteAblagestapel().value == this.value //gleicher Wert
                 || tisch.getObereKarteAblagestapel().value == this.value - 1   //Handkarte ist um eins größer als die oberste Ablagekarte

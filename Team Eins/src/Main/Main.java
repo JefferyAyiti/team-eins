@@ -48,8 +48,6 @@ public class Main extends Application {
     public static Boolean autoSort = null; //null = aus, false = einmalig, true = immer
 
 
-
-
     //Wird später im Menü festgelegt
     public static int anzSpieler;
 
@@ -82,12 +80,11 @@ public class Main extends Application {
     public static Image[] cardsArray;
 
 
-
     public static GuiHauptmenu hauptmenuGui; //= new GuiHauptmenu();
-    public static GuiScoreboard scoreboardGui ;//= new GuiScoreboard();
-    public static GuiSpieltisch spieltischGui ;//= new GuiSpieltisch();
-    public static GUIChat chatbox ;//= new GUIChat();
-    public static GUISettings einstellung ;//= new GUISettings();
+    public static GuiScoreboard scoreboardGui;//= new GuiScoreboard();
+    public static GuiSpieltisch spieltischGui;//= new GuiSpieltisch();
+    public static GUIChat chatbox;//= new GUIChat();
+    public static GUISettings einstellung;//= new GUISettings();
 
     /**
      * Erstellt Tisch, Nachzieh- und Abalgestapel, Spieler
@@ -103,11 +100,11 @@ public class Main extends Application {
 
         int i = -1;
 
-        if(playMode == 0) {
+        if (playMode == 0) {
             spielerM[0] = new Spieler(myName, uniqueID);
-            i=0;
+            i = 0;
         } else {
-            if(server != null) {
+            if (server != null) {
 
                 try {
                     for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
@@ -126,7 +123,7 @@ public class Main extends Application {
             spielerM[i] = new Bot(botname[level - 1] + "Bot " + (i + 1), level);
 
         }
-        if(playMode == 1) {
+        if (playMode == 1) {
             List<Spieler> spl = Arrays.asList(spielerM);
             Collections.shuffle(spl);
             spielerM = spl.toArray(new Spieler[anzSpieler]);
@@ -176,13 +173,12 @@ public class Main extends Application {
         hauptmenuGui.showSettingsMenu(classPrimaryStage);
 
 
-
     }
 
     static class MyTask1 extends TimerTask {
         @Override
         public void run() {
-            if(timerRunning) {
+            if (timerRunning) {
                 sceneWidth = classPrimaryStage.getScene().getWidth();
                 sceneHeight = classPrimaryStage.getScene().getHeight();
                 Platform.runLater(() -> {
@@ -198,7 +194,7 @@ public class Main extends Application {
         @Override
         public void run() {
             if (!timerRunning)
-            return;
+                return;
             else {
                 if (playMode == 1) {
                     try {
@@ -217,15 +213,15 @@ public class Main extends Application {
                     //spieltischGui.printtoLog("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
                     try {
                         ((Bot) tisch.getAktivSpieler()).play();
-                    }catch (ClassCastException e2){
+                    } catch (ClassCastException e2) {
                         //e2.printStackTrace();
                         System.err.println(e2.toString());
                     }
 
-                    if(timerRunning)
-                    Platform.runLater(() -> {
-                        spieltischGui.buildStage(classPrimaryStage);
-                    });
+                    if (timerRunning)
+                        Platform.runLater(() -> {
+                            spieltischGui.buildStage(classPrimaryStage);
+                        });
                     lastmove = System.currentTimeMillis();
 
                 } else if (playMode == 1 && ((tisch.aktiv != ich || tisch.aktiv == ich &&
@@ -235,18 +231,25 @@ public class Main extends Application {
                     //if (aenderung <= server.getAenderung(Main.uniqueID)) {
 
 
-                    Platform.runLater(() -> {
-                        try {
-                            aenderung = Main.server.getAenderung(Main.uniqueID);
-                        } catch (RemoteException e) {
-                        }
-                        if (tisch.aktiv == ich) {
-                            myTurnUpdate = false;
-                        } else
-                            myTurnUpdate = true;
-                        spieltischGui.buildStage(classPrimaryStage);
-                    });
-                    //}
+                    long aend = 0;
+                    try {
+                        aend = Main.server.getAenderung(Main.uniqueID);
+                    } catch (RemoteException e) {
+                    }
+                    if (aend > aenderung) {
+                        Platform.runLater(() -> {
+                            try {
+                                aenderung = Main.server.getAenderung(Main.uniqueID);
+                            } catch (RemoteException e) {
+                            }
+                            if (tisch.aktiv == ich) {
+                                myTurnUpdate = false;
+                            } else
+                                myTurnUpdate = true;
+                            spieltischGui.buildStage(classPrimaryStage);
+                        });
+                        aenderung = aend;
+                    }
                 }
             }
         }
@@ -269,8 +272,8 @@ public class Main extends Application {
         resizecheck.schedule(new MyTask1(), 0, 500);
 
 
-        if(playMode != 2)
-            bots.schedule(new moveCheck(), 300 , 200);
+        if (playMode != 2)
+            bots.schedule(new moveCheck(), 300, 200);
 
         ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
         {
@@ -290,50 +293,63 @@ public class Main extends Application {
     }
 
 
-
-    /** setter-methode für tisch
+    /**
+     * setter-methode für tisch
+     *
      * @param tisch neue Tisch
      */
     public void setTisch(Tisch tisch) {
         Main.tisch = tisch;
     }
 
-    /** setter-Methode für anzSpieler
+    /**
+     * setter-Methode für anzSpieler
+     *
      * @param anzSpieler anzahl an Spielern am Tisch
      */
-    public void setAnzSpieler(int anzSpieler){
+    public void setAnzSpieler(int anzSpieler) {
         Main.anzSpieler = anzSpieler;
     }
 
-    /** getter-Methode für Main
+    /**
+     * getter-Methode für Main
+     *
      * @return Main main
      */
-    public Main getMain(){
+    public Main getMain() {
         return this;
     }
 
-    /** setter-Methode für spiellogik
+    /**
+     * setter-Methode für spiellogik
+     *
      * @param spiellogik
      */
     public void setSpiellogik(Spiellogik spiellogik) {
         this.spiellogik = spiellogik;
     }
 
-    /** setter-Methode für haende
+    /**
+     * setter-Methode für haende
+     *
      * @param haende
      */
     public void setHaende(Hand[] haende) {
         Main.haende = haende;
     }
 
-    /** getter-Methode für haende
+    /**
+     * getter-Methode für haende
+     *
      * @return
      */
-    public Hand[] getHaende(){
+    public Hand[] getHaende() {
         return Main.haende;
     }
 
-    /** setter-Methode für server
+    /**
+     * setter-Methode für server
+     *
      * @param server
      */
     public void setServer(RMI.server server) {

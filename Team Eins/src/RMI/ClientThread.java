@@ -48,13 +48,19 @@ public class ClientThread implements Runnable {
 
             @Override
             public void run() {
+                long aender = 0;
+                try {
+                    aender = server.getAenderung(Main.uniqueID);
+                } catch (RemoteException e) {
+                }
                 try {
 
                     if(!server.serverOpen() || server.getSpieler(client.cname).getLeftServer()){
                         server = null;
                     }
-                    if (server.getAenderung(Main.uniqueID) > aenderung) {
-                        aenderung = server.getAenderung(Main.uniqueID);
+
+                    if (aender > aenderung) {
+                        aenderung = aender;
                         Platform.runLater(() -> {
                                     chatbox.messages.getChildren().clear();
                                     chatbox.messages.getChildren().addAll(chatbox.buildChat());
