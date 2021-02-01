@@ -6,11 +6,17 @@ import RMI.server;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
+import javafx.scene.control.skin.TextInputControlSkin;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.io.*;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
 import java.rmi.RemoteException;
 import java.util.*;
+
+import static java.nio.file.StandardOpenOption.CREATE;
 
 
 public class Main extends Application {
@@ -147,8 +153,29 @@ public class Main extends Application {
         }
     }
 
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("L.A.M.A - Team Eins");
+    public void start(Stage primaryStage) throws IOException {
+        primaryStage.setTitle("L.A.M.A. - Team Eins");
+
+
+        File in = new File("./.uid");
+
+        if(!in.exists()) { //noch keine UID gespeichert, neue Datei anlegen
+            PrintWriter pWriter = null;
+            try {
+                pWriter = new PrintWriter(new BufferedWriter(new FileWriter(in)));
+                pWriter.println(uniqueID);
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            } finally {
+                if (pWriter != null) {
+                    pWriter.flush();
+                    pWriter.close();
+                }
+            }
+        } else {
+            BufferedReader reader = new BufferedReader(new FileReader(in));
+            uniqueID = reader.readLine();
+        }
 
         table1 = new Image("GUI/images/table2.svg");
         classPrimaryStage = primaryStage;
