@@ -34,11 +34,15 @@ public class Bot extends Spieler  implements Serializable {
             case 3:
                 playSchwierigkeitSchwer();
                 break;
+            case 4: //Tutorial
+                tutorialBot();
+                break;
         }
 
         //Main.tisch.naechste();
         return true;
     }
+
 
     /**
      * Bot versucht immer Chips zu tauschen, danach spielt er in folgender Reihenfolge:
@@ -333,6 +337,10 @@ public class Bot extends Spieler  implements Serializable {
 
             }
         }
+    }
+
+    private void tutorialBot() {
+
     }
     /**
      * Lässt den Bot Chips ablegen, wenn er alle Karten abgelegt hat.

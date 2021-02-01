@@ -47,6 +47,7 @@ public class GuiSpieltisch {
     boolean settingsOpen = false;
     int[] cardId;
     Boolean myTurnNotice = null;
+    private GridPane spielfeld;
 
     double dragX;
     double dragY;
@@ -57,6 +58,11 @@ public class GuiSpieltisch {
                     "-fx-background-radius: 10; " +
                     "-fx-cursor:hand;" +
                     "-fx-effect: dropshadow(three-pass-box, yellow, 10, 0, 0, 0);";
+    private static final String HILIGHT_BUTTON_STYLE =
+            "-fx-background-insets: 10; " +
+                    "-fx-background-radius: 10; " +
+                    "-fx-cursor:hand;" +
+                    "-fx-effect: dropshadow(three-pass-box, gold, 30, 0.5, 0, 0);";
 
 
     public GuiSpieltisch() {
@@ -73,6 +79,7 @@ public class GuiSpieltisch {
      * @param playerId
      * @return Gibt ein Panel zurück
      */
+
     private Pane makepanel(int playerId) {
 
 
@@ -85,9 +92,10 @@ public class GuiSpieltisch {
 
         int tablePos = Math.floorMod(playerId - ich, anzSpieler);
         Label plr = new Label(tisch.getSpielerList()[playerId].getName()); //PlayerID für debug
-        if (tablePos > 1 && tablePos < 5) {
+        if (tutorialAn==false && tablePos > 1 && tablePos < 5) {
             plr.setRotate(180);
         }
+
         plr.setTextFill(Color.WHITE);
         plr.setFont(Font.font("Verdana", 12 * zoomfactor));
         if (tisch.getSpielerList()[playerId] == Main.tisch.getAktivSpieler()) {
@@ -359,10 +367,16 @@ public class GuiSpieltisch {
                 buildStage(Main.classPrimaryStage);
             });
 
+            if (tutorial.chips) {
+                chips.setStyle(HILIGHT_BUTTON_STYLE);
 
-            chips.setOnMouseEntered(e -> chips.setStyle(HOVERED_BUTTON_STYLE));
-            chips.setOnMouseExited(e -> chips.setStyle(IDLE_BUTTON_STYLE));
-        }
+            }else if(tutorialAn && tutorial.chips==false){
+                chips.setStyle(IDLE_BUTTON_STYLE);
+            }else {
+                    chips.setOnMouseEntered(e -> chips.setStyle(HOVERED_BUTTON_STYLE));
+                    chips.setOnMouseExited(e -> chips.setStyle(IDLE_BUTTON_STYLE));
+                }
+            }
 
         chips.add(blChip, 0, 0);
         chips.add(whChip, 0, 1);
@@ -416,7 +430,7 @@ public class GuiSpieltisch {
             chips.add(mute, 2, 0, 1, 2);
 
         }
-        if (tablePos > 1 && tablePos < 5) {
+        if (!tutorialAn &&(tablePos > 1 && tablePos < 5)) {
             chips.setRotate(180);
         }
 
@@ -467,8 +481,12 @@ public class GuiSpieltisch {
                 pane.setTranslateY(10 * zoomfactor);
                 break;
             case 2:
-                pane.setTranslateX(-30 * zoomfactor);
-                pane.setTranslateY(+10 * zoomfactor);
+                if(tutorialAn){
+                    pane.setTranslateY(10 * zoomfactor);
+                }else {
+                    pane.setTranslateX(-30 * zoomfactor);
+                    pane.setTranslateY(+10 * zoomfactor);
+                }
                 break;
         }
         return pane;
@@ -672,35 +690,48 @@ public class GuiSpieltisch {
             Rotate rotate = new Rotate();
             //Setting pivot points for the rotation
             rotate.setAngle(90);
+            if(tutorialAn){//Tutorialansicht
+                gridPane.add(makepanel(0), 1, 4, 3, 1);
 
-            gridPane.add(makepanel(ich), 1, 4, 3, 1);
+                Node player1 = makepanel(1);
+                player1.setRotate(90);
+                gridPane.add(player1, 0, 2, 1, 1);
 
-            Node player1 = makepanel((1 + ich) % anzSpieler);
-            player1.setRotate(90);
-            gridPane.add(player1, 0, 2, 1, 1);
+                Node player2 = makepanel(2);
+                player2.setRotate(-90);
+                gridPane.add(player2, 4, 2, 2, 1);
 
-            if (Main.anzSpieler > 2) {
-                Node player2 = makepanel((2 + ich) % anzSpieler);
-                gridPane.add(player2, 0, 0, 2, 1);
-                player2.setRotate(155);
-            }
 
-            if (Main.anzSpieler > 3) {
-                Node player3 = makepanel((3 + ich) % anzSpieler);
-                player3.setRotate(180);
-                gridPane.add(player3, 2, 0, 1, 1);
-            }
+            }else {//normale Ansicht
+                gridPane.add(makepanel(ich), 1, 4, 3, 1);
 
-            if (Main.anzSpieler > 4) {
-                Node player4 = makepanel((4 + ich) % anzSpieler);
-                player4.setRotate(205);
-                gridPane.add(player4, 3, 0, 2, 1);
-            }
+                Node player1 = makepanel((1 + ich) % anzSpieler);
+                player1.setRotate(90);
+                gridPane.add(player1, 0, 2, 1, 1);
 
-            if (Main.anzSpieler > 5) {
-                Node player5 = makepanel((5 + ich) % anzSpieler);
-                player5.setRotate(-90);
-                gridPane.add(player5, 4, 2, 2, 1);
+                if (Main.anzSpieler > 2) {
+                    Node player2 = makepanel((2 + ich) % anzSpieler);
+                    gridPane.add(player2, 0, 0, 2, 1);
+                    player2.setRotate(155);
+                }
+
+                if (Main.anzSpieler > 3) {
+                    Node player3 = makepanel((3 + ich) % anzSpieler);
+                    player3.setRotate(180);
+                    gridPane.add(player3, 2, 0, 1, 1);
+                }
+
+                if (Main.anzSpieler > 4) {
+                    Node player4 = makepanel((4 + ich) % anzSpieler);
+                    player4.setRotate(205);
+                    gridPane.add(player4, 3, 0, 2, 1);
+                }
+
+                if (Main.anzSpieler > 5) {
+                    Node player5 = makepanel((5 + ich) % anzSpieler);
+                    player5.setRotate(-90);
+                    gridPane.add(player5, 4, 2, 2, 1);
+                }
             }
 
 
@@ -851,7 +882,7 @@ public class GuiSpieltisch {
 
 
             //Notice wenn man am Zug ist
-            if(myTurnNotice  && tisch.aktiv == ich) {
+            if((myTurnNotice  && tisch.aktiv == ich )&& tutorialAn==false) {
 
 
                 turnNotice = new VBox();
@@ -879,7 +910,7 @@ public class GuiSpieltisch {
 
 
 
-
+            setGridpane(gridPane);
             root.getChildren().add(gridPane);
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
 
@@ -1007,7 +1038,10 @@ public class GuiSpieltisch {
 
 
     }
-
-
-
+    private void setGridpane(GridPane p){
+        spielfeld=p;
+    }
+    public GridPane getGridPane() {
+        return spielfeld;
+    }
 }
