@@ -26,9 +26,11 @@ public class GUISettings {
     private static VBox steuerung = new VBox();
     private static HBox header = new HBox();
     private static Button schliessen = new Button("Schliessen");
+    private static VBox transparenz = new VBox();
     ToggleGroup filter = new ToggleGroup();
     ToggleGroup hinweis = new ToggleGroup();
     ToggleGroup sort = new ToggleGroup();
+    Slider slider;
 
     /**
      * Die Komponente der Einstellungen werden in Constructor erzeugt
@@ -112,20 +114,29 @@ public class GUISettings {
         kartesortOpt.setAlignment(Pos.TOP_CENTER);
         kartesortOpt.setSpacing(5);
 
+        Label chattranz = new Label("Chat Transparenz");
+        transparenz.setAlignment(Pos.CENTER);
+        slider = new Slider(0,1,0.8);
+        slider.setShowTickMarks(true);
+        slider.setShowTickLabels(true);
+        slider.setMajorTickUnit(0.25f);
+        slider.setBlockIncrement(0.1f);
+
+
 
         header.getChildren().add(label);
 
         schimpf.getChildren().addAll(wort,wortOptionen );
         tipp.getChildren().addAll(hinweis, hinweisOptionen);
         sortieren.getChildren().addAll(kartesort, kartesortOpt );
-
+        transparenz.getChildren().addAll(chattranz, slider);
         schliessen.setOnMouseClicked(c -> settings.hide());
 
 
         steuerung.setPrefWidth(220);
-        steuerung.setPrefHeight(300);
+        steuerung.setPrefHeight(350);
         steuerung.setAlignment(Pos.CENTER);
-        steuerung.getChildren().addAll(header, schimpf, tipp, sortieren, schliessen);
+        steuerung.getChildren().addAll(header, schimpf, tipp, sortieren,transparenz, schliessen);
         steuerung.setSpacing(5);
         settings.getContent().add(steuerung);
     }
@@ -144,6 +155,7 @@ public class GUISettings {
         schimpf.getStyleClass().add("hbox");
         tipp.getStyleClass().add("hbox");
         sortieren.getStyleClass().add("hbox");
+        transparenz.getStyleClass().add("hbox");
         steuerung.getStyleClass().add("vbox");
         steuerung.getStylesheets().add("GUI/einstellung.css");
         settings.show(owner);
@@ -167,5 +179,9 @@ public class GUISettings {
      */
     public Popup getSettings() {
         return settings;
+    }
+
+    public double getSliderValue(){
+       return slider.getValue();
     }
 }
