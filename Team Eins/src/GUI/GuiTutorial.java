@@ -170,24 +170,23 @@ public class GuiTutorial {
     boolean karte=false;
     boolean aussetzten=false;
 
-    public void startTutorial(int i) {
+    public void startTutorial() {
         System.out.println("Karl: "+spielerM[1].getCardHand().getKarte(0) + "Paul: "+ spielerM[2].getCardHand().getKarte(0));
-        switch (i) {
-            case 1:
-                //Anfang
-                txt = new Text("Willkommen beim Tutorial "
-                        + spielerM[0].getName()
-                        + "! Ich bin Karl. Ich helfe dir das Spiel zu verstehen.\n"
-                        + "Klicke einfach auf den Bildschirm wenn du breit bist, dann fangen wir an...");
-                popUp(txt, 5, 0);
+        if(intro) {
 
-                //Chips
-                Main.spieltischGui.getGridPane().onMouseClickedProperty().set(a -> {
-                    closeDialog();
-                    txt = new Text("Am Ende einer Runde kassierst du für die Karten auf deiner Hand Minuspunkte.\n"
-                            + "Also halte dich immer an die L.A.M.A.-Regel: Lege alle Minuspunkte ab. \n"
-                            + "Hast du am Ende die wenigsten Minuspunkte gewinnst du das Spiel.");
-                    popUp(txt, 5, 0);
+            txt = new Text("Willkommen beim Tutorial "
+                    + spielerM[0].getName()
+                    + "! Ich bin Karl. Ich helfe dir das Spiel zu verstehen.\n"
+                    + "Klicke einfach auf den Bildschirm wenn du breit bist, dann fangen wir an...");
+            //Anfang
+            popUp(txt, 5, 0);
+            //Chips
+            Main.spieltischGui.getGridPane().onMouseClickedProperty().set(a -> {
+                closeDialog();
+                txt = new Text("Am Ende einer Runde kassierst du für die Karten auf deiner Hand Minuspunkte.\n"
+                        + "Also halte dich immer an die L.A.M.A.-Regel: Lege alle Minuspunkte ab. \n"
+                        + "Hast du am Ende die wenigsten Minuspunkte gewinnst du das Spiel.");
+                popUp(txt, 5, 0);
 
                     Main.spieltischGui.getGridPane().onMouseClickedProperty().set(b -> {
                         closeDialog();
@@ -217,12 +216,13 @@ public class GuiTutorial {
                                     Main.spieltischGui.getGridPane().onMouseClickedProperty().set(e -> {
                                         if (spielerM[0].getBlackChips() == 3) {
                                             chips = false;
+                                            karte= true;
                                             reloadGui();
                                             txt = new Text("Toll! ");
                                             popUp(txt, 5, 0);
 
                                             Main.spieltischGui.getGridPane().onMouseClickedProperty().set(f -> {
-                                                startTutorial(2);
+                                                startTutorial();
                                             });
 
                                         }
@@ -233,58 +233,58 @@ public class GuiTutorial {
                     });
                 });
             //legen
-            case 2:
-                Main.spieltischGui.getGridPane().onMouseClickedProperty().set(b -> {
-                    txt = new Text("Du kannst immer eine der drei Aktionen auswählen: \n" +
-                            "eine Karte ablegen," +
-                            "eine Katze nachziehen oder" +
-                            "Aussteigen");
-                    popUp(txt, 5, 0);
+           if(karte) {
+               Main.spieltischGui.getGridPane().onMouseClickedProperty().set(b -> {
+                   txt = new Text("Du kannst immer eine der drei Aktionen auswählen: \n" +
+                           "eine Karte ablegen," +
+                           "eine Katze nachziehen oder" +
+                           "Aussteigen");
+                   popUp(txt, 5, 0);
 
-                    Main.spieltischGui.getGridPane().onMouseClickedProperty().set(c -> {
-                        closeDialog();
-                        txt = new Text("versuchen wir erst eine Karte abzulegen. Der Ablage bestimmt, was du ablegen darfst.\n+" +
-                                "Du kannst immer nur eine Karte mit dem gleichen Wert oder einen Wert höher ablegen." +
-                                "Das Lama ist die höhste Karte, auf sie kann nur ein Lama oder eine 1 gelegt werden.");
-                        popUp(txt, 5, 0);
+                   Main.spieltischGui.getGridPane().onMouseClickedProperty().set(c -> {
+                       closeDialog();
+                       txt = new Text("versuchen wir erst eine Karte abzulegen. Der Ablage bestimmt, was du ablegen darfst.\n+" +
+                               "Du kannst immer nur eine Karte mit dem gleichen Wert oder einen Wert höher ablegen." +
+                               "Das Lama ist die höhste Karte, auf sie kann nur ein Lama oder eine 1 gelegt werden.");
+                       popUp(txt, 5, 0);
 
-                        Main.spieltischGui.getGridPane().onMouseClickedProperty().set(d -> {
-                            closeDialog();
-                            Main.tooltip = true;
-                            reloadGui();
-                            txt = new Text(" Auf dem Ablagestapel liegt eine 2 also kannst du nur eine 2 oder eine 3 darauf legen.\n" +
-                                    "Du kannst also nur deine 3 auf den Stapel legen.");
-                            popUp(txt, 5, 0);
+                       Main.spieltischGui.getGridPane().onMouseClickedProperty().set(d -> {
+                           closeDialog();
+                           Main.tooltip = true;
+                           reloadGui();
+                           txt = new Text(" Auf dem Ablagestapel liegt eine 2 also kannst du nur eine 2 oder eine 3 darauf legen.\n" +
+                                   "Du kannst also nur deine 3 auf den Stapel legen.");
+                           popUp(txt, 5, 0);
 
-                            Main.spieltischGui.getGridPane().onMouseClickedProperty().set(e -> {
-                                closeDialog();
-                                txt = new Text("Klasse! Jetzt bin ich am Zug ");
-                                popUp(txt, 5, 0);
-                                do {
-                                    spiellogik.karteLegen(spielerM[1], spielerM[1].getCardHand().getKarte(0));
+                           Main.spieltischGui.getGridPane().onMouseClickedProperty().set(e -> {
+                               closeDialog();
+                               txt = new Text("Klasse! Jetzt bin ich am Zug ");
+                               popUp(txt, 5, 0);
+                               do {
+                                   spiellogik.karteLegen(spielerM[1], spielerM[1].getCardHand().getKarte(0));
 
-                                } while (tisch.getAktivSpieler() == spielerM[1]);
+                               } while (tisch.getAktivSpieler() == spielerM[1]);
 
-                                Main.spieltischGui.getGridPane().onMouseClickedProperty().set(f -> {
-                                    closeDialog();
-                                    txt = new Text("Ich habe eine 4 gelegt und jetzt ist Paul an der Reihe.");
-                                    Main.spieltischGui.getGridPane().onMouseClickedProperty().set(g -> {
-                                        do {
-                                            spiellogik.karteLegen(spielerM[2], spielerM[2].getCardHand().getKarte(0));
+                               Main.spieltischGui.getGridPane().onMouseClickedProperty().set(f -> {
+                                   closeDialog();
+                                   txt = new Text("Ich habe eine 4 gelegt und jetzt ist Paul an der Reihe.");
+                                   Main.spieltischGui.getGridPane().onMouseClickedProperty().set(g -> {
+                                       do {
+                                           spiellogik.karteLegen(spielerM[2], spielerM[2].getCardHand().getKarte(0));
 
-                                        } while (tisch.getAktivSpieler() == spielerM[2]);
-                                        next = true;
-                                        startTutorial(3);
-                                    });
-                                });
+                                       } while (tisch.getAktivSpieler() == spielerM[2]);
+                                       next = true;
+                                       startTutorial();
+                                   });
+                               });
 
-                            });
+                           });
 
-                        });
-                    });
-                });
-            // 2. Zug
-            case 3:
+                       });
+                   });
+               });
+           }
+           // 2. Zug
 
         }
 

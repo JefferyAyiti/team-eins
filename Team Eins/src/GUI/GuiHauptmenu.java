@@ -477,7 +477,7 @@ public class GuiHauptmenu {
             Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
             if(tutorialAn){
-                tutorial.startTutorial(1);
+                tutorial.startTutorial();
             }
 
 
