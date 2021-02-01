@@ -69,27 +69,13 @@ public class GuiTutorial {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 5; j++) {
                 switch (i) {
-                    case 0:
-                        nachziehStapel.addCard(new Karte(1, true));
-                        break;
-                    case 1:
-                        nachziehStapel.addCard(new Karte(2, true));
-                        break;
-                    case 2:
-                        nachziehStapel.addCard(new Karte(3, true));
-                        break;
-                    case 3:
-                        nachziehStapel.addCard(new Karte(4, true));
-                        break;
-                    case 4:
-                        nachziehStapel.addCard(new Karte(5, true));
-                        break;
-                    case 5:
-                        nachziehStapel.addCard(new Karte(6, true));
-                        break;
-                    case 6:
-                        nachziehStapel.addCard(new Karte(10, true));
-                        break;
+                    case 0 -> nachziehStapel.addCard(new Karte(1, true));
+                    case 1 -> nachziehStapel.addCard(new Karte(2, true));
+                    case 2 -> nachziehStapel.addCard(new Karte(3, true));
+                    case 3 -> nachziehStapel.addCard(new Karte(4, true));
+                    case 4 -> nachziehStapel.addCard(new Karte(5, true));
+                    case 5 -> nachziehStapel.addCard(new Karte(6, true));
+                    case 6 -> nachziehStapel.addCard(new Karte(10, true));
                 }
             }
         }
@@ -131,33 +117,16 @@ public class GuiTutorial {
     }
 
     private Karte kartenErstellen(int i){
-
-        Karte karte = new Karte(1,true);
-
-        switch (i) {
-            case 1:
-                karte = new Karte(1, true);
-                break;
-            case 2:
-                karte = new Karte(2, true);
-                break;
-            case 3:
-                karte = new Karte(3, true);
-                break;
-            case 4:
-                karte = new Karte(4, true);
-                break;
-            case 5:
-                karte = new Karte(5, true);
-                break;
-            case 6:
-                karte = new Karte(6, true);
-                break;
-            case 7:
-                karte = new Karte(10, true);
-                break;
-        }
-        return karte;
+        
+        return switch (i) {
+            case 2 -> new Karte(2, true);
+            case 3 -> new Karte(3, true);
+            case 4 -> new Karte(4, true);
+            case 5 -> new Karte(5, true);
+            case 6 -> new Karte(6, true);
+            case 7 -> new Karte(10, true);
+            default -> new Karte(1, true);
+        };
 
 
 
@@ -183,9 +152,10 @@ public class GuiTutorial {
             //Chips
             Main.spieltischGui.getGridPane().onMouseClickedProperty().set(a -> {
                 closeDialog();
-                txt = new Text("Am Ende einer Runde kassierst du für die Karten auf deiner Hand Minuspunkte.\n"
-                        + "Also halte dich immer an die L.A.M.A.-Regel: Lege alle Minuspunkte ab. \n"
-                        + "Hast du am Ende die wenigsten Minuspunkte gewinnst du das Spiel.");
+                txt = new Text("""
+                        Am Ende einer Runde kassierst du für die Karten auf deiner Hand Minuspunkte.
+                        Also halte dich immer an die L.A.M.A.-Regel: Lege alle Minuspunkte ab.\s
+                        Hast du am Ende die wenigsten Minuspunkte gewinnst du das Spiel.""");
                 popUp(txt, 5, 0);
 
                     Main.spieltischGui.getGridPane().onMouseClickedProperty().set(b -> {
@@ -195,16 +165,18 @@ public class GuiTutorial {
 
                         Main.spieltischGui.getGridPane().onMouseClickedProperty().set(c -> {
                             closeDialog();
-                            txt = new Text("Um dir das Spiel besser zu zeigen beginnen wir das Spiel nicht bei null. \n" +
-                                    "Paul hat breits 2 schwarze Chips und 8 weiße. Somit hat er -28 Punkte.\n" +
-                                    "Ich habe 2 schwarze und 3 weiße Chips und somit -23 Punkte.");
+                            txt = new Text("""
+                                    Um dir das Spiel besser zu zeigen beginnen wir das Spiel nicht bei null.\s
+                                    Paul hat breits 2 schwarze Chips und 8 weiße. Somit hat er -28 Punkte.
+                                    Ich habe 2 schwarze und 3 weiße Chips und somit -23 Punkte.""");
                             popUp(txt, 5, 0);
 
                             Main.spieltischGui.getGridPane().onMouseClickedProperty().set(d -> {
                                 closeDialog();
-                                txt = new Text("Du kannst jeder Zeit 10 weiße Chips gegen einen schwarzen Chip tauschen.\n"
-                                        + "Hast du keine Karten mehr auf der Hand darfst du nämlich einen beliebigen Chip abgeben\n" +
-                                        "und durch einen schwarzen Chip kannst du mehr Minuspunkte loswerden.");
+                                txt = new Text("""
+                                        Du kannst jeder Zeit 10 weiße Chips gegen einen schwarzen Chip tauschen.
+                                        Hast du keine Karten mehr auf der Hand darfst du nämlich einen beliebigen Chip abgeben
+                                        und durch einen schwarzen Chip kannst du mehr Minuspunkte loswerden.""");
                                 popUp(txt, 5, 0);
 
                                 Main.spieltischGui.getGridPane().onMouseClickedProperty().set(h -> {
@@ -221,9 +193,7 @@ public class GuiTutorial {
                                             txt = new Text("Toll! ");
                                             popUp(txt, 5, 0);
 
-                                            Main.spieltischGui.getGridPane().onMouseClickedProperty().set(f -> {
-                                                startTutorial();
-                                            });
+                                            Main.spieltischGui.getGridPane().onMouseClickedProperty().set(f -> startTutorial());
 
                                         }
                                     });
@@ -294,8 +264,7 @@ public class GuiTutorial {
     HBox popUp(Text text, double X, double Y) {
 
         TextFlow flow = new TextFlow();
-        Text t = text;
-       /* Image bubble = new Image("GUI/images/speechBubble.png",100,50,false,false);
+        /* Image bubble = new Image("GUI/images/speechBubble.png",100,50,false,false);
         BackgroundImage myBI = new BackgroundImage(bubble,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(100, 100, true, true, false, true));
@@ -308,11 +277,11 @@ public class GuiTutorial {
         Image avatar = new Image("GUI/images/clipart2498304.png", 50 * Main.zoomfactor, 70 * Main.zoomfactor, false, false);
         ImageView bild = new ImageView(avatar);
         //Label erklareung = new Label(text);
-        t.setFont(new Font("arial black", 13));
-        t.setStyle("-fx-fill: black;");
-        t.setTranslateX(X);
-        t.setTranslateY(Y);
-        flow.getChildren().add(t);
+        text.setFont(new Font("arial black", 13));
+        text.setStyle("-fx-fill: black;");
+        text.setTranslateX(X);
+        text.setTranslateY(Y);
+        flow.getChildren().add(text);
         flow.setMinWidth(450 * Main.zoomfactor);
 
         info = new HBox();
