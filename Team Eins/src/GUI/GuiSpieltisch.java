@@ -385,10 +385,12 @@ public class GuiSpieltisch {
         if (playerId != ich && playMode != 0) {
             Image muteIcon = new Image("GUI/images/mute.png");
             Image unMuteIcon = new Image("GUI/images/unmute.png");
+
             ImageView mute = new ImageView(
                     mutelist.contains(tisch.getSpielerList()[playerId].getName()) ?
                             unMuteIcon : muteIcon
             );
+            mute.setTranslateZ(0);
             mute.setTranslateX(10);
             mute.setPreserveRatio(true);
             mute.setFitWidth(20 * zoomfactor);
@@ -840,6 +842,7 @@ public class GuiSpieltisch {
             options.getChildren().addAll(beenden,settings);
             options.setAlignment(Pos.TOP_RIGHT);
             options.setSpacing(20);
+            options.setMaxWidth(35*zoomfactor);
             options.setPadding(new Insets(10));
             //}
             gridPane.add(options, 4, 0, 1, 1);

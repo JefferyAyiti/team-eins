@@ -164,7 +164,6 @@ public class Tisch implements Serializable {
 
         if(!(spielerList[aktiv] instanceof Bot))
             System.out.println(spielerList[aktiv].getName()+" ist dran:");
-        System.out.println("Tischaktiv:"+aktiv);
         return spielerList[aktiv];
     }
 
