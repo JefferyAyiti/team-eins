@@ -143,7 +143,6 @@ public class Main extends Application {
 
         if (System.currentTimeMillis() < resize + 500 || init) {
             GuiZoomLoader.getZoomedImages();
-            System.out.println("resize");
             spieltischGui.buildStage(classPrimaryStage);
         }
     }
