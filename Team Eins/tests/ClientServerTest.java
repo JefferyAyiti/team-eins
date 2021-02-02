@@ -1,6 +1,8 @@
 import GUI.GUIChat;
 import GUI.GuiHauptmenu;
 import Main.*;
+import java.util.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,9 +13,7 @@ import RMI.*;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,7 +22,7 @@ public class ClientServerTest {
     RunServer runServer;
     RunClient client1;
     RunClient client2;
-    ClientThread clientThread;
+    Map<String,String> clientsMap = new LinkedHashMap<>();
     Main main;
     Tisch tisch;
     Spiellogik spiellogik;
@@ -38,14 +38,21 @@ public class ClientServerTest {
     void setUp() throws RemoteException, NotBoundException, AlreadyBoundException {
 
         main = new Main();
+        main.setTisch(null);
         main.setAnzSpieler(3);
         server = new ServerImpl();
         spielerM = new Spieler[3];
-
+        clientsMap.put("1","client1");
+        clientsMap.put("2","client2");
+        spielerM[0] = new Spieler("test","0");
 
 
     }
 
+    @AfterEach
+    void close(){
+        runServer.stop();
+    }
 
     /** addClient-Methode und leaveServer-Methode von serverImpl testen
      * @throws RemoteException
@@ -53,27 +60,19 @@ public class ClientServerTest {
      * @throws NotBoundException
      */
     @Test
-    void addClientUndleaveServer() throws RemoteException, AlreadyBoundException, NotBoundException {
+    void leaveServer() throws RemoteException, AlreadyBoundException, NotBoundException {
         //server aufstellen
         runServer = new RunServer("localhost","testServer", 8001, "0","test");
         runServer.starting();
+
 
         //clients starten
         client1 = new RunClient("localhost",8001, "testServer","1", "client1");
         client2 = new RunClient("localhost",8001, "testServer","2", "client2");
 
-
-        assertEquals(3,client1.getServer().getAnzahlSpieler());
-        assertEquals("client1",client2.getServer().getClients().get("1"));
-        assertEquals("client2",client2.getServer().getClients().get("2"));
-
-        client2.getServer().leaveServer("2");
-        assertEquals(false,client1.getServer().getClients().containsKey("2"));
-        assertEquals(2,client1.getServer().getAnzClients());
-        runServer.stop();
-
-
-
+        assertEquals("client1",runServer.getServer().getClients().get("1"));
+        runServer.getServer().leaveServer("1");
+        assertNull(runServer.getServer().getClients().get("1"));
     }
 
 
@@ -92,10 +91,11 @@ public class ClientServerTest {
         client1 = new RunClient("localhost",8001, "testServer","1", "client1");
         client2 = new RunClient("localhost",8001, "testServer","2", "client2");
 
-
+        assertEquals("client1",runServer.getServer().getClients().get("1"));
         client1.getServer().changeName("1","c");
-        assertEquals("c",client1.getServer().getClients().get("1"));
-        runServer.stop();
+        assertEquals("c",runServer.getServer().getClients().get("1"));
+
+
     }
 
 
@@ -111,25 +111,30 @@ public class ClientServerTest {
         runServer = new RunServer("localhost","testServer", 8001, "0","test");
         runServer.starting();
 
+        int i = 1;
+        for (Map.Entry<String, String> entry : clientsMap.entrySet()) {
+            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
+            i++;
+        }
+        tisch = new Tisch(spielerM);
+        main.setTisch(tisch);
+
         //clients starten
         client1 = new RunClient("localhost",8001, "testServer","1", "client1");
         client2 = new RunClient("localhost",8001, "testServer","2", "client2");
 
-        int i = -1;
-        for (Map.Entry<String, String> entry : client1.getServer().getClients().entrySet()) {
-            i++;
-            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
-        }
+
 
         //init tisch und spiellogik
-        tisch = new Tisch(spielerM);
+
         spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
+        main.setServer(server);
+        main.setSpiellogik(spiellogik);
 
-        assertEquals(1,server.assignId("1"));
-        assertEquals(2,server.assignId("2"));
-        assertEquals(-1,server.assignId("4"));
-        runServer.stop();
+        assertEquals(1,runServer.getServer().assignId("1"));
+        assertEquals(2,runServer.getServer().assignId("2"));
+        assertEquals(-1,runServer.getServer().assignId("4"));
 
     }
 
@@ -144,34 +149,36 @@ public class ClientServerTest {
         runServer = new RunServer("localhost","testServer", 8001, "0","test");
         runServer.starting();
 
+        //init tisch und spiellogik
+        int i = 1;
+        for (Map.Entry<String, String> entry : clientsMap.entrySet()) {
+            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
+            i++;
+        }
+        tisch = new Tisch(spielerM);
+
         //clients starten
         client1 = new RunClient("localhost",8001, "testServer","1", "client1");
         client2 = new RunClient("localhost",8001, "testServer","2", "client2");
 
-        //init tisch und spiellogik
-        int i = -1;
-        for (Map.Entry<String, String> entry : client1.getServer().getClients().entrySet()) {
-            i++;
-            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
-        }
-        tisch = new Tisch(spielerM);
+
         spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
+
         main.setSpiellogik(spiellogik);
         main.setServer(server);
-        main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
-        client1.getServer().neueRunde(true,client1.getuId());
-        client2.getServer().neueRunde(true,client2.getuId());
-        server.neueRunde(true,server.getHost());
+        main.setHaende(new Hand[runServer.getServer().getAnzahlSpieler()]);
+        runServer.getServer().neueRunde(true,client1.getuId());
+        runServer.getServer().neueRunde(true,client2.getuId());
+        runServer.getServer().neueRunde(true,server.getHost());
         tisch.setAktiv(1);
         int size = tisch.getNachziehStapelSize();
-        client1.getServer().karteNachziehen(tisch.getSpielerList()[1]);
+        runServer.getServer().karteNachziehen(tisch.getSpielerList()[1]);
 
         //gucken ob für beide Spieler der Nachziehstapel eine Karte weniger hat
-        assertEquals(size-1, client1.getServer().updateTisch().getNachziehStapelSize());
-        assertEquals(size-1,client2.getServer().updateTisch().getNachziehStapelSize());
+        assertEquals(size-1, runServer.getServer().updateTisch().getNachziehStapelSize());
+        assertEquals(size-1,runServer.getServer().updateTisch().getNachziehStapelSize());
 
-        runServer.stop();
     }
 
     /** Test für karteLegen
@@ -185,34 +192,34 @@ public class ClientServerTest {
         runServer = new RunServer("localhost","testServer", 8001, "0","test");
         runServer.starting();
 
+        int i = 1;
+        for (Map.Entry<String, String> entry : clientsMap.entrySet()) {
+            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
+            i++;
+        }
+        tisch = new Tisch(spielerM);
+
         //clients starten
         client1 = new RunClient("localhost",8001, "testServer","1", "client1");
         client2 = new RunClient("localhost",8001, "testServer","2", "client2");
 
-        //init tisch und spiellogik
-        int i = -1;
-        for (Map.Entry<String, String> entry : client1.getServer().getClients().entrySet()) {
-            i++;
-            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
-        }
-        tisch = new Tisch(spielerM);
+
         spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
         main.setServer(server);
         main.setSpiellogik(spiellogik);
-        main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
-        client1.getServer().neueRunde(true,client1.getuId());
-        client2.getServer().neueRunde(true,client2.getuId());
-        server.neueRunde(true,server.getHost());
+        main.setHaende(new Hand[runServer.getServer().getAnzahlSpieler()]);
+        runServer.getServer().neueRunde(true,client1.getuId());
+        runServer.getServer().neueRunde(true,client2.getuId());
+        runServer.getServer().neueRunde(true,runServer.getServer().getHost());
         tisch.setAktiv(1);
-        client1.getServer().karteNachziehen(tisch.getSpielerList()[1]);
+        runServer.getServer().karteNachziehen(tisch.getSpielerList()[1]);
 
         //gucken ob für beide Spieler der Nachziehstapel eine Karte weniger hat;
         tisch.karteAblegen(tisch.getSpielerList()[1].getCardHand().getKarte(0));
         int val =  tisch.getSpielerList()[1].getCardHand().getKarte(0).getValue();
-        client1.getServer().karteLegen(tisch.getSpielerList()[1],new Karte(tisch.getSpielerList()[1].getCardHand().getKarte(0).getValue(),false));
-        assertEquals(val,client2.getServer().updateTisch().getObereKarteAblagestapel().getValue());
-        runServer.stop();
+        runServer.getServer().karteLegen(tisch.getSpielerList()[1],new Karte(tisch.getSpielerList()[1].getCardHand().getKarte(0).getValue(),false));
+        assertEquals(val,runServer.getServer().updateTisch().getObereKarteAblagestapel().getValue());
 
     }
 
@@ -227,34 +234,34 @@ public class ClientServerTest {
         runServer = new RunServer("localhost","testServer", 8001, "0","test");
         runServer.starting();
 
+        int i = 1;
+        for (Map.Entry<String, String> entry : clientsMap.entrySet()) {
+            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
+            i++;
+        }
+        tisch = new Tisch(spielerM);
+
         //clients starten
         client1 = new RunClient("localhost",8001, "testServer","1", "client1");
         client2 = new RunClient("localhost",8001, "testServer","2", "client2");
 
-        //init tisch und spiellogik
-        int i = -1;
-        for (Map.Entry<String, String> entry : client1.getServer().getClients().entrySet()) {
-            i++;
-            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
-        }
-        tisch = new Tisch(spielerM);
         spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
         main.setServer(server);
         main.setSpiellogik(spiellogik);
-        main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
-        client1.getServer().neueRunde(true,client1.getuId());
-        client2.getServer().neueRunde(true,client2.getuId());
-        server.neueRunde(true,server.getHost());
+        main.setHaende(new Hand[runServer.getServer().getAnzahlSpieler()]);
+        runServer.getServer().neueRunde(true,client1.getuId());
+        runServer.getServer().neueRunde(true,client2.getuId());
+        runServer.getServer().neueRunde(true,server.getHost());
 
         tisch.setAktiv(1);
         int handkartenSum = 0;
 
         //Alle spieler steigen hier aus
-        client1.getServer().aussteigen(tisch.getSpielerList()[1]);
-        assertEquals(false,tisch.getSpielerList()[1].inGame());
-        client2.getServer().aussteigen(tisch.getSpielerList()[2]);
-        client2.getServer().aussteigen(tisch.getSpielerList()[0]);
+        runServer.getServer().aussteigen(tisch.getSpielerList()[1]);
+        assertEquals(false,runServer.getServer().updateTisch().getSpielerList()[1].inGame());
+        runServer.getServer().aussteigen(runServer.getServer().updateTisch().getSpielerList()[2]);
+        runServer.getServer().aussteigen(runServer.getServer().updateTisch().getSpielerList()[0]);
 
         //berechne Punktzahl für Handkarten des Spielers
         Set<Integer> handkarten = new LinkedHashSet<>();
@@ -267,10 +274,9 @@ public class ClientServerTest {
         for (Integer c : handkarten) {
             handkartenSum += c;
         }
-        assertEquals(tisch.getSpielerList()[1].getPoints(),-1*handkartenSum);
+        assertEquals(runServer.getServer().updateTisch().getSpielerList()[1].getPoints(),-1*handkartenSum);
 
         tisch.setAktiv(1);
-        runServer.stop();
 
     }
 
@@ -285,25 +291,26 @@ public class ClientServerTest {
         runServer = new RunServer("localhost","testServer", 8001, "0","test");
         runServer.starting();
 
+        int i = 1;
+        for (Map.Entry<String, String> entry : clientsMap.entrySet()) {
+            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
+            i++;
+        }
+        tisch = new Tisch(spielerM);
+
         //clients starten
         client1 = new RunClient("localhost",8001, "testServer","1", "client1");
         client2 = new RunClient("localhost",8001, "testServer","2", "client2");
 
-        //init tisch und spiellogik
-        int i = -1;
-        for (Map.Entry<String, String> entry : client1.getServer().getClients().entrySet()) {
-            i++;
-            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
-        }
-        tisch = new Tisch(spielerM);
+
         spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
         main.setServer(server);
         main.setSpiellogik(spiellogik);
         main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
-        client1.getServer().neueRunde(true,client1.getuId());
-        client2.getServer().neueRunde(true,client2.getuId());
-        server.neueRunde(true,server.getHost());
+        runServer.getServer().neueRunde(true,client1.getuId());
+        runServer.getServer().neueRunde(true,client2.getuId());
+        runServer.getServer().neueRunde(true,runServer.getServer().getHost());
         tisch.setAktiv(1);
         int handkartenSum = 0;
 
@@ -312,20 +319,18 @@ public class ClientServerTest {
         //Spiler hat 10 weiße und 0 schwarze Chips
         tisch.getSpielerList()[1].setWhiteChips(10);
         tisch.getSpielerList()[1].setBlackChips(0);
-        client1.getServer().chipsTauschen(1);
+        runServer.getServer().chipsTauschen(1);
 
-        assertEquals(1,tisch.getSpielerList()[1].getBlackChips());
-        assertEquals(0,tisch.getSpielerList()[1].getWhiteChips());
+        assertEquals(1,runServer.getServer().updateTisch().getSpielerList()[1].getBlackChips());
+        assertEquals(0,runServer.getServer().updateTisch().getSpielerList()[1].getWhiteChips());
 
         //Spieler hat keine Karten mehr
         tisch.getSpielerList()[1].setCardHand(new Hand());
 
         //Spieler gibt schwarzen Chip ab
-        client1.getServer().chipAbgeben(tisch.getSpielerList()[1],new BlackChip());
-
-        assertEquals(0,tisch.getSpielerList()[1].getBlackChips());
-        assertEquals(0,tisch.getSpielerList()[1].getWhiteChips());
-        runServer.stop();
+        runServer.getServer().chipAbgeben(tisch.getSpielerList()[1],new BlackChip());
+        assertEquals(0,runServer.getServer().updateTisch().getSpielerList()[1].getBlackChips());
+        assertEquals(0,runServer.getServer().updateTisch().getSpielerList()[1].getWhiteChips());
 
     }
 
@@ -340,33 +345,33 @@ public class ClientServerTest {
         runServer = new RunServer("localhost","testServer", 8001, "0","test");
         runServer.starting();
 
+        int i = 1;
+        for (Map.Entry<String, String> entry : clientsMap.entrySet()) {
+            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
+            i++;
+        }
+        tisch = new Tisch(spielerM);
+
         //clients starten
         client1 = new RunClient("localhost",8001, "testServer","1", "client1");
         client2 = new RunClient("localhost",8001, "testServer","2", "client2");
 
 
-        //init tisch und spiellogik
-        int i = -1;
-        for (Map.Entry<String, String> entry : client1.getServer().getClients().entrySet()) {
-            i++;
-            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
-        }
-        tisch = new Tisch(spielerM);
         spiellogik = new Spiellogik(tisch);
         main.setTisch(tisch);
-        main.setServer(server);
+        main.setServer(runServer.getServer());
         main.setSpiellogik(spiellogik);
-        main.setHaende(new Hand[client1.getServer().getAnzahlSpieler()]);
+        main.setHaende(new Hand[runServer.getServer().getAnzahlSpieler()]);
 
         //spieler wird durch Bot ersetzt
-        server.replaceSpielerDurchBot("1");
+        runServer.getServer().replaceSpielerDurchBot("1");
         Bot bot = new Bot("bot",1);
         assertEquals(bot.getClass(),tisch.getSpielerList()[1].getClass());
-        runServer.stop();
     }
 
     @Test
     void chatTest() throws AlreadyBoundException, RemoteException, NotBoundException {
+
         //server aufstellen
         runServer = new RunServer("localhost","testServer", 8001, "0","test");
         runServer.starting();
@@ -377,16 +382,51 @@ public class ClientServerTest {
 
 
         //einfache Message
-        server.sendMessage("test","1");
+        runServer.getServer().sendMessage("test","1");
         //coinflip
-        server.sendMessage("/coinflip","2");
+        runServer.getServer().sendMessage("/coinflip","2");
         //roll
-        server.sendMessage("/roll 6","2");
-        assertEquals("test",server.getChat(false).get(0).get(1));
-        assertTrue("Zahl" == server.getChat(false).get(1).get(2) || "Kopf" == server.getChat(false).get(1).get(2));
-        int test = Integer.parseInt(server.getChat(false).get(2).get(2));
+        runServer.getServer().sendMessage("/roll 6","2");
+        assertEquals("test",runServer.getServer().getChat(false).get(0).get(1));
+        assertTrue(
+            "Zahl".equals(runServer.getServer().getChat(false).get(1).get(2)) ||
+                "Kopf".equals(runServer.getServer().getChat(false).get(1).get(2)));
+        int test = Integer.parseInt(runServer.getServer().getChat(false).get(2).get(2));
         assertTrue(test > 0 && test <= 6);
-        runServer.stop();
+    }
+
+    @Test
+    void reconnect() throws AlreadyBoundException, RemoteException, NotBoundException {
+        //server aufstellen
+        runServer = new RunServer("localhost","testServer", 8001, "0","test");
+        runServer.starting();
+
+        int i = 1;
+        for (Map.Entry<String, String> entry : clientsMap.entrySet()) {
+            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
+            i++;
+        }
+        tisch = new Tisch(spielerM);
+
+        //clients starten
+        client1 = new RunClient("localhost",8001, "testServer","1", "client1");
+        client2 = new RunClient("localhost",8001, "testServer","2", "client2");
+
+
+        spiellogik = new Spiellogik(tisch);
+        main.setTisch(tisch);
+        main.setServer(runServer.getServer());
+        main.setSpiellogik(spiellogik);
+        main.setHaende(new Hand[runServer.getServer().getAnzahlSpieler()]);
+
+        assertEquals("client1",runServer.getServer().getClients().get("1"));
+        runServer.getServer().leaveServer("1");
+        runServer.getServer().replaceSpielerDurchBot("1");
+        assertNull(runServer.getServer().getClients().get("1"));
+
+        runServer.getServer().reconnect("1","client1");
+        assertEquals("client1",runServer.getServer().getClients().get("1"));
+
     }
 
 

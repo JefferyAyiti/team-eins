@@ -8,6 +8,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 public class RunServer {
+    public server server;
     static String IP;
     static String SERVER_NAME;
     static int PORT;
@@ -41,7 +42,7 @@ public class RunServer {
         System.setProperty("java.rmi.server.hostname",IP);
         System.setProperty("java.security.policy","file:///tmp/test.policy");
 
-        server server = new ServerImpl();
+        server = new ServerImpl();
         registry = LocateRegistry.createRegistry(PORT);
         registry.bind(SERVER_NAME , server);
         server.addClient(uid, myname);
@@ -61,4 +62,10 @@ public class RunServer {
         }
     }
 
+    /** getter-Methode für server
+     * @return server
+     */
+    public server getServer() {
+        return server;
+    }
 }
