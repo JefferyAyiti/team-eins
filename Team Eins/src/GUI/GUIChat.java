@@ -258,4 +258,8 @@ public class GUIChat {
         chat.setX(owner.getScene().getWindow().getX() + 5);
         chat.setY(owner.getScene().getWindow().getY() + 35);
     }
+
+    public void scaleTransparenz(){
+        scroll.setOpacity(einstellung.getSliderValue());
+    }
 }

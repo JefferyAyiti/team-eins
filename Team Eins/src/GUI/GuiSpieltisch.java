@@ -793,6 +793,7 @@ public class GuiSpieltisch {
                 );
 
                 chatbox.reposition(classPrimaryStage);
+                chatbox.scaleTransparenz();
                 gridPane.add(chatButton, 0, 4, 1, 1);
 
             }
