@@ -72,7 +72,7 @@ public class GUIChat {
         chat.setX(owner.getScene().getWindow().getX() + 5);
         chat.setY(owner.getScene().getWindow().getY() + 35);
         //chat.setAutoFix(true);
-        scroll.setOpacity(0.8);
+        scroll.setOpacity(einstellung.getSliderValue());
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sendButton.setStyle("-fx-text-fill: black;\n" +
                 "    -fx-background-color: rgba(255,255,255,0.6);\n" +
