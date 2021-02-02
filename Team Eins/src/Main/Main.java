@@ -52,7 +52,8 @@ public class Main extends Application {
     public static boolean sortedOnce = true;
     public static boolean schimpfFilter = false;
     public static Boolean autoSort = null; //null = aus, false = einmalig, true = immer
-    public static boolean tutorialAn = true;
+    public static boolean tutorialAn = false;
+    public static boolean autochips = false;
 
 
     //Wird später im Menü festgelegt
@@ -230,6 +231,13 @@ public class Main extends Application {
             if (!timerRunning)
                 return;
             else {
+                if(autochips && playMode < 2) {
+                    Main.spiellogik.chipsTauschen(ich);
+                } else if(autochips) {
+                    try {
+                        server.chipsTauschen(ich);
+                    } catch (RemoteException e) {}
+                }
                 if (playMode == 1) {
                     try {
                         server.checkTimeout();
@@ -273,6 +281,7 @@ public class Main extends Application {
                     if (aend > aenderung) {
                         Platform.runLater(() -> {
                             try {
+
                                 aenderung = Main.server.getAenderung(Main.uniqueID);
                             } catch (RemoteException e) {
                             }

@@ -23,6 +23,7 @@ public class GUISettings {
     private static VBox schimpf = new VBox();
     private static VBox tipp = new VBox();
     private static VBox sortieren = new VBox();
+    private static VBox autoChip = new VBox();
     private static VBox steuerung = new VBox();
     private static HBox header = new HBox();
     private static Button schliessen = new Button("Schliessen");
@@ -30,6 +31,7 @@ public class GUISettings {
     ToggleGroup filter = new ToggleGroup();
     ToggleGroup hinweis = new ToggleGroup();
     ToggleGroup sort = new ToggleGroup();
+    ToggleGroup autochips = new ToggleGroup();
     Slider slider;
 
     /**
@@ -40,7 +42,21 @@ public class GUISettings {
         settings.setHideOnEscape(true);
 
 
+        //Autochip
+        RadioButton chipsAn = new RadioButton("An");
+        chipsAn.setToggleGroup(autochips);
+        chipsAn.setOnMouseClicked(e -> {
+            Main.autochips = true;
+        });
 
+        RadioButton chipsAus = new RadioButton("Aus");
+        chipsAus.setToggleGroup(autochips);
+        chipsAus.setOnMouseClicked(e -> {
+            Main.autochips = false;
+        });
+        chipsAus.setSelected(true);
+
+        //Filter
         RadioButton filterAn = new RadioButton("An");
         filterAn.setToggleGroup(filter);
         filterAn.setOnMouseClicked(e -> {
@@ -55,6 +71,7 @@ public class GUISettings {
         filterAus.setSelected(true);
 
 
+        //Tipps
         RadioButton tippAn = new RadioButton("An");
         tippAn.setOnMouseClicked(e -> {
             Main.tooltip = true;
@@ -69,6 +86,7 @@ public class GUISettings {
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
         });
 
+        //Sortieren
 
         RadioButton sortAn = new RadioButton("Immer");
         sortAn.setToggleGroup(sort);
@@ -114,6 +132,14 @@ public class GUISettings {
         kartesortOpt.setAlignment(Pos.TOP_CENTER);
         kartesortOpt.setSpacing(5);
 
+        Label chips = new Label("Automatische Chips:");
+        autoChip.setAlignment(Pos.CENTER);
+        HBox autoChipOpt = new HBox(chipsAn, chipsAus);
+        autoChipOpt.setAlignment(Pos.TOP_CENTER);
+        autoChipOpt.setSpacing(20);
+
+
+
         Label chattranz = new Label("Chat Transparenz");
         transparenz.setAlignment(Pos.CENTER);
         slider = new Slider(0,1,0.8);
@@ -129,6 +155,7 @@ public class GUISettings {
         schimpf.getChildren().addAll(wort,wortOptionen );
         tipp.getChildren().addAll(hinweis, hinweisOptionen);
         sortieren.getChildren().addAll(kartesort, kartesortOpt );
+        autoChip.getChildren().addAll(chips, autoChipOpt);
         transparenz.getChildren().addAll(chattranz, slider);
         schliessen.setOnMouseClicked(c -> settings.hide());
 
@@ -136,7 +163,7 @@ public class GUISettings {
         steuerung.setPrefWidth(220);
         steuerung.setPrefHeight(350);
         steuerung.setAlignment(Pos.CENTER);
-        steuerung.getChildren().addAll(header, schimpf, tipp, sortieren,transparenz, schliessen);
+        steuerung.getChildren().addAll(header, schimpf, tipp, sortieren, autoChip, transparenz, schliessen);
         steuerung.setSpacing(5);
         settings.getContent().add(steuerung);
     }
@@ -155,6 +182,7 @@ public class GUISettings {
         schimpf.getStyleClass().add("hbox");
         tipp.getStyleClass().add("hbox");
         sortieren.getStyleClass().add("hbox");
+        autoChip.getStyleClass().add("hbox");
         transparenz.getStyleClass().add("hbox");
         steuerung.getStyleClass().add("vbox");
         steuerung.getStylesheets().add("GUI/einstellung.css");

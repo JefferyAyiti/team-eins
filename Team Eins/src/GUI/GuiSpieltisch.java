@@ -963,7 +963,7 @@ public class GuiSpieltisch {
             }
         }
         if (tisch.getSpielerList()[playerId].getCardHand().getHandKarte().isEmpty() && (tisch.getSpielerList()[playerId].getBlackChips() > 0 || tisch.getSpielerList()[playerId].getWhiteChips() > 0)) {
-            Chip tausch;
+            Chip tausch = null;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("     ");
             alert.initStyle(StageStyle.TRANSPARENT);
@@ -974,36 +974,13 @@ public class GuiSpieltisch {
             ButtonType buttonTypeBlack = new ButtonType("schwarz");
             ButtonType buttonTypeCancel = new ButtonType("schließen", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-            //spieler hat weiße und Schwarze Chips
-            if (tisch.getSpielerList()[playerId].getWhiteChips() >= 1 && tisch.getSpielerList()[playerId].getBlackChips() >= 1) {
-                alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeBlack, buttonTypeCancel);
-                //nur weiße
-            } else if (tisch.getSpielerList()[playerId].getWhiteChips() >= 1) {
-                alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeCancel);
-                //nur schwarze
-            } else if (tisch.getSpielerList()[playerId].getBlackChips() >= 1) {
-                alert.getButtonTypes().setAll(buttonTypeBlack, buttonTypeCancel);
-            } else {
-                //alert.setHeaderText("Du hast keine Chips zum abgeben");
-                alert.getButtonTypes().setAll(buttonTypeCancel);
-            }
+            if(autochips) {
+                if(tisch.getSpielerList()[playerId].getBlackChips() >= 1) {
+                    tausch = new BlackChip();
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == buttonTypeWhite) {
-                // ... user chose "weiß"
-                tausch = new WhiteChip();
-                if (Main.playMode == 2) { //Multiplayermodus
-                    try {
-                        server.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                } else {//lokaler Spielmodus
-                    Main.spiellogik.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
+                } else if(tisch.getSpielerList()[playerId].getWhiteChips() >= 1) {
+                    tausch = new WhiteChip();
                 }
-            } else if (result.get() == buttonTypeBlack) {
-                // ... user chose "schwarz"
-                tausch = new BlackChip();
                 if (Main.playMode == 2) {  //Multiplayermodus
                     try {
                         server.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
@@ -1015,9 +992,50 @@ public class GuiSpieltisch {
                 }
 
             } else {
-                // ... user chose CANCEL or closed the dialog
-            }
+                //spieler hat weiße und Schwarze Chips
+                if (tisch.getSpielerList()[playerId].getWhiteChips() >= 1 && tisch.getSpielerList()[playerId].getBlackChips() >= 1) {
+                    alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeBlack, buttonTypeCancel);
+                    //nur weiße
+                } else if (tisch.getSpielerList()[playerId].getWhiteChips() >= 1) {
+                    alert.getButtonTypes().setAll(buttonTypeWhite, buttonTypeCancel);
+                    //nur schwarze
+                } else if (tisch.getSpielerList()[playerId].getBlackChips() >= 1) {
+                    alert.getButtonTypes().setAll(buttonTypeBlack, buttonTypeCancel);
+                } else {
+                    //alert.setHeaderText("Du hast keine Chips zum abgeben");
+                    alert.getButtonTypes().setAll(buttonTypeCancel);
+                }
 
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == buttonTypeWhite) {
+                    // ... user chose "weiß"
+                    tausch = new WhiteChip();
+                    if (Main.playMode == 2) { //Multiplayermodus
+                        try {
+                            server.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    } else {//lokaler Spielmodus
+                        Main.spiellogik.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
+                    }
+                } else if (result.get() == buttonTypeBlack) {
+                    // ... user chose "schwarz"
+                    tausch = new BlackChip();
+                    if (Main.playMode == 2) {  //Multiplayermodus
+                        try {
+                            server.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    } else { //lokaler Spielmodus
+                        Main.spiellogik.chipAbgeben(tisch.getSpielerList()[playerId], tausch);
+                    }
+
+                } else {
+                    // ... user chose CANCEL or closed the dialog
+                }
+            }
         }
 
         buildStage(Main.classPrimaryStage);
