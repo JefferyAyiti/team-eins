@@ -164,7 +164,7 @@ public class Main extends Application {
 
     public void start(Stage primaryStage) throws IOException {
         primaryStage.setTitle("L.A.M.A. - Team Eins");
-
+        primaryStage.getIcons().add(new Image("/lama.gif"));
 
         File in = new File("./.uid");
 
