@@ -24,7 +24,11 @@ public class Tisch implements Serializable {
         blackCh = chipsblack.getMaxChips();
         whiteCh = whiteChip.getMaxChips();
         this.spielerList = spieler;
-        aktiv = (int) (Math.random()*getAnzSpieler());
+        if(Main.tutorialAn==false) {
+            aktiv = (int) (Math.random() * getAnzSpieler());
+        }else{
+            aktiv = -1;
+        }
     }
 
     /**

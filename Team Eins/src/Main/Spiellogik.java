@@ -442,20 +442,23 @@ public class Spiellogik implements Serializable {
             tisch.spielerList[i].setCardHand(Main.haende[i]);
             tisch.spielerList[i].setOldScore(tisch.spielerList[i].getPoints());
         }
+        if(tutorialAn){
+            tutorial.tutNachziehstapel();
+            tutorial.tutKartenGeben();
+        }else {
+            tisch.initNachziehstapel();
+            tisch.mischenNachziehstapel();
 
-        tisch.initNachziehstapel();
-        tisch.mischenNachziehstapel();
 
+            //gebe jeden Spieler (anzSpieler) 6 Karten in Reihenfolge
+            for (int i = 0; i < 6; i++) {
 
-        //gebe jeden Spieler (anzSpieler) 6 Karten in Reihenfolge
-        for (int i = 0; i < 6; i++) {
+                for (int s = 0; s < anzSpieler; s++) {
+                    Main.haende[s].addKarte(tisch.karteZiehen());
+                }
 
-            for (int s = 0; s < anzSpieler; s++) {
-                Main.haende[s].addKarte(tisch.karteZiehen());
             }
-
         }
-
         tisch.nextDurchgang();
         tisch.karteAblegen(tisch.karteZiehen()); //Ablagestapel
         einSpielerUebrig();

@@ -290,6 +290,27 @@ public class GuiHauptmenu {
                     }
                 }
         );
+        //Tutorial
+        if(playMode==0) {
+            HBox t = new HBox();
+            ToggleGroup tutor = new ToggleGroup();
+            Label tut = new Label("Tutorial");
+            tut.setFont(new Font(fontsize));
+            RadioButton tutAn = new RadioButton("An");
+            tutAn.setToggleGroup(tutor);
+            tutAn.setOnMouseClicked(e -> {
+                tutorialAn = true;
+            });
+            RadioButton tutAus = new RadioButton("Aus");
+            tutAus.setSelected(true);
+            tutAus.setToggleGroup(tutor);
+            tutAus.setOnMouseClicked(e -> {
+                tutorialAn = false;
+            });
+            t.getChildren().addAll(tutAn,tutAus);
+            t.setSpacing(20*zoomfactor);
+            center.addRow(5, tut, t);
+        }
 
         //Darstellung
         Label titel = new Label("Hauptmenü");
@@ -453,9 +474,12 @@ public class GuiHauptmenu {
             if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
             Main.anzSpieler = (int) playeranzselect.getValue();
             Main.initGame();
-
             Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
+            if(tutorialAn){
+                tutorial.startTutorial();
+            }
+
 
 
         } else if (action == "close") { //Host

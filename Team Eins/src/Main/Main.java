@@ -52,6 +52,7 @@ public class Main extends Application {
     public static boolean sortedOnce = true;
     public static boolean schimpfFilter = false;
     public static Boolean autoSort = null; //null = aus, false = einmalig, true = immer
+    public static boolean tutorialAn = true;
 
 
     //Wird später im Menü festgelegt
@@ -64,6 +65,7 @@ public class Main extends Application {
         spieltischGui = new GuiSpieltisch();
         chatbox = new GUIChat();
         einstellung = new GUISettings();
+        tutorial = new GuiTutorial();
         loader = new TestLoadImageUsingClass();
         loader.installSvgLoader();
         launch(args);
@@ -86,59 +88,65 @@ public class Main extends Application {
     public static Image[] cardsArray;
 
 
+
     public static GuiHauptmenu hauptmenuGui; //= new GuiHauptmenu();
     public static GuiScoreboard scoreboardGui;//= new GuiScoreboard();
     public static GuiSpieltisch spieltischGui;//= new GuiSpieltisch();
     public static GUIChat chatbox;//= new GUIChat();
     public static GUISettings einstellung;//= new GUISettings();
+    public static GuiTutorial tutorial;
 
     /**
      * Erstellt Tisch, Nachzieh- und Abalgestapel, Spieler
      * und startet die erste Runde im Spiel
      */
     public static void initGame() {
+        if (tutorialAn){
+            tutorial.initTutorial(classPrimaryStage);
+        }else {
 
-        //initialisiere Spieler mit handkarten
-        haende = new Hand[anzSpieler];
-        spielerM = new Spieler[anzSpieler];
+            //initialisiere Spieler mit handkarten
+            haende = new Hand[anzSpieler];
+            spielerM = new Spieler[anzSpieler];
 
-        //spieler[0]= new Bot("Spieler",2);
+            //spieler[0]= new Bot("Spieler",2);
 
-        int i = -1;
+            int i = -1;
 
-        if (playMode == 0) {
-            spielerM[0] = new Spieler(myName, uniqueID);
-            i = 0;
-        } else {
-            if (server != null) {
+            if (playMode == 0) {
+                spielerM[0] = new Spieler(myName, uniqueID);
+                i = 0;
+            } else {
+                if (server != null) {
 
-                try {
-                    for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
-                        i++;
-                        spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
+                    try {
+                        for (Map.Entry<String, String> entry : server.getClients().entrySet()) {
+                            i++;
+                            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
+                        }
+
+                    } catch (Exception e) {
                     }
-
-                } catch (Exception e) {
                 }
             }
-        }
-        int level;
-        String[] botname = {"EZ-", "Mid-", "Hard-"};
-        for (i++; i < anzSpieler; i++) {
-            level = botlevel == 0 ? (int) (Math.random() * 3 + 1) : botlevel;
-            spielerM[i] = new Bot(botname[level - 1] + "Bot " + (i + 1), level);
+            int level;
+            String[] botname = {"EZ-", "Mid-", "Hard-"};
+            for (i++; i < anzSpieler; i++) {
+                level = botlevel == 0 ? (int) (Math.random() * 3 + 1) : botlevel;
+                spielerM[i] = new Bot(botname[level - 1] + "Bot " + (i + 1), level);
 
-        }
-        if (playMode == 1) {
-            List<Spieler> spl = Arrays.asList(spielerM);
-            Collections.shuffle(spl);
-            spielerM = spl.toArray(new Spieler[anzSpieler]);
-        }
-        tisch = new Tisch(spielerM);
-        spiellogik = new Spiellogik(tisch);
-        spiellogik.initNeueRunde();
+            }
+            if (playMode == 1) {
+                List<Spieler> spl = Arrays.asList(spielerM);
+                Collections.shuffle(spl);
+                spielerM = spl.toArray(new Spieler[anzSpieler]);
+            }
+            tisch = new Tisch(spielerM);
+            spiellogik = new Spiellogik(tisch);
+            spiellogik.initNeueRunde();
 
-        resize(true);
+            resize(true);
+        }
     }
 
 
