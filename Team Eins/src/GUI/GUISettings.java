@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -24,7 +25,7 @@ public class GUISettings {
     private static VBox tipp = new VBox();
     private static VBox sortieren = new VBox();
     private static VBox autoChip = new VBox();
-    private static VBox steuerung = new VBox();
+    private static GridPane steuerung = new GridPane();
     private static HBox header = new HBox();
     private static Button schliessen = new Button("Schliessen");
     private static VBox transparenz = new VBox();
@@ -143,9 +144,6 @@ public class GUISettings {
         Label chattranz = new Label("Chat Transparenz");
         transparenz.setAlignment(Pos.CENTER);
         slider = new Slider(0,1,0.8);
-        slider.setShowTickMarks(true);
-        slider.setShowTickLabels(true);
-        slider.setMajorTickUnit(0.25f);
         slider.setBlockIncrement(0.1f);
 
 
@@ -160,11 +158,13 @@ public class GUISettings {
         schliessen.setOnMouseClicked(c -> settings.hide());
 
 
-        steuerung.setPrefWidth(220);
-        steuerung.setPrefHeight(350);
+        steuerung.setPrefWidth(368);
+        steuerung.setPrefHeight(220);
         steuerung.setAlignment(Pos.CENTER);
-        steuerung.getChildren().addAll(header, schimpf, tipp, sortieren, autoChip, transparenz, schliessen);
-        steuerung.setSpacing(5);
+        steuerung.add(header, 0,0,2,1);
+        steuerung.addRow(1,tipp,schimpf);
+        steuerung.addRow(2, transparenz, sortieren);
+        steuerung.add(schliessen, 0, 3, 2,1);
         settings.getContent().add(steuerung);
     }
 

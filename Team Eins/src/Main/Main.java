@@ -168,7 +168,7 @@ public class Main extends Application {
 
         File in = new File("./.uid");
 
-        if(!in.exists()) { //noch keine UID gespeichert, neue Datei anlegen
+        /*if(!in.exists()) { //noch keine UID gespeichert, neue Datei anlegen
             PrintWriter pWriter = null;
             try {
                 pWriter = new PrintWriter(new BufferedWriter(new FileWriter(in)));
@@ -184,7 +184,7 @@ public class Main extends Application {
         } else {
             BufferedReader reader = new BufferedReader(new FileReader(in));
             uniqueID = reader.readLine();
-        }
+        }*/
 
         table1 = new Image("GUI/images/table2.svg");
         classPrimaryStage = primaryStage;
