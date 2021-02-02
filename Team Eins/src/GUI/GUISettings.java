@@ -131,7 +131,7 @@ public class GUISettings {
         sortieren.setAlignment(Pos.CENTER);
         HBox kartesortOpt = new HBox(sortAn, sortBeginn, sortAus);
         kartesortOpt.setAlignment(Pos.TOP_CENTER);
-        kartesortOpt.setSpacing(5);
+        kartesortOpt.setSpacing(20);
 
         Label chips = new Label("Automatische Chips:");
         autoChip.setAlignment(Pos.CENTER);
@@ -141,7 +141,7 @@ public class GUISettings {
 
 
 
-        Label chattranz = new Label("Chat Transparenz");
+        Label chattranz = new Label("Chat Transparenz:");
         transparenz.setAlignment(Pos.CENTER);
         slider = new Slider(0,1,0.8);
         slider.setBlockIncrement(0.1f);
@@ -163,8 +163,9 @@ public class GUISettings {
         steuerung.setAlignment(Pos.CENTER);
         steuerung.add(header, 0,0,2,1);
         steuerung.addRow(1,tipp,schimpf);
-        steuerung.addRow(2, transparenz, sortieren);
-        steuerung.add(schliessen, 0, 3, 2,1);
+        steuerung.addRow(2, transparenz, autoChip);
+        steuerung.add(sortieren,0,3,2,1);
+        steuerung.add(schliessen, 0, 4, 2,1);
         settings.getContent().add(steuerung);
     }
 
