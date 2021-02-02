@@ -102,10 +102,10 @@ public class Main extends Application {
      * und startet die erste Runde im Spiel
      */
     public static void initGame() {
-        if (tutorialAn){
-            tutorial.initTutorial(classPrimaryStage);
+        if (tutorialAn && playMode==0){
+            tutorial.initTutorial();
         }else {
-
+            tutorialAn=false;
             //initialisiere Spieler mit handkarten
             haende = new Hand[anzSpieler];
             spielerM = new Spieler[anzSpieler];

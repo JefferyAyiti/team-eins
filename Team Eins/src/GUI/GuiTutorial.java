@@ -1,18 +1,14 @@
 package GUI;
+
 import Main.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Popup;
-import javafx.stage.Stage;
-import org.mozilla.javascript.ast.Jump;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+
 
 import static Main.Main.*;
 
@@ -27,7 +23,7 @@ public class GuiTutorial {
 
 
 
-    public void initTutorial(Stage primaryStage) {
+    public void initTutorial() {
         intro=true;
         Main.anzSpieler = 3;
         Main.ich = 0;
@@ -158,110 +154,124 @@ public class GuiTutorial {
                         Hast du am Ende die wenigsten Minuspunkte gewinnst du das Spiel.""");
                 popUp(txt, 5, 0);
 
-                    Main.spieltischGui.getGridPane().onMouseClickedProperty().set(b -> {
+                Main.spieltischGui.getGridPane().onMouseClickedProperty().set(b -> {
+                    closeDialog();
+                    txt = new Text("Minuspunkte werden als Chips vergeben. Ein weißer Chip gibt -1 Punkte und ein schwarzer -10.\n");
+                    popUp(txt, 5, 0);
+
+                    Main.spieltischGui.getGridPane().onMouseClickedProperty().set(c -> {
                         closeDialog();
-                        txt = new Text("Minuspunkte werden als Chips vergeben. Ein weißer Chip gibt -1 Punkte und ein schwarzer -10.\n");
+                        txt = new Text("""
+                                Um dir das Spiel besser zu zeigen beginnen wir das Spiel nicht bei null.\s
+                                Paul hat breits 2 schwarze Chips und 8 weiße. Somit hat er -28 Punkte.
+                                Ich habe 2 schwarze und 3 weiße Chips und somit -23 Punkte.""");
                         popUp(txt, 5, 0);
 
-                        Main.spieltischGui.getGridPane().onMouseClickedProperty().set(c -> {
+                        Main.spieltischGui.getGridPane().onMouseClickedProperty().set(d -> {
                             closeDialog();
                             txt = new Text("""
-                                    Um dir das Spiel besser zu zeigen beginnen wir das Spiel nicht bei null.\s
-                                    Paul hat breits 2 schwarze Chips und 8 weiße. Somit hat er -28 Punkte.
-                                    Ich habe 2 schwarze und 3 weiße Chips und somit -23 Punkte.""");
+                                    Du kannst jeder Zeit 10 weiße Chips gegen einen schwarzen Chip tauschen.
+                                    Hast du keine Karten mehr auf der Hand darfst du nämlich einen beliebigen Chip abgeben
+                                    und durch einen schwarzen Chip kannst du mehr Minuspunkte loswerden.""");
                             popUp(txt, 5, 0);
 
-                            Main.spieltischGui.getGridPane().onMouseClickedProperty().set(d -> {
-                                closeDialog();
-                                txt = new Text("""
-                                        Du kannst jeder Zeit 10 weiße Chips gegen einen schwarzen Chip tauschen.
-                                        Hast du keine Karten mehr auf der Hand darfst du nämlich einen beliebigen Chip abgeben
-                                        und durch einen schwarzen Chip kannst du mehr Minuspunkte loswerden.""");
+                            Main.spieltischGui.getGridPane().onMouseClickedProperty().set(h -> {
+                                chips = true;
+                                reloadGui();
+                                txt = new Text("Wie ich sehe hast du momentan 10 weiße Chips. Klicke auf deine Chips um sie zu tauschen.");
                                 popUp(txt, 5, 0);
 
-                                Main.spieltischGui.getGridPane().onMouseClickedProperty().set(h -> {
-                                    chips = true;
-                                    reloadGui();
-                                    txt = new Text("Wie ich sehe hast du momentan 10 weiße Chips. Klicke auf deine Chips um sie zu tauschen.");
-                                    popUp(txt, 5, 0);
+                                Main.spieltischGui.getGridPane().onMouseClickedProperty().set(e -> {
+                                    if (spielerM[0].getBlackChips() == 3) {
+                                        chips = false;
+                                        karte = true;
+                                        intro = false;
+                                        reloadGui();
+                                        txt = new Text("Toll! ");
+                                        popUp(txt, 5, 0);
 
-                                    Main.spieltischGui.getGridPane().onMouseClickedProperty().set(e -> {
-                                        if (spielerM[0].getBlackChips() == 3) {
-                                            chips = false;
-                                            karte= true;
-                                            reloadGui();
-                                            txt = new Text("Toll! ");
-                                            popUp(txt, 5, 0);
+                                        Main.spieltischGui.getGridPane().onMouseClickedProperty().set(f -> startTutorial());
 
-                                            Main.spieltischGui.getGridPane().onMouseClickedProperty().set(f -> startTutorial());
-
-                                        }
-                                    });
+                                    }
                                 });
                             });
                         });
                     });
                 });
-            //legen
-           if(karte) {
-               Main.spieltischGui.getGridPane().onMouseClickedProperty().set(b -> {
-                   txt = new Text("Du kannst immer eine der drei Aktionen auswählen: \n" +
-                           "eine Karte ablegen," +
-                           "eine Katze nachziehen oder" +
-                           "Aussteigen");
+            });
+        }
+        
+        //legen
+       if(karte) {
+           Main.spieltischGui.getGridPane().onMouseClickedProperty().set(b -> {
+               txt = new Text("Du kannst immer eine der drei Aktionen auswählen: \n" +
+                       "eine Karte ablegen," +
+                       "eine Katze nachziehen oder" +
+                       "Aussteigen");
+               popUp(txt, 5, 0);
+
+               Main.spieltischGui.getGridPane().onMouseClickedProperty().set(c -> {
+                   closeDialog();
+                   txt = new Text("versuchen wir erst eine Karte abzulegen. Der Ablage bestimmt, was du ablegen darfst.\n+" +
+                           "Du kannst immer nur eine Karte mit dem gleichen Wert oder einen Wert höher ablegen." +
+                           "Das Lama ist die höhste Karte, auf sie kann nur ein Lama oder eine 1 gelegt werden.");
                    popUp(txt, 5, 0);
 
-                   Main.spieltischGui.getGridPane().onMouseClickedProperty().set(c -> {
+                   Main.spieltischGui.getGridPane().onMouseClickedProperty().set(d -> {
                        closeDialog();
-                       txt = new Text("versuchen wir erst eine Karte abzulegen. Der Ablage bestimmt, was du ablegen darfst.\n+" +
-                               "Du kannst immer nur eine Karte mit dem gleichen Wert oder einen Wert höher ablegen." +
-                               "Das Lama ist die höhste Karte, auf sie kann nur ein Lama oder eine 1 gelegt werden.");
+                       Main.tooltip = true;
+                       reloadGui();
+                       txt = new Text(" Auf dem Ablagestapel liegt eine 2 also kannst du nur eine 2 oder eine 3 darauf legen.\n" +
+                               "Du kannst also nur deine 3 auf den Stapel legen.");
                        popUp(txt, 5, 0);
 
-                       Main.spieltischGui.getGridPane().onMouseClickedProperty().set(d -> {
+                       Main.spieltischGui.getGridPane().onMouseClickedProperty().set(i -> {
+                           if(tisch.getObereKarteAblagestapel().getValue()==3) {
                            closeDialog();
-                           Main.tooltip = true;
-                           reloadGui();
-                           txt = new Text(" Auf dem Ablagestapel liegt eine 2 also kannst du nur eine 2 oder eine 3 darauf legen.\n" +
-                                   "Du kannst also nur deine 3 auf den Stapel legen.");
+                           txt = new Text("Klasse! Jetzt bin ich am Zug ");
                            popUp(txt, 5, 0);
 
-                           Main.spieltischGui.getGridPane().onMouseClickedProperty().set(e -> {
-                               closeDialog();
-                               txt = new Text("Klasse! Jetzt bin ich am Zug ");
-                               popUp(txt, 5, 0);
-                               do {
-                                   spiellogik.karteLegen(spielerM[1], spielerM[1].getCardHand().getKarte(0));
+                               Main.spieltischGui.getGridPane().onMouseClickedProperty().set(e -> {
+                                   while (!spiellogik.karteLegen(spielerM[1], spielerM[1].getCardHand().getKarte(0)));
 
-                               } while (tisch.getAktivSpieler() == spielerM[1]);
 
-                               Main.spieltischGui.getGridPane().onMouseClickedProperty().set(f -> {
-                                   closeDialog();
-                                   txt = new Text("Ich habe eine 4 gelegt und jetzt ist Paul an der Reihe.");
-                                   Main.spieltischGui.getGridPane().onMouseClickedProperty().set(g -> {
-                                       do {
-                                           spiellogik.karteLegen(spielerM[2], spielerM[2].getCardHand().getKarte(0));
+                                           Main.spieltischGui.getGridPane().onMouseClickedProperty().set(g -> {
 
-                                       } while (tisch.getAktivSpieler() == spielerM[2]);
-                                       next = true;
-                                       startTutorial();
-                                   });
+                                               txt = new Text("Ich habe eine 4 gelegt und jetzt ist Paul an der Reihe.");
+                                               popUp(txt, 5, 0);
+                                                System.out.println(tisch.getAktivSpieler().getName()+ " " + spielerM[1].getName());
+
+                                                   System.out.println(tisch.getAktivSpieler() == spielerM[1]);
+                                                   while(!spiellogik.karteLegen(spielerM[2], spielerM[2].getCardHand().getKarte(0)));
+
+                                                   if (tisch.getObereKarteAblagestapel().getValue() == 5) {
+                                                       karte = false;
+                                                       next = true;
+                                                       startTutorial();
+                                                   }
+
+
+                                           });
+                                       
                                });
 
-                           });
-
+                           }
                        });
+
                    });
                });
-           }
-           // 2. Zug
+           });
+       }
+       // 2. Zug
+        if (next){
 
         }
+
 
     }
 
 
-    HBox popUp(Text text, double X, double Y) {
+    void popUp(Text text, double X, double Y) {
 
         TextFlow flow = new TextFlow();
         /* Image bubble = new Image("GUI/images/speechBubble.png",100,50,false,false);
@@ -271,11 +281,12 @@ public class GuiTutorial {
         flow.setBackground(new Background(myBI));
 
         */
-        //flow.setStyle("-fx-background-image: url('/GUI/images/speechBubble.png');");
 
-        //VBox txt = new VBox();
+
+
         Image avatar = new Image("GUI/images/clipart2498304.png", 50 * Main.zoomfactor, 70 * Main.zoomfactor, false, false);
         ImageView bild = new ImageView(avatar);
+
         //Label erklareung = new Label(text);
         text.setFont(new Font("arial black", 13));
         text.setStyle("-fx-fill: black;");
@@ -291,7 +302,6 @@ public class GuiTutorial {
         info.getChildren().addAll(bild, flow);
         flow.setStyle("-fx-background-color: gray;");
         Main.spieltischGui.getGridPane().add(info, 0, 0, 4, 1);
-        return info;
     }
 
     void closeDialog(){
