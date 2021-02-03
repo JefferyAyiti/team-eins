@@ -60,6 +60,9 @@ public class RMIClient {
         }
     }
 
+    /** getter-Methode für tisch
+     * @return tisch
+     */
     public Tisch getTisch(){
         return Main.tisch;
     }

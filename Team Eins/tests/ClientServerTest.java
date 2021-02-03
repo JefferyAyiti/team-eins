@@ -49,6 +49,9 @@ public class ClientServerTest {
 
     }
 
+    /**
+     * schließen des servers
+     */
     @AfterEach
     void close(){
         runServer.stop();
@@ -70,8 +73,11 @@ public class ClientServerTest {
         client1 = new RunClient("localhost",8001, "testServer","1", "client1");
         client2 = new RunClient("localhost",8001, "testServer","2", "client2");
 
+        //Spieler ist auf dem Server
         assertEquals("client1",runServer.getServer().getClients().get("1"));
+        //Spieler verlässt Spiel
         runServer.getServer().leaveServer("1");
+        //Spieler nicht mehr auf dem Server
         assertNull(runServer.getServer().getClients().get("1"));
     }
 
@@ -91,8 +97,11 @@ public class ClientServerTest {
         client1 = new RunClient("localhost",8001, "testServer","1", "client1");
         client2 = new RunClient("localhost",8001, "testServer","2", "client2");
 
+        //Spieler "1" heißt "client1"
         assertEquals("client1",runServer.getServer().getClients().get("1"));
+        //Name ändern
         client1.getServer().changeName("1","c");
+        //Nameänderung bestätigen
         assertEquals("c",runServer.getServer().getClients().get("1"));
 
 
@@ -138,7 +147,7 @@ public class ClientServerTest {
 
     }
 
-    /** Test für karteNachziehen
+    /** Test für karteNachziehen-Methode von serverimpl
      * @throws AlreadyBoundException
      * @throws RemoteException
      * @throws NotBoundException
@@ -175,13 +184,12 @@ public class ClientServerTest {
         int size = tisch.getNachziehStapelSize();
         runServer.getServer().karteNachziehen(tisch.getSpielerList()[1]);
 
-        //gucken ob für beide Spieler der Nachziehstapel eine Karte weniger hat
+        //gucken der Nachziehstapel eine Karte weniger hat
         assertEquals(size-1, runServer.getServer().updateTisch().getNachziehStapelSize());
-        assertEquals(size-1,runServer.getServer().updateTisch().getNachziehStapelSize());
 
     }
 
-    /** Test für karteLegen
+    /** Test für karteLegen-Methode von serverimpl
      * @throws RemoteException
      * @throws AlreadyBoundException
      * @throws NotBoundException
@@ -215,15 +223,20 @@ public class ClientServerTest {
         tisch.setAktiv(1);
         runServer.getServer().karteNachziehen(tisch.getSpielerList()[1]);
 
-        //gucken ob für beide Spieler der Nachziehstapel eine Karte weniger hat;
+        //Setup, sodass ein Spieler eine Karte ablegen kann
         tisch.karteAblegen(tisch.getSpielerList()[1].getCardHand().getKarte(0));
         int val =  tisch.getSpielerList()[1].getCardHand().getKarte(0).getValue();
+        //Spieler legt Karte ab
         runServer.getServer().karteLegen(tisch.getSpielerList()[1],new Karte(tisch.getSpielerList()[1].getCardHand().getKarte(0).getValue(),false));
+        //Karte die gelegt wurde, liegt auf dem Ablagestapel
         assertEquals(val,runServer.getServer().updateTisch().getObereKarteAblagestapel().getValue());
+        //auch für die clients liegt die Karte auf dem Ablagestapel
+        assertEquals(val,client2.getServer().updateTisch().getObereKarteAblagestapel().getValue());
+
 
     }
 
-    /** Test für aussteigen
+    /** Test für aussteigen-Methode von serverimpl
      * @throws RemoteException
      * @throws NotBoundException
      * @throws AlreadyBoundException
@@ -259,28 +272,28 @@ public class ClientServerTest {
 
         //Alle spieler steigen hier aus
         runServer.getServer().aussteigen(tisch.getSpielerList()[1]);
-        assertEquals(false,runServer.getServer().updateTisch().getSpielerList()[1].inGame());
+        assertFalse(runServer.getServer().updateTisch().getSpielerList()[1].inGame());
         runServer.getServer().aussteigen(runServer.getServer().updateTisch().getSpielerList()[2]);
         runServer.getServer().aussteigen(runServer.getServer().updateTisch().getSpielerList()[0]);
 
         //berechne Punktzahl für Handkarten des Spielers
         Set<Integer> handkarten = new LinkedHashSet<>();
-
-
         for (Karte c : tisch.getSpielerList()[1].getCardHand().getHandKarte()) {
             handkarten.add(c.getValue());
         }
-
         for (Integer c : handkarten) {
             handkartenSum += c;
         }
+
         assertEquals(runServer.getServer().updateTisch().getSpielerList()[1].getPoints(),-1*handkartenSum);
+        assertEquals(client1.getServer().updateTisch().getSpielerList()[1].getPoints(),-1*handkartenSum);
+
 
         tisch.setAktiv(1);
 
     }
 
-    /** Test für chipsAbgeben und chipTauschen
+    /** Test für chipsAbgeben und chipTauschen-Methoden von serverimpl
      * @throws RemoteException
      * @throws NotBoundException
      * @throws AlreadyBoundException
@@ -321,8 +334,11 @@ public class ClientServerTest {
         tisch.getSpielerList()[1].setBlackChips(0);
         runServer.getServer().chipsTauschen(1);
 
+        //Sicht aus server und client
         assertEquals(1,runServer.getServer().updateTisch().getSpielerList()[1].getBlackChips());
         assertEquals(0,runServer.getServer().updateTisch().getSpielerList()[1].getWhiteChips());
+        assertEquals(1,client2.getServer().updateTisch().getSpielerList()[1].getBlackChips());
+        assertEquals(0,client1.getServer().updateTisch().getSpielerList()[1].getWhiteChips());
 
         //Spieler hat keine Karten mehr
         tisch.getSpielerList()[1].setCardHand(new Hand());
@@ -334,7 +350,7 @@ public class ClientServerTest {
 
     }
 
-    /** Test für replaceSpielerDurchBot
+    /** Test für replaceSpielerDurchBot-Methode von serverimpl
      * @throws AlreadyBoundException
      * @throws RemoteException
      * @throws NotBoundException
@@ -369,6 +385,11 @@ public class ClientServerTest {
         assertEquals(bot.getClass(),tisch.getSpielerList()[1].getClass());
     }
 
+    /** Test für den Chat
+     * @throws AlreadyBoundException
+     * @throws RemoteException
+     * @throws NotBoundException
+     */
     @Test
     void chatTest() throws AlreadyBoundException, RemoteException, NotBoundException {
 
@@ -387,7 +408,7 @@ public class ClientServerTest {
         runServer.getServer().sendMessage("/coinflip","2");
         //roll
         runServer.getServer().sendMessage("/roll 6","2");
-        assertEquals("test",runServer.getServer().getChat(false).get(0).get(1));
+        assertEquals("test",client1.getServer().getChat(false).get(0).get(1));
         assertTrue(
             "Zahl".equals(runServer.getServer().getChat(false).get(1).get(2)) ||
                 "Kopf".equals(runServer.getServer().getChat(false).get(1).get(2)));
@@ -395,6 +416,11 @@ public class ClientServerTest {
         assertTrue(test > 0 && test <= 6);
     }
 
+    /** Test für reconnect-Methode von serverimpl
+     * @throws AlreadyBoundException
+     * @throws RemoteException
+     * @throws NotBoundException
+     */
     @Test
     void reconnect() throws AlreadyBoundException, RemoteException, NotBoundException {
         //server aufstellen
@@ -419,13 +445,60 @@ public class ClientServerTest {
         main.setSpiellogik(spiellogik);
         main.setHaende(new Hand[runServer.getServer().getAnzahlSpieler()]);
 
+        //Spieler ist auf dem Server
         assertEquals("client1",runServer.getServer().getClients().get("1"));
+        //Spieler verlässt Server
         runServer.getServer().leaveServer("1");
+        //Spieler wird ersetzt durch Bot
         runServer.getServer().replaceSpielerDurchBot("1");
+        //Spieler nicht mir in der clientsliste
         assertNull(runServer.getServer().getClients().get("1"));
 
+        //Spieler kann reconnecten
         runServer.getServer().reconnect("1","client1");
+        //Spieler wieder auf dem Server
         assertEquals("client1",runServer.getServer().getClients().get("1"));
+
+    }
+
+    /** Test für isInGame-Methode von serverimpl
+     * @throws RemoteException
+     * @throws NotBoundException
+     * @throws AlreadyBoundException
+     */
+    @Test
+    void isInGame() throws RemoteException, NotBoundException, AlreadyBoundException {
+        //server aufstellen
+        runServer = new RunServer("localhost","testServer", 8001, "0","test");
+        runServer.starting();
+
+        int i = 1;
+        for (Map.Entry<String, String> entry : clientsMap.entrySet()) {
+            spielerM[i] = new Spieler(entry.getValue(), entry.getKey());
+            i++;
+        }
+        tisch = new Tisch(spielerM);
+
+        //Spieler is noch nicht im Spiel
+        assertFalse(runServer.getServer().isInGame("1"));
+
+
+        //clients starten
+        client1 = new RunClient("localhost",8001, "testServer","1", "client1");
+        client2 = new RunClient("localhost",8001, "testServer","2", "client2");
+
+
+        spiellogik = new Spiellogik(tisch);
+        main.setTisch(tisch);
+        main.setServer(runServer.getServer());
+        main.setSpiellogik(spiellogik);
+        main.setHaende(new Hand[runServer.getServer().getAnzahlSpieler()]);
+
+        assertEquals("client1",runServer.getServer().getClients().get("1"));
+
+        //Spieler ist im Spiel
+        assertTrue(runServer.getServer().isInGame("1"));
+
 
     }
 
