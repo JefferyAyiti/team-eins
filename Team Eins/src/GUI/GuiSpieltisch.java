@@ -509,11 +509,12 @@ public class GuiSpieltisch {
         primaryStage.xProperty().addListener((obs, oldVal, newVal) -> reposition(primaryStage));
         primaryStage.yProperty().addListener((obs, oldVal, newVal) -> reposition(primaryStage));
 
+
+
         if(myTurnNotice == null || tisch.aktiv != ich) {
             myTurnNotice = true;
         }
-        primaryStage.setScene(scene);
-        primaryStage.show();
+
         root.setOnMousePressed(event -> {
             Bounds nodeBounds = ablagestapel.localToScene(ablagestapel.getBoundsInLocal());
             ablageX = new double[]{nodeBounds.getMinX(), nodeBounds.getMaxX()};
@@ -525,14 +526,6 @@ public class GuiSpieltisch {
 
             Main.classPrimaryStage = primaryStage;
 
-            if (Main.sceneWidth == 0) {
-                Main.sceneWidth = 600;
-            } else
-                Main.sceneWidth = Main.classPrimaryStage.getScene().getWidth();
-            if (Main.sceneHeight == 0) {
-                Main.sceneHeight = 400;
-            } else
-                Main.sceneHeight = Main.classPrimaryStage.getScene().getHeight();
 
 
             if (Main.inMenu) {
@@ -551,8 +544,7 @@ public class GuiSpieltisch {
 
 
             }
-            Main.sceneWidth = scene.getWidth();
-            Main.sceneHeight = scene.getHeight();
+
             Main.lastmove = System.currentTimeMillis();
 
 
@@ -898,7 +890,7 @@ public class GuiSpieltisch {
                 turnLabel.setTextFill(Color.LIGHTGREEN);
                 turnLabel.setFont(Font.font("Ink Free", FontWeight.BOLD, 25 * zoomfactor));
                 turnNotice.getChildren().add(turnLabel);
-                System.out.println("myturn");
+
                 FadeTransition ft = new FadeTransition(Duration.millis(6000), turnNotice);
                 ft.setFromValue(1.0);
                 ft.setToValue(0);
@@ -922,7 +914,11 @@ public class GuiSpieltisch {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        primaryStage.setScene(scene);
+        primaryStage.setWidth(primaryStage.getWidth()+sceneWidth-primaryStage.getScene().getWidth());
+        primaryStage.setHeight(primaryStage.getHeight()+sceneHeight-primaryStage.getScene().getHeight());
 
+        primaryStage.show();
     }
 
     /**

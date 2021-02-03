@@ -2,6 +2,7 @@ package GUI;
 
 import RMI.*;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -62,15 +63,10 @@ public class GuiHauptmenu {
         status.setId("status");
         status.setFont(new Font(fontsize));
 
+
         PrimaryStage.xProperty().addListener((obs, oldVal, newVal) -> reposition(PrimaryStage));
         PrimaryStage.yProperty().addListener((obs, oldVal, newVal) -> reposition(PrimaryStage));
 
-
-
-        if(classPrimaryStage.getScene() != null) {
-            sceneWidth = classPrimaryStage.getScene().getWidth();
-            sceneHeight = classPrimaryStage.getScene().getHeight();
-        }
         inMenu = true;
         try {
             if(server != null){
@@ -437,6 +433,19 @@ public class GuiHauptmenu {
                 menu.getStylesheets().add("GUI/MainMenu.css");
 
                 PrimaryStage.setScene(menu);
+
+                ChangeListener<Number> stageSizeListenerW = (observable, oldValue, newValue) ->
+                {
+                   sceneWidth = (double)newValue;
+                };
+                ChangeListener<Number> stageSizeListenerH = (observable, oldValue, newValue) ->
+                {
+                    sceneHeight = (double)newValue;
+                };
+
+                PrimaryStage.getScene().widthProperty().addListener(stageSizeListenerW);
+                PrimaryStage.getScene().heightProperty().addListener(stageSizeListenerH);
+                resize = System.currentTimeMillis();
                 PrimaryStage.show();
             }
         } catch (RemoteException e) {

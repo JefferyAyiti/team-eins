@@ -309,7 +309,6 @@ public class Main extends Application {
 
 
     public static void runTimers(Stage ps) {
-        resize(true);
         bots = new Timer();
         resizecheck = new Timer();
         resizecheck.schedule(new MyTask1(), 0, 500);
