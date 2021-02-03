@@ -192,6 +192,7 @@ public class GUISettings {
 
     public void hideSettings() {
         settings.hide();
+        Main.spieltischGui.settingsOpen = false;
     }
 
     /**

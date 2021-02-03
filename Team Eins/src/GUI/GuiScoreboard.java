@@ -23,6 +23,8 @@ public class GuiScoreboard {
     static Scene showRangliste(Map<Spieler, Integer> ranking) throws  RemoteException {
         //System.out.println("gibt Rangliste aus");
         int p = 1;
+        chatbox.hideChat();
+        einstellung.hideSettings();
 
         //Scoreboard
         VBox names = new VBox(new Label(""));

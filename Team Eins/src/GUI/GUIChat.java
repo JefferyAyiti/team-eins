@@ -63,6 +63,7 @@ public class GUIChat {
      */
     public void hideChat() {
         chat.hide();
+        spieltischGui.chatOpened = false;
     }
 
 
