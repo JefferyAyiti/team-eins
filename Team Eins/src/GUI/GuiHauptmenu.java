@@ -408,7 +408,7 @@ public class GuiHauptmenu {
 
         BackgroundImage myBI = new BackgroundImage(Main.table1,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-                new BackgroundSize(100, 100, true, true, false, true));
+            new BackgroundSize(1.0, 2.0, true, true, false, false));
         root.setBackground(new Background(myBI));
         try {
             if (playMode>=1 && Main.joined && server.serverOpen()){
