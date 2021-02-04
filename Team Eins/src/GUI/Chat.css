@@ -89,3 +89,7 @@ TextFlow > Text {
 .popup {
     -fx-border-color: none;
 }
+
+.viewport,.scroll-pane{
+    -fx-background-color: transparent;
+}

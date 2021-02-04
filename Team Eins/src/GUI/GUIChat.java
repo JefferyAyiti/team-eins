@@ -7,8 +7,12 @@ import com.pavlobu.emojitextflow.EmojiTextFlowParameters;
 import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
@@ -72,8 +76,7 @@ public class GUIChat {
 
         chat.setX(owner.getScene().getWindow().getX() + 5);
         chat.setY(owner.getScene().getWindow().getY() + 35);
-        //chat.setAutoFix(true);
-        scroll.setOpacity(einstellung.getSliderValue());
+
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sendButton.setStyle("-fx-text-fill: black;\n" +
                 "    -fx-background-color: rgba(255,255,255,0.6);\n" +
@@ -87,23 +90,28 @@ public class GUIChat {
         messages.setPrefHeight(240*zoomfactor);
         messages.setMinWidth(160 *zoomfactor);
         messages.setMaxWidth(160*zoomfactor);
-        messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
+        //messages.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
+        messages.setStyle("-fx-background-color: transparent");
         HBox inputBox = new HBox();
 
-        //input.setStyle("-fx-opacity: 0.9");
+        VBox background = new VBox(new Label("Chat"));
+        background.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
+        background.setOpacity(einstellung.getSliderValue());
+
+        StackPane format = new StackPane(background, scroll);
+
         sendButton.setPrefWidth(60);
         input.setPrefWidth(170*zoomfactor-60);
-        //inputBox.minWidth(width);
-        //inputBox.maxWidth(600*zoomfactor);
+
         input.setId("eingabe");
-        //inputBox.prefWidthProperty().bind(content.prefWidthProperty().multiply(zoomfactor));
+
         inputBox.getChildren().addAll(input, sendButton);
         onEnter();
         onPress();
         messages.getChildren().clear();
         messages.getChildren().addAll(buildChat());
         scroll.setContent(messages);
-        content.getChildren().addAll(scroll, inputBox);
+        content.getChildren().addAll(format, inputBox);
         chat.getContent().addAll(content);
         //chat.setAutoHide(true);
         scroll.vvalueProperty().bind(messages.heightProperty());
