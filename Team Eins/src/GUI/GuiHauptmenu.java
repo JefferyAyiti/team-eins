@@ -288,6 +288,7 @@ public class GuiHauptmenu {
         );
         //Tutorial
         if(playMode==0) {
+            tutorialAn=false;
             HBox t = new HBox();
             ToggleGroup tutor = new ToggleGroup();
             Label tut = new Label("Tutorial");

@@ -278,7 +278,10 @@ public class GuiSpieltisch {
 
                         imgView.setOnMouseClicked(e -> {
                             if (e.isStillSincePress()) {
-                                kartelegen(playerId, finalI);
+                                if(tutorial.wrongCard(finalI)) {
+                                }else{
+                                    kartelegen(playerId, finalI);
+                                }
                             }
                         });
 
