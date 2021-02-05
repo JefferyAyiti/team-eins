@@ -574,6 +574,7 @@ public class GuiSpieltisch {
                             } catch (RemoteException e) {
                                 e.printStackTrace();
                             }
+                            //
                             System.out.println("\t Ziehe Karte");
                         } else if (Main.spiellogik.karteNachziehen(tisch.getSpielerList()[ich]))
                             System.out.println("\t Ziehe Karte");

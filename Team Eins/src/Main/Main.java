@@ -40,7 +40,7 @@ public class Main extends Application {
     public static volatile long resize = 0;
     public static int ich = 0;
     public static long botPlayTime = 0;
-    public static int botlevel = 0;
+    public static int botlevel = 0; //
     public static Stage classPrimaryStage;
     public static boolean joined;
     public static String myName;

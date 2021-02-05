@@ -68,7 +68,7 @@ public class GuiHauptmenu {
         PrimaryStage.yProperty().addListener((obs, oldVal, newVal) -> reposition(PrimaryStage));
 
         inMenu = true;
-        try {
+        try { //
             if(server != null){
             }
 
