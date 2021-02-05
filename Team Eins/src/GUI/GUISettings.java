@@ -214,4 +214,8 @@ public class GUISettings {
     public double getSliderValue(){
        return slider.getValue();
     }
+
+    public boolean getValueChange(){
+        return slider.isValueChanging();
+    }
 }

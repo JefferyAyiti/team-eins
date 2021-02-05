@@ -32,6 +32,7 @@ public class GUIChat {
     public ScrollPane scroll = new ScrollPane();
     public VBox messages = new VBox();
     Button sendButton = new Button("Senden");
+    VBox background = new VBox();
 
 
     final static double EMOJI_SCALE_FACTOR = 1.5D; // used to adjust emoji size and position in relation to other text
@@ -91,19 +92,18 @@ public class GUIChat {
         messages.setStyle("-fx-background-color: transparent");
         HBox inputBox = new HBox();
 
-        VBox background = new VBox();
+
         background.setMinWidth(170*zoomfactor);
         background.setMaxWidth(170*zoomfactor);
         //background.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
         BackgroundImage backgroundImage = new BackgroundImage(new Image("/GUI/images/oberflaeche.jpg"),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.ROUND,BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.REPEAT,BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         background.setBackground(new Background(backgroundImage));
 
         StackPane format = new StackPane(background, scroll);
         format.setMinWidth(170 *zoomfactor);
         format.setMaxWidth(170*zoomfactor);
         background.setOpacity(einstellung.getSliderValue());
-
         sendButton.setPrefWidth(60);
         input.setPrefWidth(170*zoomfactor-60);
 
@@ -279,6 +279,6 @@ public class GUIChat {
     }
 
     public void scaleTransparenz(){
-        scroll.setOpacity(einstellung.getSliderValue());
+        background.setOpacity(einstellung.getSliderValue());
     }
 }
