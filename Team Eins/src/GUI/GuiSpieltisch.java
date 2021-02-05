@@ -278,7 +278,10 @@ public class GuiSpieltisch {
 
                         imgView.setOnMouseClicked(e -> {
                             if (e.isStillSincePress()) {
-                                kartelegen(playerId, finalI);
+                                if(tutorial.wrongCard(finalI)) {
+                                }else{
+                                    kartelegen(playerId, finalI);
+                                }
                             }
                         });
 
@@ -550,7 +553,7 @@ public class GuiSpieltisch {
 
             BackgroundImage myBI = new BackgroundImage(Main.table1,
                     BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-                    new BackgroundSize(100, 100, true, true, false, true));
+                new BackgroundSize(1.0, 2.0, true, true, false, false));
 
 
 
@@ -825,6 +828,7 @@ public class GuiSpieltisch {
 
             beenden.setOnMouseClicked(mouseEvent -> {
                 if (Main.playMode <= 1) {
+                    resizecheck.cancel();
                     Main.gameRunning = false;
                     Main.bots.cancel();
                     Main.joined = false;
@@ -845,6 +849,7 @@ public class GuiSpieltisch {
                     Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
 
                 } else if (Main.playMode == 2) {//Multiplaymodus
+                    resizecheck.cancel();
                     joined = false;
                     try {
                         Main.server.replaceSpielerDurchBot(uniqueID);

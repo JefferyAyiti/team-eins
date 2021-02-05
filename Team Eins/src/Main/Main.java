@@ -6,15 +6,22 @@ import RMI.server;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.control.skin.TextInputControlSkin;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
+import java.awt.*;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
 import java.io.*;
 import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 
@@ -166,9 +173,21 @@ public class Main extends Application {
         primaryStage.setTitle("L.A.M.A. - Team Eins");
         primaryStage.getIcons().add(new Image("/lama.gif"));
 
+
+        primaryStage.focusedProperty().addListener(new ChangeListener<Boolean>()
+        {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean onHidden, Boolean onShown)
+            {
+                //System.out.println("Fenster is focused = "+ classPrimaryStage.isFocused());
+                Main.chatbox.hideChat();
+                Main.einstellung.hideSettings();
+            }
+        });
+
         File in = new File("./.uid");
 
-        /*if(!in.exists()) { //noch keine UID gespeichert, neue Datei anlegen
+        if(!in.exists()) { //noch keine UID gespeichert, neue Datei anlegen
             PrintWriter pWriter = null;
             try {
                 pWriter = new PrintWriter(new BufferedWriter(new FileWriter(in)));
@@ -184,7 +203,7 @@ public class Main extends Application {
         } else {
             BufferedReader reader = new BufferedReader(new FileReader(in));
             uniqueID = reader.readLine();
-        }*/
+        }
 
         table1 = new Image("GUI/images/table2.svg");
         classPrimaryStage = primaryStage;
@@ -255,7 +274,7 @@ public class Main extends Application {
                     //spieltischGui.printtoLog("Spieler '" + tisch.getAktivSpieler().getName() + "' ist dran:");
                     try {
                         ((Bot) tisch.getAktivSpieler()).play();
-                    } catch (ClassCastException e2) {
+                    } catch (ClassCastException| NullPointerException e2) {
                         //e2.printStackTrace();
                         System.err.println(e2.toString());
                     }
