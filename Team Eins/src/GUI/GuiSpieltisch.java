@@ -42,7 +42,8 @@ public class GuiSpieltisch {
 
     private ArrayList<Double> x = new ArrayList<>();
     private ArrayList<Double> y = new ArrayList<>();
-    private ArrayList<Double> deg = new ArrayList<>();;
+    private ArrayList<Double> deg = new ArrayList<>();
+    ;
     boolean chatOpened = false;
     boolean settingsOpen = false;
     int[] cardId;
@@ -92,7 +93,7 @@ public class GuiSpieltisch {
 
         int tablePos = Math.floorMod(playerId - ich, anzSpieler);
         Label plr = new Label(tisch.getSpielerList()[playerId].getName()); //PlayerID für debug
-        if (tutorialAn==false && tablePos > 1 && tablePos < 5) {
+        if (tutorialAn == false && tablePos > 1 && tablePos < 5) {
             plr.setRotate(180);
         }
 
@@ -208,7 +209,7 @@ public class GuiSpieltisch {
                                     e.getSceneY() > ablageY[0] &&
                                     e.getSceneY() < ablageY[1]) {
                                 if (tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable() &&
-                                tisch.aktiv == ich)
+                                        tisch.aktiv == ich)
                                     ablagestapel.setStyle("-fx-background-insets: 20; " +
                                             "-fx-background-radius: 20; " +
                                             "-fx-cursor:hand;" +
@@ -219,7 +220,9 @@ public class GuiSpieltisch {
                                             "-fx-cursor:hand;" +
                                             "-fx-effect: dropshadow(three-pass-box, red, 20, 0, 0, 0);");
                             } else {
+
                                 ablagestapel.setStyle(IDLE_BUTTON_STYLE);
+
                             }
 
 
@@ -278,8 +281,8 @@ public class GuiSpieltisch {
 
                         imgView.setOnMouseClicked(e -> {
                             if (e.isStillSincePress()) {
-                                if(tutorial.wrongCard(finalI)) {
-                                }else{
+                                if (tutorial.wrongCard(finalI)) {
+                                } else {
                                     kartelegen(playerId, finalI);
                                 }
                             }
@@ -373,13 +376,13 @@ public class GuiSpieltisch {
             if (tutorial.chips) {
                 chips.setStyle(HILIGHT_BUTTON_STYLE);
 
-            }else if(tutorialAn && tutorial.chips==false){
+            } else if (tutorialAn && tutorial.chips == false) {
                 chips.setStyle(IDLE_BUTTON_STYLE);
-            }else {
-                    chips.setOnMouseEntered(e -> chips.setStyle(HOVERED_BUTTON_STYLE));
-                    chips.setOnMouseExited(e -> chips.setStyle(IDLE_BUTTON_STYLE));
-                }
+            } else {
+                chips.setOnMouseEntered(e -> chips.setStyle(HOVERED_BUTTON_STYLE));
+                chips.setOnMouseExited(e -> chips.setStyle(IDLE_BUTTON_STYLE));
             }
+        }
 
         chips.add(blChip, 0, 0);
         chips.add(whChip, 0, 1);
@@ -433,7 +436,7 @@ public class GuiSpieltisch {
             chips.add(mute, 2, 0, 1, 2);
 
         }
-        if (!tutorialAn &&(tablePos > 1 && tablePos < 5)) {
+        if (!tutorialAn && (tablePos > 1 && tablePos < 5)) {
             chips.setRotate(180);
         }
 
@@ -484,9 +487,9 @@ public class GuiSpieltisch {
                 pane.setTranslateY(10 * zoomfactor);
                 break;
             case 2:
-                if(tutorialAn){
+                if (tutorialAn) {
                     pane.setTranslateY(10 * zoomfactor);
-                }else {
+                } else {
                     pane.setTranslateX(-30 * zoomfactor);
                     pane.setTranslateY(+10 * zoomfactor);
                 }
@@ -513,8 +516,7 @@ public class GuiSpieltisch {
         primaryStage.yProperty().addListener((obs, oldVal, newVal) -> reposition(primaryStage));
 
 
-
-        if(myTurnNotice == null || tisch.aktiv != ich) {
+        if (myTurnNotice == null || tisch.aktiv != ich) {
             myTurnNotice = true;
         }
 
@@ -528,7 +530,6 @@ public class GuiSpieltisch {
         try {
 
             Main.classPrimaryStage = primaryStage;
-
 
 
             if (Main.inMenu) {
@@ -553,9 +554,7 @@ public class GuiSpieltisch {
 
             BackgroundImage myBI = new BackgroundImage(Main.table1,
                     BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-                new BackgroundSize(1.0, 2.0, true, true, false, false));
-
-
+                    new BackgroundSize(1.0, 2.0, true, true, false, false));
 
 
             GridPane table = new GridPane();
@@ -581,8 +580,12 @@ public class GuiSpieltisch {
 
                         buildStage(Main.classPrimaryStage);
                     });
-                    imgView.setOnMouseEntered(e -> imgView.setStyle(HOVERED_BUTTON_STYLE));
-                    imgView.setOnMouseExited(e -> imgView.setStyle(IDLE_BUTTON_STYLE));
+                    if(tutorialAn && tutorial.stapel) {
+                        imgView.setStyle(HILIGHT_BUTTON_STYLE);
+                    }else {
+                        imgView.setOnMouseEntered(e -> imgView.setStyle(HOVERED_BUTTON_STYLE));
+                        imgView.setOnMouseExited(e -> imgView.setStyle(IDLE_BUTTON_STYLE));
+                    }
                 }
                 imgView.setPreserveRatio(true);
                 imgView.setSmooth(true);
@@ -685,7 +688,7 @@ public class GuiSpieltisch {
             Rotate rotate = new Rotate();
             //Setting pivot points for the rotation
             rotate.setAngle(90);
-            if(tutorialAn){//Tutorialansicht
+            if (tutorialAn) {//Tutorialansicht
                 gridPane.add(makepanel(0), 1, 4, 3, 1);
 
                 Node player1 = makepanel(1);
@@ -697,7 +700,7 @@ public class GuiSpieltisch {
                 gridPane.add(player2, 4, 2, 2, 1);
 
 
-            }else {//normale Ansicht
+            } else {//normale Ansicht
                 gridPane.add(makepanel(ich), 1, 4, 3, 1);
 
                 Node player1 = makepanel((1 + ich) % anzSpieler);
@@ -866,10 +869,10 @@ public class GuiSpieltisch {
                 }
 
             });
-            options.getChildren().addAll(beenden,settings);
+            options.getChildren().addAll(beenden, settings);
             options.setAlignment(Pos.TOP_RIGHT);
             options.setSpacing(20);
-            options.setMaxWidth(35*zoomfactor);
+            options.setMaxWidth(35 * zoomfactor);
             options.setPadding(new Insets(10));
             //}
             gridPane.add(options, 4, 0, 1, 1);
@@ -878,7 +881,7 @@ public class GuiSpieltisch {
 
 
             //Notice wenn man am Zug ist
-            if((myTurnNotice  && tisch.aktiv == ich )&& tutorialAn==false) {
+            if ((myTurnNotice && tisch.aktiv == ich) && tutorialAn == false) {
 
 
                 turnNotice = new VBox();
@@ -903,9 +906,6 @@ public class GuiSpieltisch {
             }
 
 
-
-
-
             setGridpane(gridPane);
             root.getChildren().add(gridPane);
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
@@ -918,8 +918,8 @@ public class GuiSpieltisch {
             e.printStackTrace();
         }
         primaryStage.setScene(scene);
-        primaryStage.setWidth(primaryStage.getWidth()+sceneWidth-primaryStage.getScene().getWidth());
-        primaryStage.setHeight(primaryStage.getHeight()+sceneHeight-primaryStage.getScene().getHeight());
+        primaryStage.setWidth(primaryStage.getWidth() + sceneWidth - primaryStage.getScene().getWidth());
+        primaryStage.setHeight(primaryStage.getHeight() + sceneHeight - primaryStage.getScene().getHeight());
 
         primaryStage.show();
     }
@@ -973,11 +973,11 @@ public class GuiSpieltisch {
             ButtonType buttonTypeBlack = new ButtonType("schwarz");
             ButtonType buttonTypeCancel = new ButtonType("schließen", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-            if(autochips) {
-                if(tisch.getSpielerList()[playerId].getBlackChips() >= 1) {
+            if (autochips) {
+                if (tisch.getSpielerList()[playerId].getBlackChips() >= 1) {
                     tausch = new BlackChip();
 
-                } else if(tisch.getSpielerList()[playerId].getWhiteChips() >= 1) {
+                } else if (tisch.getSpielerList()[playerId].getWhiteChips() >= 1) {
                     tausch = new WhiteChip();
                 }
                 if (Main.playMode == 2) {  //Multiplayermodus
@@ -1042,23 +1042,27 @@ public class GuiSpieltisch {
     }
 
 
-    /** positioniert den Chat und die Einstellung relativ zum Window
+    /**
+     * positioniert den Chat und die Einstellung relativ zum Window
+     *
      * @param primaryStage
      */
-    public void reposition(Stage primaryStage){
-        if(chatbox != null && chatbox.chat != null){
+    public void reposition(Stage primaryStage) {
+        if (chatbox != null && chatbox.chat != null) {
             chatbox.reposition(primaryStage);
         }
 
-        if(einstellung != null && einstellung.getSettings() != null){
+        if (einstellung != null && einstellung.getSettings() != null) {
             einstellung.reposition(primaryStage);
         }
 
 
     }
-    private void setGridpane(GridPane p){
-        spielfeld=p;
+
+    private void setGridpane(GridPane p) {
+        spielfeld = p;
     }
+
     public GridPane getGridPane() {
         return spielfeld;
     }
