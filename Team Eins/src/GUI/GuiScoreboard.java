@@ -149,14 +149,32 @@ public class GuiScoreboard {
                 nextRound = new Button("Hauptmenü");
                 nextRound.setOnAction(e -> {
                     if(playMode == 2){
-                        hauptmenuGui.cleanupServer();
+                        resizecheck.cancel();
+                        joined = false;
+                        try {
+                            Main.server.replaceSpielerDurchBot(uniqueID);
+                        } catch (RemoteException e2) {
+                        }
+                        hauptmenuGui.update.cancel();
+                        server = null;
+                        hauptmenuGui.status = new Label("Server verlassen");
                         Platform.runLater(() -> hauptmenuGui.showSettingsMenu(Main.classPrimaryStage));
 
                     }else{
+                        try {
+                            server.closeServer();
+                        } catch (RemoteException remoteException) {
+                            remoteException.printStackTrace();
+                        }
+                        resizecheck.cancel();
+                        joined = false;
                         Main.inMenu = true;
                         Main.gameRunning = false;
                         Main.myTurnUpdate = true;
                         spiellogik = null;
+                        server = null;
+                        Main.hauptmenuGui.update.cancel();
+                        hauptmenuGui.status = new Label("Server verlassen");
                         try {
                             Main.bots.cancel();
                         }catch (NullPointerException  l){}
