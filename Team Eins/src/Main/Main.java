@@ -64,8 +64,8 @@ public class Main extends Application {
         hauptmenuGui = new GuiHauptmenu();
         scoreboardGui = new GuiScoreboard();
         spieltischGui = new GuiSpieltisch();
-        chatbox = new GUIChat();
         einstellung = new GUISettings();
+        chatbox = new GUIChat();
         tutorial = new GuiTutorial();
         loader = new TestLoadImageUsingClass();
         loader.installSvgLoader();
@@ -93,8 +93,8 @@ public class Main extends Application {
     public static GuiHauptmenu hauptmenuGui; //= new GuiHauptmenu();
     public static GuiScoreboard scoreboardGui;//= new GuiScoreboard();
     public static GuiSpieltisch spieltischGui;//= new GuiSpieltisch();
-    public static GUIChat chatbox;//= new GUIChat();
     public static GUISettings einstellung;//= new GUISettings();
+    public static GUIChat chatbox;//= new GUIChat();
     public static GuiTutorial tutorial;
 
     /**
