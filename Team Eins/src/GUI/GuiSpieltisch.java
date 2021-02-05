@@ -828,6 +828,7 @@ public class GuiSpieltisch {
 
             beenden.setOnMouseClicked(mouseEvent -> {
                 if (Main.playMode <= 1) {
+                    resizecheck.cancel();
                     Main.gameRunning = false;
                     Main.bots.cancel();
                     Main.joined = false;
@@ -848,6 +849,7 @@ public class GuiSpieltisch {
                     Main.hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
 
                 } else if (Main.playMode == 2) {//Multiplaymodus
+                    resizecheck.cancel();
                     joined = false;
                     try {
                         Main.server.replaceSpielerDurchBot(uniqueID);
