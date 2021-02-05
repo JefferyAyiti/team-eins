@@ -10,10 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.scene.transform.Translate;
@@ -94,11 +91,18 @@ public class GUIChat {
         messages.setStyle("-fx-background-color: transparent");
         HBox inputBox = new HBox();
 
-        VBox background = new VBox(new Label("Chat"));
-        background.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
-        background.setOpacity(einstellung.getSliderValue());
+        VBox background = new VBox();
+        background.setMinWidth(170*zoomfactor);
+        background.setMaxWidth(170*zoomfactor);
+        //background.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
+        BackgroundImage backgroundImage = new BackgroundImage(new Image("/GUI/images/oberflaeche.jpg"),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.ROUND,BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        background.setBackground(new Background(backgroundImage));
 
         StackPane format = new StackPane(background, scroll);
+        format.setMinWidth(170 *zoomfactor);
+        format.setMaxWidth(170*zoomfactor);
+        background.setOpacity(einstellung.getSliderValue());
 
         sendButton.setPrefWidth(60);
         input.setPrefWidth(170*zoomfactor-60);
@@ -194,7 +198,9 @@ public class GUIChat {
                                 }
                                 String text = (message);
                                 TextFlow emoteText = emojiTextParser(text); //emoji chat
-                                emoteText.setLineSpacing(10);
+                                emoteText.setMaxWidth(160*zoomfactor);
+                                emoteText.setMinWidth(160*zoomfactor);
+                                emoteText.setLineSpacing(5);
                                 emoteText.setId("emoji");
 
                                 Text nametext = new Text(name+ ": ");
@@ -208,6 +214,8 @@ public class GUIChat {
 
                         } else if (zeile.get(1).equals("/coinflip")) {
                             TextFlow flow = new TextFlow();
+                            flow.setMaxWidth(160*zoomfactor);
+                            flow.setMinWidth(160*zoomfactor);
                             flow.setId("coinflip");
                             Text text1 = new Text("\uD83D\uDCB0    " + zeile.get(0) + " ");
                             text1.setStyle("-fx-font-weight: bold;");
@@ -222,6 +230,8 @@ public class GUIChat {
                             cbox.getChildren().add(flow);
                         } else {
                             TextFlow flow = new TextFlow();
+                            flow.setMaxWidth(160*zoomfactor); //textwrap
+                            flow.setMinWidth(160*zoomfactor);
                             flow.setId("roll");
 
                             Text text1 = new Text("\uD83C\uDFB2    " + zeile.get(0) + " ");
