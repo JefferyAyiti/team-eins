@@ -212,7 +212,7 @@ public class GuiHauptmenu {
             ip.setMaxWidth(80*zoomfactor);
             port.setMaxWidth(40*zoomfactor);
         }else {
-            center.setHgap(60 * Main.zoomfactor);
+            center.setHgap(15 * Main.zoomfactor);
         }
         center.setId("MMcenter");
         center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('/GUI/images/oberflaeche.jpg');-fx-background-size: cover");
