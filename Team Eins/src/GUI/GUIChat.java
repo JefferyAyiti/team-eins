@@ -96,9 +96,12 @@ public class GUIChat {
 
         VBox background = new VBox(new Label("Chat"));
         background.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
-        background.setOpacity(einstellung.getSliderValue());
+
 
         StackPane format = new StackPane(background, scroll);
+        format.setMinWidth(170 *zoomfactor);
+        format.setMaxWidth(170*zoomfactor);
+        background.setOpacity(einstellung.getSliderValue());
 
         sendButton.setPrefWidth(60);
         input.setPrefWidth(170*zoomfactor-60);
@@ -194,7 +197,9 @@ public class GUIChat {
                                 }
                                 String text = (message);
                                 TextFlow emoteText = emojiTextParser(text); //emoji chat
-                                emoteText.setLineSpacing(10);
+                                emoteText.setMaxWidth(160*zoomfactor);
+                                emoteText.setMinWidth(160*zoomfactor);
+                                emoteText.setLineSpacing(5);
                                 emoteText.setId("emoji");
 
                                 Text nametext = new Text(name+ ": ");
@@ -208,6 +213,8 @@ public class GUIChat {
 
                         } else if (zeile.get(1).equals("/coinflip")) {
                             TextFlow flow = new TextFlow();
+                            flow.setMaxWidth(160*zoomfactor);
+                            flow.setMinWidth(160*zoomfactor);
                             flow.setId("coinflip");
                             Text text1 = new Text("\uD83D\uDCB0    " + zeile.get(0) + " ");
                             text1.setStyle("-fx-font-weight: bold;");
@@ -222,6 +229,8 @@ public class GUIChat {
                             cbox.getChildren().add(flow);
                         } else {
                             TextFlow flow = new TextFlow();
+                            flow.setMaxWidth(160*zoomfactor); //textwrap
+                            flow.setMinWidth(160*zoomfactor);
                             flow.setId("roll");
 
                             Text text1 = new Text("\uD83C\uDFB2    " + zeile.get(0) + " ");
