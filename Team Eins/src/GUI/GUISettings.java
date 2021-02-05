@@ -96,14 +96,6 @@ public class GUISettings {
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
         });
 
-
-        RadioButton sortBeginn = new RadioButton("zu Beginn");
-        sortBeginn.setToggleGroup(sort);
-        sortBeginn.setOnMouseClicked(e -> {
-            Main.autoSort = false;
-        });
-
-
         RadioButton sortAus = new RadioButton("Aus");
 
         sortAus.setToggleGroup(sort);
@@ -129,7 +121,7 @@ public class GUISettings {
 
         Label kartesort = new Label("Karten sortieren:");
         sortieren.setAlignment(Pos.CENTER);
-        HBox kartesortOpt = new HBox(sortAn, sortBeginn, sortAus);
+        HBox kartesortOpt = new HBox(sortAn, sortAus);
         kartesortOpt.setAlignment(Pos.TOP_CENTER);
         kartesortOpt.setSpacing(20);
 
