@@ -92,7 +92,6 @@ public class GUIChat {
         messages.setStyle("-fx-background-color: transparent");
         HBox inputBox = new HBox();
 
-
         background.setMinWidth(170*zoomfactor);
         background.setMaxWidth(170*zoomfactor);
         //background.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
@@ -278,7 +277,8 @@ public class GUIChat {
         chat.setY(owner.getScene().getWindow().getY() + 35);
     }
 
-    public void scaleTransparenz(){
+    public void setOpacity(){
         background.setOpacity(einstellung.getSliderValue());
     }
+
 }
