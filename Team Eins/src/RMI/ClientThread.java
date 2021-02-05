@@ -51,7 +51,7 @@ public class ClientThread implements Runnable {
                 long aender = 0;
                 try {
                     aender = server.getAenderung(Main.uniqueID);
-                } catch (RemoteException e) {
+                } catch (RemoteException | NullPointerException e) {
                 }
                 try {
 
