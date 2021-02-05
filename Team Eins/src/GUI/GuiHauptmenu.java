@@ -43,6 +43,9 @@ public class GuiHauptmenu {
     String IP = "localhost";
     String Port = "8001";
     boolean hasLeftServer = false;
+    int playerAnz = 4;
+    int botDifficulty = 0;
+    double botThinking = 2750;
 
     boolean shutdown = false;
     boolean settingsOpen = false;
@@ -149,17 +152,6 @@ public class GuiHauptmenu {
         Label sp = new Label("Server-Port: ");
         sp.setFont(new Font(fontsize));
 
-        if (Main.playMode == 2 && !Main.joined) {
-            //IP:Port
-
-            center.addRow(1,sip , ip);
-            center.addRow(2, sp, port);
-            center.addRow(5, status);
-
-        }
-
-
-
         //Spieleranzahl
         ObservableList<Integer> ploptions =
                 FXCollections.observableArrayList(
@@ -169,20 +161,13 @@ public class GuiHauptmenu {
                         5,
                         6
                 );
+
         playeranzselect = new ComboBox(ploptions);
         playeranzselect.setMinWidth(playeranzselect.getWidth()*zoomfactor);
         playeranzselect.setMinHeight(playeranzselect.getHeight()*zoomfactor);
-        playeranzselect.getSelectionModel().select(4);
+        playeranzselect.getSelectionModel().select(playerAnz);
         Label sa = new Label("Spieleranzahl: ");
         sa.setFont(new Font(fontsize));
-
-        if (Main.playMode < 2) {
-            center.addRow(1, sa, playeranzselect);
-        }
-            if(Main.playMode == 1){
-                center.addRow(1, sip, ip);
-            }
-
 
         //Boteinstellungen
         //Schwierigkeit
@@ -196,24 +181,10 @@ public class GuiHauptmenu {
         botselect = new ComboBox(botoptions);
         botselect.setMinWidth(botselect.getWidth()*zoomfactor);
         botselect.setMinHeight(botselect.getHeight()*zoomfactor);
-        botselect.getSelectionModel().select(0);
+        botselect.getSelectionModel().select(botDifficulty);
         Label bs =  new Label("Bot-Schwierigkeit: ");
         bs.setFont(new Font(fontsize));
-        if (Main.playMode < 2)
-            center.addRow(2,bs, botselect);
-            if(Main.playMode == 1){
-                center.addRow(2, sp, port);
-                center.addRow(5, status);
-            }
 
-        if(Main.playMode==1 ){
-            center.setHgap(15*zoomfactor);
-            namefield.setMaxWidth(150 *zoomfactor);
-            ip.setMaxWidth(80*zoomfactor);
-            port.setMaxWidth(40*zoomfactor);
-        }else {
-            center.setHgap(15 * Main.zoomfactor);
-        }
         center.setId("MMcenter");
         center.setStyle("-fx-border-width:5 ; -fx-border-color:black;-fx-background-image: url('/GUI/images/oberflaeche.jpg');-fx-background-size: cover");
         center.setMinHeight(250 * Main.zoomfactor);
@@ -224,7 +195,7 @@ public class GuiHauptmenu {
         slider.setMin(500);
         slider.setMax(5000);
         slider.setValue(Main.botPlayTime == 0 ?
-                (slider.getMax() - slider.getMin()) / 2 + slider.getMin() :
+                botThinking:
                 Main.botPlayTime);
         slider.setShowTickMarks(false);
         slider.setShowTickLabels(false);
@@ -233,11 +204,6 @@ public class GuiHauptmenu {
         slider.setBlockIncrement(10);
         slider.setPrefSize(150*zoomfactor, 5);
 
-        if (Main.playMode < 2) {
-            Label b = new Label("Bot-Bedenkzeit: ");
-            b.setFont(new Font(fontsize));
-            center.addRow(3, b, slider);
-        }
         //Spielmodus
 
         spielart = new ComboBox(FXCollections.observableArrayList(
@@ -245,7 +211,6 @@ public class GuiHauptmenu {
                 "Runden-Limit",
                 "Unendlich"
         ));
-
 
         spielart.getSelectionModel().select(spielArt);
         spielart.setMinWidth(spielart.getWidth()*zoomfactor);
@@ -259,19 +224,8 @@ public class GuiHauptmenu {
         Label sart = new Label("Spielart: ");
         sart.setFont(new Font(fontsize));
 
-        if (Main.playMode < 2)
-            center.addRow(4, sart, spielart);
-
         Label r = new Label("Rundenanzahl: ");
         r.setFont(new Font (fontsize));
-        if(spielart.getSelectionModel().getSelectedIndex() == 1){
-
-            center.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 4);
-            center.addRow(4, sart, spielart);
-            center.add( r,2,4);
-            center.add( spielartLimit,3,4);
-
-        }
 
         spielart.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
                     if(spielart.getSelectionModel().getSelectedIndex() == 1) {
@@ -286,28 +240,97 @@ public class GuiHauptmenu {
                     }
                 }
         );
-        //Tutorial
-        if(playMode==0) {
-            tutorialAn=false;
-            HBox t = new HBox();
-            ToggleGroup tutor = new ToggleGroup();
-            Label tut = new Label("Tutorial");
-            tut.setFont(new Font(fontsize));
-            RadioButton tutAn = new RadioButton("An");
-            tutAn.setToggleGroup(tutor);
-            tutAn.setOnMouseClicked(e -> {
-                tutorialAn = true;
-            });
-            RadioButton tutAus = new RadioButton("Aus");
-            tutAus.setSelected(true);
-            tutAus.setToggleGroup(tutor);
-            tutAus.setOnMouseClicked(e -> {
-                tutorialAn = false;
-            });
-            t.getChildren().addAll(tutAn,tutAus);
-            t.setSpacing(20*zoomfactor);
-            center.addRow(5, tut, t);
+        //Erstelle Hauptmenü Playmodes
+        switch (playMode){
+            case(0):
+                center.addRow(1, sa, playeranzselect);
+                center.addRow(2,bs, botselect);
+
+                center.setHgap(60 * Main.zoomfactor);
+
+                Label b = new Label("Bot-Bedenkzeit: ");
+                b.setFont(new Font(fontsize));
+                center.addRow(3, b, slider);
+
+                center.addRow(4, sart, spielart);
+
+                if(spielart.getSelectionModel().getSelectedIndex() == 1){
+
+                    center.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 4);
+                    center.addRow(4, sart, spielart);
+                    center.add( r,2,4);
+                    center.add( spielartLimit,3,4);
+
+                }
+                //Tutorial
+                if(playMode==0) {
+                    tutorialAn=false;
+                    HBox t = new HBox();
+                    ToggleGroup tutor = new ToggleGroup();
+                    Label tut = new Label("Tutorial");
+                    tut.setFont(new Font(fontsize));
+                    RadioButton tutAn = new RadioButton("An");
+                    tutAn.setToggleGroup(tutor);
+                    tutAn.setOnMouseClicked(e -> {
+                        tutorialAn = true;
+                    });
+                    RadioButton tutAus = new RadioButton("Aus");
+                    tutAus.setSelected(true);
+                    tutAus.setToggleGroup(tutor);
+                    tutAus.setOnMouseClicked(e -> {
+                        tutorialAn = false;
+                    });
+                    t.getChildren().addAll(tutAn,tutAus);
+                    t.setSpacing(20*zoomfactor);
+                    center.addRow(5, tut, t);
+
+                    break;
+                }
+
+            case(1):
+                center.addRow(1, sa, playeranzselect);
+                center.addRow(1, sip, ip);
+                center.addRow(2,bs, botselect);
+                center.addRow(2, sp, port);
+                center.addRow(5, status);
+
+                center.setHgap(15*zoomfactor);
+                namefield.setMaxWidth(150 *zoomfactor);
+                ip.setMaxWidth(80*zoomfactor);
+                port.setMaxWidth(40*zoomfactor);
+
+                b = new Label("Bot-Bedenkzeit: ");
+                b.setFont(new Font(fontsize));
+                center.addRow(3, b, slider);
+
+                center.addRow(4, sart, spielart);
+
+                if(spielart.getSelectionModel().getSelectedIndex() == 1){
+
+                    center.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 4);
+                    center.addRow(4, sart, spielart);
+                    center.add( r,2,4);
+                    center.add( spielartLimit,3,4);
+
+                }
+
+                break;
+
+            case(2):
+                center.addRow(1,sip , ip);
+                center.addRow(2, sp, port);
+                center.addRow(5, status);
+
+                center.setHgap(60 * Main.zoomfactor);
+
+                break;
         }
+
+
+
+
+
+
 
         //Darstellung
         Label titel = new Label("Hauptmenü");
@@ -330,6 +353,16 @@ public class GuiHauptmenu {
         Label single = new Label("Einzelspieler");
         single.setFont(new Font(14*zoomfactor));
         single.setOnMouseClicked(e -> {
+            myName = namefield.getText();
+            IP = ip.getText();
+            Port = port.getText();
+            playerAnz = playeranzselect.getSelectionModel().getSelectedIndex();
+            botDifficulty = botselect.getSelectionModel().getSelectedIndex();
+            spielArt = spielart.getSelectionModel().getSelectedIndex();
+            botThinking = slider.getValue();
+            spielArtLimit = Integer.parseInt(spielartLimit.getText());
+
+
             status.setText("");
             Main.playMode = 0;
             Main.joined = false;
@@ -340,6 +373,15 @@ public class GuiHauptmenu {
         serverLabel.setFont(new Font(14*zoomfactor));
         Pane host = new Pane(serverLabel);
         host.setOnMouseClicked(mouseEvent -> {
+            myName = namefield.getText();
+            IP = ip.getText();
+            Port = port.getText();
+            playerAnz = playeranzselect.getSelectionModel().getSelectedIndex();
+            botDifficulty = botselect.getSelectionModel().getSelectedIndex();
+            spielArt = spielart.getSelectionModel().getSelectedIndex();
+            botThinking = slider.getValue();
+            spielArtLimit = Integer.parseInt(spielartLimit.getText());
+
             status.setText("");
             Main.playMode = 1;
             Main.joined = false;
@@ -349,6 +391,15 @@ public class GuiHauptmenu {
         Label join = new Label("Server joinen");
         join.setFont(new Font(14*zoomfactor));
         join.setOnMouseClicked(e -> {
+            myName = namefield.getText();
+            IP = ip.getText();
+            Port = port.getText();
+            playerAnz = playeranzselect.getSelectionModel().getSelectedIndex();
+            botDifficulty = botselect.getSelectionModel().getSelectedIndex();
+            spielArt = spielart.getSelectionModel().getSelectedIndex();
+            botThinking = slider.getValue();
+            spielArtLimit = Integer.parseInt(spielartLimit.getText());
+
             status.setText("");
             Main.playMode = 2;
             Main.joined = false;
@@ -470,6 +521,16 @@ public class GuiHauptmenu {
         status.setFont(new Font(12*zoomfactor));
 
         if (action == "start") { //Single-Player-Spiel
+            //Speicher Name, Ip, Port, ...
+            myName = namefield.getText();
+            IP = ip.getText();
+            Port = port.getText();
+            playerAnz = playeranzselect.getSelectionModel().getSelectedIndex();
+            botDifficulty = botselect.getSelectionModel().getSelectedIndex();
+            spielArt = spielart.getSelectionModel().getSelectedIndex();
+            botThinking = slider.getValue();
+            //
+
             inMenu = false;
             playMode = 0;
             ich = 0;
@@ -522,13 +583,24 @@ public class GuiHauptmenu {
 
 
         } else if (action == "create") { //Host
+            //Speicher Name, Ip, Port, ...
+            myName = namefield.getText();
+            IP = ip.getText();
+            Port = port.getText();
+            playerAnz = playeranzselect.getSelectionModel().getSelectedIndex();
+            botDifficulty = botselect.getSelectionModel().getSelectedIndex();
+            spielArt = spielart.getSelectionModel().getSelectedIndex();
+            botThinking = slider.getValue();
+            spielArtLimit = Integer.parseInt(spielartLimit.getText());
+            //
+
             Main.joined = true;
             Main.botPlayTime = (long) slider.getValue();
             Main.botlevel = botselect.getSelectionModel().getSelectedIndex();
             spielArt = spielart.getSelectionModel().getSelectedIndex();
             if(spielArt == 1)
                 spielArtLimit = Integer.parseInt(spielartLimit.getText());
-            Main.myName = namefield.getText();
+
             if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
             Main.anzSpieler = (int) playeranzselect.getValue();
 
@@ -537,8 +609,6 @@ public class GuiHauptmenu {
                 int portn = Integer.parseInt(port.getText());
                 runServer = new RunServer(ip.getText(),
                         "Server", portn, uniqueID, myName);
-                Port = port.getText();
-                IP = ip.getText();
 
                 server = runServer.starting();
                 status.setText("Warte auf Spieler");
@@ -591,7 +661,18 @@ public class GuiHauptmenu {
 
 
         } else if (action == "join") {
-            Main.myName = namefield.getText();
+
+            //Speicher Name, Ip, Port, ...
+            myName = namefield.getText();
+            IP = ip.getText();
+            Port = port.getText();
+            playerAnz = playeranzselect.getSelectionModel().getSelectedIndex();
+            botDifficulty = botselect.getSelectionModel().getSelectedIndex();
+            spielArt = spielart.getSelectionModel().getSelectedIndex();
+            botThinking = slider.getValue();
+            spielArtLimit = Integer.parseInt(spielartLimit.getText());
+            //
+
             if (Main.myName == null || Main.myName.equals("")) {
                 Main.myName = "Spieler";
             }
@@ -675,6 +756,7 @@ public class GuiHauptmenu {
      * siehe: RMIClient.forceLeaveServer()
      */
     public void cleanupServer(){
+        resizecheck.cancel();
         Main.joined = false;
         update.cancel();
         assigned = false;
@@ -693,6 +775,7 @@ public class GuiHauptmenu {
      * Schließt den Server. Host Seite.
      */
     public void closeServer(){
+        resizecheck.cancel();
         Main.joined = false;
         try {
             runServer.stop();
