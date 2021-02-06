@@ -61,8 +61,8 @@ public class GuiHauptmenu {
     /**
      * @param PrimaryStage Erzeugt und zeigt das Hauptmenü zu Beginn des Spiels an
      */
-    public void showSettingsMenu(Stage PrimaryStage){
-        Double fontsize= 12*zoomfactor;
+    public void showSettingsMenu(Stage PrimaryStage) {
+        Double fontsize = 12 * zoomfactor;
         status.setId("status");
         status.setFont(new Font(fontsize));
 
@@ -72,14 +72,14 @@ public class GuiHauptmenu {
 
         inMenu = true;
         try { //
-            if(server != null){
+            if (server != null) {
             }
 
-            if(server != null && server.getGameStart(uniqueID) && playMode == 2) {
+            if (server != null && server.getGameStart(uniqueID) && playMode == 2) {
                 try {
-                    if(!assigned){
+                    if (!assigned) {
                         ich = server.assignId(uniqueID);
-                        if(ich == -1) {//join fehlerhaft
+                        if (ich == -1) {//join fehlerhaft
                             server.leaveServer(uniqueID);
                             return;
                         }
@@ -128,24 +128,23 @@ public class GuiHauptmenu {
         einstellung.reposition(classPrimaryStage);
 
 
-
         //Spielername
         namefield = new TextField(Main.myName);
         namefield.addEventFilter(KeyEvent.KEY_TYPED, maxLength(13));
         Label l = new Label("Spielername: ");
         l.setFont(new Font(fontsize));
 
-        if(!Main.joined) {
+        if (!Main.joined) {
 
-            center.addRow(0,l, namefield);
+            center.addRow(0, l, namefield);
         }
         ip = new TextField(IP);
-        ip.setMinWidth(ip.getWidth()*zoomfactor);
-        ip.setMinHeight(ip.getHeight()*zoomfactor);
+        ip.setMinWidth(ip.getWidth() * zoomfactor);
+        ip.setMinHeight(ip.getHeight() * zoomfactor);
 
         port = new TextField(Port);
-        port.setMinWidth((port.getWidth()*zoomfactor));
-        port.setMinHeight(port.getHeight()*zoomfactor);
+        port.setMinWidth((port.getWidth() * zoomfactor));
+        port.setMinHeight(port.getHeight() * zoomfactor);
 
         Label sip = new Label("Server-IP: ");
         sip.setFont(new Font(fontsize));
@@ -163,8 +162,8 @@ public class GuiHauptmenu {
                 );
 
         playeranzselect = new ComboBox(ploptions);
-        playeranzselect.setMinWidth(playeranzselect.getWidth()*zoomfactor);
-        playeranzselect.setMinHeight(playeranzselect.getHeight()*zoomfactor);
+        playeranzselect.setMinWidth(playeranzselect.getWidth() * zoomfactor);
+        playeranzselect.setMinHeight(playeranzselect.getHeight() * zoomfactor);
         playeranzselect.getSelectionModel().select(playerAnz);
         Label sa = new Label("Spieleranzahl: ");
         sa.setFont(new Font(fontsize));
@@ -179,10 +178,10 @@ public class GuiHauptmenu {
                         "Schwer"
                 );
         botselect = new ComboBox(botoptions);
-        botselect.setMinWidth(botselect.getWidth()*zoomfactor);
-        botselect.setMinHeight(botselect.getHeight()*zoomfactor);
+        botselect.setMinWidth(botselect.getWidth() * zoomfactor);
+        botselect.setMinHeight(botselect.getHeight() * zoomfactor);
         botselect.getSelectionModel().select(botDifficulty);
-        Label bs =  new Label("Bot-Schwierigkeit: ");
+        Label bs = new Label("Bot-Schwierigkeit: ");
         bs.setFont(new Font(fontsize));
 
         center.setId("MMcenter");
@@ -195,14 +194,14 @@ public class GuiHauptmenu {
         slider.setMin(500);
         slider.setMax(5000);
         slider.setValue(Main.botPlayTime == 0 ?
-                botThinking:
+                botThinking :
                 Main.botPlayTime);
         slider.setShowTickMarks(false);
         slider.setShowTickLabels(false);
         slider.setMinorTickCount(1000);
         slider.setMajorTickUnit(1000);
         slider.setBlockIncrement(10);
-        slider.setPrefSize(150*zoomfactor, 5);
+        slider.setPrefSize(150 * zoomfactor, 5);
 
         //Spielmodus
 
@@ -213,25 +212,25 @@ public class GuiHauptmenu {
         ));
 
         spielart.getSelectionModel().select(spielArt);
-        spielart.setMinWidth(spielart.getWidth()*zoomfactor);
-        spielart.setMinHeight(spielart.getHeight()*zoomfactor);
+        spielart.setMinWidth(spielart.getWidth() * zoomfactor);
+        spielart.setMinHeight(spielart.getHeight() * zoomfactor);
 
 
         spielartLimit = new TextField(Integer.toString(spielArtLimit));
-        spielartLimit.setMaxWidth(50*zoomfactor);
-        spielartLimit.setMinHeight(spielartLimit.getHeight()*zoomfactor);
+        spielartLimit.setMaxWidth(50 * zoomfactor);
+        spielartLimit.setMinHeight(spielartLimit.getHeight() * zoomfactor);
 
         Label sart = new Label("Spielart: ");
         sart.setFont(new Font(fontsize));
 
         Label r = new Label("Rundenanzahl: ");
-        r.setFont(new Font (fontsize));
+        r.setFont(new Font(fontsize));
 
-        spielart.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
-                    if(spielart.getSelectionModel().getSelectedIndex() == 1) {
+        spielart.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+                    if (spielart.getSelectionModel().getSelectedIndex() == 1) {
                         if (Main.playMode < 2) {
-                            center.add( r,2,4);
-                            center.add( spielartLimit,3,4);
+                            center.add(r, 2, 4);
+                            center.add(spielartLimit, 3, 4);
                         }
 
                     } else {
@@ -241,15 +240,15 @@ public class GuiHauptmenu {
                 }
         );
         //Erstelle Hauptmenü Playmodes
-        switch (playMode){
-            case(0):
-                center.setHgap(15*zoomfactor);
-                namefield.setMaxWidth(150 *zoomfactor);
-                ip.setMaxWidth(80*zoomfactor);
-                port.setMaxWidth(40*zoomfactor);
+        switch (playMode) {
+            case (0):
+                center.setHgap(15 * zoomfactor);
+                namefield.setMaxWidth(150 * zoomfactor);
+                ip.setMaxWidth(80 * zoomfactor);
+                port.setMaxWidth(40 * zoomfactor);
 
                 center.addRow(1, sa, playeranzselect);
-                center.addRow(2,bs, botselect);
+                center.addRow(2, bs, botselect);
 
                 Label b = new Label("Bot-Bedenkzeit: ");
                 b.setFont(new Font(fontsize));
@@ -257,17 +256,17 @@ public class GuiHauptmenu {
 
                 center.addRow(4, sart, spielart);
 
-                if(spielart.getSelectionModel().getSelectedIndex() == 1){
+                if (spielart.getSelectionModel().getSelectedIndex() == 1) {
 
                     center.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 4);
                     center.addRow(4, sart, spielart);
-                    center.add( r,2,4);
-                    center.add( spielartLimit,3,4);
+                    center.add(r, 2, 4);
+                    center.add(spielartLimit, 3, 4);
 
                 }
                 //Tutorial
 
-                tutorialAn=false;
+                tutorialAn = false;
                 HBox t = new HBox();
                 ToggleGroup tutor = new ToggleGroup();
                 Label tut = new Label("Tutorial");
@@ -283,24 +282,24 @@ public class GuiHauptmenu {
                 tutAus.setOnMouseClicked(e -> {
                     tutorialAn = false;
                 });
-                t.getChildren().addAll(tutAn,tutAus);
-                t.setSpacing(20*zoomfactor);
+                t.getChildren().addAll(tutAn, tutAus);
+                t.setSpacing(20 * zoomfactor);
                 center.addRow(5, tut, t);
 
                 break;
 
 
-            case(1):
+            case (1):
                 center.addRow(1, sa, playeranzselect);
                 center.addRow(1, sip, ip);
-                center.addRow(2,bs, botselect);
+                center.addRow(2, bs, botselect);
                 center.addRow(2, sp, port);
                 center.addRow(5, status);
 
-                center.setHgap(15*zoomfactor);
-                namefield.setMaxWidth(150 *zoomfactor);
-                ip.setMaxWidth(80*zoomfactor);
-                port.setMaxWidth(40*zoomfactor);
+                center.setHgap(15 * zoomfactor);
+                namefield.setMaxWidth(150 * zoomfactor);
+                ip.setMaxWidth(80 * zoomfactor);
+                port.setMaxWidth(40 * zoomfactor);
 
                 b = new Label("Bot-Bedenkzeit: ");
                 b.setFont(new Font(fontsize));
@@ -308,19 +307,19 @@ public class GuiHauptmenu {
 
                 center.addRow(4, sart, spielart);
 
-                if(spielart.getSelectionModel().getSelectedIndex() == 1){
+                if (spielart.getSelectionModel().getSelectedIndex() == 1) {
 
                     center.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 4);
                     center.addRow(4, sart, spielart);
-                    center.add( r,2,4);
-                    center.add( spielartLimit,3,4);
+                    center.add(r, 2, 4);
+                    center.add(spielartLimit, 3, 4);
 
                 }
 
                 break;
 
-            case(2):
-                center.addRow(1,sip , ip);
+            case (2):
+                center.addRow(1, sip, ip);
                 center.addRow(2, sp, port);
                 center.addRow(5, status);
 
@@ -328,11 +327,6 @@ public class GuiHauptmenu {
 
                 break;
         }
-
-
-
-
-
 
 
         //Darstellung
@@ -348,13 +342,13 @@ public class GuiHauptmenu {
 
         //Singlepalyer / Host / Join
         HBox multiplayer = new HBox();
-        multiplayer.setMinWidth(580*zoomfactor);
-        multiplayer.setPrefHeight(20*zoomfactor);
-        multiplayer.setSpacing(50*zoomfactor);
+        multiplayer.setMinWidth(580 * zoomfactor);
+        multiplayer.setPrefHeight(20 * zoomfactor);
+        multiplayer.setSpacing(50 * zoomfactor);
         multiplayer.setTranslateY(15);
         multiplayer.setAlignment(Pos.BOTTOM_CENTER);
         Label single = new Label("Einzelspieler");
-        single.setFont(new Font(14*zoomfactor));
+        single.setFont(new Font(14 * zoomfactor));
         single.setOnMouseClicked(e -> {
             myName = namefield.getText();
             IP = ip.getText();
@@ -373,7 +367,7 @@ public class GuiHauptmenu {
         });
 
         Label serverLabel = new Label("Server erstellen");
-        serverLabel.setFont(new Font(14*zoomfactor));
+        serverLabel.setFont(new Font(14 * zoomfactor));
         Pane host = new Pane(serverLabel);
         host.setOnMouseClicked(mouseEvent -> {
             myName = namefield.getText();
@@ -392,7 +386,7 @@ public class GuiHauptmenu {
         });
 
         Label join = new Label("Server joinen");
-        join.setFont(new Font(14*zoomfactor));
+        join.setFont(new Font(14 * zoomfactor));
         join.setOnMouseClicked(e -> {
             myName = namefield.getText();
             IP = ip.getText();
@@ -452,9 +446,9 @@ public class GuiHauptmenu {
         bottom.setSpacing(10);
         bottom.getChildren().add(start);
 
-        top.setMinHeight((400*zoomfactor) / 4);
+        top.setMinHeight((400 * zoomfactor) / 4);
         //center.setPrefHeight(PrimaryStage.getHeight()- (top.getHeight()+bottom.getHeight()));
-        bottom.setMinHeight((400*zoomfactor)/6);
+        bottom.setMinHeight((400 * zoomfactor) / 6);
 
 
         root.setTop(header);
@@ -463,15 +457,15 @@ public class GuiHauptmenu {
 
         BackgroundImage myBI = new BackgroundImage(Main.table1,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-            new BackgroundSize(1.0, 2.0, true, true, false, false));
+                new BackgroundSize(1.0, 2.0, true, true, false, false));
         root.setBackground(new Background(myBI));
         try {
-            if (playMode>=1 && Main.joined && server.serverOpen()){
+            if (playMode >= 1 && Main.joined && server.serverOpen()) {
                 Scene menu = GuiLobby.lobby();
-                 PrimaryStage.setScene(menu);
-                 PrimaryStage.show();
-            }else {
-                if(playMode>=1 && Main.joined && !server.serverOpen()){
+                PrimaryStage.setScene(menu);
+                PrimaryStage.show();
+            } else {
+                if (playMode >= 1 && Main.joined && !server.serverOpen()) {
                     Main.joined = false;
                     assigned = false;
                     try {
@@ -491,11 +485,11 @@ public class GuiHauptmenu {
 
                 ChangeListener<Number> stageSizeListenerW = (observable, oldValue, newValue) ->
                 {
-                   sceneWidth = (double)newValue;
+                    sceneWidth = (double) newValue;
                 };
                 ChangeListener<Number> stageSizeListenerH = (observable, oldValue, newValue) ->
                 {
-                    sceneHeight = (double)newValue;
+                    sceneHeight = (double) newValue;
                 };
 
                 PrimaryStage.getScene().widthProperty().addListener(stageSizeListenerW);
@@ -507,24 +501,28 @@ public class GuiHauptmenu {
             e.printStackTrace();
         }
         PrimaryStage.setOnCloseRequest(windowEvent -> {
-            try {System.exit(0);
+            try {
+                System.exit(0);
+            } catch (Exception e) {
             }
-            catch (Exception e) {}
 
         });
     }
 
 
-    /** Führt die Button-Actions im Hauptmenü aus
+    /**
+     * Führt die Button-Actions im Hauptmenü aus
+     *
      * @param action welcher Button wurde geklickt
      */
     void setSettings(String action) {
-        status.setTranslateY(30*zoomfactor);
+        status.setTranslateY(30 * zoomfactor);
         status.setId("status");
-        status.setFont(new Font(12*zoomfactor));
+        status.setFont(new Font(12 * zoomfactor));
 
         if (action == "start") { //Single-Player-Spiel
             //Speicher Name, Ip, Port, ...
+
             myName = namefield.getText();
             IP = ip.getText();
             Port = port.getText();
@@ -540,7 +538,7 @@ public class GuiHauptmenu {
             Main.botPlayTime = (long) slider.getValue();
             Main.botlevel = botselect.getSelectionModel().getSelectedIndex();
             spielArt = spielart.getSelectionModel().getSelectedIndex();
-            if(spielArt == 1)
+            if (spielArt == 1)
                 spielArtLimit = Integer.parseInt(spielartLimit.getText());
             System.out.println(spielArt);
             System.out.println(Integer.parseInt(spielartLimit.getText()));
@@ -550,14 +548,13 @@ public class GuiHauptmenu {
             Main.initGame();
             Main.runTimers(Main.classPrimaryStage);
             Main.spieltischGui.buildStage(Main.classPrimaryStage);
-            if(tutorialAn && playMode==0){
+            if (tutorialAn && playMode == 0) {
                 tutorial.startTutorial();
             }
 
 
-
         } else if (action == "close") { //Host
-            if(Main.playMode == 1){
+            if (Main.playMode == 1) {
                 try {
                     server.closeServer();
                 } catch (RemoteException e) {
@@ -569,10 +566,11 @@ public class GuiHauptmenu {
                     runServer.stop();
                     update.cancel();
                     server = null;
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
                 status.setText("Server wurde geschlossen");
                 showSettingsMenu(Main.classPrimaryStage);
-            }else{
+            } else {
                 joined = false;
                 update.cancel();
                 try {
@@ -580,7 +578,8 @@ public class GuiHauptmenu {
                     server = null;
                     System.out.println("Client Disconnected. action = close");
                     status.setText("Verbindung wurde getrennt");
-                } catch (RemoteException e) {}
+                } catch (RemoteException e) {
+                }
                 showSettingsMenu(Main.classPrimaryStage);
             }
 
@@ -601,7 +600,7 @@ public class GuiHauptmenu {
             Main.botPlayTime = (long) slider.getValue();
             Main.botlevel = botselect.getSelectionModel().getSelectedIndex();
             spielArt = spielart.getSelectionModel().getSelectedIndex();
-            if(spielArt == 1)
+            if (spielArt == 1)
                 spielArtLimit = Integer.parseInt(spielartLimit.getText());
 
             if (Main.myName == null || Main.myName.equals("")) Main.myName = "Spieler";
@@ -620,10 +619,9 @@ public class GuiHauptmenu {
                 update.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        if(Main.spiellogik == null)
-                        Platform.runLater(() -> showSettingsMenu(Main.classPrimaryStage));
-                        else
-                        {
+                        if (Main.spiellogik == null)
+                            Platform.runLater(() -> showSettingsMenu(Main.classPrimaryStage));
+                        else {
                             update.cancel();
                             Platform.runLater(() ->
                                     Main.spieltischGui.buildStage(Main.classPrimaryStage));
@@ -644,7 +642,8 @@ public class GuiHauptmenu {
         } else if (action == "startserver") {
             try {
                 update.cancel();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
             inMenu = false;
 
             Main.initGame();
@@ -686,8 +685,8 @@ public class GuiHauptmenu {
                         uniqueID,
                         Main.myName);
                 server = runClient.client.server;
-                try{
-                    if(!server.getSpielBeendet() && server.isInGame(uniqueID) && server.serverOpen()){
+                try {
+                    if (!server.getSpielBeendet() && server.isInGame(uniqueID) && server.serverOpen()) {
                         server.reconnect(uniqueID, myName);
                         hasLeftServer = true;
 
@@ -705,10 +704,10 @@ public class GuiHauptmenu {
 
                     }
 
-                }catch (RemoteException | NullPointerException e2){
+                } catch (RemoteException | NullPointerException e2) {
                     //System.err.println(e2.toString());
                 }
-                if(server.getAnzClients() >= server.getAnzahlSpieler()) {
+                if (server.getAnzClients() >= server.getAnzahlSpieler()) {
                     System.out.println(server.getAnzClients() + " max: " + server.getAnzahlSpieler());
                 }
                 update = new Timer();
@@ -716,7 +715,7 @@ public class GuiHauptmenu {
                     @Override
                     public void run() {
                         Platform.runLater(() -> showSettingsMenu(Main.classPrimaryStage));
-                        if(shutdown){
+                        if (shutdown) {
                             update.cancel();
                             shutdown = false;
                             status.setText("Verbindung zu Server verloren");
@@ -725,7 +724,7 @@ public class GuiHauptmenu {
                 }, 1500, 1500);
                 joined = true;
                 status.setText("Verbunden");
-                status.setFont(new Font(12*zoomfactor));
+                status.setFont(new Font(12 * zoomfactor));
                 status.setTextFill(Color.LIGHTGREEN);
 
 
@@ -742,14 +741,15 @@ public class GuiHauptmenu {
         } else if (action == "leave") {
             joined = false;
             update.cancel();
-                       try {
+            try {
                 server.leaveServer(uniqueID);
                 server = null;
                 status.setText("Verbindung wurde getrennt");
-                status.setFont(new Font(12*zoomfactor));
+                status.setFont(new Font(12 * zoomfactor));
                 System.out.println("Client Disconnected. action = leave ");
 
-            } catch (RemoteException e) {}
+            } catch (RemoteException e) {
+            }
             showSettingsMenu(Main.classPrimaryStage);
         }
     }
@@ -758,7 +758,7 @@ public class GuiHauptmenu {
      * Wird für das resetten des Clients verwendet, wenn er die verbindung zum Server verliert.
      * siehe: RMIClient.forceLeaveServer()
      */
-    public void cleanupServer(){
+    public void cleanupServer() {
         resizecheck.cancel();
         Main.joined = false;
         update.cancel();
@@ -767,24 +767,25 @@ public class GuiHauptmenu {
         try {
             server.leaveServer(uniqueID);
         } catch (RemoteException e) {
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.err.println(e.toString());
         }
         server = null;
-        Platform.runLater(() ->status.setText("Verbindung zu Server verloren"));
+        Platform.runLater(() -> status.setText("Verbindung zu Server verloren"));
     }
 
     /**
      * Schließt den Server. Host Seite.
      */
-    public void closeServer(){
+    public void closeServer() {
         resizecheck.cancel();
         Main.joined = false;
         try {
             runServer.stop();
             update.cancel();
             server = null;
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         status.setText("Server wurde geschlossen");
 
         showSettingsMenu(Main.classPrimaryStage);
@@ -792,6 +793,7 @@ public class GuiHauptmenu {
 
     /**
      * Methode zur begrenzung der Text Eingabe
+     *
      * @param i erlaube Anzahl an Zeichen
      * @return EventHandler
      */
@@ -800,7 +802,7 @@ public class GuiHauptmenu {
 
             @Override
             public void handle(KeyEvent arg0) {
-                if(namefield.getText() != null) {
+                if (namefield.getText() != null) {
                     TextField tx = (TextField) arg0.getSource();
                     if (tx.getText().length() >= i) {
                         arg0.consume();
@@ -812,12 +814,12 @@ public class GuiHauptmenu {
 
     }
 
-    public void reposition(Stage primaryStage){
-        if(chatbox != null && chatbox.chat != null){
+    public void reposition(Stage primaryStage) {
+        if (chatbox != null && chatbox.chat != null) {
             chatbox.reposition(primaryStage);
         }
 
-        if(einstellung != null && einstellung.getSettings() != null){
+        if (einstellung != null && einstellung.getSettings() != null) {
             einstellung.reposition(primaryStage);
         }
 

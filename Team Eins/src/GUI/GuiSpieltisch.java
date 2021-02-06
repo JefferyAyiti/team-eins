@@ -156,10 +156,13 @@ public class GuiSpieltisch {
                 ImageView finalImgView = imgView;
                 myCardImages[i] = imgView;
                 if (tisch.aktiv == ich || true) {
+                    if(playMode==0 && tutorialAn && !tutorial.spielerZug){
 
-                    imgView.setOnMouseEntered(e -> finalImgView.setStyle(HOVERED_BUTTON_STYLE));
-                    ImageView finalImgView1 = imgView;
-                    imgView.setOnMouseExited(e -> finalImgView1.setStyle(IDLE_BUTTON_STYLE));
+                    }else {
+                        imgView.setOnMouseEntered(e -> finalImgView.setStyle(HOVERED_BUTTON_STYLE));
+                        ImageView finalImgView1 = imgView;
+                        imgView.setOnMouseExited(e -> finalImgView1.setStyle(IDLE_BUTTON_STYLE));
+                    }
                 }
             } else if (i > 6)
                 continue;
@@ -189,6 +192,7 @@ public class GuiSpieltisch {
                         myCardImages[i] = imgView;
                         int finalI = i;
 
+
                         //Spielbare Karten
                         if (Main.tooltip && tisch.aktiv == ich) {
                             if (!tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable()) {
@@ -196,6 +200,11 @@ public class GuiSpieltisch {
                                 colorAdjust.setBrightness(-0.6);
                                 myCard.setEffect(colorAdjust);
                             }
+                        }
+                        if(playMode==0 && tutorialAn && !tutorial.spielerZug){
+                            ColorAdjust colorAdjust = new ColorAdjust();
+                            colorAdjust.setBrightness(-0.6);
+                            myCard.setEffect(colorAdjust);
                         }
 
                         final double[] myCardsX = new double[2];
@@ -921,8 +930,8 @@ public class GuiSpieltisch {
             e.printStackTrace();
         }
         primaryStage.setScene(scene);
-        primaryStage.setWidth(primaryStage.getWidth() + sceneWidth - primaryStage.getScene().getWidth());
-        primaryStage.setHeight(primaryStage.getHeight() + sceneHeight - primaryStage.getScene().getHeight());
+        //primaryStage.setWidth(primaryStage.getWidth() + sceneWidth - primaryStage.getScene().getWidth());
+        //primaryStage.setHeight(primaryStage.getHeight() + sceneHeight - primaryStage.getScene().getHeight());
 
         primaryStage.show();
     }

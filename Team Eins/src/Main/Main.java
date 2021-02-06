@@ -264,7 +264,7 @@ public class Main extends Application {
                         e.printStackTrace();
                     }
                 }
-                if (playMode < 2 && tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet()) {
+                if (playMode < 2 && tisch.getAktivSpieler() instanceof Bot && !spiellogik.getRundeBeendet() && !tutorialAn) {
                     if (System.currentTimeMillis() - lastmove < botPlayTime) {
                         try {
                             Thread.sleep(botPlayTime - (System.currentTimeMillis() - lastmove));

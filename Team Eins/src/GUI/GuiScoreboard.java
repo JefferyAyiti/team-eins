@@ -102,101 +102,131 @@ public class GuiScoreboard {
 
         Button nextRound = new Button();
         Label wait = new Label();
+        if (playMode==0&&tutorialAn){
+            Button spielStart = new Button("Spiel starten");
+            spielStart.setOnAction(e->{
+                tutorialAn=false;
+                tooltip=false;
+                hauptmenuGui.setSettings("start");
 
-        try {
-            if ((Main.server != null && !Main.server.getSpielBeendet() && !isReady) ||
-                    (Main.server == null &&!Main.spiellogik.spielBeendet )) {
-                nextRound = new Button("Nächste Runde");
-                nextRound.setOnAction(e -> {
-                    if (playMode >= 1) {
-                        try {
-                            Main.server.neueRunde(true,uniqueID);
-                            isReady = true;
-                        } catch (RemoteException ex) {
-                            ex.printStackTrace();
-                        }
-                    } else
-                        Main.spiellogik.initNeueRunde();
-                    sortedOnce = false;
-                    Main.spieltischGui.buildStage(Main.classPrimaryStage);
-                });
+            });
 
-            }else if((Main.server != null && !Main.server.getSpielBeendet() && isReady)){
-                wait.setText("Warte auf Mitspieler... [" + server.getAnzReadyClients() +"|"+ server.getAnzClients() +"] sind bereit");
-                server.checkForNewRound();
+            Button hauptmenu = new Button ("Hauptmenu");
+            hauptmenu.setOnAction(e->{
+                resizecheck.cancel();
+                Main.inMenu = true;
+                Main.gameRunning = false;
+                Main.myTurnUpdate = true;
+                spiellogik = null;
+                Main.hauptmenuGui.update.cancel();
+                try {
+                    Main.bots.cancel();
+                } catch (NullPointerException l) {
+                }
+            });
+            hauptmenu.setTranslateY(-15);
+            spielStart.setTranslateY(-15);
+            bottom.getChildren().addAll(spielStart,hauptmenu);
+
+        }else {
+
+            try {
+                if ((Main.server != null && !Main.server.getSpielBeendet() && !isReady) ||
+                        (Main.server == null && !Main.spiellogik.spielBeendet)) {
+                    nextRound = new Button("Nächste Runde");
+                    nextRound.setOnAction(e -> {
+                        if (playMode >= 1) {
+                            try {
+                                Main.server.neueRunde(true, uniqueID);
+                                isReady = true;
+                            } catch (RemoteException ex) {
+                                ex.printStackTrace();
+                            }
+                        } else
+                            Main.spiellogik.initNeueRunde();
+                        sortedOnce = false;
+                        Main.spieltischGui.buildStage(Main.classPrimaryStage);
+                    });
+
+                } else if ((Main.server != null && !Main.server.getSpielBeendet() && isReady)) {
+                    wait.setText("Warte auf Mitspieler... [" + server.getAnzReadyClients() + "|" + server.getAnzClients() + "] sind bereit");
+                    server.checkForNewRound();
+
+                } else {
+                    Button endGame = new Button("Spiel beenden");
+                    endGame.setTranslateY(-15);
+                    endGame.setOnAction(e -> {
+                                if (playMode == 2) {
+                                    try {
+                                        server.leaveServer(uniqueID);
+                                    } catch (RemoteException remoteException) {
+                                        remoteException.printStackTrace();
+                                    }
+                                }
+
+                                try {
+                                    Main.bots.cancel();
+                                } catch (NullPointerException l) {
+                                }
+                                Main.resizecheck.cancel();
+                                System.exit(0);
+                            }
+                    );
+                    bottom.getChildren().add(endGame);
+
+                    nextRound = new Button("Hauptmenü");
+                    nextRound.setOnAction(e -> {
+                                if (playMode == 2) {
+                                    resizecheck.cancel();
+                                    joined = false;
+                                    try {
+                                        Main.server.replaceSpielerDurchBot(uniqueID);
+                                    } catch (RemoteException e2) {
+                                    }
+                                    hauptmenuGui.update.cancel();
+                                    server = null;
+                                    hauptmenuGui.status = new Label("Server verlassen");
+                                    Platform.runLater(() -> hauptmenuGui.showSettingsMenu(Main.classPrimaryStage));
+
+                                } else {
+                                    try {
+                                        server.closeServer();
+                                    } catch (RemoteException remoteException) {
+                                        remoteException.printStackTrace();
+                                    }
+                                    resizecheck.cancel();
+                                    joined = false;
+                                    Main.inMenu = true;
+                                    Main.gameRunning = false;
+                                    Main.myTurnUpdate = true;
+                                    spiellogik = null;
+                                    server = null;
+                                    Main.hauptmenuGui.update.cancel();
+                                    hauptmenuGui.status = new Label("Server verlassen");
+                                    try {
+                                        Main.bots.cancel();
+                                    } catch (NullPointerException l) {
+                                    }
+                                    hauptmenuGui.closeServer();
+                                }
+
+                            }
+                    );
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            if ((Main.server != null && !Main.server.getSpielBeendet() && isReady)) {
+                wait.setFont(new Font("Ink Free", 19 * Main.zoomfactor));
+                wait.setTextFill(Color.WHITE);
+                wait.setTranslateY(-15);
+
+                bottom.getChildren().add(wait);
 
             } else {
-                Button endGame = new Button("Spiel beenden");
-                endGame.setTranslateY(-15);
-                endGame.setOnAction(e -> {
-                    if(playMode == 2){
-                        try {
-                            server.leaveServer(uniqueID);
-                        } catch (RemoteException remoteException) {
-                            remoteException.printStackTrace();
-                        }
-                    }
-
-                    try {
-                        Main.bots.cancel();
-                    }catch (NullPointerException  l){}
-                    Main.resizecheck.cancel();
-                    System.exit(0);
-                        }
-                );
-                bottom.getChildren().add(endGame);
-
-                nextRound = new Button("Hauptmenü");
-                nextRound.setOnAction(e -> {
-                    if(playMode == 2){
-                        resizecheck.cancel();
-                        joined = false;
-                        try {
-                            Main.server.replaceSpielerDurchBot(uniqueID);
-                        } catch (RemoteException e2) {
-                        }
-                        hauptmenuGui.update.cancel();
-                        server = null;
-                        hauptmenuGui.status = new Label("Server verlassen");
-                        Platform.runLater(() -> hauptmenuGui.showSettingsMenu(Main.classPrimaryStage));
-
-                    }else{
-                        try {
-                            server.closeServer();
-                        } catch (RemoteException remoteException) {
-                            remoteException.printStackTrace();
-                        }
-                        resizecheck.cancel();
-                        joined = false;
-                        Main.inMenu = true;
-                        Main.gameRunning = false;
-                        Main.myTurnUpdate = true;
-                        spiellogik = null;
-                        server = null;
-                        Main.hauptmenuGui.update.cancel();
-                        hauptmenuGui.status = new Label("Server verlassen");
-                        try {
-                            Main.bots.cancel();
-                        }catch (NullPointerException  l){}
-                        hauptmenuGui.closeServer();
-                            }
-
-                        }
-                );
+                nextRound.setTranslateY(-15);
+                bottom.getChildren().add(nextRound);
             }
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        if((Main.server != null && !Main.server.getSpielBeendet() && isReady)){
-            wait.setFont(new Font("Ink Free", 19 * Main.zoomfactor));
-            wait.setTextFill(Color.WHITE);
-            wait.setTranslateY(-15);
-
-            bottom.getChildren().add(wait);
-
-        }else{
-            nextRound.setTranslateY(-15);
-            bottom.getChildren().add(nextRound);
         }
 
 
