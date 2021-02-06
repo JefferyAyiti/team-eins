@@ -243,10 +243,13 @@ public class GuiHauptmenu {
         //Erstelle Hauptmenü Playmodes
         switch (playMode){
             case(0):
+                center.setHgap(15*zoomfactor);
+                namefield.setMaxWidth(150 *zoomfactor);
+                ip.setMaxWidth(80*zoomfactor);
+                port.setMaxWidth(40*zoomfactor);
+
                 center.addRow(1, sa, playeranzselect);
                 center.addRow(2,bs, botselect);
-
-                center.setHgap(60 * Main.zoomfactor);
 
                 Label b = new Label("Bot-Bedenkzeit: ");
                 b.setFont(new Font(fontsize));
@@ -263,29 +266,29 @@ public class GuiHauptmenu {
 
                 }
                 //Tutorial
-                if(playMode==0) {
-                    tutorialAn=false;
-                    HBox t = new HBox();
-                    ToggleGroup tutor = new ToggleGroup();
-                    Label tut = new Label("Tutorial");
-                    tut.setFont(new Font(fontsize));
-                    RadioButton tutAn = new RadioButton("An");
-                    tutAn.setToggleGroup(tutor);
-                    tutAn.setOnMouseClicked(e -> {
-                        tutorialAn = true;
-                    });
-                    RadioButton tutAus = new RadioButton("Aus");
-                    tutAus.setSelected(true);
-                    tutAus.setToggleGroup(tutor);
-                    tutAus.setOnMouseClicked(e -> {
-                        tutorialAn = false;
-                    });
-                    t.getChildren().addAll(tutAn,tutAus);
-                    t.setSpacing(20*zoomfactor);
-                    center.addRow(5, tut, t);
 
-                    break;
-                }
+                tutorialAn=false;
+                HBox t = new HBox();
+                ToggleGroup tutor = new ToggleGroup();
+                Label tut = new Label("Tutorial");
+                tut.setFont(new Font(fontsize));
+                RadioButton tutAn = new RadioButton("An");
+                tutAn.setToggleGroup(tutor);
+                tutAn.setOnMouseClicked(e -> {
+                    tutorialAn = true;
+                });
+                RadioButton tutAus = new RadioButton("Aus");
+                tutAus.setSelected(true);
+                tutAus.setToggleGroup(tutor);
+                tutAus.setOnMouseClicked(e -> {
+                    tutorialAn = false;
+                });
+                t.getChildren().addAll(tutAn,tutAus);
+                t.setSpacing(20*zoomfactor);
+                center.addRow(5, tut, t);
+
+                break;
+
 
             case(1):
                 center.addRow(1, sa, playeranzselect);
