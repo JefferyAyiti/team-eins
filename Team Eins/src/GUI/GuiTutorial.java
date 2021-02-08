@@ -151,13 +151,13 @@ public class GuiTutorial {
             //Anfang
             popUp(txt, 25, 10, 145);
             //Chips
-            spieltischGui.scene.onKeyTypedProperty().set(a -> {
+            classPrimaryStage.getScene().onKeyTypedProperty().set(a -> {
                 txt = new Text("""
                         Ziel des Spiels ist es, die wenigsten Minuspunkte zu haben.
                         Diese kassierst du am Ende jeder Runde für die übrigen Karten in deiner Hand.\n
                         Also halte dich immer an die L.A.M.A.-Regel: Lege alle Minuspunkte ab. """);
                 popUp(txt, 25, 15, 150);
-                spieltischGui.scene.onKeyTypedProperty().set(k -> {
+                classPrimaryStage.getScene().onKeyTypedProperty().set(k -> {
                     txt = new Text("""
                             Jede Karte zählt ihren Wert als Minuspunkte. Dabei zählt jeder Wert aber nur einmal.
                              
@@ -166,7 +166,7 @@ public class GuiTutorial {
                             Die Lama Karte gibt -10 Punkte.""");
                     popUp(txt, 25, 10, 150);
 
-                    spieltischGui.scene.onKeyTypedProperty().set(b -> {
+                    classPrimaryStage.getScene().onKeyTypedProperty().set(b -> {
                         txt = new Text("""
                                 Minuspunkte werden als Chips vergeben.                                
                                 Ein weißer Chip gibt -1 und ein schwarzer -10 Punkte.
@@ -174,7 +174,7 @@ public class GuiTutorial {
                                 Das Spiel endet sobald ein Mitspieler 40 oder mehr Minuspunkte hat.""");
                         popUp(txt, 15, 15, 130);
 
-                        spieltischGui.scene.onKeyTypedProperty().set(c -> {
+                        classPrimaryStage.getScene().onKeyTypedProperty().set(c -> {
                             txt = new Text("""
                                     Um dir alles zu zeigen, fangen wir ausnahmsweise nicht bei der ersten Runden an.
                                     Wir haben also schon ein paar Runden gespielt. \n
@@ -182,7 +182,7 @@ public class GuiTutorial {
                                     Ich habe 2 schwarze und 3 weiße Chips und somit -23 Punkte.""");
                             popUp(txt, 25, 10, 150);
 
-                            spieltischGui.scene.onKeyTypedProperty().set(d -> {
+                            classPrimaryStage.getScene().onKeyTypedProperty().set(d -> {
                                 txt = new Text("""
                                         Hast du 10 weiße Chips, kannst du diese jederzeit gegen einen schwarzen Chip tauschen.
                                                                                 
@@ -190,14 +190,14 @@ public class GuiTutorial {
                                         Hast du also einen schwarzen Chip kannst du mehr Minuspunkte loswerden.""");
                                 popUp(txt, 25, 10, 150);
 
-                                spieltischGui.scene.onKeyTypedProperty().set(h -> {
+                                classPrimaryStage.getScene().onKeyTypedProperty().set(h -> {
                                     chips = true;
                                     reloadGui();
                                     txt = new Text("""
                                             Wie ich sehe hast du momentan 10 weiße Chips. 
                                             Klicke auf deine Chips um sie zu tauschen.""");
                                     popUp(txt, 25, 13, 50);
-                                    spieltischGui.scene.onMouseClickedProperty().set(i -> {
+                                    classPrimaryStage.getScene().onMouseClickedProperty().set(i -> {
                                         if (spielerM[0].getBlackChips() == 3) {
                                             chips = false;
                                             karte = true;
@@ -222,7 +222,7 @@ public class GuiTutorial {
             System.out.println("kartelegen");
             txt = new Text("Toll! ");
             popUp(txt, 25, 10, 50);
-            spieltischGui.scene.onKeyTypedProperty().set(x -> {
+            classPrimaryStage.getScene().onKeyTypedProperty().set(x -> {
                 txt = new Text("""
                         Bist du am Zug, kannst du immer eine der drei Aktionen auswählen:
                                                 
@@ -231,14 +231,14 @@ public class GuiTutorial {
                         - Aussteigen""");
                 popUp(txt, 25, 10, 150);
 
-                spieltischGui.scene.onKeyTypedProperty().set(c -> {
+                classPrimaryStage.getScene().onKeyTypedProperty().set(c -> {
                     txt = new Text("""
                             Der Ablagestapel bestimmt, was du ablegen darfst.\n
                             Du kannst immer nur eine Karte mit dem gleichen Wert oder einen Wert höher ablegen.
                             Das Lama ist die höhste Karte, auf sie kann nur ein Lama oder eine 1 gelegt werden.""");
                     popUp(txt, 25, 10, 150);
 
-                    spieltischGui.scene.onKeyTypedProperty().set(d -> {
+                    classPrimaryStage.getScene().onKeyTypedProperty().set(d -> {
                         closeDialog();
                         Main.tooltip = true;
                         spielerZug = true;
@@ -251,7 +251,7 @@ public class GuiTutorial {
                         popUp(txt, 25, 15, 150);
 
                         //Karl legt 4
-                        spieltischGui.scene.onMouseClickedProperty().set(z -> {
+                        classPrimaryStage.getScene().onMouseClickedProperty().set(z -> {
                             popUp(txt, 25, 10, 80);
                             if (tisch.getObereKarteAblagestapel().getValue() == 3) {
                                 spielerZug = false;
@@ -259,14 +259,14 @@ public class GuiTutorial {
                                 txt = new Text("Klasse! Jetzt bin ich am Zug ");
                                 popUp(txt, 25, 10, 20);
 
-                                spieltischGui.scene.onKeyTypedProperty().set(e -> {
+                                classPrimaryStage.getScene().onKeyTypedProperty().set(e -> {
                                     spiellogik.karteLegen(karl, karl.getCardHand().getKarte(0));
                                     reloadGui();
                                     txt = new Text("Ich habe eine 4 gelegt und jetzt ist Paul an der Reihe.");
                                     popUp(txt, 25, 10, 50);
 
                                     //Paul legt 5
-                                    spieltischGui.scene.onKeyTypedProperty().set(g -> {
+                                    classPrimaryStage.getScene().onKeyTypedProperty().set(g -> {
                                         popUp(txt, 25, 10, 50);
                                         if (tisch.getObereKarteAblagestapel().getValue() == 4) {
                                             spiellogik.karteLegen(paul, paul.getCardHand().getKarte(0));
@@ -302,18 +302,18 @@ public class GuiTutorial {
             System.out.println("2.Zug");
             popUp(txt, 25, 10, 50);
 
-            spieltischGui.scene.onKeyTypedProperty().set(w -> {
+            classPrimaryStage.getScene().onKeyTypedProperty().set(w -> {
                 txt = new Text("Bedenke bei deinem nächsten Zug, dass du für Karten die du nicht ablegen kannst Minuspunkte erhälst.\n\n" +
                         "Da Doppelte Karten nur einmal ihren Wert zählen bedeutet das auch, dass du erst beide 5er loswerden musst bevor du keine Minuspunkte dafür erhälst.");
                 popUp(txt, 25, 15, 150);
 
-                spieltischGui.scene.onKeyTypedProperty().set(o -> {
+                classPrimaryStage.getScene().onKeyTypedProperty().set(o -> {
                     spielerZug = true;
                     reloadGui();
                     txt = new Text("Es ist also schlauer jetzt die 6 abzulegen, da du so weniger Punkte auf der Hand hast.");
                     popUp(txt, 25, 10, 50);
 
-                    spieltischGui.scene.onMouseClickedProperty().set(a -> {
+                    classPrimaryStage.getScene().onMouseClickedProperty().set(a -> {
                         popUp(txt, 25, 10, 50);
                         if (tisch.getObereKarteAblagestapel().getValue() == 6) {
                             spielerZug = false;
@@ -324,13 +324,13 @@ public class GuiTutorial {
                             popUp(txt, 25, 10, 50);
 
                             //Karl legt 6
-                            spieltischGui.scene.onKeyTypedProperty().set(b -> {
+                            classPrimaryStage.getScene().onKeyTypedProperty().set(b -> {
                                 spiellogik.karteLegen(karl, karl.getCardHand().getKarte(0));
                                 reloadGui();
                                 closeDialog();
                                 txt = new Text("Paul ist jetzt wieder an der Reihe.");
                                 popUp(txt, 25, 10, 50);
-                                spieltischGui.scene.onKeyTypedProperty().set(x -> {
+                                classPrimaryStage.getScene().onKeyTypedProperty().set(x -> {
                                     popUp(txt, 25, 10, 50);
                                     //Paul zieht nach
                                     if (tisch.getAktivSpieler() == paul) {
@@ -341,7 +341,7 @@ public class GuiTutorial {
                                         popUp(txt, 25, 10, 50);
 
                                         //Spieler sollte Lama legen
-                                        spieltischGui.scene.onKeyTypedProperty().set(z -> {
+                                        classPrimaryStage.getScene().onKeyTypedProperty().set(z -> {
                                             popUp(txt, 25, 10, 50);
                                             if (tisch.getAktivSpieler() == spielerM[0]) {
                                                 spielerZug = true;
@@ -354,7 +354,7 @@ public class GuiTutorial {
                                                         Versuche Lamas immer loszuwerden """);
                                                 popUp(txt, 15, 10, 130);
 
-                                                spieltischGui.scene.onMouseClickedProperty().set(d -> {
+                                                classPrimaryStage.getScene().onMouseClickedProperty().set(d -> {
                                                     popUp(txt, 15, 10, 130);
                                                     if (tisch.getObereKarteAblagestapel().getValue() == 10) {
                                                         spielerZug = false;
@@ -364,14 +364,14 @@ public class GuiTutorial {
                                                         popUp(txt, 25, 10, 50);
 
                                                         //Karl legt 1
-                                                        spieltischGui.scene.onKeyTypedProperty().set(f -> {
+                                                        classPrimaryStage.getScene().onKeyTypedProperty().set(f -> {
                                                             closeDialog();
                                                             spiellogik.karteLegen(karl, karl.getCardHand().getKarte(0));
                                                             reloadGui();
                                                             txt = new Text("Da das Lama die höhste Karte ist, kann auf sie nur ein Lama oder eine 1 gelegt werden.");
                                                             popUp(txt, 25, 10, 50);
                                                             //Paul legt 2
-                                                            spieltischGui.scene.onKeyTypedProperty().set(g -> {
+                                                            classPrimaryStage.getScene().onKeyTypedProperty().set(g -> {
                                                                 if (tisch.getObereKarteAblagestapel().getValue() == 1) {
                                                                     spiellogik.karteLegen(paul, paul.getCardHand().getKarte(0));
                                                                     reloadGui();
@@ -411,7 +411,7 @@ public class GuiTutorial {
 
             popUp(txt, 25, 8, 150);
             //Karl legt 3
-            spieltischGui.scene.onMouseClickedProperty().set(a -> {
+            classPrimaryStage.getScene().onMouseClickedProperty().set(a -> {
                 popUp(txt, 25, 5, 150);
                 if (tisch.getAktivSpieler() == karl) {
                     closeDialog();
@@ -425,7 +425,7 @@ public class GuiTutorial {
 
                     //Paul legt 4
                     if (tisch.getAktivSpieler() == paul) {
-                        spieltischGui.scene.onKeyTypedProperty().set(b -> {
+                        classPrimaryStage.getScene().onKeyTypedProperty().set(b -> {
                             reloadGui();
 
                             spiellogik.karteLegen(paul, paul.getCardHand().getKarte(0));
@@ -436,7 +436,7 @@ public class GuiTutorial {
                             txt = new Text("Du bist dran");
                             popUp(txt, 25, 10, 50);
 
-                            spieltischGui.scene.onMouseClickedProperty().set(d -> {
+                            classPrimaryStage.getScene().onMouseClickedProperty().set(d -> {
                                 popUp(txt, 25, 10, 50);
                                 if (tisch.getAktivSpieler() == karl) {
                                     spielerZug = false;
@@ -448,7 +448,7 @@ public class GuiTutorial {
                                             Aussteigen kannst du in dem du auf die Hand neben deinen Chips klickst.""");
                                     popUp(txt, 25, 15, 150);
 
-                                    spieltischGui.scene.onKeyTypedProperty().set(e -> {
+                                    classPrimaryStage.getScene().onKeyTypedProperty().set(e -> {
                                         //reloadGui();
                                         spiellogik.aussteigen(karl);
                                         reloadGui();
@@ -461,7 +461,7 @@ public class GuiTutorial {
                                                 """);
                                         popUp(txt, 30, 10, 150);
 
-                                        spieltischGui.scene.onKeyTypedProperty().set(f -> {
+                                        classPrimaryStage.getScene().onKeyTypedProperty().set(f -> {
                                             popUp(txt, 25, 10, 150);
                                             if (tisch.getAktivSpieler() == paul) {
                                                 spiellogik.aussteigen(paul);
@@ -472,7 +472,7 @@ public class GuiTutorial {
                                                         möglich, eine Karte nachziehen ist aber
                                                         nicht mehr erlaubt.""");
                                                 popUp(txt, 15, 15, 100);
-                                                spieltischGui.scene.onKeyTypedProperty().set(g -> {
+                                                classPrimaryStage.getScene().onKeyTypedProperty().set(g -> {
                                                     popUp(txt, 25, 01, 100);
                                                     if (spielerM[0] == tisch.getAktivSpieler()) {
                                                         nachziehen = false;
@@ -502,14 +502,14 @@ public class GuiTutorial {
                     """);
             popUp(txt, 15, 15, 100);
 
-            spieltischGui.scene.onKeyTypedProperty().set(a -> {
+            classPrimaryStage.getScene().onKeyTypedProperty().set(a -> {
                 txt = new Text("""
                         Wenn du es schaffst alle Karten abzulegen, kannst du einen schwarzen Chip abgeben und hast somit nur noch 20 Minuspunkte.
                         
                         In den Einstellungen kannst du jederzeit sagen, dass automatisch der bestmöglichste Chip abgegeben werden soll. """);
 
                 popUp(txt, 25, 10, 150);
-                spieltischGui.scene.onKeyTypedProperty().set(b -> {
+                classPrimaryStage.getScene().onKeyTypedProperty().set(b -> {
                     txt = new Text("""
                             Nach dem die Runde beendet ist, wird dir die Rangliste angezeigt. 
                             Dort siehst du, wie viele Punkte jeder Spieler dazu gewonnen hat und auf welchem Platz du momentan stehst.
@@ -518,7 +518,7 @@ public class GuiTutorial {
                     popUp(txt, 25, 25, 150);
                     spielerZug = true;
                     reloadGui();
-                    spieltischGui.scene.onMouseClickedProperty().set(c -> {
+                    classPrimaryStage.getScene().onMouseClickedProperty().set(c -> {
                         closeDialog();
                     });
 
