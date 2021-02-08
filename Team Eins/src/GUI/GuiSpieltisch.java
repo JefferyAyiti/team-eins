@@ -113,11 +113,13 @@ public class GuiSpieltisch {
             cardcount = 7;
         }
 
+        HandKarte karte = null;
 
         if (playerId == ich) {
             //neu gezogene Karte farblich markieren
             if(tisch.getSpielerList()[ich].getKarteGezogen()){
-
+                int index = tisch.getSpielerList()[ich].getNeueKarte();
+                   karte = tisch.getSpielerList()[ich].getCardHand().getKarte(index);
             }
             if (autoSort != null && (autoSort == false && !sortedOnce || autoSort)) {
                 //sortieren
@@ -196,6 +198,18 @@ public class GuiSpieltisch {
                         myCardImages[i] = imgView;
                         int finalI = i;
 
+                        //neu gezogene Karte farblich markieren
+                        int j = tisch.getSpielerList()[ich].getCardHand().getHandKarte().indexOf(karte);
+                        if(tisch.getSpielerList()[ich].getKarteGezogen() && i == j ){
+                            tisch.getSpielerList()[ich].setKarteGezogen(false);
+                            ColorAdjust colorAdjust = new ColorAdjust();
+                            colorAdjust.setBrightness(-0.6);
+                            myCard.setEffect(colorAdjust);
+                            myCard.setStyle("-fx-background-insets: 20; " +
+                                    "-fx-background-radius: 20; " +
+                                    "-fx-cursor:hand;" +
+                                    "-fx-effect: dropshadow(three-pass-box, green, 20, 0.5, 0, 0);");
+                        }
 
                         //Spielbare Karten
                         if (Main.tooltip && tisch.aktiv == ich) {

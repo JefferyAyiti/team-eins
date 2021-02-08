@@ -148,7 +148,7 @@ public class Spiellogik implements Serializable {
             try {
                 Karte karte = tisch.karteZiehen();
                 tisch.getAktivSpieler().setKarteGezogen(true);
-                tisch.getAktivSpieler().setNeueKarte(tisch.getAktivSpieler().getCardHand().getHandKarte().size()+1);
+                tisch.getAktivSpieler().setNeueKarte(tisch.getAktivSpieler().getCardHand().getHandKarte().size());
                 tisch.getAktivSpieler().getCardHand().addKarte(karte);
                 tisch.naechste();
                 if (Main.server != null) {
