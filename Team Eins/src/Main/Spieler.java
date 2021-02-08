@@ -19,6 +19,8 @@ public class Spieler  implements Serializable {
     private boolean aussteigen = false;
     private boolean leftServer = false;
     protected int schwierigkeit = 0;
+    private boolean karteGezogen = false;
+    private int neueKarte;
 
 
     /**
@@ -183,5 +185,33 @@ public class Spieler  implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(uid);
+    }
+
+    /** getter-Methode für neueKarte
+     * @return neue Karte die gezogen wurde
+     */
+    public int getNeueKarte() {
+        return neueKarte;
+    }
+
+    /** getter-Methode für karteGezogen
+     * @return statusFlag, ob eine neue Karte gezogen wurde
+     */
+    public boolean getKarteGezogen(){
+        return karteGezogen;
+    }
+
+    /** setter-Methode für karteGezogen
+     * @param karteGezogen
+     */
+    public void setKarteGezogen(boolean karteGezogen) {
+        this.karteGezogen = karteGezogen;
+    }
+
+    /** setter-Methode für neueKarte
+     * @param neueKarte index der neuen Karte die gezogen wurde
+     */
+    public void setNeueKarte(int neueKarte) {
+        this.neueKarte = neueKarte;
     }
 }
