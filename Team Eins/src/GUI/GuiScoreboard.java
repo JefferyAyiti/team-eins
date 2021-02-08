@@ -102,9 +102,13 @@ public class GuiScoreboard {
 
         Button nextRound = new Button();
         Label wait = new Label();
+        //Tutorial
         if (playMode==0&&tutorialAn){
             Button spielStart = new Button("Spiel starten");
             spielStart.setOnAction(e->{
+                Main.bots.cancel();
+                resizecheck.cancel();
+                spiellogik = null;
                 tutorialAn=false;
                 tooltip=false;
                 hauptmenuGui.setSettings("start");
@@ -118,11 +122,11 @@ public class GuiScoreboard {
                 Main.gameRunning = false;
                 Main.myTurnUpdate = true;
                 spiellogik = null;
-                Main.hauptmenuGui.update.cancel();
                 try {
                     Main.bots.cancel();
                 } catch (NullPointerException l) {
                 }
+                hauptmenuGui.showSettingsMenu(Main.classPrimaryStage);
             });
             hauptmenu.setTranslateY(-15);
             spielStart.setTranslateY(-15);

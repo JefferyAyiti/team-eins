@@ -307,7 +307,10 @@ public class GuiSpieltisch {
                                     e.getSceneY() < ablageY[1] &&
                                     tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable()) {
 
-                                kartelegen(cardId[0], cardId[1]);
+                                if (tutorial.wrongCard(finalI)) {
+                                } else {
+                                    kartelegen(cardId[0], cardId[1]);
+                                }
                             } else //karten sortieren
                                 if (e.getSceneX() > myCardsX[0] - 40 &&
                                         e.getSceneX() < myCardsX[1] + 40 &&

@@ -142,7 +142,7 @@ public class GuiTutorial {
     public void startTutorial() {
         if (intro) {
             System.out.println("intro");
-            initTutorial();
+
             txt = new Text("Willkommen beim Tutorial "
                     + spielerM[0].getName()
                     + "! Ich bin Karl.\n" +
@@ -172,7 +172,7 @@ public class GuiTutorial {
                                 Ein weißer Chip gibt -1 und ein schwarzer -10 Punkte.
                                                                 
                                 Das Spiel endet sobald ein Mitspieler 40 oder mehr Minuspunkte hat.""");
-                        popUp(txt, 30, 15, 150);
+                        popUp(txt, 15, 15, 130);
 
                         spieltischGui.scene.onKeyTypedProperty().set(c -> {
                             txt = new Text("""
@@ -196,7 +196,7 @@ public class GuiTutorial {
                                     txt = new Text("""
                                             Wie ich sehe hast du momentan 10 weiße Chips. 
                                             Klicke auf deine Chips um sie zu tauschen.""");
-                                    popUp(txt, 30, 13, 20);
+                                    popUp(txt, 25, 13, 50);
                                     spieltischGui.scene.onMouseClickedProperty().set(i -> {
                                         if (spielerM[0].getBlackChips() == 3) {
                                             chips = false;
@@ -221,19 +221,19 @@ public class GuiTutorial {
 
             System.out.println("kartelegen");
             txt = new Text("Toll! ");
-            popUp(txt, 25, 10, 20);
+            popUp(txt, 25, 10, 50);
             spieltischGui.scene.onKeyTypedProperty().set(x -> {
                 txt = new Text("""
-                        Bist du am zug, kannst du immer eine der drei Aktionen auswählen:
+                        Bist du am Zug, kannst du immer eine der drei Aktionen auswählen:
                                                 
                         - eine Karte ablegen,
-                        - eine Katze nachziehen oder
+                        - eine Karte nachziehen oder
                         - Aussteigen""");
                 popUp(txt, 25, 10, 150);
 
                 spieltischGui.scene.onKeyTypedProperty().set(c -> {
                     txt = new Text("""
-                            Der Ablage bestimmt, was du ablegen darfst.\n
+                            Der Ablagestapel bestimmt, was du ablegen darfst.\n
                             Du kannst immer nur eine Karte mit dem gleichen Wert oder einen Wert höher ablegen.
                             Das Lama ist die höhste Karte, auf sie kann nur ein Lama oder eine 1 gelegt werden.""");
                     popUp(txt, 25, 10, 150);
@@ -244,8 +244,9 @@ public class GuiTutorial {
                         spielerZug = true;
                         reloadGui();
                         txt = new Text("""
-                                Auf dem Ablagestapel liegt eine 2. Darauf folgen können nur 2er oder 3er.
+                                Auf dem Ablagestapel liegt momentan eine 2. Darauf folgen können nur 2er oder 3er.
                                 Du kannst also nur deine 3 auf den Stapel legen.
+                                
                                 Um eine Karte abzulegen, klicke einfach auf die gewünschte Karte oder zieh sie zum Ablagestapel.""");
                         popUp(txt, 25, 15, 150);
 
@@ -302,7 +303,7 @@ public class GuiTutorial {
             popUp(txt, 25, 10, 50);
 
             spieltischGui.scene.onKeyTypedProperty().set(w -> {
-                txt = new Text(" Bedenke bei deinem nächsten Zug, dass du für Karten die du nicht ablegen kannst Minuspunkte erhälst.\n\n" +
+                txt = new Text("Bedenke bei deinem nächsten Zug, dass du für Karten die du nicht ablegen kannst Minuspunkte erhälst.\n\n" +
                         "Da Doppelte Karten nur einmal ihren Wert zählen bedeutet das auch, dass du erst beide 5er loswerden musst bevor du keine Minuspunkte dafür erhälst.");
                 popUp(txt, 25, 15, 150);
 
@@ -346,11 +347,11 @@ public class GuiTutorial {
                                                 spielerZug = true;
                                                 reloadGui();
                                                 txt = new Text("""
-                                                        Du kannst jetzt wieder eine 6 oder ein Lama legen. 
-                                                        Das Lama hat einen wert von 10. Hast du
+                                                        Möglich wäre jetzt wieder eine 6 oder ein Lama zu legen. 
+                                                        Das Lama hat einen Wert von -10. Hast du
                                                         mindestens ein Lama auf der Hand, erhälst du somit 10 Minuspunkte.
                                                                                                                 
-                                                        Versuche also Lamas immer loszuwerden """);
+                                                        Versuche Lamas immer loszuwerden """);
                                                 popUp(txt, 15, 10, 130);
 
                                                 spieltischGui.scene.onMouseClickedProperty().set(d -> {
@@ -359,7 +360,7 @@ public class GuiTutorial {
                                                         spielerZug = false;
                                                         closeDialog();
                                                         lamaKarte = false;
-                                                        txt = new Text("wundervoll.");
+                                                        txt = new Text("Wundervoll.");
                                                         popUp(txt, 25, 10, 50);
 
                                                         //Karl legt 1
@@ -404,11 +405,11 @@ public class GuiTutorial {
             reloadGui();
             txt = new Text("""
                     Sieht so aus als könntest du keine Karte ablegen. 
-                    Du hast jetzt möglichkeit ausszusteigen oder eine Karte zu ziehen. 
-                    Da ich und Paul beide noch ein paar Karten haben und die Summe deiner Hand noch sehr hoch ist, ist es besser eine Karte zu ziehen.
+                    Du hast jetzt die Möglichkeit ausszusteigen oder eine Karte zu ziehen. 
+                    Da Paul und ich beide noch ein paar Karten haben und die Summe deiner Hand noch sehr hoch ist, ist es besser eine Karte zu ziehen.
                     Klicke auf den Stapel um eine neue Karte aufzunehmen.""");
 
-            popUp(txt, 25, 5, 150);
+            popUp(txt, 25, 8, 150);
             //Karl legt 3
             spieltischGui.scene.onMouseClickedProperty().set(a -> {
                 popUp(txt, 25, 5, 150);
@@ -418,7 +419,7 @@ public class GuiTutorial {
                     spielerZug = false;
                     reloadGui();
                     txt = new Text("Durch das Nachziehen ist dein Zug beendet und ich bin wieder dran");
-                    popUp(txt, 25, 20, 50);
+                    popUp(txt, 25, 10, 50);
 
                     spiellogik.karteLegen(karl, karl.getCardHand().getKarte(0));
 
@@ -452,12 +453,13 @@ public class GuiTutorial {
                                         spiellogik.aussteigen(karl);
                                         reloadGui();
                                         txt = new Text(""" 
-                                                Wenn ein Spieler ausgestiegen ist, kannst du das daran erkennen, dass seine Karten grau sind.
-                                                Ein Spieler der ausgestiegen ist, kann er den Rest einer Runde keine Aktionen mehr ausführen.
+                                                Wenn ein Spieler ausgestiegen ist, erkennst du das daran, dass seine Karten grau sind.
                                                 
-                                                Sind alle Spieler ausgestiegen, endet eine Runde.
+                                                Ein Spieler der ausgestiegen ist, kann den Rest einer Runde keine Aktionen mehr ausführen.
+                                                
+                                                Sollten alle Spieler ausgestiegen sein, endet eine Runde.
                                                 """);
-                                        popUp(txt, 30, 15, 150);
+                                        popUp(txt, 30, 10, 150);
 
                                         spieltischGui.scene.onKeyTypedProperty().set(f -> {
                                             popUp(txt, 25, 10, 150);
@@ -465,10 +467,11 @@ public class GuiTutorial {
                                                 spiellogik.aussteigen(paul);
                                                 reloadGui();
                                                 txt = new Text(""" 
-                                                        Paul ist auch ausgestiegen, das bedeutet darfst du so viele Karten ablegen wie du noch kannst,
-                                                        darfst aber keine Karten mehr nachziehen.
-                                                        """);
-                                                popUp(txt, 25, 10, 50);
+                                                        Paul ist auch ausgestiegen. 
+                                                        Du kannst jetzt noch so viele Karten ablegen wie 
+                                                        möglich, eine Karte nachziehen ist aber
+                                                        nicht mehr erlaubt.""");
+                                                popUp(txt, 15, 15, 100);
                                                 spieltischGui.scene.onKeyTypedProperty().set(g -> {
                                                     popUp(txt, 25, 01, 100);
                                                     if (spielerM[0] == tisch.getAktivSpieler()) {
@@ -491,27 +494,28 @@ public class GuiTutorial {
         } else if (ausgestiegen) {
             // closeDialog();
             txt = new Text(""" 
-                    Vorsicht! 
+                    Aber Vorsicht! 
                     Du hast jetzt noch eine 5,6 und ein Lama. 
-                    legst du sie in der Richtigen Reihenfolge ab, 
-                    kannst du alle Karten loswerden und
-                     einen Chip abgeben.
+                    Legst du sie in der Richtigen Reihenfolge ab, 
+                    kannst du alle Karten loswerden und einen Chip 
+                    abgeben.
                     """);
-            popUp(txt, 20, 15, 100);
+            popUp(txt, 15, 15, 100);
 
             spieltischGui.scene.onKeyTypedProperty().set(a -> {
                 txt = new Text("""
-                        Wenn dus es schaffst alle Karten abzulegen, kannst du einen schwarzen Chip abgeben und hast somit nur noch 20 Minuspunkte.
-                        In den Einstellungen kannst du sagen, dass das automatisch der bestmöglichste Chip abgegeben werden soll. """);
+                        Wenn du es schaffst alle Karten abzulegen, kannst du einen schwarzen Chip abgeben und hast somit nur noch 20 Minuspunkte.
+                        
+                        In den Einstellungen kannst du jederzeit sagen, dass automatisch der bestmöglichste Chip abgegeben werden soll. """);
 
                 popUp(txt, 25, 10, 150);
                 spieltischGui.scene.onKeyTypedProperty().set(b -> {
                     txt = new Text("""
                             Nach dem die Runde beendet ist, wird dir die Rangliste angezeigt. 
-                            Dort siehst du, dann wie viel Punkte jeder Spieler dazu gewonnen hast und auf welchem Platz du momentan stehst.
-                            Hat ein Spieler mindestens -40 Punkte erreicht, ist das Spiel zu ende. 
+                            Dort siehst du, wie viele Punkte jeder Spieler dazu gewonnen hat und auf welchem Platz du momentan stehst.
+                            Hat ein Spieler mindestens -40 Punkte erreicht, ist das Spiel zu Ende. 
                             Viel Erfolg!""");
-                    popUp(txt, 25, 15, 150);
+                    popUp(txt, 25, 25, 150);
                     spielerZug = true;
                     reloadGui();
                     spieltischGui.scene.onMouseClickedProperty().set(c -> {
@@ -556,6 +560,7 @@ public class GuiTutorial {
             bubble = new Image("GUI/images/speachbubble2.png");
         } else {
             bubble = new Image("GUI/images/speachbubble5.png");
+            bild.setTranslateY(10);
         }
         BackgroundImage myBI = new BackgroundImage(bubble,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
