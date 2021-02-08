@@ -487,16 +487,23 @@ public class GuiSpieltisch {
             bottom.getChildren().add(exit);
 
             exit.setOnMouseClicked(mouseEvent -> {
-                if (Main.playMode == 2) {//Multiplaymodus
-                    try {
-                        server.aussteigen(tisch.getSpielerList()[playerId]);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
+                if (tutorialAn && playMode == 0 && tutorial.aussteigen) {
+                } else {
+
+                    if (Main.playMode == 2) {//Multiplaymodus
+                        try {
+                            server.aussteigen(tisch.getSpielerList()[playerId]);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                        buildStage(Main.classPrimaryStage);
+                    } else {//lokaler Spielmodus
+                        Main.spiellogik.aussteigen(tisch.getSpielerList()[playerId]);
+                        buildStage(Main.classPrimaryStage);
                     }
-                } else {//lokaler Spielmodus
-                    Main.spiellogik.aussteigen(tisch.getSpielerList()[playerId]);
+
                 }
-                buildStage(Main.classPrimaryStage);
+
             });
 
         }
@@ -606,11 +613,15 @@ public class GuiSpieltisch {
                                 e.printStackTrace();
                             }
                             //
+                            buildStage(Main.classPrimaryStage);
                             System.out.println("\t Ziehe Karte");
-                        } else if (Main.spiellogik.karteNachziehen(tisch.getSpielerList()[ich]))
+                        } else if (tutorialAn && !tutorial.stapel) {
+
+                        } else if (Main.spiellogik.karteNachziehen(tisch.getSpielerList()[ich])){
                             System.out.println("\t Ziehe Karte");
 
                         buildStage(Main.classPrimaryStage);
+                    }
                     });
                     if(tutorialAn && tutorial.stapel) {
                         imgView.setStyle(HILIGHT_BUTTON_STYLE);

@@ -10,7 +10,7 @@ import javafx.scene.text.TextFlow;
 
 
 import static Main.Main.*;
-import static java.lang.Thread.sleep;
+
 
 public class GuiTutorial {
 
@@ -19,6 +19,7 @@ public class GuiTutorial {
     private static Spieler[] spielerM;
     boolean chips = false;
     boolean stapel = false;
+    boolean aussteigen=true;
     Text txt;
     boolean spielerZug = false;
     private boolean intro = true;
@@ -31,6 +32,10 @@ public class GuiTutorial {
     private Spieler karl;
     private Spieler paul;
 
+    /**
+     * Erstellt Tisch, Spieler
+     *      * und startet die erste Runde für das Tutorial
+     */
     public void initTutorial() {
         intro = true;
         chips = false;
@@ -73,6 +78,9 @@ public class GuiTutorial {
         paul = tisch.getSpielerList()[2];
     }
 
+    /**
+     * erstellt immer den gleichen Stapel für das Turorial
+     */
     public void tutNachziehstapel() {
         Stapel nachziehStapel = new Stapel(true);
         for (int i = 0; i < 7; i++) {
@@ -97,6 +105,9 @@ public class GuiTutorial {
 
     }
 
+    /**
+     * gibt Karl, Paul und dem Spieler immer die gleiche Hand
+     */
     public void tutKartenGeben() {
         //Spieler
         Main.haende[0].addKarte(kartenErstellen(3));
@@ -125,6 +136,10 @@ public class GuiTutorial {
 
     }
 
+    /**
+     * @param i Karte die erstellt werden soll
+     * @return neue Karte
+     */
     private Karte kartenErstellen(int i) {
 
         return switch (i) {
@@ -139,6 +154,9 @@ public class GuiTutorial {
 
     }
 
+    /**
+     * Startet Tutorial
+     */
     public void startTutorial() {
         if (intro) {
             System.out.println("intro");
@@ -252,7 +270,7 @@ public class GuiTutorial {
 
                         //Karl legt 4
                         classPrimaryStage.getScene().onMouseClickedProperty().set(z -> {
-                            popUp(txt, 25, 10, 80);
+                            popUp(txt, 25, 10, 150);
                             if (tisch.getObereKarteAblagestapel().getValue() == 3) {
                                 spielerZug = false;
                                 reloadGui();
@@ -352,10 +370,10 @@ public class GuiTutorial {
                                                         mindestens ein Lama auf der Hand, erhälst du somit 10 Minuspunkte.
                                                                                                                 
                                                         Versuche Lamas immer loszuwerden """);
-                                                popUp(txt, 15, 10, 130);
+                                                popUp(txt, 25, 10, 150);
 
                                                 classPrimaryStage.getScene().onMouseClickedProperty().set(d -> {
-                                                    popUp(txt, 15, 10, 130);
+                                                    popUp(txt, 25, 10, 150);
                                                     if (tisch.getObereKarteAblagestapel().getValue() == 10) {
                                                         spielerZug = false;
                                                         closeDialog();
@@ -473,7 +491,7 @@ public class GuiTutorial {
                                                         nicht mehr erlaubt.""");
                                                 popUp(txt, 15, 15, 100);
                                                 classPrimaryStage.getScene().onKeyTypedProperty().set(g -> {
-                                                    popUp(txt, 25, 01, 100);
+                                                    popUp(txt, 25, 15, 100);
                                                     if (spielerM[0] == tisch.getAktivSpieler()) {
                                                         nachziehen = false;
                                                         ausgestiegen = true;
@@ -516,11 +534,10 @@ public class GuiTutorial {
                             Hat ein Spieler mindestens -40 Punkte erreicht, ist das Spiel zu Ende. 
                             Viel Erfolg!""");
                     popUp(txt, 25, 25, 150);
+                    aussteigen=false;
                     spielerZug = true;
                     reloadGui();
-                    classPrimaryStage.getScene().onMouseClickedProperty().set(c -> {
-                        closeDialog();
-                    });
+                    classPrimaryStage.getScene().onMouseClickedProperty().set(c -> closeDialog());
 
                 });
             });
@@ -530,17 +547,25 @@ public class GuiTutorial {
     }
 
 
+    /**
+     * erstellt eig Dialogfeld
+     * @param text Text der angezeigt werden soll
+     * @param X verschiebt Text an der Y-Achse
+     * @param Y verschiebt Text an der Y-Achse
+     * @param height legt die max. höhe des Textfelds fest.
+     */
     void popUp(Text text, double X, double Y, double height) {
         closeDialog();
         TextFlow flow = new TextFlow();
 
-        Image avatar = new Image("GUI/images/clipart2498304.png", 50 * Main.zoomfactor, 70 * Main.zoomfactor, false, false);
+        Image avatar = new Image("GUI/images/LamaAvatar.png", 120 * Main.zoomfactor, 160 * Main.zoomfactor, true, true);
         ImageView bild = new ImageView(avatar);
+        bild.setTranslateX(-5);
 
         //Label erklareung = new Label(text);
         text.setFont(new Font("arial light", 10 * zoomfactor));
         text.setStyle("-fx-fill: black; -fx-font-weight: bold");
-        text.setTranslateX(X*zoomfactor);
+        text.setTranslateX((X-20)*zoomfactor);
         text.setTranslateY(Y*zoomfactor);
         flow.getChildren().add(text);
         flow.setMinWidth(420 * Main.zoomfactor);
@@ -560,7 +585,8 @@ public class GuiTutorial {
             bubble = new Image("GUI/images/speachbubble2.png");
         } else {
             bubble = new Image("GUI/images/speachbubble5.png");
-            bild.setTranslateY(10);
+            bild.setTranslateY(5);
+
         }
         BackgroundImage myBI = new BackgroundImage(bubble,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
@@ -570,14 +596,24 @@ public class GuiTutorial {
         Main.spieltischGui.getGridPane().add(info, 0, 0, 4, 1);
     }
 
+    /**
+     * schließt Tutorial-Dialog
+     */
     void closeDialog() {
         spieltischGui.getGridPane().getChildren().remove(info);
     }
 
+    /**
+     * aktualisiert die GUI
+     */
     void reloadGui() {
         spieltischGui.buildStage(Main.classPrimaryStage);
     }
 
+    /**
+     * @param i Karte die gespielt werden soll
+     * @return Gibt zurück ob die richtige Karte gespielt werden soll.
+     */
     public boolean wrongCard(int i) {
         if (playMode == 0 && tutorialAn && spielerM[0] == tisch.getAktivSpieler()) {
             if (!spielerZug) {
