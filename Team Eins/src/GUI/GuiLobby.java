@@ -7,6 +7,7 @@
     import RMI.RunServer;
     import javafx.application.Application;
     import javafx.geometry.Pos;
+    import javafx.scene.Node;
     import javafx.scene.Scene;
     import javafx.scene.control.Button;
     import javafx.scene.control.Label;
@@ -24,7 +25,7 @@
     public String action;
     public static String host;
 
-    public static Scene lobby(){
+    public static Node lobby(){
         Label titel = new Label("Lobby");
         titel.setFont(new Font("Script MT Bold", 36 * Main.zoomfactor));
         titel.setId("titel");
@@ -155,10 +156,10 @@
 
 
         //neue Scene
-        Scene lobby = new Scene(root, Main.sceneWidth, Main.sceneHeight);
-        lobby.getStylesheets().add("GUI/Lobby.css");
+        classPrimaryStage.getScene().getStylesheets().removeAll(classPrimaryStage.getScene().getStylesheets());
+        classPrimaryStage.getScene().getStylesheets().add("GUI/Lobby.css");
 
-        return lobby;
+        return root;
 
     }
     public String getAction(){

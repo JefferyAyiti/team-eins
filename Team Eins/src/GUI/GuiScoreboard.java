@@ -2,7 +2,6 @@ package GUI;
 
 import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -20,7 +19,7 @@ public class GuiScoreboard {
 
     public static boolean isReady = false;
 
-    static Scene showRangliste(Map<Spieler, Integer> ranking) throws  RemoteException {
+    static void showRangliste(Map<Spieler, Integer> ranking) throws  RemoteException {
         //System.out.println("gibt Rangliste aus");
         int p = 1;
         chatbox.hideChat();
@@ -270,12 +269,11 @@ public class GuiScoreboard {
 
 
         //neue Scene
-        Scene rangliste = new Scene(root, Main.sceneWidth, Main.sceneHeight);
-        rangliste.getStylesheets().add("GUI/Rangliste.css");
+        classPrimaryStage.getScene().getStylesheets().removeAll(classPrimaryStage.getScene().getStylesheets());
+        classPrimaryStage.getScene().getStylesheets().add("GUI/Rangliste.css");
 
-        Main.classPrimaryStage.setScene(rangliste);
+        Main.classPrimaryStage.getScene().setRoot(root);
         //spiellogik.durchschnitt();
-        return rangliste;
     }
 
     public boolean getIsReady(){

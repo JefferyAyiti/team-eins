@@ -524,6 +524,7 @@ public class GuiSpieltisch {
      * @param primaryStage
      */
     public void buildStage(Stage primaryStage) {
+        root = new StackPane();
         primaryStage.xProperty().addListener((obs, oldVal, newVal) -> reposition(primaryStage));
         primaryStage.yProperty().addListener((obs, oldVal, newVal) -> reposition(primaryStage));
 
@@ -932,7 +933,7 @@ public class GuiSpieltisch {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        primaryStage.setScene(scene);
+        primaryStage.getScene().setRoot(root);
         //primaryStage.setWidth(primaryStage.getWidth() + sceneWidth - primaryStage.getScene().getWidth());
         //primaryStage.setHeight(primaryStage.getHeight() + sceneHeight - primaryStage.getScene().getHeight());
 

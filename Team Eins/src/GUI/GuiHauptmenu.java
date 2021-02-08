@@ -8,6 +8,8 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -461,8 +463,8 @@ public class GuiHauptmenu {
         root.setBackground(new Background(myBI));
         try {
             if (playMode >= 1 && Main.joined && server.serverOpen()) {
-                Scene menu = GuiLobby.lobby();
-                PrimaryStage.setScene(menu);
+                Node menu = GuiLobby.lobby();
+                PrimaryStage.getScene().setRoot((Parent) menu);
                 PrimaryStage.show();
             } else {
                 if (playMode >= 1 && Main.joined && !server.serverOpen()) {
@@ -478,10 +480,15 @@ public class GuiHauptmenu {
 
                 }
                 //neue Scene
-                Scene menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
-                menu.getStylesheets().add("GUI/MainMenu.css");
+                Scene menu;
+                if(classPrimaryStage.getScene() == null) {
+                    menu = new Scene(root, Main.sceneWidth, Main.sceneHeight);
+                    classPrimaryStage.setScene(menu);
+                }
+                classPrimaryStage.getScene().getStylesheets().removeAll(classPrimaryStage.getScene().getStylesheets());
+                classPrimaryStage.getScene().getStylesheets().add("GUI/MainMenu.css");
 
-                PrimaryStage.setScene(menu);
+                PrimaryStage.getScene().setRoot(root);
 
                 ChangeListener<Number> stageSizeListenerW = (observable, oldValue, newValue) ->
                 {
