@@ -115,6 +115,10 @@ public class GuiSpieltisch {
 
 
         if (playerId == ich) {
+            //neu gezogene Karte farblich markieren
+            if(tisch.getSpielerList()[ich].getKarteGezogen()){
+
+            }
             if (autoSort != null && (autoSort == false && !sortedOnce || autoSort)) {
                 //sortieren
                 ArrayList<HandKarte> sortedHand =
