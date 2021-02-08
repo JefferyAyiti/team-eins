@@ -978,6 +978,9 @@ public class GuiSpieltisch {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("     ");
             alert.initStyle(StageStyle.TRANSPARENT);
+
+            alert.setX((classPrimaryStage.getScene().getWindow().getX() + classPrimaryStage.getWidth()/2) - 200 );
+            alert.setY((classPrimaryStage.getScene().getWindow().getY() + classPrimaryStage.getHeight()/2) - 100);
             DialogPane dialogPane = alert.getDialogPane();
             dialogPane.getStylesheets().add("GUI/alert.css");
 
