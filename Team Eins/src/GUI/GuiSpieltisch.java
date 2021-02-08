@@ -924,18 +924,14 @@ public class GuiSpieltisch {
             root.getChildren().add(gridPane);
             // nun Setzen wir die Scene zu unserem Stage und zeigen ihn an
 
-            scene.getStylesheets().add("GUI/Chat.css");
-            //scene.getStylesheets().add("GUI/einstellung.css");
+            classPrimaryStage.getScene().getStylesheets().removeAll(classPrimaryStage.getScene().getStylesheets());
+            classPrimaryStage.getScene().getStylesheets().add("GUI/Chat.css");
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         primaryStage.getScene().setRoot(root);
-        //primaryStage.setWidth(primaryStage.getWidth() + sceneWidth - primaryStage.getScene().getWidth());
-        //primaryStage.setHeight(primaryStage.getHeight() + sceneHeight - primaryStage.getScene().getHeight());
-
-        primaryStage.show();
     }
 
     /**
