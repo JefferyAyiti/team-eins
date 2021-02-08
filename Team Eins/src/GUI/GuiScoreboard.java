@@ -189,11 +189,14 @@ public class GuiScoreboard {
                                     Platform.runLater(() -> hauptmenuGui.showSettingsMenu(Main.classPrimaryStage));
 
                                 } else {
-                                    try {
-                                        server.closeServer();
-                                    } catch (RemoteException remoteException) {
-                                        remoteException.printStackTrace();
+                                    if (playMode == 1){
+                                        try {
+                                            server.closeServer();
+                                        } catch (RemoteException e1) {}
+                                        hauptmenuGui.status = new Label("Server verlassen");
+                                        Main.hauptmenuGui.update.cancel();
                                     }
+
                                     resizecheck.cancel();
                                     joined = false;
                                     Main.inMenu = true;
@@ -201,8 +204,6 @@ public class GuiScoreboard {
                                     Main.myTurnUpdate = true;
                                     spiellogik = null;
                                     server = null;
-                                    Main.hauptmenuGui.update.cancel();
-                                    hauptmenuGui.status = new Label("Server verlassen");
                                     try {
                                         Main.bots.cancel();
                                     } catch (NullPointerException l) {
