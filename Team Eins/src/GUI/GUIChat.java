@@ -69,7 +69,12 @@ public class GUIChat {
     }
 
 
-    public void openChat(Stage owner, double height, double width){
+    /**
+     * @param owner Offnet chat in Spielfenster
+     *              Alle Komponente und Eingeschaften
+     *              von Chatfenster wird geladen
+     */
+    public void openChat(Stage owner){
         //chat.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_BOTTOM_LEFT);
 
         chat.setX(owner.getScene().getWindow().getX() + 5);
@@ -94,7 +99,6 @@ public class GUIChat {
 
         background.setMinWidth(170*zoomfactor);
         background.setMaxWidth(170*zoomfactor);
-        //background.setStyle("-fx-background-image: url('/GUI/images/oberflaeche.jpg');");
         BackgroundImage backgroundImage = new BackgroundImage(new Image("/GUI/images/oberflaeche.jpg"),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.REPEAT,BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         background.setBackground(new Background(backgroundImage));
@@ -102,7 +106,7 @@ public class GUIChat {
         StackPane format = new StackPane(background, scroll);
         format.setMinWidth(170 *zoomfactor);
         format.setMaxWidth(170*zoomfactor);
-        background.setOpacity(einstellung.getSliderValue());
+        setOpacity();
         sendButton.setPrefWidth(60);
         input.setPrefWidth(170*zoomfactor-60);
 
@@ -145,6 +149,9 @@ public class GUIChat {
         input.clear();
     }
 
+    /**
+     * Neue Nachricht in chat mit GUI send button
+     */
     public void onPress(){
         sendButton.setOnMouseClicked( mouseEvent -> {
             send();
@@ -272,13 +279,22 @@ public class GUIChat {
         return 1; //sichtbar für jeden
     }
 
+    /**
+     * @param owner Aktualisiert die Position wenn @owner
+     *              beweget ist
+     */
     public void reposition(Stage owner){
         chat.setX(owner.getScene().getWindow().getX() + 5);
         chat.setY(owner.getScene().getWindow().getY() + 35);
     }
 
+    /**
+     * Nimmt die Slider wert und aktualisiert opacity
+     * von background
+     */
     public void setOpacity(){
-        background.setOpacity(einstellung.getSliderValue());
+        background.setStyle("-fx-opacity: "+einstellung.getSliderValue());
     }
+
 
 }

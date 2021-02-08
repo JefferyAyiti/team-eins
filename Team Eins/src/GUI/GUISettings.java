@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -17,6 +18,7 @@ import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+import static Main.Main.chatbox;
 import static Main.Main.playMode;
 
 public class GUISettings {
@@ -203,11 +205,12 @@ public class GUISettings {
         return settings;
     }
 
+    /**
+     * @return Gibt den aktuellen Wert
+     * von chat Opacity
+     */
     public double getSliderValue(){
        return slider.getValue();
     }
 
-    public boolean getValueChange(){
-        return slider.isValueChanging();
-    }
 }

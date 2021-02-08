@@ -785,7 +785,7 @@ public class GuiSpieltisch {
                 chatButton.setOnMouseClicked(e -> {
 
                             if (!chatOpened) {
-                                chatbox.openChat(classPrimaryStage, 240 * zoomfactor, 90 * zoomfactor);
+                                chatbox.openChat(classPrimaryStage);
                                 chatButton.setText("Chat <<");
                                 chatOpened = true;
                             } else { //chat bereits offen
@@ -805,7 +805,6 @@ public class GuiSpieltisch {
                 );
 
                 chatbox.reposition(classPrimaryStage);
-                chatbox.setOpacity();
                 gridPane.add(chatButton, 0, 4, 1, 1);
 
             }
@@ -829,7 +828,6 @@ public class GuiSpieltisch {
             });
             settings.setOnMouseEntered(e -> settings.setStyle(HOVERED_BUTTON_STYLE));
             settings.setOnMouseExited(e -> settings.setStyle(IDLE_BUTTON_STYLE));
-            einstellung.reposition(classPrimaryStage);
 
             //Spiel verlassen
             //if (playerId == Main.ich) {
