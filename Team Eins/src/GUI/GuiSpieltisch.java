@@ -346,6 +346,7 @@ public class GuiSpieltisch {
                                         tisch.getSpielerList()[playerId].getCardHand().setHandKarten(newHandCards);
                                     } else { //multiplayer
                                         try {
+                                            tisch.getSpielerList()[playerId].getCardHand().setHandKarten(newHandCards);
                                             server.setCardHand(playerId, newHandCards);
                                         } catch (RemoteException ex) {
                                             ex.printStackTrace();
