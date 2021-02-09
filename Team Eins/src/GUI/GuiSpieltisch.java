@@ -726,7 +726,7 @@ public class GuiSpieltisch {
             Rotate rotate = new Rotate();
             //Setting pivot points for the rotation
             rotate.setAngle(90);
-            if (tutorialAn) {//Tutorialansicht
+            if (tutorialAn && playMode==0) {//Tutorialansicht
                 gridPane.add(makepanel(0), 1, 4, 3, 1);
 
                 Node player1 = makepanel(1);
@@ -739,6 +739,7 @@ public class GuiSpieltisch {
 
 
             } else {//normale Ansicht
+                tutorialAn=false;
                 gridPane.add(makepanel(ich), 1, 4, 3, 1);
 
                 Node player1 = makepanel((1 + ich) % anzSpieler);
