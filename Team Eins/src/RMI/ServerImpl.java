@@ -415,7 +415,7 @@ public class ServerImpl implements server {
         return sol;
     }
     @Override
-    public void reconnect(String UID, String name) throws RemoteException {
+    public int reconnect(String UID, String name) throws RemoteException {
         Spieler s;
         Spieler newPlayer;
         for(int i = 0; i< anzSpieler; i++){
@@ -445,9 +445,11 @@ public class ServerImpl implements server {
                 aenderung++;
 
                 System.out.println(newPlayer instanceof Bot);
+                return i;
 
             }
         }
+        return -1;
     }
 
     @Override
