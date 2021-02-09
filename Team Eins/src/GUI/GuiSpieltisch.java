@@ -47,7 +47,7 @@ public class GuiSpieltisch {
     boolean chatOpened = false;
     boolean settingsOpen = false;
     int[] cardId;
-    Boolean myTurnNotice = null;
+    public Boolean myTurnNotice = null;
     private GridPane spielfeld;
 
     double dragX;
@@ -212,17 +212,12 @@ public class GuiSpieltisch {
                         }
 
                         //Spielbare Karten
-                        if (Main.tooltip && tisch.aktiv == ich) {
-                            if (!tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable()) {
+                        if ((Main.tooltip && tisch.aktiv == ich &&
+                                !tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable() ||
+                                playMode==0 && tutorialAn && !tutorial.spielerZug)) {
                                 ColorAdjust colorAdjust = new ColorAdjust();
                                 colorAdjust.setBrightness(-0.6);
                                 myCard.setEffect(colorAdjust);
-                            }
-                        }
-                        if(playMode==0 && tutorialAn && !tutorial.spielerZug){
-                            ColorAdjust colorAdjust = new ColorAdjust();
-                            colorAdjust.setBrightness(-0.6);
-                            myCard.setEffect(colorAdjust);
                         }
 
                         final double[] myCardsX = new double[2];
@@ -403,7 +398,7 @@ public class GuiSpieltisch {
                 buildStage(Main.classPrimaryStage);
             });
 
-            if (tutorial.chips) {
+            if (tutorialAn && tutorial.chips) {
                 chips.setStyle(HILIGHT_BUTTON_STYLE);
 
             } else if (tutorialAn && tutorial.chips == false) {
@@ -487,16 +482,23 @@ public class GuiSpieltisch {
             bottom.getChildren().add(exit);
 
             exit.setOnMouseClicked(mouseEvent -> {
-                if (Main.playMode == 2) {//Multiplaymodus
-                    try {
-                        server.aussteigen(tisch.getSpielerList()[playerId]);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
+                if (tutorialAn && playMode == 0 && tutorial.aussteigen) {
+                } else {
+
+                    if (Main.playMode == 2) {//Multiplaymodus
+                        try {
+                            server.aussteigen(tisch.getSpielerList()[playerId]);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                        buildStage(Main.classPrimaryStage);
+                    } else {//lokaler Spielmodus
+                        Main.spiellogik.aussteigen(tisch.getSpielerList()[playerId]);
+                        buildStage(Main.classPrimaryStage);
                     }
-                } else {//lokaler Spielmodus
-                    Main.spiellogik.aussteigen(tisch.getSpielerList()[playerId]);
+
                 }
-                buildStage(Main.classPrimaryStage);
+
             });
 
         }
@@ -606,11 +608,15 @@ public class GuiSpieltisch {
                                 e.printStackTrace();
                             }
                             //
+                            buildStage(Main.classPrimaryStage);
                             System.out.println("\t Ziehe Karte");
-                        } else if (Main.spiellogik.karteNachziehen(tisch.getSpielerList()[ich]))
+                        } else if (tutorialAn && !tutorial.stapel) {
+
+                        } else if (Main.spiellogik.karteNachziehen(tisch.getSpielerList()[ich])){
                             System.out.println("\t Ziehe Karte");
 
                         buildStage(Main.classPrimaryStage);
+                    }
                     });
                     if(tutorialAn && tutorial.stapel) {
                         imgView.setStyle(HILIGHT_BUTTON_STYLE);
@@ -860,6 +866,10 @@ public class GuiSpieltisch {
 
 
             beenden.setOnMouseClicked(mouseEvent -> {
+                if(tutorialAn){
+                    tooltip=false;
+                    tutorialAn=false;
+                }
                 if (Main.playMode <= 1) {
                     resizecheck.cancel();
                     Main.gameRunning = false;
@@ -917,12 +927,13 @@ public class GuiSpieltisch {
 
 
                 turnNotice = new VBox();
+                turnNotice.setTranslateY(-70*zoomfactor);
                 turnNotice.setMouseTransparent(true);
                 turnNotice.setAlignment(Pos.CENTER);
-                turnNotice.setStyle("-fx-background-image:url('/GUI/images/oberflaeche.jpg'); -fx-background-insets: 20; " +
+                turnNotice.setStyle("-fx-background-insets: 20; " +
                         "-fx-background-radius: 50; " +
                         "-fx-cursor:hand;" +
-                        "-fx-effect: dropshadow(three-pass-box, black, 50, 0, 0, 0);");
+                        "-fx-effect: dropshadow(three-pass-box, white, 50, 0, 0, 0);");
                 Label turnLabel = new Label("- Du bist dran -");
                 turnLabel.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.7 ,0 ,0 ); -fx-font-weight: bolder");
                 turnLabel.setTextFill(Color.LIGHTGREEN);

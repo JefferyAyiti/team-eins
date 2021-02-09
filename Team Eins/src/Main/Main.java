@@ -109,6 +109,7 @@ public class Main extends Application {
      * und startet die erste Runde im Spiel
      */
     public static void initGame() {
+
         if (tutorialAn && playMode==0){
             tutorial.initTutorial();
         }else {
@@ -152,8 +153,11 @@ public class Main extends Application {
             tisch = new Tisch(spielerM);
             spiellogik = new Spiellogik(tisch);
             spiellogik.initNeueRunde();
-
             resize(true);
+
+
+            classPrimaryStage.getScene().onKeyTypedProperty().set(a -> {});
+            classPrimaryStage.getScene().onMouseClickedProperty().set(a -> {});
         }
     }
 
@@ -165,6 +169,9 @@ public class Main extends Application {
 
         if (System.currentTimeMillis() < resize + 500 || init) {
             GuiZoomLoader.getZoomedImages();
+            if(init) {
+                spieltischGui.myTurnNotice = null;
+            }
             spieltischGui.buildStage(classPrimaryStage);
         }
     }
