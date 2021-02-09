@@ -86,6 +86,7 @@ public class GuiHauptmenu {
                             return;
                         }
                         assigned = true;
+                        System.out.println("assigned ID: "+ich);
                     }
 
                 } catch (RemoteException e) {
@@ -694,7 +695,7 @@ public class GuiHauptmenu {
                 server = runClient.client.server;
                 try {
                     if (!server.getSpielBeendet() && server.isInGame(uniqueID) && server.serverOpen()) {
-                        server.reconnect(uniqueID, myName);
+                        ich = server.reconnect(uniqueID, myName);
                         hasLeftServer = true;
 
                         inMenu = false;
