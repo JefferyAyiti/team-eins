@@ -207,7 +207,7 @@ public class GuiSpieltisch {
                         if(tisch.getSpielerList()[ich].getKarteGezogen() && i == j ){
                             tisch.getSpielerList()[ich].setKarteGezogen(false);
                             ColorAdjust colorAdjust = new ColorAdjust();
-                            colorAdjust.setBrightness(-0.6);
+                            //colorAdjust.setBrightness(-0.6);
                             myCard.setEffect(colorAdjust);
                             myCard.setStyle("-fx-background-insets: 20; " +
                                     "-fx-background-radius: 20; " +
