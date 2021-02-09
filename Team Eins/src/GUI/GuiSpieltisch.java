@@ -942,11 +942,11 @@ public class GuiSpieltisch {
                 turnLabel.setFont(Font.font("Ink Free", FontWeight.BOLD, 25 * zoomfactor));
                 turnNotice.getChildren().add(turnLabel);
 
-                FadeTransition ft = new FadeTransition(Duration.millis(5000), turnNotice);
+                FadeTransition ft = new FadeTransition(Duration.millis(6000), turnNotice);
                 ft.setFromValue(1.0);
                 ft.setToValue(0);
                 ft.play();
-                gridPane.add(turnNotice, 1, 1, 3, 1);
+                table.add(turnNotice, 0, 0, 3, 1);
                 myTurnNotice = false;
             }
 
