@@ -20,6 +20,7 @@ public class GuiTutorial {
     boolean chips = false;
     boolean stapel = false;
     boolean aussteigen=true;
+    boolean falscheKarte = false;
     Text txt;
     boolean spielerZug = false;
     private boolean intro = true;
@@ -269,8 +270,9 @@ public class GuiTutorial {
                         popUp(txt, 25, 15, 150);
 
                         //Karl legt 4
-                        classPrimaryStage.getScene().onMouseClickedProperty().set(z -> {
+                        spieltischGui.myCards.onMouseClickedProperty().set(z -> {
                             popUp(txt, 25, 10, 150);
+
                             if (tisch.getObereKarteAblagestapel().getValue() == 3) {
                                 spielerZug = false;
                                 reloadGui();
@@ -322,7 +324,7 @@ public class GuiTutorial {
 
             classPrimaryStage.getScene().onKeyTypedProperty().set(w -> {
                 txt = new Text("Bedenke bei deinem nächsten Zug, dass du für Karten die du nicht ablegen kannst Minuspunkte erhälst.\n\n" +
-                        "Da Doppelte Karten nur einmal ihren Wert zählen bedeutet das auch, dass du erst beide 5er loswerden musst bevor du keine Minuspunkte dafür erhälst.");
+                        "Da doppelte Karten nur einmal ihren Wert zählen bedeutet das auch, dass du erst beide 5er loswerden musst bevor du keine Minuspunkte dafür erhälst.");
                 popUp(txt, 25, 15, 150);
 
                 classPrimaryStage.getScene().onKeyTypedProperty().set(o -> {
@@ -331,13 +333,13 @@ public class GuiTutorial {
                     txt = new Text("Es ist also schlauer jetzt die 6 abzulegen, da du so weniger Punkte auf der Hand hast.");
                     popUp(txt, 25, 10, 50);
 
-                    classPrimaryStage.getScene().onMouseClickedProperty().set(a -> {
+                    spieltischGui.myCards.onMouseClickedProperty().set(a -> {
                         popUp(txt, 25, 10, 50);
                         if (tisch.getObereKarteAblagestapel().getValue() == 6) {
                             spielerZug = false;
-                            reloadGui();
                             karte6 = false;
                             lamaKarte = true;
+                            reloadGui();
                             txt = new Text("Klasse! ");
                             popUp(txt, 25, 10, 50);
 
@@ -363,17 +365,19 @@ public class GuiTutorial {
                                             popUp(txt, 25, 10, 50);
                                             if (tisch.getAktivSpieler() == spielerM[0]) {
                                                 spielerZug = true;
-                                                reloadGui();
+
                                                 txt = new Text("""
                                                         Möglich wäre jetzt wieder eine 6 oder ein Lama zu legen. 
                                                         Das Lama hat einen Wert von -10. Hast du
                                                         mindestens ein Lama auf der Hand, erhälst du somit 10 Minuspunkte.
                                                                                                                 
                                                         Versuche Lamas immer loszuwerden """);
+                                                reloadGui();
                                                 popUp(txt, 25, 10, 150);
 
-                                                classPrimaryStage.getScene().onMouseClickedProperty().set(d -> {
+                                                spieltischGui.myCards.onMouseClickedProperty().set(d -> {
                                                     popUp(txt, 25, 10, 150);
+
                                                     if (tisch.getObereKarteAblagestapel().getValue() == 10) {
                                                         spielerZug = false;
                                                         closeDialog();
@@ -454,7 +458,7 @@ public class GuiTutorial {
                             txt = new Text("Du bist dran");
                             popUp(txt, 25, 10, 50);
 
-                            classPrimaryStage.getScene().onMouseClickedProperty().set(d -> {
+                            spieltischGui.myCards.onMouseClickedProperty().set(d -> {
                                 popUp(txt, 25, 10, 50);
                                 if (tisch.getAktivSpieler() == karl) {
                                     spielerZug = false;
@@ -537,7 +541,7 @@ public class GuiTutorial {
                     aussteigen=false;
                     spielerZug = true;
                     reloadGui();
-                    classPrimaryStage.getScene().onMouseClickedProperty().set(c -> closeDialog());
+                    spieltischGui.myCards.onMouseClickedProperty().set(c -> closeDialog());
 
                 });
             });
@@ -583,6 +587,7 @@ public class GuiTutorial {
 
         if (height < 100) {
             bubble = new Image("GUI/images/speachbubble2.png");
+            bild.setTranslateY(-7);
         } else {
             bubble = new Image("GUI/images/speachbubble5.png");
             bild.setTranslateY(5);
@@ -617,18 +622,23 @@ public class GuiTutorial {
     public boolean wrongCard(int i) {
         if (playMode == 0 && tutorialAn && spielerM[0] == tisch.getAktivSpieler()) {
             if (!spielerZug) {
-                return true;
+                falscheKarte =true;
+
             } else if (next && karte6 && spielerM[0].getCardHand().getKarte(i).getValue() != 6) {
                 txt = new Text("lege die 6 Ab.");
                 popUp(txt, 25, 10, 50);
-                return true;
+                falscheKarte=true;
+
             } else if (next && lamaKarte && spielerM[0].getCardHand().getKarte(i).getValue() != 10) {
                 txt = new Text("lege ein Lama Ab.");
                 popUp(txt, 25, 10, 50);
-                return true;
+                falscheKarte=true;
+
             } else {
-                return false;
+                falscheKarte=false;
+
             }
+            return falscheKarte;
         } else {// Tutorial aus
             return false;
 
