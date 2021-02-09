@@ -154,6 +154,9 @@ public class Main extends Application {
             spiellogik.initNeueRunde();
 
             resize(true);
+
+            classPrimaryStage.getScene().onKeyTypedProperty().set(a -> {});
+            classPrimaryStage.getScene().onMouseClickedProperty().set(a -> {});
         }
     }
 

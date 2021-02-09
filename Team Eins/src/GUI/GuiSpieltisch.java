@@ -212,19 +212,14 @@ public class GuiSpieltisch {
                         }
 
                         //Spielbare Karten
-                        if (Main.tooltip && tisch.aktiv == ich) {
-                            if (!tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable()) {
+                        if ((Main.tooltip && tisch.aktiv == ich &&
+                                !tisch.getSpielerList()[playerId].getCardHand().getKarte(finalI).isPlayable() ||
+                                playMode==0 && tutorialAn && !tutorial.spielerZug)) {
                                 ColorAdjust colorAdjust = new ColorAdjust();
                                 colorAdjust.setBrightness(-0.6);
                                 myCard.setEffect(colorAdjust);
-                            }
                         }
-                        if(playMode==0 && tutorialAn && !tutorial.spielerZug){
-                            ColorAdjust colorAdjust = new ColorAdjust();
-                            colorAdjust.setBrightness(-0.6);
-                            myCard.setEffect(colorAdjust);
-                        }
-
+                     
                         final double[] myCardsX = new double[2];
                         final double[] myCardsY = new double[2];
                         final int[] shifted = new int[cardcount];
@@ -403,7 +398,7 @@ public class GuiSpieltisch {
                 buildStage(Main.classPrimaryStage);
             });
 
-            if (tutorial.chips) {
+            if (tutorialAn && tutorial.chips) {
                 chips.setStyle(HILIGHT_BUTTON_STYLE);
 
             } else if (tutorialAn && tutorial.chips == false) {
