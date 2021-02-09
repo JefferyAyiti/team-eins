@@ -873,6 +873,10 @@ public class GuiSpieltisch {
 
 
             beenden.setOnMouseClicked(mouseEvent -> {
+                if(tutorialAn){
+                    tooltip=false;
+                    tutorialAn=false;
+                }
                 if (Main.playMode <= 1) {
                     resizecheck.cancel();
                     Main.gameRunning = false;
@@ -942,11 +946,11 @@ public class GuiSpieltisch {
                 turnLabel.setFont(Font.font("Ink Free", FontWeight.BOLD, 25 * zoomfactor));
                 turnNotice.getChildren().add(turnLabel);
 
-                FadeTransition ft = new FadeTransition(Duration.millis(6000), turnNotice);
+                FadeTransition ft = new FadeTransition(Duration.millis(5000), turnNotice);
                 ft.setFromValue(1.0);
                 ft.setToValue(0);
                 ft.play();
-                table.add(turnNotice, 0, 0, 3, 1);
+                gridPane.add(turnNotice, 1, 1, 3, 1);
                 myTurnNotice = false;
             }
 
