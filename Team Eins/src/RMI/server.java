@@ -200,4 +200,6 @@ public interface server extends Remote {
     int reconnect(String UID, String name) throws RemoteException;
 
     boolean isInGame(String UID)  throws RemoteException;
+
+    void setKarteGezogen(boolean b, String uniqueID) throws RemoteException;
 }

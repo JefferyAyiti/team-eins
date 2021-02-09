@@ -205,14 +205,21 @@ public class GuiSpieltisch {
                         //neu gezogene Karte farblich markieren
                         int j = tisch.getSpielerList()[ich].getCardHand().getHandKarte().indexOf(karte);
                         if(tisch.getSpielerList()[ich].getKarteGezogen() && i == j ){
-                            tisch.getSpielerList()[ich].setKarteGezogen(false);
                             ColorAdjust colorAdjust = new ColorAdjust();
-                            //colorAdjust.setBrightness(-0.6);
                             myCard.setEffect(colorAdjust);
                             myCard.setStyle("-fx-background-insets: 20; " +
                                     "-fx-background-radius: 20; " +
                                     "-fx-cursor:hand;" +
                                     "-fx-effect: dropshadow(three-pass-box, green, 20, 0.5, 0, 0);");
+                            myCard.setOnMouseEntered(e ->{
+                                        if(server != null){
+                                            try {
+                                                server.setKarteGezogen(false, uniqueID);
+                                            }catch (RemoteException re){}
+                                        }else{
+                                            tisch.getSpielerList()[ich].setKarteGezogen(false);
+                                        }
+                            });
                         }
 
                         //Spielbare Karten
@@ -492,12 +499,14 @@ public class GuiSpieltisch {
 
                     if (Main.playMode == 2) {//Multiplaymodus
                         try {
+                            server.setKarteGezogen(false, uniqueID);
                             server.aussteigen(tisch.getSpielerList()[playerId]);
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
                         buildStage(Main.classPrimaryStage);
                     } else {//lokaler Spielmodus
+                        tisch.getSpielerList()[ich].setKarteGezogen(false);
                         Main.spiellogik.aussteigen(tisch.getSpielerList()[playerId]);
                         buildStage(Main.classPrimaryStage);
                     }
@@ -575,12 +584,15 @@ public class GuiSpieltisch {
                 return;
             } else {
                 if (Main.server == null && Main.spiellogik.getRundeBeendet()) {
+                    tisch.getSpielerList()[ich].setKarteGezogen(false);
                     Main.scoreboardGui.showRangliste(Main.spiellogik.ranglisteErstellen());
                     return;
                 } else if (Main.server != null && Main.server.getRundeBeendet()) {
+                    server.setKarteGezogen(false, uniqueID);
                     Main.scoreboardGui.showRangliste(server.getRangliste());
                     return;
                 } else if (Main.server != null && !Main.server.getRundeBeendet() && scoreboardGui.getIsReady()) {
+                    server.setKarteGezogen(false, uniqueID);
                     scoreboardGui.setIsReady(false);
                 }
 
@@ -608,6 +620,7 @@ public class GuiSpieltisch {
                     imgView.setOnMouseClicked(mouseEvent -> {
                         if (Main.playMode == 2) {
                             try {
+
                                 server.karteNachziehen(tisch.getSpielerList()[ich]);
                             } catch (RemoteException e) {
                                 e.printStackTrace();

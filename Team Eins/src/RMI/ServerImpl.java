@@ -468,5 +468,15 @@ public class ServerImpl implements server {
         return out;
     }
 
+    @Override
+    public void setKarteGezogen(boolean b, String uniqueID) {
+        Spieler s;
+        for (int i = 0; i < anzSpieler; i++) {
+            s = tisch.getSpielerList()[i];
+            if (s.getUid().equals(uniqueID)){
+                s.setKarteGezogen(b);
+            }
+        }
+    }
 
 }
