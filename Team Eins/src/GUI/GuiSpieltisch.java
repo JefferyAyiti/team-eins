@@ -47,7 +47,7 @@ public class GuiSpieltisch {
     boolean chatOpened = false;
     boolean settingsOpen = false;
     int[] cardId;
-    Boolean myTurnNotice = null;
+    public Boolean myTurnNotice = null;
     private GridPane spielfeld;
 
     double dragX;
@@ -219,7 +219,7 @@ public class GuiSpieltisch {
                                 colorAdjust.setBrightness(-0.6);
                                 myCard.setEffect(colorAdjust);
                         }
-                     
+
                         final double[] myCardsX = new double[2];
                         final double[] myCardsY = new double[2];
                         final int[] shifted = new int[cardcount];
@@ -925,12 +925,13 @@ public class GuiSpieltisch {
 
 
                 turnNotice = new VBox();
+                turnNotice.setTranslateY(-70*zoomfactor);
                 turnNotice.setMouseTransparent(true);
                 turnNotice.setAlignment(Pos.CENTER);
-                turnNotice.setStyle("-fx-background-image:url('/GUI/images/oberflaeche.jpg'); -fx-background-insets: 20; " +
+                turnNotice.setStyle("-fx-background-insets: 20; " +
                         "-fx-background-radius: 50; " +
                         "-fx-cursor:hand;" +
-                        "-fx-effect: dropshadow(three-pass-box, black, 50, 0, 0, 0);");
+                        "-fx-effect: dropshadow(three-pass-box, white, 50, 0, 0, 0);");
                 Label turnLabel = new Label("- Du bist dran -");
                 turnLabel.setStyle("-fx-effect: dropshadow( gaussian , black ,10 ,0.7 ,0 ,0 ); -fx-font-weight: bolder");
                 turnLabel.setTextFill(Color.LIGHTGREEN);
