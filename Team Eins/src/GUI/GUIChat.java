@@ -182,12 +182,17 @@ public class GUIChat {
                              */
 
                                 String name = zeile.get(0);
+                                int EmpfNameLen;
                                 String message = zeile.get(1);
+                                System.out.println(message);
                                 if(sichtbarkeit == 2) {
+                                    //get empf-name
+                                    String empfName = message.substring(1,message.indexOf(" "));
+                                    EmpfNameLen = empfName.length();
                                     name = name+" (privat)";
                                     emojiTextFlowParameters.setTextColor(Color.rgb(245, 96, 66,1));
                                     try {
-                                        message = message.substring(myName.length()+2);
+                                        message = message.substring(EmpfNameLen+1);
                                     } catch (Exception e) {
                                         message = "";
                                     }
@@ -201,6 +206,7 @@ public class GUIChat {
                                 emoteText.setMinWidth(160*zoomfactor);
                                 emoteText.setLineSpacing(5);
                                 emoteText.setId("emoji");
+                                emoteText.setStyle("-fx-font-weight: normal;");
 
                                 Text nametext = new Text(name+ ": ");
                                 nametext.setStyle("-fx-font-weight: bold;");
@@ -208,6 +214,7 @@ public class GUIChat {
                                     nametext.setFill(Color.rgb(245, 96, 66,1));
                                 }
                                 TextFlow msg = new TextFlow(nametext, emoteText);
+                                msg.setPrefWidth(Region.USE_COMPUTED_SIZE);
                                 cbox.getChildren().add(msg);
                             }
 
@@ -229,8 +236,7 @@ public class GUIChat {
                             cbox.getChildren().add(flow);
                         } else {
                             TextFlow flow = new TextFlow();
-                            flow.setMaxWidth(160*zoomfactor); //textwrap
-                            flow.setMinWidth(160*zoomfactor);
+                            flow.setPrefWidth(Region.USE_COMPUTED_SIZE);
                             flow.setId("roll");
 
                             Text text1 = new Text("\uD83C\uDFB2    " + zeile.get(0) + " ");
