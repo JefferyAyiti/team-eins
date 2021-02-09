@@ -199,7 +199,7 @@ public class GuiSpieltisch {
                         int finalI = i;
 
                         //neu gezogene Karte farblich markieren
-                        int j = tisch.getSpielerList()[ich].getCardHand().getHandKarte().indexOf(karte);
+                        //int j = tisch.getSpielerList()[ich].getCardHand().getHandKarte().indexOf(karte);
                         /*if(tisch.getSpielerList()[ich].getKarteGezogen() && i == j ){
                             tisch.getSpielerList()[ich].setKarteGezogen(false);
                             ColorAdjust colorAdjust = new ColorAdjust();
