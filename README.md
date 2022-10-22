@@ -15,6 +15,9 @@ Create a highly interactive software-based version of the LAMA CARD GAME https:/
 
 The stack turns RED when a player selects an invalid card, GREEN when a valid card is played 
 
+![round_gif](https://user-images.githubusercontent.com/47574921/197342729-70ffd95a-d994-4b81-9745-daab3824d254.gif)
+
+A round ends when every player drops their hand. The scoreboard is displayed after
 
 ![sorting_gif](https://user-images.githubusercontent.com/47574921/197339880-9ae33e36-522b-4e98-9051-2ef9af8ab7a4.gif)
 
