@@ -1,4 +1,4 @@
-# Team Eins LAMA
+# LAMA
 This software was produced as part of the Software Development Project for Computer Science (Ba) at TU Kaiserslautern. The project was directed by insiders-Technologies GmbH. 
 The software was created by a team of 4 students using the SCRUM Framework. The team worked remotely throughout the development process, coordinating tasks with GitLab and communicating over Discord.
 
@@ -7,11 +7,10 @@ Create a highly interactive software-based version of the LAMA CARD GAME https:/
 
 ## Product Demo
 ### Main Menu
-
-![menu_gif](https://user-images.githubusercontent.com/47574921/197340419-01ef1e21-42cc-466f-ad5f-4e52b3d0f988.gif)
+![start_gif](https://user-images.githubusercontent.com/47574921/197342385-b43ea529-e1b9-400f-9dcd-37bde9f278f5.gif)
 
 ### Gameplay
-![rules_gif](https://user-images.githubusercontent.com/47574921/197340104-d4924338-58cf-4286-80ea-4c711bd89ea4.gif)
+![rules_b](https://user-images.githubusercontent.com/47574921/197342396-fcddbaca-04bf-49d9-83ed-bad0b777555f.gif)
 
 
 The stack turns RED when a player selects an invalid card, GREEN when a valid card is played 
