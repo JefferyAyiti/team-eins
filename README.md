@@ -2,12 +2,12 @@
 This software was produced as part of the Software Development Project for Computer Science (Ba) at TU Kaiserslautern. The project was directed by insiders-Technologies GmbH. 
 The software was created by a team of 4 students using SCRUM. The team worked remotely throughout the development process, coordinating tasks with GitLab and communicating over Discord.
 
-## Objective: 
+## Objectives: 
 - Create a highly interactive software-based version of the LAMA CARD GAME https://www.amigo-spiele.de/spiel/lama. 
 - Implement the software using Java, JavaFX
 - Deliver the software-product within 16 weeks.
 
-## Product Demo
+## Final Product Demo
 ### Main Menu
 ![start_gif](https://user-images.githubusercontent.com/47574921/197342385-b43ea529-e1b9-400f-9dcd-37bde9f278f5.gif)
 
@@ -30,7 +30,7 @@ The software was created by a team of 4 students using SCRUM. The team worked re
 
 Scoreboard at the end of the game. Now a player can return to the main menu or exit the game
 
-## Final Features 
+## Final Product Features 
 - Implements all the game rules
 - Game Tutorial
 - Card interaction with drap and drop, clicking
